@@ -5,8 +5,8 @@ extends Node2D
 ## Size stands for the size of an object.
 ## Movable objects should only have squared
 ## sizes or be conceived as non-rotating
-## objects when they change directions.
-## No dimension can be 0 here.
+## objects when they change directions. No
+## dimension can be 0 here.
 var size: Vector2i:
 	get:
 		return _size
