@@ -9,11 +9,16 @@ class Movement:
 		const RIGHT: int = 2
 		const UP: int = 3
 
-var size: Vector2i = Vector2i(8, 6):
+@export var _size: Vector2i = Vector2i(8, 6)
+
+## The size of the map, expressed in cells.
+## Other actual tiles server aesthetic purposes
+## only and do not serve for placing entities.
+var size: Vector2i:
 	get:
-		return size
+		return _size
 	set(value):
-		pass
+		assert(false, "The size cannot be set this way")
 
 ## Tells whether the map is valid. This involves
 ## checks on data elements and also checks on
@@ -62,3 +67,8 @@ func get_delta(index: int) -> Vector2i:
 					return Vector2i(0, 0)
 		_:
 			return Vector2i(0, 0)
+
+func _ready():
+	if _size.x <= 0 or _size.y <= 0:
+		push_warning("The map's size is not positive - changing it to (8, 6)")
+		_size = Vector2i(8, 8)
