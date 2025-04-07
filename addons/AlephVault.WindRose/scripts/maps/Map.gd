@@ -9,6 +9,12 @@ class Movement:
 		const RIGHT: int = 2
 		const UP: int = 3
 
+var size: Vector2i = Vector2i(8, 6):
+	get:
+		return size
+	set(value):
+		pass
+
 ## Tells whether the map is valid. This involves
 ## checks on data elements and also checks on
 ## supported configurations.
@@ -30,7 +36,13 @@ func is_valid():
 ## movement). The delta is expressed in cells,
 ## both vertical and horizontal.
 func get_delta(index: int) -> Vector2i:
-	## It will return 0 if no tile_set is set.
+	# HINT: map_to_local(Vector2i) returns a result
+	# in pixels, where the reference pixel is the
+	# top-left local pixel in the current object.
+	# This requires a better alignment process in
+	# the images used inside objects in this map.
+	#
+	# It will return 0 if no tile_set is set.
 	if tile_set == null:
 		return Vector2i(0, 0)
 	

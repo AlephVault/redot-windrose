@@ -11,7 +11,7 @@ var key: String:
 		if _key == "":
 			_key = value
 		else:
-			assert(false, "The key cannot be changed")
+			assert(false, "The key is already set and cannot be changed")
 
 var _maps: Array = []
 
