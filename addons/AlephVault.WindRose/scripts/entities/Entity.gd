@@ -36,7 +36,7 @@ var size: Vector3i:
 ## or not. This is the first check of ability to
 ## move and other conditions may prevent it from
 ## actually moving.
-@export var is_movable: bool = false;
+@export var is_movable: bool = false
 
 @export var _speed: float = 1.0
 
@@ -50,10 +50,36 @@ var speed: float:
 	set(value):
 		if value >= 0:
 			_speed = value
+			self.speed_changed.emit(self, value)
 		else:
 			assert(false, "The speed cannot be negative")
 
+@export var _orientation: int = 0
+
+## The orientation of the object. This value will
+## always be set.
+var orientation: int:
+	get:
+		return _orientation
+	set(value):
+		if value >= 0:
+			_orientation = value
+			self.orientation_changed.emit(self, value)
+		else:
+			assert(false, "The orientation cannot be negative")
+
+## This signal is triggered (locally) when the object's
+## orientation changes.
+signal orientation_changed(entity, orientation)
+
+## This signal is triggered (locally) when the object's
+## speed changes.
+signal speed_changed(entity, speed)
+
 func _ready():
+	if _orientation < 0:
+		push_warning("The entity's orientation is negative - changing it to 0")
+		_orientation = 0
 	if _speed < 0:
 		push_warning("The entity's speed is negative - changing it to 1.0")
 		_speed = 1.0
