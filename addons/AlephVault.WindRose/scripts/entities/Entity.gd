@@ -106,7 +106,7 @@ var pause_status: PauseStatus:
 
 ## The current (x, y) position. It's retrieved from
 ## the map. When not in a map, returns (-1, -1).
-var map_position: Vector2i:
+var current_position: Vector2i:
 	get:
 		if map != null:
 			return map.get_entity_status(self).position
@@ -116,7 +116,7 @@ var map_position: Vector2i:
 
 ## The current movement. It's retrieved from the map.
 ## When not in a map, returns -1.
-var movement: int:
+var current_movement: int:
 	get:
 		if map != null:
 			return map.get_entity_status(self).movement
@@ -124,6 +124,15 @@ var movement: int:
 	set(value):
 		assert(false, "the movement cannot be set this way")
 
+## The current cell size of the map.
+var tile_size: Vector2i:
+	get:
+		if map == null:
+			return Vector2i(-1, -1)
+		return map.tile_size
+	set(value):
+		assert(false, "The tile size cannot be set this way")
+	
 ## This signal is triggered (locally) when the object's
 ## orientation changes.
 signal orientation_changed(orientation)
