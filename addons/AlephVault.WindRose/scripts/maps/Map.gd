@@ -78,6 +78,15 @@ func is_valid():
 	# Otherwise, it's supported.
 	return true
 
+## The size of tiles of this map.
+var tile_size: Vector2i:
+	get:
+		if tile_set == null:
+			return Vector2i(-1, -1)
+		return tile_set.tile_size
+	set(value):
+		assert(false, "The tile size ccannot be set this way")
+
 ## Tells a specific unit vector. Unit vectors are
 ## intended to define the movement one cell at a
 ## time (many consecutive vectors imply a full
@@ -96,7 +105,6 @@ func get_delta(index: int) -> Vector2i:
 	
 	match tile_set.tile_shape:
 		TileSet.TileShape.TILE_SHAPE_SQUARE:
-			var size: Vector2i = tile_set.tile_size
 			match index:
 				Direction.Square.DOWN:
 					return Vector2i(0, 1)
