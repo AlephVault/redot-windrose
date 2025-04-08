@@ -2,7 +2,7 @@ extends Node2D
 
 ## The pause status. The object is either free to
 ## move / animate, animated but in-place, or paused.
-enum PauseStatus { Free, InplaceAnimated, Paused }
+enum PauseStatus { FREE, INPLACE_ANIMATED, PAUSED }
 
 var _layer: AlephVault__WindRose.Entities.Layer
 
@@ -10,7 +10,32 @@ var _layer: AlephVault__WindRose.Entities.Layer
 const IDLE_STATE: String = "IDLE"
 
 ## A state meant to be "moving".
-const MOVING: String = "MOVING"
+const MOVING_STATE: String = "MOVING"
+
+# The time before a queued movement expires. Used so
+# the queued movement can be discarded if the user
+# queued it long time before the current movement was
+# about to finish. Otherwise, the user cannot repent
+# the queued movement or have undesired "extra advances"
+# in the current direction.
+var _queued_movement_expiration: float = 0
+
+# The queued movement, if any.
+var _queued_movement: int = -1
+
+# The number of movements executed by this entity. It
+# starts in -1 so the first movement starts as 0.
+# After 1 << 32, it becomes 0 again. 
+var _current_movement_index: int = -1
+
+# The maximum for movement indices.
+const MAX_MOVEMENT_INDEX = 1 << 32
+
+# The current origin, if a movement is present.
+var _origin: Vector2i = Vector2i(-1, -1)
+
+# The current target, if a movement is present.
+var _target: Vector2i = Vector2i(-1, -1)
 
 ## The current layer this entity is attached to.
 ## This is a layer in a map.
@@ -93,7 +118,7 @@ var state: String:
 		else:
 			assert(false, "The state must be non-empty")
 
-var _pause_status: PauseStatus = PauseStatus.Free
+var _pause_status: PauseStatus = PauseStatus.FREE
 
 ## The pause status. Either Free, Paused, or in-place
 ## but animated.
@@ -112,7 +137,19 @@ var current_position: Vector2i:
 			return map.get_entity_status(self).position
 		return Vector2i(-1, -1)
 	set(value):
-		assert(false, "the in-map position cannot be set this way")
+		assert(false, "The in-map position cannot be set this way")
+
+## The current (xf, yf) position, opposite to (x, y) in
+## the sense that it's the bottom-right corner instead
+## of the top-left (pivot) corner.
+var current_final_position: Vector2i:
+	get:
+		var pos = current_position
+		if pos == Vector2i(1, 1):
+			return pos
+		return pos + self.tile_size - Vector2i(1, 1)
+	set(value):
+		assert(false, "The in-map final position cannot be set this way")
 
 ## The current movement. It's retrieved from the map.
 ## When not in a map, returns -1.
@@ -206,3 +243,116 @@ func _ready():
 
 func _exit_tree() -> void:
 	_layer = null
+
+## Attaches itself to a new map. It is an error
+## if the object already belongs to a map, unless
+## force is set to true (in that case, the object
+## is first detached).
+func attach(
+	map: AlephVault__WindRose.Maps.Map,
+	at: Vector2i, force: bool = false
+) -> bool:
+	if force:
+		self.detach()
+	return map.attach(self, at)
+
+## Detaches itself from the current map, if any.
+func detach() -> bool:
+	if self.map:
+		return self.map.detach(self)
+	return false
+
+## Teleports itself to another position in the map.
+## The position must be valid in the map according
+## to the entity's size as well. If silent == true,
+## then teleportation will not trigger any event
+## but serve as some sort of self-correction.
+func teleport(to: Vector2i, silent: bool = false) -> bool:
+	if not self.map and self.pause_status == PauseStatus.FREE:
+		return false
+	return self.map.teleport(self, to, silent)
+
+func start_movement(
+	direction: int,
+	continued: bool = false,
+	queue_if_moving: bool = false
+):
+	if self.map == null or self.pause_status != PauseStatus.FREE:
+		return false
+	
+	if self.current_movement >= 0:
+		if not queue_if_moving:
+			return false
+		self._queued_movement = direction
+		if self._speed == 0:
+			self._queued_movement_expiration = INF
+		else:
+			self._queued_movement_expiration = 1.0 / (self._speed * 4.0)
+	elif not self.map.start_movement(self, direction):
+		return false
+	else:
+		_origin = self.map.map_to_local(current_position)
+		# Notes: By this point, current_movement will be == direction
+		_target = self.map.map_to_local(current_position + self.map.get_delta(self.current_movement))
+		state = MOVING_STATE
+		# Also, start fixing the position:
+		position = _origin
+
+func _check_queued_movement(time: float):
+	self._queued_movement_expiration -= time
+	if self._queued_movement_expiration <= 0:
+		self._queued_movement_expiration = 0
+		self._queued_movement = 0
+
+## Reports a movement as cancelled. The entity will have
+## its status reverted back to the beginning of the last
+## movement it started (i.e. a single cell being displaced).
+## Also, all the rules will reflect accordingly back to the
+## beginning of that movement.
+func cancel_movement() -> bool:
+	if self.current_movement >= 0 and self.pause_status == PauseStatus.FREE:
+		return self.map.cancel_movement(self)
+	return false
+
+## Reports a movement as finished. The entity will have
+## its status updated and all the rules will reflect
+## accordingly to the new position.
+func finish_movement() -> bool:
+	if self.current_movement >= 0 and self.pause_status == PauseStatus.FREE:
+		return self.map.finish_movement(self)
+	return false
+
+## Moves according to time delta.
+func _movement_tick(delta: float) -> void:
+	# No map <--> no processing.
+	if self.map == null:
+		return
+		
+	# Paused will wait for the next tick.
+	if self.pause_status != PauseStatus.FREE:
+		return
+	
+	# If no movement, nothing to process here.
+	if self.current_movement >= 0:
+		# TODO IMPLEMENT THIS FROM WINDROSE: https://github.com/AlephVault/unity-windrose/blob/main/Runtime/Authoring/Behaviours/Entities/Objects/MapObject.cs#L333
+		# TODO inside if (IsMoving) { ... }
+		pass
+	elif self._queued_movement >= 0:
+		var qm: int = self._queued_movement
+		self._queued_movement = -1
+		self.start_movement(qm)
+		_origin = position
+		# Notes: By this point, current_position will be up to date.
+		# Same for current_movement.
+		_target = self.map.map_to_local(current_position + self.map.get_delta(self.current_movement))
+		state = MOVING_STATE
+	else:
+		# Not moving, now.
+		state = IDLE_STATE
+	
+	# Then, expire the queued movement if any.
+	self._check_queued_movement(delta)
+
+
+func _process(delta: float) -> void:
+	_movement_tick(delta)
