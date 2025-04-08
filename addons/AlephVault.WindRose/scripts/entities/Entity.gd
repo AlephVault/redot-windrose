@@ -1,5 +1,24 @@
 extends Node2D
 
+var _layer: AlephVault__WindRose.Entities.Layer
+
+## The current layer this entity is attached to.
+## This is a layer in a map.
+var layer: AlephVault__WindRose.Entities.Layer:
+	get:
+		return _layer
+	set(value):
+		assert(false, "The entity layer cannot be set this way")
+
+## The current map this entity belongs to.
+## It corresponds to the current layer this
+## entity is attached to.
+var map: AlephVault__WindRose.Maps.Map:
+	get:
+		return _layer.map if _layer != null else null
+	set(value):
+		assert(false, "The entity map cannot be set this way")
+
 @export var _size: Vector2i = Vector2i(1, 1)
 
 ## Size stands for the size of an object.
@@ -41,3 +60,10 @@ func _ready():
 	if _size.x <= 0 or _size.y <= 0:
 		push_warning("The entity's size is not positive - changing it to (1, 1)")
 		_size = Vector2i(1, 1)
+	var _parent = get_parent()
+	if _parent is AlephVault__WindRose.Entities.Layer:
+		_layer = _parent
+	request_ready()
+
+func _exit_tree() -> void:
+	_layer = null
