@@ -2,7 +2,7 @@ extends TileMap
 
 ## The movement constants that are supported
 ## by the current version of Map.
-class Movement:
+class Direction:
 	class Square:
 		const DOWN: int = 0
 		const LEFT: int = 1
@@ -15,13 +15,9 @@ class Movement:
 ## any (if movement < 0, then there's no current
 ## movement).
 class EntityStatus:
-	## The x position, considering the pivot
+	## The position, considering the pivot
 	## to be the top-left corner of the entity.
-	var x: int
-
-	## The y position, considering the pivot
-	## to be the top-left corner of the entity.
-	var y: int
+	var position: Vector2i
 	
 	## The movement, if any.
 	var movement: int
@@ -42,8 +38,7 @@ func _add_entity_status(
 	x: int, y: int
 ):
 	var status = self._entity_statuses.get_or_add(entity, EntityStatus.new())
-	status.x = x
-	status.y = y
+	status.position = Vector2i(x, y)
 	status.movement = -1
 
 ## Removes the truth about an entity. Its position
@@ -103,13 +98,13 @@ func get_delta(index: int) -> Vector2i:
 		TileSet.TileShape.TILE_SHAPE_SQUARE:
 			var size: Vector2i = tile_set.tile_size
 			match index:
-				Movement.Square.DOWN:
+				Direction.Square.DOWN:
 					return Vector2i(0, 1)
-				Movement.Square.LEFT:
+				Direction.Square.LEFT:
 					return Vector2i(-1, 0)
-				Movement.Square.RIGHT:
+				Direction.Square.RIGHT:
 					return Vector2i(1, 0)
-				Movement.Square.UP:
+				Direction.Square.UP:
 					return Vector2i(0, -1)
 				_:
 					return Vector2i(0, 0)
