@@ -120,26 +120,73 @@ func get_delta(index: int) -> Vector2i:
 			return Vector2i(0, 0)
 
 ## Attaches an object to this map at a given position.
-## It can force the attachment by popping the entity
-## out of its current map, if any.
+##
+## This method is requested by an Entity.
 func attach(
 	entity: AlephVault__WindRose.Entities.Entity,
-	at: Vector2i, force: bool = false
+	at: Vector2i
 ) -> bool:
 	assert(false, "IMPLEMENT attach method!!!")
 	return false
 
 ## Detaches an object from this map.
+##
+## This method is requested by an Entity.
 func detach(entity: AlephVault__WindRose.Entities.Entity) -> bool:
 	assert(false, "IMPLEMENT detach method!!!")
 	return false
 
 ## Teleports an entity inside the map to another position.
+## The position must be valid considering the map's size
+## and the entity's size as well. If silent == true, then
+## teleportation will not trigger any event but serve as
+## some sort of self-correction.
+##
+## This method is requested by an Entity.
 func teleport(
 	entity: AlephVault__WindRose.Entities.Entity,
-	to:Vector2i
+	to: Vector2i, silent: bool = false
 ) -> bool:
 	assert(false, "IMPLEMENT teleport method!!!")
+	return false
+
+## Reports the desire of starting a movement. This action
+## can be vetoed by the current rules. The status and the
+## rules are notified accordingly and react accordingly,
+## letting or not the movement start.
+##
+## This method is requested by an Entity.
+func start_movement(
+	entity: AlephVault__WindRose.Entities.Entity,
+	direction: int
+) -> bool:
+	if direction < 0:
+		return false
+
+	assert(false, "IMPLEMENT start_movement method!!!")
+	return false
+
+## Reports a movement cancel (an individual tile, not the full
+## movement since the first user interaction). Notifies rules
+## and status to revert to the beginning of that individual
+## movement in particular.
+##
+## This method is requested by an Entity.
+func cancel_movement(
+	entity: AlephVault__WindRose.Entities.Entity
+) -> bool:
+	assert(false, "IMPLEMENT cancel_movement method!!!")
+	return false
+
+## Reports a movement finish (an individual tile, not the full
+## movement which may imply several steps). Notifies the rules
+## and updates the status accordingly.
+##
+## This method is requested by an Entity.
+func finish_movement(
+	entity: AlephVault__WindRose.Entities.Entity
+) -> bool:
+	assert(false, "IMPLEMENT finish_movement method!!!")
 	return false
 
 func _ready():
