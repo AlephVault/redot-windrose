@@ -224,6 +224,8 @@ signal pause_status_changed(pause_status)
 ## was teleported to a new location in the same map.
 signal teleported(x, y)
 
+var _hidrated: bool = false
+
 func _ready():
 	if _orientation < 0:
 		push_warning("The entity's orientation is negative - changing it to 0")
@@ -239,7 +241,26 @@ func _ready():
 	var _parent = get_parent()
 	if _parent is AlephVault__WindRose.Entities.Layer:
 		_layer = _parent
+	self._hidrate()
 	request_ready()
+
+func _hidrate():
+	if self._hidrated:
+		return
+	
+	# TODO assign current rule.
+	var on_attached = func(m: AlephVault__WindRose.Maps.Map):
+		self._inc_movement()
+		rotation_degrees = 0
+	self.attached.connect(on_attached)
+	var on_teleported = func(x: int, y: int):
+		self._inc_movement()
+	self.teleported.connect(on_teleported)
+	var on_movement_started = func(d: int):
+		self._inc_movement()
+	self.movement_started.connect(on_movement_started)
+	
+	self._hidrated = true
 
 func _exit_tree() -> void:
 	_layer = null
@@ -291,9 +312,9 @@ func start_movement(
 	elif not self.map.start_movement(self, direction):
 		return false
 	else:
-		_origin = self.map.map_to_local(current_position)
+		_origin = self._map_to_local(current_position)
 		# Notes: By this point, current_movement will be == direction
-		_target = self.map.map_to_local(current_position + self.map.get_delta(self.current_movement))
+		_target = self._map_to_local(current_position + self.map.get_delta(self.current_movement))
 		state = MOVING_STATE
 		# Also, start fixing the position:
 		position = _origin
@@ -324,8 +345,10 @@ func finish_movement() -> bool:
 
 ## Moves according to time delta.
 func _movement_tick(delta: float) -> void:
+	var map: AlephVault__WindRose.Maps.Map = self.map
+
 	# No map <--> no processing.
-	if self.map == null:
+	if map == null:
 		return
 		
 	# Paused will wait for the next tick.
@@ -334,17 +357,48 @@ func _movement_tick(delta: float) -> void:
 	
 	# If no movement, nothing to process here.
 	if self.current_movement >= 0:
-		# TODO IMPLEMENT THIS FROM WINDROSE: https://github.com/AlephVault/unity-windrose/blob/main/Runtime/Authoring/Behaviours/Entities/Objects/MapObject.cs#L333
-		# TODO inside if (IsMoving) { ... }
-		pass
+		var norm: float = self._speed * delta
+		var delta_px: Vector2i = _target - _origin
+		if self._queued_movement != self.current_movement:
+			var toward: Vector2 = position.move_toward(_target, norm)
+			if toward == position:
+				# The movement is already finished.
+				map.finish_movement(self)
+			else:
+				# Offset the object.
+				position = toward
+		else:
+			var extra_target: Vector2i = _target * delta_px * (1 + norm)
+			var toward: Vector2i = position.move_toward(extra_target, norm)
+			position = toward
+			while true:
+				var total_traversed: float = (toward - _origin).length()
+				if total_traversed < delta_px.length():
+					break
+				var movement: int = self.current_movement
+				var movement_index = self._current_movement_index
+				map.finish_movement(self)
+				if self._current_movement_index != movement_index + 1:
+					# Reason: Other movements occurred after our finish.
+					break
+				movement_index = self._current_movement_index
+				if total_traversed > delta_px.length():
+					_origin = _target
+					_target = _target + delta_px
+					if not self.start_movement(movement):
+						position = Vector2(_origin)
+						break
+					if self._current_movement_index != movement_index + 1:
+						# Reason: Other movements occurred after our finish.
+						break
 	elif self._queued_movement >= 0:
 		var qm: int = self._queued_movement
 		self._queued_movement = -1
 		self.start_movement(qm)
 		_origin = position
 		# Notes: By this point, current_position will be up to date.
-		# Same for current_movement.
-		_target = self.map.map_to_local(current_position + self.map.get_delta(self.current_movement))
+		# Same for current_movement, since there's no current movement.
+		_target = self._map_to_local(current_position + self.map.get_delta(self.current_movement))
 		state = MOVING_STATE
 	else:
 		# Not moving, now.
@@ -354,5 +408,22 @@ func _movement_tick(delta: float) -> void:
 	self._check_queued_movement(delta)
 
 
+func _map_to_local(pos: Vector2i) -> Vector2:
+	var map: AlephVault__WindRose.Maps.Map = self.map
+	if map == null:
+		return Vector2(-1, -1)
+	return map.map_to_local(pos) - map.tile_size / 2.
+
+
+func _inc_movement():
+	self._current_movement_index += 1
+	if self._current_movement_index == MAX_MOVEMENT_INDEX:
+		self._current_movement_index = 0
+
+
 func _process(delta: float) -> void:
 	_movement_tick(delta)
+
+
+func _enter_tree() -> void:
+	pass

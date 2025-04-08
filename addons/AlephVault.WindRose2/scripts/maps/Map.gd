@@ -31,6 +31,15 @@ class EntityStatus:
 ## The entities and their statuses.
 var _entity_statuses: Dictionary
 
+# The entities layer.
+var _entities_layer: AlephVault__WindRose.Entities.Layer
+
+var entities_layer: AlephVault__WindRose.Entities.Layer:
+	get:
+		return _entities_layer
+	set(value):
+		assert(false, "The entities layer cannot be set this way")
+
 ## Adds the truth about an entity. Its position
 ## and its movement (-1 initially).
 func _add_entity_status(
@@ -188,6 +197,14 @@ func finish_movement(
 ) -> bool:
 	assert(false, "IMPLEMENT finish_movement method!!!")
 	return false
+
+func _enter_tree() -> void:
+	_entities_layer = null
+	for c in get_children():
+		if c is AlephVault__WindRose.Entities.Layer:
+			assert(_entities_layer == null, "An Entities.Layer is already assigned to this map")
+			if _entities_layer == null:
+				_entities_layer = c
 
 func _ready():
 	if _size.x <= 0 or _size.y <= 0:
