@@ -80,9 +80,11 @@ func _ready():
 	if _orientation < 0:
 		push_warning("The entity's orientation is negative - changing it to 0")
 		_orientation = 0
+		self.orientation_changed.emit(self, 0)
 	if _speed < 0:
 		push_warning("The entity's speed is negative - changing it to 1.0")
 		_speed = 1.0
+		self.speed_changed.emit(self, 0)
 	if _size.x <= 0 or _size.y <= 0 or _size.z <= 0:
 		push_warning("The entity's size is not positive - changing it to (1, 1, 1)")
 		_size = Vector3i(1, 1, 1)
