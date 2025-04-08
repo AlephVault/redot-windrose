@@ -1,5 +1,9 @@
 extends Node2D
 
+## The pause status. The object is either free to
+## move / animate, animated but in-place, or paused.
+enum PauseStatus { Free, InplaceAnimated, Paused }
+
 var _layer: AlephVault__WindRose.Entities.Layer
 
 ## A state meant to be "idle".
@@ -89,6 +93,37 @@ var state: String:
 		else:
 			assert(false, "The state must be non-empty")
 
+var _pause_status: PauseStatus = PauseStatus.Free
+
+## The pause status. Either Free, Paused, or in-place
+## but animated.
+var pause_status: PauseStatus:
+	get:
+		return _pause_status
+	set(value):
+		_pause_status = value
+		self.pause_status_changed.emit(value)
+
+## The current (x, y) position. It's retrieved from
+## the map. When not in a map, returns (-1, -1).
+var map_position: Vector2i:
+	get:
+		if map != null:
+			return map.get_entity_status(self).position
+		return Vector2i(-1, -1)
+	set(value):
+		assert(false, "the in-map position cannot be set this way")
+
+## The current movement. It's retrieved from the map.
+## When not in a map, returns -1.
+var movement: int:
+	get:
+		if map != null:
+			return map.get_entity_status(self).movement
+		return -1
+	set(value):
+		assert(false, "the movement cannot be set this way")
+
 ## This signal is triggered (locally) when the object's
 ## orientation changes.
 signal orientation_changed(orientation)
@@ -134,6 +169,10 @@ signal movement_cancelled(direction)
 ## object will be passed, along with the updated property
 ## and the corresponding old and new values of it.
 signal property_updated(rule, prop, old_value, new_value)
+
+## This signal is triggerd (locally) when the pause status
+## is changed.
+signal pause_status_changed(pause_status)
 
 ## This signal is triggered (externally) when the object
 ## was teleported to a new location in the same map.
