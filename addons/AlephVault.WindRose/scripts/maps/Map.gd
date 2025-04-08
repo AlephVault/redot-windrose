@@ -32,6 +32,33 @@ class EntityStatus:
 
 @export var _size: Vector2i = Vector2i(8, 6)
 
+## The entities and their statuses.
+var _entity_statuses: Dictionary
+
+## Adds the truth about an entity. Its position
+## and its movement (-1 initially).
+func _add_entity_status(
+	entity: AlephVault__WindRose.Entities.Entity,
+	x: int, y: int
+):
+	var status = self._entity_statuses.get_or_add(entity, EntityStatus.new())
+	status.x = x
+	status.y = y
+	status.movement = -1
+
+## Removes the truth about an entity. Its position
+## and its movement.
+func _remove_entity_status(
+	entity: AlephVault__WindRose.Entities.Entity
+):
+	self._entity_statuses.erase(entity)
+
+## Returns the status of an entity.
+func get_entity_status(
+	entity: AlephVault__WindRose.Entities.Entity
+) -> EntityStatus:
+	return self._entity_statuses.get(entity)
+
 ## The size of the map, expressed in cells.
 ## Other actual tiles server aesthetic purposes
 ## only and do not serve for placing entities.
