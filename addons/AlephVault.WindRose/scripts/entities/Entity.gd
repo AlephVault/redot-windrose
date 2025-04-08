@@ -128,6 +128,17 @@ signal movement_finished(direction)
 ## by that point.
 signal movement_cancelled(direction)
 
+## This signal is triggered (externally, by the involved
+## entity rule) when the said entity rule determines that
+## a change on a property needs to be notified. The rule
+## object will be passed, along with the updated property
+## and the corresponding old and new values of it.
+signal property_updated(rule, prop, old_value, new_value)
+
+## This signal is triggered (externally) when the object
+## was teleported to a new location in the same map.
+signal teleported(x, y)
+
 func _ready():
 	if _orientation < 0:
 		push_warning("The entity's orientation is negative - changing it to 0")
