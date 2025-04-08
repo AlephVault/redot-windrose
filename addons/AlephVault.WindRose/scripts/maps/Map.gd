@@ -119,6 +119,29 @@ func get_delta(index: int) -> Vector2i:
 		_:
 			return Vector2i(0, 0)
 
+## Attaches an object to this map at a given position.
+## It can force the attachment by popping the entity
+## out of its current map, if any.
+func attach(
+	entity: AlephVault__WindRose.Entities.Entity,
+	at: Vector2i, force: bool = false
+) -> bool:
+	assert(false, "IMPLEMENT attach method!!!")
+	return false
+
+## Detaches an object from this map.
+func detach(entity: AlephVault__WindRose.Entities.Entity) -> bool:
+	assert(false, "IMPLEMENT detach method!!!")
+	return false
+
+## Teleports an entity inside the map to another position.
+func teleport(
+	entity: AlephVault__WindRose.Entities.Entity,
+	to:Vector2i
+) -> bool:
+	assert(false, "IMPLEMENT teleport method!!!")
+	return false
+
 func _ready():
 	if _size.x <= 0 or _size.y <= 0:
 		push_warning("The map's size is not positive - changing it to (8, 6)")
