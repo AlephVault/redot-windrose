@@ -19,14 +19,14 @@ var map: AlephVault__WindRose.Maps.Map:
 	set(value):
 		assert(false, "The entity map cannot be set this way")
 
-@export var _size: Vector2i = Vector2i(1, 1)
+@export var _size: Vector3i = Vector3i(1, 1, 0)
 
 ## Size stands for the size of an object.
 ## Movable objects should only have squared
 ## sizes or be conceived as non-rotating
-## objects when they change directions. No
-## dimension can be 0 here.
-var size: Vector2i:
+## objects when they change directions.
+## No component can be <= 0 here.
+var size: Vector3i:
 	get:
 		return _size
 	set(value):
@@ -57,9 +57,9 @@ func _ready():
 	if _speed < 0:
 		push_warning("The entity's speed is negative - changing it to 1.0")
 		_speed = 1.0
-	if _size.x <= 0 or _size.y <= 0:
-		push_warning("The entity's size is not positive - changing it to (1, 1)")
-		_size = Vector2i(1, 1)
+	if _size.x <= 0 or _size.y <= 0 or _size.z <= 0:
+		push_warning("The entity's size is not positive - changing it to (1, 1, 1)")
+		_size = Vector3i(1, 1, 1)
 	var _parent = get_parent()
 	if _parent is AlephVault__WindRose.Entities.Layer:
 		_layer = _parent
