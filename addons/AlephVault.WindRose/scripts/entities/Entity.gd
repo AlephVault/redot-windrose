@@ -2,6 +2,12 @@ extends Node2D
 
 var _layer: AlephVault__WindRose.Entities.Layer
 
+## A state meant to be "idle".
+const IDLE_STATE: String = "IDLE"
+
+## A state meant to be "moving".
+const MOVING: String = "MOVING"
+
 ## The current layer this entity is attached to.
 ## This is a layer in a map.
 var layer: AlephVault__WindRose.Entities.Layer:
@@ -50,7 +56,7 @@ var speed: float:
 	set(value):
 		if value >= 0:
 			_speed = value
-			self.speed_changed.emit(self, value)
+			self.speed_changed.emit(value)
 		else:
 			assert(false, "The speed cannot be negative")
 
@@ -64,17 +70,63 @@ var orientation: int:
 	set(value):
 		if value >= 0:
 			_orientation = value
-			self.orientation_changed.emit(self, value)
+			self.orientation_changed.emit(value)
 		else:
 			assert(false, "The orientation cannot be negative")
 
+@export var _state: String = IDLE_STATE
+
+## The current state of this object. This value is
+## a string and typically meant to be used for when
+## this object needs a visual representation.
+var state: String:
+	get:
+		return _state
+	set(value):
+		if value != "":
+			_state = value
+			self.state_changed.emit(state)
+		else:
+			assert(false, "The state must be non-empty")
+
 ## This signal is triggered (locally) when the object's
 ## orientation changes.
-signal orientation_changed(entity, orientation)
+signal orientation_changed(orientation)
 
 ## This signal is triggered (locally) when the object's
 ## speed changes.
-signal speed_changed(entity, speed)
+signal speed_changed(speed)
+
+## This signal is triggered (locally) when the object's
+## state changes.
+signal state_changed(state)
+
+## This signal is triggered (externally) when the entity
+## was just added to the map. The map property will be
+## updated by this point.
+signal attached()
+
+## This signal is triggered (externally) when the object
+## was just removed from the map.
+signal detached()
+
+## This signal is triggered (externally) when the object
+## started moving.
+signal movement_started(direction)
+
+## This signal is triggered (externally) when the object
+## is rejected from started moving.
+signal movement_rejected(direction)
+
+## This signal is triggered (externally) when the object
+## finished a single movement step.
+signal movement_finished(direction)
+
+## This signal is triggered (externally) when the object
+## cancelled the current movement step, if any. In this
+## signal, direction can be <= 0 if no movement was made
+## by that point.
+signal movement_cancelled(direction)
 
 func _ready():
 	if _orientation < 0:
