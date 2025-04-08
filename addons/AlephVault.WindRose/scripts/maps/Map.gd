@@ -9,6 +9,27 @@ class Movement:
 		const RIGHT: int = 2
 		const UP: int = 3
 
+## Entity status refers to the status of the
+## entities inside the map. This only involves
+## the current position and the movement, if
+## any (if movement < 0, then there's no current
+## movement).
+class EntityStatus:
+	## The x position, considering the pivot
+	## to be the top-left corner of the entity.
+	var x: int
+
+	## The y position, considering the pivot
+	## to be the top-left corner of the entity.
+	var y: int
+	
+	## The movement, if any.
+	var movement: int
+	
+	## Whether there's a current movement.
+	func is_moving() -> bool:
+		return self.movement >= 0
+
 @export var _size: Vector2i = Vector2i(8, 6)
 
 ## The size of the map, expressed in cells.
