@@ -75,54 +75,75 @@ func initialize():
 		for x in range(s.x):
 			self.initialize_cell_data(Vector2i(x, y))
 
+## Initializes global data for this rule.
+## Make use of `size` property to understand
+## the size of the underlying data.
 func initialize_global_data():
 	pass
 
+## Initializes a cell's data for this rule.
 func initialize_cell_data(cell: Vector2i):
 	pass
 
+## Updates a cell's data for this rule. Most
+## likely, the same as initialize_cell_data.
 func update_cell_data(cell: Vector2i):
 	pass
 
+## Tells whether an entity can be attached
+## to the map.
 func can_attach(entity, cell: Vector2i) -> bool:
 	return true
 
+## Handles when an entity has been attached to the map.
 func on_entity_attached(entity, to_position: Vector2i):
 	pass
 
+## Tells whether an entity can start moving.
 func can_move(entity, direction: int) -> bool:
 	return true
 
+## Handles when an entity started moving (to a single
+## adjacent cell).
 func on_movement_started(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementStartedStage
 ):
 	pass
 
+## Handles when an entity completed a movement (to a
+## single adjacent cell).
 func on_movement_finished(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementConfirmedStage
 ):
 	pass
 
+## Tells whether an entity can cancel its current movement.
 func can_cancel_movement(entity, direction: int) -> bool:
 	return true
 
+## Handles when an entity cancelled a movement.
 func on_movement_cancelled(
 	entity, start_position: Vector2i, reverted_position: Vector2i, direction: int,
 	stage: MovementClearedStage
 ):
 	pass
 
+## Handles when an entity was teleported to a new position
+## in the map.
 func on_teleported(
 	entity, from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
 ):
 	pass
 
+## Handles when an entity was detached from the map.
 func on_entity_detached(entity, from_position: Vector2i):
 	pass
 
+## Handles when an entity has one of the properties changed
+## on one of the entity-side rules.
 func on_property_updated(
 	entity_rule: AlephVault__WindRose.Rules.EntityRule,
 	property: String, old_value, new_value
