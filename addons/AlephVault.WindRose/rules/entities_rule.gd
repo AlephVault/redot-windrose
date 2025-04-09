@@ -37,33 +37,21 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-var _entities_layer: AlephVault__WindRose.Entities.Entity
-
-## Returns the associated entity layer.
-var entities_layer: AlephVault__WindRose.Entities.Entity:
-	get:
-		return _entities_layer
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntitiesRule", "entities_layer"
-		)
-
-var _size: Vector2i
+## Returns the size of the rule's terrain.
+func _get_size() -> Vector2i:
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntitiesRule", "_get_size"
+	)
+	return Vector2i(0, 0)
 
 ## Returns the size for this rule.
 var size: Vector2i:
 	get:
-		return _size
+		return _get_size()
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntitiesRule", "size"
 		)
-
-## Construction takes the entity layer and
-## keeps that layer and size.
-func _init(entities_layer: AlephVault__WindRose.Entities.Entity) -> void:
-	_entities_layer = entities_layer
-	_size = entities_layer.size
 
 var _initialized: bool = false
 

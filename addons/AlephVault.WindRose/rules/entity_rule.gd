@@ -3,28 +3,21 @@ extends Object
 ## the related entity. It is the counterpart
 ## of an EntitiesRule.
 
-var _entity: AlephVault__WindRose.Entities.Entity
-
-## Returns the associated entity.
-var entity: AlephVault__WindRose.Entities.Entity:
-	get:
-		return _entity
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntityRule", "entity"
-		)
-
-var _size: Vector2i
+## Returns the size of the rule's terrain.
+func _get_size() -> Vector2i:
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "_get_size"
+	)
+	return Vector2i(0, 0)
 
 ## Returns the size for this rule.
 var size: Vector2i:
 	get:
-		return _size
+		return _get_size()
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntityRule", "size"
 		)
 
 func _init(entity: AlephVault__WindRose.Entities.Entity):
-	_entity = entity
-	_size = entity.size
+	pass

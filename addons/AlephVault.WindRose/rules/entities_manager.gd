@@ -14,26 +14,12 @@ var entities_rule: AlephVault__WindRose.Rules.EntitiesRule:
 			"EntitiesManager", "entities_rule"
 		)
 
-var _entities_layer
-
-## Returns the associated entity layer.
-var entities_layer:
-	get:
-		return _entities_layer
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntitiesManager", "entities_layer"
-		)
-
 ## Construction takes the entities layer and
 ## keeps also the associated rule
-func _init(entities_layer: AlephVault__WindRose.Entities.Layer) -> void:
-	_entities_layer = entities_layer
-	_entities_rule = entities_layer.rule
+func _init(entities_rule: AlephVault__WindRose.Rules.EntitiesRule) -> void:
+	_entities_rule = entities_rule
 
-## Initializes its state (also means: initializes
-## the underlying rule). By this point, this means
-## the layout is already initialized as well (e.g.
-## the entities layer will be ready).
+## Initializes its state (and also the data of
+## the underlying rule).
 func initialize() -> void:
 	entities_rule.initialize()
