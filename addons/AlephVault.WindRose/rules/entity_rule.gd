@@ -3,6 +3,8 @@ extends Object
 ## the related entity. It is the counterpart
 ## of an EntitiesRule.
 
+const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+
 ## Returns the size of the rule's terrain.
 func _get_size() -> Vector2i:
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
@@ -29,4 +31,20 @@ func trigger_on_attached(to_position: Vector2i):
 func trigger_on_detached(from_position: Vector2i):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
 		"EntityRule", "trigger_on_detached"
+	)
+
+## Triggers the on_movement_rejected event.
+func trigger_on_movement_rejected(
+	from_position: Vector2i, to_position: Vector2i, direction: _Direction
+):
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "trigger_on_movement_rejected"
+	)
+
+## Triggers the on_movement_started event.
+func trigger_on_movement_started(
+	from_position: Vector2i, to_position: Vector2i, direction: _Direction
+):
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "trigger_on_movement_started"
 	)
