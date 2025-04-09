@@ -1,4 +1,7 @@
 extends Object
+## An EntityRule contains data and references
+## the related entity. It is the counterpart
+## of an EntitiesRule.
 
 var _entity
 

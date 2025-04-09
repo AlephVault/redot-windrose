@@ -1,4 +1,10 @@
 extends Object
+## An EntitiesRule has the responsibility
+## to manage the entities: track data of
+## the entities positions, tell whether
+## a movement can be installed or cancelled,
+## and tell whether an object can be attached
+## to the related map.
 
 ## Stage of the movement-start operation.
 ## Used to tell on_movement_started which
@@ -62,7 +68,7 @@ func _init(entity_layer) -> void:
 var _initialized: bool = false
 
 ## Initializes the whole map rule.
-func initialize():
+func initialize() -> void:
 	if self._initialized:
 		return
 	self._initialized = true
@@ -78,16 +84,16 @@ func initialize():
 ## Initializes global data for this rule.
 ## Make use of `size` property to understand
 ## the size of the underlying data.
-func initialize_global_data():
+func initialize_global_data() -> void:
 	pass
 
 ## Initializes a cell's data for this rule.
-func initialize_cell_data(cell: Vector2i):
+func initialize_cell_data(cell: Vector2i) -> void:
 	pass
 
 ## Updates a cell's data for this rule. Most
 ## likely, the same as initialize_cell_data.
-func update_cell_data(cell: Vector2i):
+func update_cell_data(cell: Vector2i) -> void:
 	pass
 
 ## Tells whether an entity can be attached
@@ -96,7 +102,7 @@ func can_attach(entity, cell: Vector2i) -> bool:
 	return true
 
 ## Handles when an entity has been attached to the map.
-func on_entity_attached(entity, to_position: Vector2i):
+func on_entity_attached(entity, to_position: Vector2i) -> void:
 	pass
 
 ## Tells whether an entity can start moving.
@@ -108,7 +114,7 @@ func can_move(entity, direction: int) -> bool:
 func on_movement_started(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementStartedStage
-):
+) -> void:
 	pass
 
 ## Handles when an entity completed a movement (to a
@@ -116,7 +122,7 @@ func on_movement_started(
 func on_movement_finished(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementConfirmedStage
-):
+) -> void:
 	pass
 
 ## Tells whether an entity can cancel its current movement.
@@ -127,7 +133,7 @@ func can_cancel_movement(entity, direction: int) -> bool:
 func on_movement_cancelled(
 	entity, start_position: Vector2i, reverted_position: Vector2i, direction: int,
 	stage: MovementClearedStage
-):
+) -> void:
 	pass
 
 ## Handles when an entity was teleported to a new position
@@ -135,11 +141,11 @@ func on_movement_cancelled(
 func on_teleported(
 	entity, from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
-):
+) -> void:
 	pass
 
 ## Handles when an entity was detached from the map.
-func on_entity_detached(entity, from_position: Vector2i):
+func on_entity_detached(entity, from_position: Vector2i) -> void:
 	pass
 
 ## Handles when an entity has one of the properties changed
@@ -147,5 +153,5 @@ func on_entity_detached(entity, from_position: Vector2i):
 func on_property_updated(
 	entity_rule: AlephVault__WindRose.Rules.EntityRule,
 	property: String, old_value, new_value
-):
+) -> void:
 	pass
