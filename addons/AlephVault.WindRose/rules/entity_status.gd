@@ -4,13 +4,29 @@ extends Object
 ## (anchored by top-left corner).
 
 ## The current position.
-var position: Vector2i
+var _position: Vector2i
+
+var position: Vector2i:
+	get:
+		return _position
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntityStatus", "position"
+		)
 
 ## The current movement.
-var movement: AlephVault__WindRose.Utils.DirectionUtils.Direction
+var _movement: AlephVault__WindRose.Utils.DirectionUtils.Direction
+
+var movement: AlephVault__WindRose.Utils.DirectionUtils.Direction:
+	get:
+		return _movement
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntityStatus", "position"
+		)
 
 func _init(
-	_position: Vector2i
+	position: Vector2i
 ):
-	position = _position
-	movement = AlephVault__WindRose.Utils.DirectionUtils.Direction.NONE 
+	_position = position
+	_movement = AlephVault__WindRose.Utils.DirectionUtils.Direction.NONE 

@@ -3,6 +3,8 @@ extends Object
 ## to be used and, based on it, to manage the
 ## state of the entities in the current map.
 
+const EntityStatus = preload("./entity_status.gd")
+
 var _entities_rule: AlephVault__WindRose.Rules.EntitiesRule
 
 ## Returns the entities rule for this manager.
@@ -13,6 +15,11 @@ var entities_rule: AlephVault__WindRose.Rules.EntitiesRule:
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntitiesManager", "entities_rule"
 		)
+
+var _statuses: Dictionary
+
+func get_status_for(entity_rule: AlephVault__WindRose.Rules.EntityRule):
+	return _statuses.get(entity_rule)
 
 ## Construction takes the entities layer and
 ## keeps also the associated rule
