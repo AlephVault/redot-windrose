@@ -27,3 +27,7 @@ class Error:
 	func _init(code: String, detail: String = ""):
 		_code = code
 		_detail = detail
+	
+	func raise():
+		assert(false, self._detail)
+		return self
