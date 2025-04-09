@@ -31,3 +31,7 @@ class Error:
 	func raise():
 		assert(false, self._detail)
 		return self
+
+## Raises an error.
+static func raise(code: String, details: String = "") -> Error:
+	return Error.new(code, details).raise()
