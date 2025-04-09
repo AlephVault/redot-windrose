@@ -39,7 +39,7 @@ var entity_layer:
 		return _entity_layer
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"MapRule", "entity_layer"
+			"EntitiesRule", "entity_layer"
 		)
 
 var _size: Vector2i
@@ -50,7 +50,7 @@ var size: Vector2i:
 		return _size
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"MapRule", "size"
+			"EntitiesRule", "size"
 		)
 
 ## Construction takes the entity layer
