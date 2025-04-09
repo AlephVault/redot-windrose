@@ -3,10 +3,10 @@ extends Object
 ## the related entity. It is the counterpart
 ## of an EntitiesRule.
 
-var _entity
+var _entity: AlephVault__WindRose.Entities.Entity
 
 ## Returns the associated entity.
-var entity:
+var entity: AlephVault__WindRose.Entities.Entity:
 	get:
 		return _entity
 	set(value):
@@ -16,7 +16,7 @@ var entity:
 
 var _size: Vector2i
 
-## Returns the size for this strategy.
+## Returns the size for this rule.
 var size: Vector2i:
 	get:
 		return _size
@@ -25,6 +25,6 @@ var size: Vector2i:
 			"EntityRule", "size"
 		)
 
-func _init(entity):
+func _init(entity: AlephVault__WindRose.Entities.Entity):
 	_entity = entity
 	_size = entity.size
