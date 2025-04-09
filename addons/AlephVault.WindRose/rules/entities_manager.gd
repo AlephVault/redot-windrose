@@ -3,5 +3,30 @@ extends Object
 ## to be used and, based on it, to manage the
 ## state of the entities in the current map.
 
-func _init() -> void:
-	pass
+var _entities_rule: AlephVault__WindRose.Rules.EntitiesRule
+
+## Returns the entities rule for this manager.
+var entities_rule: AlephVault__WindRose.Rules.EntitiesRule:
+	get:
+		return _entities_rule
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesManager", "entities_rule"
+		)
+
+var _entities_layer
+
+## Returns the associated entity layer.
+var entities_layer:
+	get:
+		return _entities_layer
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesManager", "entities_layer"
+		)
+
+## Construction takes the entity rule and
+## keeps that rule and its layer.
+func _init(entities_rule: AlephVault__WindRose.Rules.EntitiesRule) -> void:
+	_entities_rule = entities_rule
+	_entities_layer = entities_rule.entities_layer

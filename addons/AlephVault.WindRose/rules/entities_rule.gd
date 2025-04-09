@@ -37,20 +37,20 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-var _entity_layer
+var _entities_layer
 
 ## Returns the associated entity layer.
-var entity_layer:
+var entities_layer:
 	get:
-		return _entity_layer
+		return _entities_layer
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntitiesRule", "entity_layer"
+			"EntitiesRule", "entities_layer"
 		)
 
 var _size: Vector2i
 
-## Returns the size for this strategy.
+## Returns the size for this rule.
 var size: Vector2i:
 	get:
 		return _size
@@ -59,11 +59,11 @@ var size: Vector2i:
 			"EntitiesRule", "size"
 		)
 
-## Construction takes the entity layer
+## Construction takes the entity layer and
 ## keeps that layer and size.
-func _init(entity_layer) -> void:
-	_entity_layer = entity_layer
-	_size = entity_layer.size
+func _init(entities_layer) -> void:
+	_entities_layer = entities_layer
+	_size = entities_layer.size
 
 var _initialized: bool = false
 
@@ -98,21 +98,31 @@ func update_cell_data(cell: Vector2i) -> void:
 
 ## Tells whether an entity can be attached
 ## to the map.
-func can_attach(entity, cell: Vector2i) -> bool:
+func can_attach(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	cell: Vector2i
+) -> bool:
 	return true
 
 ## Handles when an entity has been attached to the map.
-func on_entity_attached(entity, to_position: Vector2i) -> void:
+func on_entity_attached(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	to_position: Vector2i
+) -> void:
 	pass
 
 ## Tells whether an entity can start moving.
-func can_move(entity, direction: int) -> bool:
+func can_move(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	direction: int
+) -> bool:
 	return true
 
 ## Handles when an entity started moving (to a single
 ## adjacent cell).
 func on_movement_started(
-	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementStartedStage
 ) -> void:
 	pass
@@ -120,18 +130,23 @@ func on_movement_started(
 ## Handles when an entity completed a movement (to a
 ## single adjacent cell).
 func on_movement_finished(
-	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementConfirmedStage
 ) -> void:
 	pass
 
 ## Tells whether an entity can cancel its current movement.
-func can_cancel_movement(entity, direction: int) -> bool:
+func can_cancel_movement(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	direction: int
+) -> bool:
 	return true
 
 ## Handles when an entity cancelled a movement.
 func on_movement_cancelled(
-	entity, start_position: Vector2i, reverted_position: Vector2i, direction: int,
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	start_position: Vector2i, reverted_position: Vector2i, direction: int,
 	stage: MovementClearedStage
 ) -> void:
 	pass
@@ -139,13 +154,17 @@ func on_movement_cancelled(
 ## Handles when an entity was teleported to a new position
 ## in the map.
 func on_teleported(
-	entity, from_position: Vector2i, to_position: Vector2i,
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
 ) -> void:
 	pass
 
 ## Handles when an entity was detached from the map.
-func on_entity_detached(entity, from_position: Vector2i) -> void:
+func on_entity_detached(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	from_position: Vector2i
+) -> void:
 	pass
 
 ## Handles when an entity has one of the properties changed
