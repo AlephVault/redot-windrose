@@ -31,10 +31,10 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-var _entity_layer # TODO Annotate with EntityLayer
+var _entity_layer
 
 ## Returns the associated entity layer.
-var entity_layer: # TODO Annotate with EntityLayer
+var entity_layer:
 	get:
 		return _entity_layer
 	set(value):
@@ -42,13 +42,22 @@ var entity_layer: # TODO Annotate with EntityLayer
 			"MapRule", "entity_layer"
 		)
 
-# Returns the sizze of the related map.
-func _size() -> Vector2i:
-	# TODO implement.
-	return Vector2i(0, 0)
+var _size: Vector2i
 
-func _init(_entity_layer) -> void: # TODO Annotate with EntityLayer
-	entity_layer = _entity_layer
+## Returns the size for this strategy.
+var size: Vector2i:
+	get:
+		return _size
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapRule", "size"
+		)
+
+## Construction takes the entity layer
+## keeps that layer and size.
+func _init(entity_layer) -> void:
+	_entity_layer = entity_layer
+	_size = entity_layer.size
 
 var _initialized: bool = false
 
@@ -61,7 +70,7 @@ func initialize():
 	# Initializes the internal data when it's ready.
 	# This already comes from a TileMap, most likely.
 	self.initialize_global_data()
-	var s: Vector2i = self._size()
+	var s: Vector2i = self._size
 	for y in range(s.y):
 		for x in range(s.x):
 			self.initialize_cell_data(Vector2i(x, y))
@@ -75,41 +84,47 @@ func initialize_cell_data(cell: Vector2i):
 func update_cell_data(cell: Vector2i):
 	pass
 
-func can_attach(entity, cell: Vector2i) -> bool: # TODO Annotate with Entity
+func can_attach(entity, cell: Vector2i) -> bool:
 	return true
 
-func on_entity_attached(entity, to_position: Vector2i): # TODO Annotate with Entity
+func on_entity_attached(entity, to_position: Vector2i):
 	pass
 
-func can_move(entity, direction: int) -> bool: # TODO Annotate with Entity
+func can_move(entity, direction: int) -> bool:
 	return true
 
 func on_movement_started(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementStartedStage
-): # TODO Annotate with Entity
+):
 	pass
 
 func on_movement_finished(
 	entity, start_position: Vector2i, end_position: Vector2i, direction: int,
 	stage: MovementConfirmedStage
-): # TODO Annotate with Entity
+):
 	pass
 
-func can_cancel_movement(entity, direction: int) -> bool: # TODO Annotate with Entity
+func can_cancel_movement(entity, direction: int) -> bool:
 	return true
 
 func on_movement_cancelled(
 	entity, start_position: Vector2i, reverted_position: Vector2i, direction: int,
 	stage: MovementClearedStage
-): # TODO Annotate with Entity
+):
 	pass
 
 func on_teleported(
 	entity, from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
-): # TODO Annotate with Entity
+):
 	pass
 
-func on_entity_detached(entity, from_position: Vector2i): # TODO Annotate with Entity
+func on_entity_detached(entity, from_position: Vector2i):
+	pass
+
+func on_property_updated(
+	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	property: String, old_value, new_value
+):
 	pass
