@@ -37,10 +37,10 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-var _entities_layer
+var _entities_layer: AlephVault__WindRose.Entities.Entity
 
 ## Returns the associated entity layer.
-var entities_layer:
+var entities_layer: AlephVault__WindRose.Entities.Entity:
 	get:
 		return _entities_layer
 	set(value):
@@ -61,7 +61,7 @@ var size: Vector2i:
 
 ## Construction takes the entity layer and
 ## keeps that layer and size.
-func _init(entities_layer) -> void:
+func _init(entities_layer: AlephVault__WindRose.Entities.Entity) -> void:
 	_entities_layer = entities_layer
 	_size = entities_layer.size
 

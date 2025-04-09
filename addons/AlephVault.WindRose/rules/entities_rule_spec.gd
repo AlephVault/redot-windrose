@@ -7,6 +7,8 @@ extends Resource
 ## object later.
 
 ## Instantiates a rule object for the given entity.
-func create_rule(entity) -> AlephVault__WindRose.Rules.EntitiesRule:
-	assert(false, "EntitiesRuleSpec::create_rule(entity) must be implemented")
+func create_rule(
+	entities_layer: AlephVault__WindRose.Entities.Layer
+) -> AlephVault__WindRose.Rules.EntitiesRule:
+	assert(false, "EntitiesRuleSpec::create_rule(entities_layer) must be implemented")
 	return null
