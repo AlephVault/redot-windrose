@@ -11,14 +11,24 @@ enum Direction {
 }
 
 ## Tells whether a direction is valid.
-static func is_valid_direction(direction: int) -> bool:
+static func is_valid_direction(direction: Direction) -> bool:
 	return direction in [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
 ## Returns the opposite of a given direction.
-static func opposite_direction(direction: int) -> int:
+static func opposite_direction(direction: Direction) -> Direction:
 	match direction:
 		Direction.UP: return Direction.DOWN
 		Direction.DOWN: return Direction.UP
 		Direction.LEFT: return Direction.RIGHT
 		Direction.RIGHT: return Direction.LEFT
 		_: return Direction.NONE
+
+## Returns the delta of a vector, independent of
+## the layout.
+static func get_delta(direction: Direction) -> Vector2i:
+	match direction:
+		Direction.UP: return Vector2i(0, -1)
+		Direction.DOWN: return Vector2i(0, 1)
+		Direction.LEFT: return Vector2i(-1, 0)
+		Direction.RIGHT: return Vector2i(1, 0)
+		_: return Vector2i(0, 0)

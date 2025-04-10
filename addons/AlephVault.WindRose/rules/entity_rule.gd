@@ -48,3 +48,27 @@ func trigger_on_movement_started(
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
 		"EntityRule", "trigger_on_movement_started"
 	)
+
+## Triggers the on_movement_finished event.
+func trigger_on_movement_finished(
+	from_position: Vector2i, to_position: Vector2i, direction: _Direction
+):
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "trigger_on_movement_finished"
+	)
+
+## Triggers the on_movement_cleared event. Reverted
+## position will be (-1, -1) if there was no movement.
+func trigger_on_movement_cleared(
+	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
+):
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "trigger_on_movement_cleared"
+	)
+
+func trigger_on_teleported(
+	from_position: Vector2i, to_position: Vector2i
+):
+	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
+		"EntityRule", "trigger_on_movement_teleported"
+	)

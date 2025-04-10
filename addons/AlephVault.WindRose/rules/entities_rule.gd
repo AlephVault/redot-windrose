@@ -39,13 +39,6 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-## Returns a delta for the given direction.
-func get_delta(direction: _Direction) -> Vector2i:
-	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
-		"EntitiesRule", "get_delta"
-	)
-	return Vector2i(0, 0)
-
 ## Returns the size of the rule's terrain.
 func _get_size() -> Vector2i:
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
@@ -149,6 +142,8 @@ func can_cancel_movement(
 	return true
 
 ## Handles when an entity cancelled a movement.
+## reverted_position will be (-1, -1) if the
+## direction is None.
 func on_movement_cancelled(
 	entity_rule: AlephVault__WindRose.Rules.EntityRule,
 	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,

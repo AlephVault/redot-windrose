@@ -8,7 +8,8 @@ const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
 const _EntityRule = AlephVault__WindRose.Rules.EntityRule
 const _EntitiesRule = AlephVault__WindRose.Rules.EntitiesRule
-const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
+const _Direction = _DirectionUtils.Direction
 const EntityStatus = preload("./entity_status.gd")
 
 var _entities_rule: _EntitiesRule
@@ -54,9 +55,7 @@ func initialize() -> void:
 	entities_rule.initialize()
 
 ## Attaches an entity to the current rule.
-func attach(
-	entity_rule: _EntityRule, to_position: Vector2i
-) -> _Exception:
+func attach(entity_rule: _EntityRule, to_position: Vector2i) -> _Exception:
 	var e: _Exception
 	# Check is not attached.
 	e = _require_not_attached(entity_rule)
@@ -65,10 +64,11 @@ func attach(
 	# Check allowance.
 	if not _can_attach(entity_rule, to_position):
 		return _Exception.raise("not_allowed", "Entity not allowed")
-	var s: Vector2i = entities_rule.size
-	var f: Vector2i = s + to_position
 	# Check boundaries.
-	if to_position.x < 0 or to_position.y < 0 or f.x > s.x or f.y > s.y:
+	var ss: Vector2i = entities_rule.size
+	var s: Vector2i = entity_rule.size
+	var f: Vector2i = s + to_position
+	if to_position.x < 0 or to_position.y < 0 or f.x > ss.x or f.y > ss.y:
 		return _Exception.raise("outbound", "Position out of bounds")
 	# Register status.
 	_statuses[entity_rule] = EntityStatus.new(to_position)
@@ -85,9 +85,7 @@ func _attached(entity_rule: _EntityRule, to_position: Vector2i) -> void:
 	entity_rule.trigger_on_attached(to_position)
 
 ## Detaches an entity from the current rule.
-func detach(
-	entity_rule: _EntityRule
-) -> _Exception:
+func detach(entity_rule: _EntityRule) -> _Exception:
 	var e: _Exception
 	# Check is attached.
 	e = _require_attached(entity_rule)
@@ -118,7 +116,7 @@ func movement_start(
 	# Check if it can allocate a movement.
 	var status: EntityStatus = _statuses[entity_rule]
 	var position: Vector2i = status.position
-	var end_position: Vector2i = position + entities_rule.get_delta(direction)
+	var end_position: Vector2i = position + _DirectionUtils.get_delta(direction)
 	if not _can_allocate(
 		entity_rule, position, direction, continued
 	):
@@ -152,7 +150,7 @@ func _can_allocate(
 	entity_rule: _EntityRule,
 	position: Vector2i, direction: _Direction, continued: bool
 ) -> bool:
-	return entities_rule.can_move(entity_rule, position, direction, continued)
+	return bypass or entities_rule.can_move(entity_rule, position, direction, continued)
 
 func _movement_started(
 	entity_rule: _EntityRule,
@@ -163,6 +161,131 @@ func _movement_started(
 		entity_rule, from_position, to_position, direction, stage
 	)
 
+## Cancels an ongoing movement, if there was any.
+func movement_cancel(entity_rule: _EntityRule) -> _Response:
+	# Check is attached.
+	var e: _Exception
+	e = _require_attached(entity_rule)
+	if e:
+		return _Response.fail(e)
+	var status: EntityStatus = _statuses[entity_rule]
+	# Check if can clear.
+	if bypass or entities_rule.can_cancel_movement(
+		entity_rule, status.movement
+	):
+		# Everything ok.
+		_clear_movement(entity_rule)
+		return _Response.succeed(true)
+	else:
+		# It cannot clear.
+		return _Response.succeed(false)
+
 # Clears any pending movement.
-func _clear_movement(entity_rule: _EntityRule) -> void:
-	pass
+func _clear_movement(entity_rule: _EntityRule):
+	var status: EntityStatus = _statuses[entity_rule]
+	var movement: _Direction = status.movement
+	var start_position: Vector2i = status.position
+	var reverted_position: Vector2i = start_position + _DirectionUtils.get_delta(movement)
+	entities_rule.on_movement_cancelled(
+		entity_rule, start_position, reverted_position, movement,
+		_EntitiesRule.MovementClearedStage.Begin
+	)
+	_statuses[entity_rule].movement = _Direction.NONE
+	entities_rule.on_movement_cancelled(
+		entity_rule, start_position, reverted_position, movement,
+		_EntitiesRule.MovementClearedStage.MovementCleared
+	)
+	entity_rule.trigger_on_movement_cleared(
+		start_position, reverted_position, movement
+	)
+	entities_rule.on_movement_cancelled(
+		entity_rule, start_position, reverted_position, movement,
+		_EntitiesRule.MovementClearedStage.Begin
+	)
+
+## Marks a movement as finished, when effectively
+## was terminated by the movement engine itself.
+## Objects report this as a way to actually mark
+## their movement as finished.
+func movement_finish(entity_rule: _EntityRule) -> _Response:
+	# Check is attached.
+	var e: _Exception
+	e = _require_attached(entity_rule)
+	if e:
+		return _Response.fail(e)
+	var status: EntityStatus = _statuses[entity_rule]
+	# Check it's moving.
+	if status.movement == _Direction.NONE:
+		return _Response.succeed(false)
+	# Finishes the movement.
+	var start_position: Vector2i = status.position
+	var movement: _Direction = status.movement
+	var end_position: Vector2i = start_position + _DirectionUtils.get_delta(movement)
+	entities_rule.on_movement_finished(
+		entity_rule, start_position, end_position, movement,
+		_EntitiesRule.MovementConfirmedStage.Begin
+	)
+	status.position = end_position
+	entities_rule.on_movement_finished(
+		entity_rule, start_position, end_position, movement,
+		_EntitiesRule.MovementConfirmedStage.PositionChanged
+	)
+	status.movement = _Direction.NONE
+	entities_rule.on_movement_finished(
+		entity_rule, start_position, end_position, movement,
+		_EntitiesRule.MovementConfirmedStage.MovementCleared
+	)
+	entity_rule.trigger_on_movement_finished(
+		start_position, end_position, movement
+	)
+	entities_rule.on_movement_finished(
+		entity_rule, start_position, end_position, movement,
+		_EntitiesRule.MovementConfirmedStage.End
+	)
+	# Everything ok.
+	return _Response.succeed(true)
+
+## Teleports an entity to another position in the map.
+## It can be done silently, to not trigger any event.
+func teleport(
+	entity_rule: _EntityRule, to_position: Vector2i,
+	silent: bool = false
+) -> _Exception:
+	# Check is attached.
+	var e: _Exception
+	e = _require_attached(entity_rule)
+	if e:
+		return e
+	# Check boundaries.
+	var ss: Vector2i = entities_rule.size
+	var s: Vector2i = entity_rule.size
+	var f: Vector2i = s + to_position
+	if to_position.x < 0 or to_position.y < 0 or f.x > ss.x or f.y > ss.y:
+		return _Exception.raise("outbound", "Position out of bounds")
+
+	# Start the teleport.
+	var status: EntityStatus = _statuses[entity_rule]
+	var position: Vector2i = status.position
+	# Clear the movement.
+	_clear_movement(entity_rule)
+	# Teleport.
+	entities_rule.on_teleported(
+		entity_rule, position, to_position,
+		_EntitiesRule.TeleportedStage.Begin
+	)
+	status.position = to_position
+	entities_rule.on_teleported(
+		entity_rule, position, to_position,
+		_EntitiesRule.TeleportedStage.PositionChanged
+	)
+	if not silent:
+		entity_rule.trigger_on_teleported(
+			position, to_position
+		)
+	entities_rule.on_teleported(
+		entity_rule, position, to_position,
+		_EntitiesRule.TeleportedStage.End
+	)
+
+	# Everything ok.
+	return null
