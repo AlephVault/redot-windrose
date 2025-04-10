@@ -289,3 +289,12 @@ func teleport(
 
 	# Everything ok.
 	return null
+
+## Reports a property being updated on an entity rule.
+func property_updated(
+	entity_rule: _EntityRule,
+	property: String, old_value, new_value
+):
+	entities_rule.on_property_updated(
+		entity_rule, property, old_value, new_value
+	)

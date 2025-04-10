@@ -168,7 +168,12 @@ func on_entity_detached(
 	pass
 
 ## Handles when an entity has one of the properties changed
-## on one of the entity-side rules.
+## on one of the entity-side rules. If the entity_rule is
+## not from the expected type, this function should not do
+## anything on itself but, perhaps, invoke this method on
+## properties that are other EntitiesRules objects being
+## dependencies on this EntitiesRules object, until one of
+## them matches the entity rule type.
 func on_property_updated(
 	entity_rule: AlephVault__WindRose.Rules.EntityRule,
 	property: String, old_value, new_value
