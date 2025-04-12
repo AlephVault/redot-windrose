@@ -6,6 +6,7 @@ const _ExceptionUtils = AlephVault__WindRose.Utils.ExceptionUtils
 const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
 const _Scope = AlephVault__WindRose.Maps.Scope
+const _Map = AlephVault__WindRose.Maps.Map
 
 var _scopesByKey: Dictionary = {}
 var _scopes: Dictionary = {}
@@ -41,3 +42,12 @@ func _drop(key: String) -> _Response:
 ## or unknown key, it returns none.
 func get_scope(key: String) -> _Scope:
 	return _scopesByKey.get(key)
+
+## A shortcut utility to get a by scope's key
+## and index, provided both the scope's key
+## and map index are valid.
+func get_map(key: String, index: int) -> _Map:
+	var scope: _Scope = _scopesByKey.get(key)
+	if scope == null:
+		return null
+	return scope.get_map(index)
