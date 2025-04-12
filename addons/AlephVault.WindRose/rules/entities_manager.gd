@@ -55,21 +55,21 @@ func initialize() -> void:
 	entities_rule.initialize()
 
 ## Attaches an entity to the current rule.
-func attach(entity_rule: _EntityRule, to_position: Vector2i) -> _Exception:
+func attach(entity_rule: _EntityRule, to_position: Vector2i) -> _Response:
 	var e: _Exception
 	# Check is not attached.
 	e = _require_not_attached(entity_rule)
 	if e:
-		return e
+		return _Response.fail(e)
 	# Check allowance.
 	if not _can_attach(entity_rule, to_position):
-		return _Exception.raise("not_allowed", "Entity not allowed")
+		return _Response.fail(_Exception.raise("not_allowed", "Entity not allowed"))
 	# Check boundaries.
 	var ss: Vector2i = entities_rule.size
 	var s: Vector2i = entity_rule.size
 	var f: Vector2i = s + to_position
 	if to_position.x < 0 or to_position.y < 0 or f.x > ss.x or f.y > ss.y:
-		return _Exception.raise("outbound", "Position out of bounds")
+		return _Response.fail(_Exception.raise("outbound", "Position out of bounds"))
 	# Register status.
 	_statuses[entity_rule] = EntityStatus.new(to_position)
 	# Hooks.
@@ -85,12 +85,12 @@ func _attached(entity_rule: _EntityRule, to_position: Vector2i) -> void:
 	entity_rule.trigger_on_attached(to_position)
 
 ## Detaches an entity from the current rule.
-func detach(entity_rule: _EntityRule) -> _Exception:
+func detach(entity_rule: _EntityRule) -> _Response:
 	var e: _Exception
 	# Check is attached.
 	e = _require_attached(entity_rule)
 	if e:
-		return e
+		return _Response.fail(e)
 	# Get the position.
 	var status: EntityStatus = _statuses[entity_rule]
 	var from_position: Vector2i = status.position
@@ -101,7 +101,7 @@ func detach(entity_rule: _EntityRule) -> _Exception:
 	_statuses.erase(entity_rule)
 	entity_rule.trigger_on_detached(from_position)
 	# Everything ok.
-	return null
+	return _Response.succeed(null)
 
 ## Starts a movement for an entity.
 func movement_start(
@@ -250,18 +250,18 @@ func movement_finish(entity_rule: _EntityRule) -> _Response:
 func teleport(
 	entity_rule: _EntityRule, to_position: Vector2i,
 	silent: bool = false
-) -> _Exception:
+) -> _Response:
 	# Check is attached.
 	var e: _Exception
 	e = _require_attached(entity_rule)
 	if e:
-		return e
+		return _Response.fail(e)
 	# Check boundaries.
 	var ss: Vector2i = entities_rule.size
 	var s: Vector2i = entity_rule.size
 	var f: Vector2i = s + to_position
 	if to_position.x < 0 or to_position.y < 0 or f.x > ss.x or f.y > ss.y:
-		return _Exception.raise("outbound", "Position out of bounds")
+		return _Response.fail(_Exception.raise("outbound", "Position out of bounds"))
 
 	# Start the teleport.
 	var status: EntityStatus = _statuses[entity_rule]
@@ -288,7 +288,7 @@ func teleport(
 	)
 
 	# Everything ok.
-	return null
+	return _Response.succeed(null)
 
 ## Reports a property being updated on an entity rule.
 func property_updated(
