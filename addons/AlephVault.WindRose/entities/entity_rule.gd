@@ -14,3 +14,6 @@ var entity: _Entity:
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntityRule", "entity"
 		)
+
+func _init(entity: _Entity) -> void:
+	_entity = entity
