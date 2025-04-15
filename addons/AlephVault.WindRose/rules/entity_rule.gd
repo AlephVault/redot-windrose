@@ -4,6 +4,7 @@ extends Object
 ## of an EntitiesRule.
 
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+const _EntitiesRule = AlephVault__WindRose.Rules.EntitiesRule
 
 ## Returns the size of the rule's terrain.
 func _get_size() -> Vector2i:
@@ -22,13 +23,13 @@ var size: Vector2i:
 		)
 
 ## Triggers the on_attached event.
-func trigger_on_attached(to_position: Vector2i):
+func trigger_on_attached(entities_rule: _EntitiesRule, to_position: Vector2i):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
 		"EntityRule", "trigger_on_attached"
 	)
 
 ## Triggers the on_detached event.
-func trigger_on_detached(from_position: Vector2i):
+func trigger_on_detached(entities_rule: _EntitiesRule, from_position: Vector2i):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
 		"EntityRule", "trigger_on_detached"
 	)

@@ -82,7 +82,7 @@ func _can_attach(entity_rule: _EntityRule, to_position: Vector2i) -> bool:
 
 func _attached(entity_rule: _EntityRule, to_position: Vector2i) -> void:
 	entities_rule.on_entity_attached(entity_rule, to_position)
-	entity_rule.trigger_on_attached(to_position)
+	entity_rule.trigger_on_attached(_entities_rule, to_position)
 
 ## Detaches an entity from the current rule.
 func detach(entity_rule: _EntityRule) -> _Response:
@@ -99,7 +99,7 @@ func detach(entity_rule: _EntityRule) -> _Response:
 	# Hooks.
 	entities_rule.on_entity_detached(entity_rule, from_position)
 	_statuses.erase(entity_rule)
-	entity_rule.trigger_on_detached(from_position)
+	entity_rule.trigger_on_detached(_entities_rule, from_position)
 	# Everything ok.
 	return _Response.succeed(null)
 
