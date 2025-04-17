@@ -25,10 +25,23 @@ var entities_rule: _EntitiesRule:
 
 var _statuses: Dictionary
 
+# Whether bypassing is allowed for this manager
+# or not. By default, bypassing is not allowed,
+# but this can be overridden to allow it under
+# certain configuration(s).
+func _bypass() -> bool:
+	return false
+
 ## Whether to bypass any veto or not. Useful
 ## for online games, where the truth is in the
 ## server and not here.
-@export var bypass: bool = false
+var bypass: bool:
+	get:
+		return _bypass()
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesManager", "entities_rule"
+		)
 
 ## Gets the current status for an entity rule.
 func get_status_for(entity_rule: _EntityRule):
@@ -75,7 +88,7 @@ func attach(entity_rule: _EntityRule, to_position: Vector2i) -> _Response:
 	# Hooks.
 	_attached(entity_rule, to_position)
 	# Everything ok.
-	return null
+	return _Response.succeed(null)
 
 func _can_attach(entity_rule: _EntityRule, to_position: Vector2i) -> bool:
 	return bypass or entities_rule.can_attach(entity_rule, to_position)
@@ -113,8 +126,12 @@ func movement_start(
 	e = _require_attached(entity_rule)
 	if e:
 		return _Response.fail(e)
+	if direction == _Direction.NONE:
+		return _Response.succeed(false)
 	# Check if it can allocate a movement.
 	var status: EntityStatus = _statuses[entity_rule]
+	if status.movement != _Direction.NONE:
+		return _Response.succeed(false)
 	var position: Vector2i = status.position
 	var end_position: Vector2i = position + _DirectionUtils.get_delta(direction)
 	if not _can_allocate(
@@ -190,7 +207,7 @@ func _clear_movement(entity_rule: _EntityRule):
 		entity_rule, start_position, reverted_position, movement,
 		_EntitiesRule.MovementClearedStage.Begin
 	)
-	_statuses[entity_rule].movement = _Direction.NONE
+	_statuses[entity_rule]._movement = _Direction.NONE
 	entities_rule.on_movement_cancelled(
 		entity_rule, start_position, reverted_position, movement,
 		_EntitiesRule.MovementClearedStage.MovementCleared
@@ -225,12 +242,12 @@ func movement_finish(entity_rule: _EntityRule) -> _Response:
 		entity_rule, start_position, end_position, movement,
 		_EntitiesRule.MovementConfirmedStage.Begin
 	)
-	status.position = end_position
+	status._position = end_position
 	entities_rule.on_movement_finished(
 		entity_rule, start_position, end_position, movement,
 		_EntitiesRule.MovementConfirmedStage.PositionChanged
 	)
-	status.movement = _Direction.NONE
+	status._movement = _Direction.NONE
 	entities_rule.on_movement_finished(
 		entity_rule, start_position, end_position, movement,
 		_EntitiesRule.MovementConfirmedStage.MovementCleared
@@ -273,7 +290,7 @@ func teleport(
 		entity_rule, position, to_position,
 		_EntitiesRule.TeleportedStage.Begin
 	)
-	status.position = to_position
+	status._position = to_position
 	entities_rule.on_teleported(
 		entity_rule, position, to_position,
 		_EntitiesRule.TeleportedStage.PositionChanged
