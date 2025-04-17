@@ -22,6 +22,13 @@ var size: Vector2i:
 			"EntityRule", "size"
 		)
 
+# The internal callable to forward that a relevant
+# property was updated. 
+var _property_updated: Callable
+
+func _init(property_updated: Callable) -> void:
+	_property_updated = property_updated
+
 ## Triggers the on_attached event.
 func trigger_on_attached(entities_rule: _EntitiesRule, to_position: Vector2i):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
@@ -74,3 +81,9 @@ func trigger_on_teleported(
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
 		"EntityRule", "trigger_on_movement_teleported"
 	)
+
+## This is a protected method designed to be used by
+## subclasses of this parent class.
+func _property_was_updated(property: String, old, new) -> void:
+	if _property_updated != null:
+		_property_updated.call(property, old, new)
