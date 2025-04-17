@@ -57,6 +57,16 @@ var size: Vector2i:
 
 var _initialized: bool = false
 
+## Tells whether this entity rule is initialized
+## or not.
+var initialized: bool:
+	get:
+		return _initialized
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesRule", "initialized"
+		)
+
 ## Initializes the whole map rule.
 func initialize() -> void:
 	if self._initialized:
