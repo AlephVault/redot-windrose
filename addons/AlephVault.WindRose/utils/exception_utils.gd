@@ -77,5 +77,3 @@ class Response:
 	## Creates a failed response.
 	static func fail(error: Exception) -> Response:
 		return Response.new(error, null)
-	
-	
