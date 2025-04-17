@@ -19,7 +19,7 @@ var rule:
 			"Entity", "rule"
 		)
 
-var _size: Vector2i
+@export var _size: Vector2i
 
 ## Returns the size for this entity.
 var size: Vector2i:
@@ -30,4 +30,10 @@ var size: Vector2i:
 			"Entity", "size"
 		)
 
-# TODO continue.
+var _initialized: bool = false;
+var _movementCount: int = 0;
+var _destroyed: bool = false;
+
+func _init() -> void:
+	# on_attached.connect()
+	pass

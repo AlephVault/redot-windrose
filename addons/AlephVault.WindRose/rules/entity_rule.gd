@@ -67,6 +67,7 @@ func trigger_on_movement_cleared(
 		"EntityRule", "trigger_on_movement_cleared"
 	)
 
+## Triggers the on_teleported event.
 func trigger_on_teleported(
 	from_position: Vector2i, to_position: Vector2i
 ):
