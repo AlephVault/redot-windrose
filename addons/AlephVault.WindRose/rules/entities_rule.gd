@@ -39,17 +39,12 @@ enum TeleportedStage {
 	Begin, PositionChanged, End
 }
 
-## Returns the size of the rule's terrain.
-func _get_size() -> Vector2i:
-	AlephVault__WindRose.Utils.AccessUtils.not_implemented(
-		"EntitiesRule", "_get_size"
-	)
-	return Vector2i(0, 0)
+var _size: Vector2i
 
 ## Returns the size for this rule.
 var size: Vector2i:
 	get:
-		return _get_size()
+		return _size
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntitiesRule", "size"
@@ -80,6 +75,9 @@ func initialize() -> void:
 	for y in range(s.y):
 		for x in range(s.x):
 			self.initialize_cell_data(Vector2i(x, y))
+
+func _init(size: Vector2i):
+	_size = Vector2i(max(1, size.x), max(1, size.y))
 
 ## Initializes global data for this rule.
 ## Make use of `size` property to understand

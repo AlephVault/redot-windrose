@@ -40,7 +40,8 @@ So, first, the idea is to have an instance of _entities rule_, which will be des
 
 ```
 var my_entities_rule: AlephVault__WindRose.Rules.EntitiesRule = ...get from somewhere...
-var manager: AlephVault__WindRose.Rules.EntitiesManager = AlephVault__WindRose.Rules.EntitiesManager.new(my_entities_rule)
+var bypass = true # or false, or a lambda like (() -> bool).
+var manager: AlephVault__WindRose.Rules.EntitiesManager = AlephVault__WindRose.Rules.EntitiesManager.new(my_entities_rule, bypass)
 manager.initialize()
 ```
 
@@ -88,13 +89,20 @@ Once it's created, the entities rule will always remain the same for the given m
 	- `r.error.code == "outbound"` if the new position, considering the entity's size, is totally or partially out of bounds.
 - `property_updated(entity_rule: _EntityRule, property: String, old_value: Variant, new_value: Variant)`: Tells that the entity changed a property's value (telling the previous and new value). This is important, since it will force the underlying entities rule to update itself as also happens when starting, clearing, finishing or teleporting a movement.
 
-**This class is meant to be overridden**. With this in mind, there are some methods that should be overridden:
-
-- `_bypass() -> bool`: This is the underlying implementation of the Tells whether the veto logic for starting a movement, cancelling a movement or attaching an entity is skipped (`true`) or applied/checked (`false`). This is the implementation of the `bypass: bool` property.
-
 ### Entities-side rule
 
 This is where _the truth_ is held. The _entities rule_ keeps information regarding to the whole map to decide whether movements can be performed / cancelled or the entities can be attached.
+
+One typically instantiates an EntitiesRule (or rather: a subclass) like this:
+
+```
+# Typically, the constructor will remain the same: accepting a size.
+# In this example, the size will be 8x6 but can be any pair of positive
+# numbers (zero or negative are not accepted).
+#
+# Also, SomeEntitiesRule will subclass AlephVault__WindRose.Rules.EntitiesRule
+var my_entities_rule: SomeEntitiesRule = SomeEntitiesRule.new(Vector2i(8, 6)) 
+```
 
 **Properties**
 
@@ -107,7 +115,6 @@ This is where _the truth_ is held. The _entities rule_ keeps information regardi
 
 **This class is meant to be overridden**. If not overridden, this class is a very dummy rule not forbidding anything and, instead, allowing every movement or cancellation. No data, by default, is held in this case. Still, the methods are:
 
-- `_get_size() -> Vector2i`: This method is almost mandatory to implement. It implements the `size: Vector2i` property.
 - `initialize_global_data() -> void`: Override this to setup e.g. a global array of data or some other sort of global data.
 - `initialize_cell_data(cell: Vector2i) -> void`: Override this to somehow get data applying to a specific cell (e.g. data coming from a TileMap). Ideally, the data would be updated in the structure that was initialized during `initialize_global_data`.
 - `update_cell_data(cell: Vector2i) -> void`: Override this to somehow update data applying to a specific cell. The implementation is most likely the same, or similar to, `initialize_cell_data`.
@@ -149,22 +156,52 @@ This class holds data related to the entity. Think as if it were the logical _ma
 
 The size is constant and related to the entity. The data is custom to each implementation of entity rule.
 
-**This is an almost purely abstract class**, more like a purely template class.
+Creating an object of this class (or even more appropriate: a subclass of this class) is simple:
+	
+	```
+	# Provided the same constructor is respected and the entity is of 2x1:
+	# A Root entity rule (with signals for the trigger_* methods described below).
+	var entity_rule: MyEntityRule = MyEntityRule.new(Vector2i(2, 1))
+	# Same idea.
+	var entity_rule: MyEntityRule = MyEntityRule.new(Vector2i(2, 1), true)
+	# No signals (used for children rules).
+	var entity_rule: MyEntityRule = MyEntityRule.new(Vector2i(2, 1), false)
+	```
 
 **Properties**:
 
 - `size: Vector2i`: Returns the size of the underlying entity. Both dimensions are > 0.
+- `signals: AlephVault__WindRose.Rules.EntityRule.Signals`: Returns the signals object. Only for entity rules which are root.
 
-**This class is meant to be overridden**. All these methods must be overridden with no exception:
+**Methods**:
 
-- `_get_size() -> Vector2i`: Returns the size of the underlying entity. It's the implementation of the `size: Vector2i` property.
-- `trigger_on_attached(entities_rule: AlephVault__WindRose.Rules.EntitiesRule, to_position: Vector2i)`: A callback telling that the entity (rule) has successfully been added to a map (given by its entities rule).
-- `trigger_on_detached(entities_rule: AlephVault__WindRose.Rules.EntitiesRule, from_position: Vector2i)`: A callback telling that the entity (rule) has successfully been removed from a map (given by its entities rule).
+- `trigger_on_attached(entities_manager: AlephVault__WindRose.Rules.EntitiesManager, to_position: Vector2i)`: A callback telling that the entity (rule) has successfully been added to a map (given by its manager).
+- `trigger_on_detached()`: A callback telling that the entity (rule) has successfully been removed from a map (given by its entities rule).
 - `trigger_on_movement_rejected(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity's intention for movement has been rejected due to the entities rule's logic.
 - `trigger_on_movement_started(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity's intention for movement has been accepted due to the entities rule's logic.
 - `trigger_on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity finished moving.
 - `trigger_on_movement_cleared(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity's current movement was reverted (this might be a noop if the direction is `NONE`).
 - `trigger_on_teleported(from_position: Vector2i, to_position: Vector2i)`: A callback telling that the entity was just teleported.
-- `_property_was_updated(property: String, old, new)`: A method to be implemented and used. When implemented, it must provide a way to forward the update of an internal property so at some point the manager is reached and `property_updated(entity_rule, property, old, new)` is invoked. After it, the user must invoke this method, typically, in the `set(value):` part of a property after it's successfully updated so the bubbling starts.
+- `_property_was_updated(property: String, old, new)`: A method providing a way to notify the update of an internal property so at some point the manager is reached and `on_property_updated(entity_rule, property, old, new)` is invoked. After it, the user must invoke this method, typically, in the `set(value):` part of a property after it's successfully updated so the bubbling starts.
+
+**Signals**
+
+- `on_property_updated(property: String, old, new)`: Triggered by `_property_was_updated` method, usually when a rule's property changes.
 
 Notice how all the `trigger_` methods are so, in the end, the entity gets notified from an external place (i.e. the _manager_). We can think about these methods as if they were _inbound_ methods or callbacks. In contrast, `_property_was_updated` is different: its intention is not to receive a notification but to _serve_ as a notifier itself when a property in this entity rule object was changed. This is, however, chosen at user's discretion.
+
+The `trigger_*` methods trigger the matching signals available in the `signals` object, if the entity rule was created as root. If it's not a root, then these methods do nothing.
+
+### Entity-side rule's signals
+
+The `signals` object (`AlephVault__WindRose.Rules.EntityRule.Signals`) has the following signals:
+
+- `on_attached(entities_manager: AlephVault__WindRose.Rules.EntitiesManager, to_position: Vector2i)`: Triggered when the entity rule was added to an entities rule (space).
+- `on_detached()`: Triggered when the entity rule was removed from an entities rule (space).
+- `on_movement_started(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the entity started moving.
+- `on_movement_rejected(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the movement attempt was rejected.
+- `on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the current movement was finished.
+- `on_movement_cancelled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when a current movement was cancelled.
+- `on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the object was teleported.
+
+These signals are listened by the respective _entity_ to allow further end-user processing.

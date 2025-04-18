@@ -25,19 +25,17 @@ var entities_rule: _EntitiesRule:
 
 var _statuses: Dictionary
 
-# Whether bypassing is allowed for this manager
-# or not. By default, bypassing is not allowed,
-# but this can be overridden to allow it under
-# certain configuration(s).
-func _bypass() -> bool:
-	return false
+var _bypass
 
 ## Whether to bypass any veto or not. Useful
 ## for online games, where the truth is in the
 ## server and not here.
 var bypass: bool:
 	get:
-		return _bypass()
+		if _bypass is Callable:
+			return _bypass.call()
+		else:
+			return bool(_bypass)
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"EntitiesManager", "entities_rule"
@@ -59,8 +57,9 @@ func _require_attached(entity_rule: _EntityRule) -> _Exception:
 
 ## Construction takes the entities layer and
 ## keeps also the associated rule
-func _init(entities_rule: _EntitiesRule) -> void:
+func _init(entities_rule: _EntitiesRule, bypass) -> void:
 	_entities_rule = entities_rule
+	_bypass = bypass
 
 ## Initializes its state (and also the data of
 ## the underlying rule).
@@ -95,7 +94,7 @@ func _can_attach(entity_rule: _EntityRule, to_position: Vector2i) -> bool:
 
 func _attached(entity_rule: _EntityRule, to_position: Vector2i) -> void:
 	entities_rule.on_entity_attached(entity_rule, to_position)
-	entity_rule.trigger_on_attached(_entities_rule, to_position)
+	entity_rule.trigger_on_attached(self, to_position)
 
 ## Detaches an entity from the current rule.
 func detach(entity_rule: _EntityRule) -> _Response:
@@ -112,7 +111,7 @@ func detach(entity_rule: _EntityRule) -> _Response:
 	# Hooks.
 	entities_rule.on_entity_detached(entity_rule, from_position)
 	_statuses.erase(entity_rule)
-	entity_rule.trigger_on_detached(_entities_rule, from_position)
+	entity_rule.trigger_on_detached()
 	# Everything ok.
 	return _Response.succeed(null)
 
