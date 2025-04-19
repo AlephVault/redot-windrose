@@ -97,21 +97,21 @@ func update_cell_data(cell: Vector2i) -> void:
 ## Tells whether an entity can be attached
 ## to the map.
 func can_attach(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	cell: Vector2i
 ) -> bool:
 	return true
 
 ## Handles when an entity has been attached to the map.
 func on_entity_attached(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	to_position: Vector2i
 ) -> void:
 	pass
 
 ## Tells whether an entity can start moving.
 func can_move(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	position: Vector2i, direction: _Direction, continued: bool
 ) -> bool:
 	return true
@@ -119,7 +119,7 @@ func can_move(
 ## Handles when an entity started moving (to a single
 ## adjacent cell).
 func on_movement_started(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
 	stage: MovementStartedStage
 ) -> void:
@@ -128,7 +128,7 @@ func on_movement_started(
 ## Handles when an entity is rejected moving (to a single
 ## adjacent cell).
 func on_movement_rejected(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction
 ) -> void:
 	pass
@@ -136,7 +136,7 @@ func on_movement_rejected(
 ## Handles when an entity completed a movement (to a
 ## single adjacent cell).
 func on_movement_finished(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
 	stage: MovementConfirmedStage
 ) -> void:
@@ -144,7 +144,7 @@ func on_movement_finished(
 
 ## Tells whether an entity can cancel its current movement.
 func can_cancel_movement(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	direction: _Direction
 ) -> bool:
 	return true
@@ -153,7 +153,7 @@ func can_cancel_movement(
 ## reverted_position will be (-1, -1) if the
 ## direction is None.
 func on_movement_cancelled(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
 	stage: MovementClearedStage
 ) -> void:
@@ -162,7 +162,7 @@ func on_movement_cancelled(
 ## Handles when an entity was teleported to a new position
 ## in the map.
 func on_teleported(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
 ) -> void:
@@ -170,7 +170,7 @@ func on_teleported(
 
 ## Handles when an entity was detached from the map.
 func on_entity_detached(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	from_position: Vector2i
 ) -> void:
 	pass
@@ -183,7 +183,7 @@ func on_entity_detached(
 ## dependencies on this EntitiesRules object, until one of
 ## them matches the entity rule type.
 func on_property_updated(
-	entity_rule: AlephVault__WindRose.Rules.EntityRule,
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	property: String, old_value, new_value
 ) -> void:
 	pass

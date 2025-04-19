@@ -6,8 +6,8 @@ extends Object
 const _ExceptionUtils = AlephVault__WindRose.Utils.ExceptionUtils
 const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
-const _EntityRule = AlephVault__WindRose.Rules.EntityRule
-const _EntitiesRule = AlephVault__WindRose.Rules.EntitiesRule
+const _EntityRule = AlephVault__WindRose.Core.EntityRule
+const _EntitiesRule = AlephVault__WindRose.Core.EntitiesRule
 const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
 const _Direction = _DirectionUtils.Direction
 const EntityStatus = preload("./entity_status.gd")

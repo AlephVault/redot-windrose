@@ -4,8 +4,8 @@ extends Object
 ## an entity rule in mind, also receiving the
 ## proper signals from the manager.
 
-const _EntitiesManager = AlephVault__WindRose.Rules.EntitiesManager
-const _EntityRule = AlephVault__WindRose.Rules.EntityRule
+const _EntitiesManager = AlephVault__WindRose.Core.EntitiesManager
+const _EntityRule = AlephVault__WindRose.Core.EntityRule
 const _Response = AlephVault__WindRose.Utils.ExceptionUtils.Response
 const _Exception = AlephVault__WindRose.Utils.ExceptionUtils.Exception
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction

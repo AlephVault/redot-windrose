@@ -4,8 +4,8 @@ extends Object
 ## of an EntitiesRule.
 
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
-const _EntitiesRule = AlephVault__WindRose.Rules.EntitiesRule
-const _EntitiesManager = AlephVault__WindRose.Rules.EntitiesManager
+const _EntitiesRule = AlephVault__WindRose.Core.EntitiesRule
+const _EntitiesManager = AlephVault__WindRose.Core.EntitiesManager
 
 ## The set of signals used to notify an entity.
 class Signals:
