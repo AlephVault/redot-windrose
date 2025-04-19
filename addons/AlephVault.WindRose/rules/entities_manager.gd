@@ -296,10 +296,9 @@ func teleport(
 		entity_rule, position, to_position,
 		_EntitiesRule.TeleportedStage.PositionChanged
 	)
-	if not silent:
-		entity_rule.trigger_on_teleported(
-			position, to_position
-		)
+	entity_rule.trigger_on_teleported(
+		position, to_position, silent
+	)
 	entities_rule.on_teleported(
 		entity_rule, position, to_position,
 		_EntitiesRule.TeleportedStage.End

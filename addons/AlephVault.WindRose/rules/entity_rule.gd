@@ -31,6 +31,9 @@ class Signals:
 		direction: _Direction
 	)
 	## Signal telling a teleport occurred.
+	signal _on_teleported_internal(
+		from_position: Vector2i, to_position: Vector2i
+	)
 	signal on_teleported(
 		from_position: Vector2i, to_position: Vector2i
 	)
@@ -113,10 +116,12 @@ func trigger_on_movement_cleared(
 
 ## Triggers the on_teleported event.
 func trigger_on_teleported(
-	from_position: Vector2i, to_position: Vector2i
+	from_position: Vector2i, to_position: Vector2i, silent: bool
 ):
 	if _signals != null:
-		_signals.on_movement_cancelled.emit(from_position, to_position)
+		_signals._on_teleported_internal.emit(from_position, to_position)
+		if not silent:
+			_signals.on_teleported.emit(from_position, to_position)
 
 ## This is a protected method designed to be used by
 ## subclasses of this parent class.

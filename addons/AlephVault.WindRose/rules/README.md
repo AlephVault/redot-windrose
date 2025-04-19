@@ -181,7 +181,7 @@ Creating an object of this class (or even more appropriate: a subclass of this c
 - `trigger_on_movement_started(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity's intention for movement has been accepted due to the entities rule's logic.
 - `trigger_on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity finished moving.
 - `trigger_on_movement_cleared(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A callback telling that the entity's current movement was reverted (this might be a noop if the direction is `NONE`).
-- `trigger_on_teleported(from_position: Vector2i, to_position: Vector2i)`: A callback telling that the entity was just teleported.
+- `trigger_on_teleported(from_position: Vector2i, to_position: Vector2i, silent: bool)`: A callback telling that the entity was just teleported (if silent==true, only a position update management will occur).
 - `_property_was_updated(property: String, old, new)`: A method providing a way to notify the update of an internal property so at some point the manager is reached and `on_property_updated(entity_rule, property, old, new)` is invoked. After it, the user must invoke this method, typically, in the `set(value):` part of a property after it's successfully updated so the bubbling starts.
 
 **Signals**
@@ -205,3 +205,48 @@ The `signals` object (`AlephVault__WindRose.Rules.EntityRule.Signals`) has the f
 - `on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the object was teleported.
 
 These signals are listened by the respective _entity_ to allow further end-user processing.
+
+### Entity
+
+And, finally, the _entity_ type. Entities are related each to an entity rule and their only purpose is to provide some sort of public handler to the entity methods in the current manager (or a target manager for attachment).
+
+This must be thought like this:
+
+1. The manager is the _universe_ and the entities ruls is the _space_ governed by that _universe_.
+2. The entity rule is the _material_ of an entity.
+3. So the concept of an _entity_ is a BEING (with spirit / free will) in that universe, made of some material.
+
+This said, creating an entity is easy:
+
+```
+# First, make the underlying rule:
+var entity_rule: MyEntityRule = MyEntityRule.new(Vector2i(1, 1))
+var entity: AlephVault__WindRose.Rules.Entity.new(entity_rule)
+```
+
+Then, it's time to know its properties and make use of it.
+
+**Properties**:
+
+- `entity_rule: AlephVault__WindRose.Rules.EntityRule`: Retrieves the underlyign rule of this entity.
+- `size: Vector2i`: Retrieves the size of this entity, directly from the rule.
+- `manager: AlephVault__WindRose.Rules.EntitiesManager`: Retrieves the manager this entity is attached to, via its rule.
+- `cell: Vector2i`: Retrieves the current position. It will be (-1, -1) if not attached to a manager.
+- `movement: AlephVault__WindRose.Utils.DirectionUtils.Direction`: The current movement. If `NONE`, three's no current movement.
+
+**Methods**:
+
+- `attach_to(manager: AlephVault__WindRose.Rules.EntitiesManager, to_position: Vector2i, force: bool = false) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: Tries to attach the entity to a manager. If `force` is true, it tries first to detach the entity from its current manager.
+  - It returns a failed response with `.error.code == "already_attached"` if the entity is already attached to a manager and `force` is false.
+  - Otherwise, see `attach(...)` method of the `Entities Manager` class.
+- `detach()`: Detaches from the current manager.
+  - It returns a successful response with `false` value if there was no current manager being attached to, or `true` if there detachment was successful.
+  - Otherwise, see `detach(...)` method of the `Entities Manager` class.
+- The following methods are related to the relevant ones in the `Entities Manager` class, but:
+  - They return a failed response with `.error.code == "not_attached"` if the entity is not attached to a manager.
+  - Otherwise, they return whatever is returned in the `Entity Manager`-related method.
+  - List of methods:
+	- `movement_start(direction: _Direction, continued: bool = false)`.
+	- `movement_cancel()`.
+	- `movement_finish()`.
+	- `teleport(to_position: Vector2i, silent: bool = false)`.

@@ -96,7 +96,7 @@ func _on_movement_cancelled(
 ):
 	_movement = _Direction.NONE
 
-func _on_teleported(
+func _on_teleported_internal(
 	from_position: Vector2i, to_position: Vector2i
 ):
 	_cell = to_position
@@ -111,7 +111,7 @@ func _init(entity_rule: _EntityRule):
 		_entity_rule.signals.on_movement_started.connect(_on_movement_started)
 		_entity_rule.signals.on_movement_finished.connect(_on_movement_finished)
 		_entity_rule.signals.on_movement_cancelled.connect(_on_movement_cancelled)
-		_entity_rule.signals.on_teleported.connect(_on_teleported)
+		_entity_rule.signals._on_teleported_internal.connect(_on_teleported_internal)
 		_entity_rule.on_property_updated.connect(_on_property_updated)
 
 func _notification(what):
@@ -122,7 +122,7 @@ func _notification(what):
 			_entity_rule.signals.on_movement_started.disconnect(_on_movement_started)
 			_entity_rule.signals.on_movement_finished.disconnect(_on_movement_finished)
 			_entity_rule.signals.on_movement_cancelled.disconnect(_on_movement_cancelled)
-			_entity_rule.signals.on_teleported.disconnect(_on_teleported)
+			_entity_rule.signals._on_teleported_internal.disconnect(_on_teleported_internal)
 			_entity_rule.on_property_updated.disconnect(_on_property_updated)
 
 ## Attepts attachment to a manager.
