@@ -68,6 +68,8 @@ func initialize() -> void:
 
 ## Attaches an entity to the current rule.
 func attach(entity_rule: _EntityRule, to_position: Vector2i) -> _Response:
+	if entity_rule == null:
+		return _Response.fail(_Exception.raise("null_value", "Null value not allowed"))
 	var e: _Exception
 	# Check is not attached.
 	e = _require_not_attached(entity_rule)
