@@ -1,5 +1,8 @@
 extends Object
 
+const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
+const _Direction = _DirectionUtils.Direction
+
 ## The layout type being detected in a related
 ## tilemap layer. This is detected, and only a
 ## limited set of combinations are accepted,
@@ -107,4 +110,11 @@ class MapLayout:
 		var og: Vector2i = layer.map_to_local(Vector2i(0, 0))
 		var dx: Vector2i = Vector2i(layer.map_to_local(Vector2i(1, 0))) - og
 		var dy: Vector2i = Vector2i(layer.map_to_local(Vector2i(0, 1))) - og
-		_transform = Transform2D(dx, dy, Vector2i.ZERO)
+		_transform = Transform2D(dx, dy, og)
+
+	## Gets a point, in coordinates space, of
+	## a cell (which is pivoted by its center)
+	## and perhaps + a 1-step displacement.
+	func get_point(cell: Vector2i, direction: _Direction = _Direction.NONE):
+		cell += _DirectionUtils.get_delta(direction)
+		return Vector2i(_transform * Vector2(cell))
