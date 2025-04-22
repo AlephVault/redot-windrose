@@ -1,4 +1,8 @@
 extends AlephVault__WindRose.Maps.Layers.Layer
+## The floor layer is one containing all the
+## TileMapLayer instances that matter for this
+## map (it also tracks the order of tilemaps
+## so the map can retrieve its data).
 
 
 var _connected: bool = false
