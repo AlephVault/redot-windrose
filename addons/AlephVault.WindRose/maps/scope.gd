@@ -58,6 +58,7 @@ func drop() -> _Response:
 func _add_map(map: _Map, index: int) -> _Response:
 	if map == null:
 		return _Response.fail(_Exception.raise("invalid_map", "The map cannot be null"))
+	_maps[index] = map
 	return _Response.succeed(null)
 
 ## Gets a map by its index, or null.

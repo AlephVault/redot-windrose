@@ -1,4 +1,5 @@
-extends TileMap
+@tool
+extends Node2D
 ## A Map is the functional unit of space for
 ## these games. It contains several layers,
 ## being the entities layer the most important
@@ -8,9 +9,11 @@ const _Scope = AlephVault__WindRose.Maps.Scope
 const _World = AlephVault__WindRose.Maps.World
 const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
 const _Direction = _DirectionUtils.Direction
+const _FloorLayer = AlephVault__WindRose.Maps.Layers.FloorLayer
 
 ## Use an index >= 0 (unique!) to register this
 ## map in its parent scope.
+@export_category("Identity")
 @export var _index: int = -1
 var _scope: _Scope
 
@@ -24,6 +27,7 @@ var scope: _Scope:
 		)
 
 ## The map size, expressed as (width, height).
+@export_category("Topology")
 @export var _size: Vector2i = Vector2i(8, 6)
 
 ## Gets the map size.
@@ -33,6 +37,23 @@ var size: Vector2i:
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"Map", "size"
+		)
+
+@export_category("Debug")
+@export var _gizmo_x_axis_color: Color = Color.RED
+@export var _gizmo_y_axis_color: Color = Color.BLUE
+@export var _gizmo_grid_color: Color = Color.YELLOW
+
+# The Floor layer
+var _floor_layer: _FloorLayer
+
+## Retrieves the Floor layers.
+var floor_layer: _FloorLayer:
+	get:
+		return _floor_layer
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Map", "floor_layer"
 		)
 
 ## Gets another map from the same world.
@@ -54,52 +75,16 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 		return null
 	return _scope.get_map(index)
 
-## Tells whether the map is valid. This involves
-## checks on data elements and also checks on
-## supported configurations.
-func is_valid():
-	# It's not valid to have no tile_set.
-	if tile_set == null:
-		return false
-	
-	# For now, we only support SQUARE rows.
-	match tile_set.tile_shape:
-		TileSet.TileShape.TILE_SHAPE_SQUARE:
-			match tile_set.tile_layout:
-				TileSet.TileLayout.TILE_LAYOUT_STACKED:
-					return true
-				_:
-					return false
-		TileSet.TileShape.TILE_SHAPE_ISOMETRIC:
-			match tile_set.tile_layout:
-				TileSet.TileLayout.TILE_LAYOUT_DIAMOND_DOWN:
-					return true
-				TileSet.TileLayout.TILE_LAYOUT_DIAMOND_RIGHT:
-					return true
-				_:
-					return false
-		_:
-			return false
+# Identifies the layers recognized in
+# this map (directly from the children).
+func _identify_layers():
+	for child in get_children():
+		if child is _FloorLayer:
+			_floor_layer = child
 
-## The size of tiles of this map.
-var tile_size: Vector2i:
-	get:
-		if tile_set == null:
-			return Vector2i(-1, -1)
-		return tile_set.tile_size
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"Map", "tile_size"
-		)
-
-## Gets a vector, in pixels, for a given
-## direction's delta. Since it's a linear
-## projection, it can be computed directly
-## from the direction's delta regardless
-## the current position.
-func get_delta_vector(d: _Direction) -> Vector2i:
-	return map_to_local(_DirectionUtils.get_delta(d))
-
+# On tree enter it registers a new index
+# in the parent scope (if the parent is
+# a scope).
 func _enter_tree() -> void:
 	var parent = get_parent()
 	if parent is _Scope and _index >= 0 and _scope == null:
@@ -107,3 +92,47 @@ func _enter_tree() -> void:
 		if _result.is_successful():
 			_scope = parent
 	_size = Vector2i(max(1, _size.x), max(1, _size.y))
+	child_order_changed.connect(_identify_layers)
+	_identify_layers()
+
+# On tree exit releases the _identify_layers
+# hook (so it can connect lat).
+func _exit_tree() -> void:
+	child_order_changed.disconnect(_identify_layers)
+	
+# The draw hook in the map
+func _draw() -> void:
+	# First, ensure there's a TileMapLayer.
+	if _floor_layer == null or _floor_layer.get_tilemaps_count() == 0:
+		return
+	var tile_map = _floor_layer.get_tilemap(0)
+
+	var s: Vector2i = size
+	var s00: Vector2i = tile_map.map_to_local(Vector2i(0, 0))
+	var s01: Vector2i = tile_map.map_to_local(Vector2i(0, 1))
+	var s10: Vector2i = tile_map.map_to_local(Vector2i(1, 0))
+	var dx: Vector2i = s10 - s00
+	var dy: Vector2i = s01 - s00
+	var lx: Vector2i = dx * s.x
+	var ly: Vector2i = dy * s.y
+	var cx: Color = _gizmo_x_axis_color
+	var cy: Color = _gizmo_y_axis_color
+	var c_: Color = _gizmo_grid_color
+	var tdy: Vector2i = Vector2i(0, 0)
+	var tdx: Vector2i = Vector2i(0, 0)
+	for y in range(1, s.y + 1):
+		# logical y
+		tdy += dy
+		draw_line(s00 + tdy, s00 + tdy + lx, c_)
+	for x in range(1, s.x + 1):
+		# logical x
+		tdx += dx
+		draw_line(s00 + tdx, s00 + tdx + ly, c_)
+	# logical y=0
+	draw_line(s00, s00 + lx, cx)
+	# logical x=0
+	draw_line(s00, s00 + ly, cy)
+
+func _process(_delta):
+	if Engine.is_editor_hint():
+		queue_redraw()
