@@ -2,10 +2,8 @@ extends AlephVault__WindRose.Maps.Layers.Layer
 ## This is an entities layer. It holds a reference
 ## to a resource that will spawn an underlying rule.
 
-
 const _Map = AlephVault__WindRose.Maps.Map
 const _EntitiesRule = AlephVault__WindRose.Core.EntitiesRule
-
 
 ## An entities manager aware of this layer.
 class Manager extends AlephVault__WindRose.Core.EntitiesManager:
@@ -25,7 +23,6 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 		super._init(entities_rule, bypass)
 		_layer = layer
 
-
 ## The associated entities rule. This one must be
 ## an EXTERNAL resource, defined in a resource file
 ## (it cannot be an embedded resource), which is
@@ -35,9 +32,7 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 ## instantiated out of it. 
 @export var _rule_spec: AlephVault__WindRose.Resources.EntitiesRuleSpec
 
-
 var _rule: AlephVault__WindRose.Core.EntitiesRule
-
 
 ## The instantiated rule, out of the configured
 ## rule spec.
@@ -61,10 +56,8 @@ var rule: AlephVault__WindRose.Core.EntitiesRule:
 			"EntitiesLayer", "rule"
 		)
 
-
 # The manager for this layer.
 var _manager: Manager
-
 
 ## The manager for this layer.
 var manager: Manager:
@@ -75,12 +68,10 @@ var manager: Manager:
 			"EntitiesLayer", "manager"
 		)
 
-
 ## Whether to ensure that, locally, the rules
 ## are bypassed (useful for stuff like online
 ## games where the truth is server-side).
 @export var _bypass: bool = false
-
 
 ## Whether to ensure that, locally, the rules
 ## are bypassed (useful for stuff like online
@@ -93,7 +84,6 @@ var bypass: bool:
 			"EntitiesLayer", "bypass"
 		)
 
-
 func _ready():
 	super._ready()
 	if _manager == null:
@@ -102,6 +92,10 @@ func _ready():
 			# Unset and try again later.
 			_manager = null
 
+## Initializes the manager.
+func initialize():
+	if _manager:
+		manager.initialize()
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet
