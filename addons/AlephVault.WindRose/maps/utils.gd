@@ -43,6 +43,9 @@ class MapLayout:
 
 	# The (linear) transform for the layouts.
 	var _transform: Transform2D
+	
+	# A callable to compute local-to-map.
+	var _ltm: Callable
 
 	## The layout type.
 	var layout_type: MapLayoutType:
@@ -110,6 +113,7 @@ class MapLayout:
 		var og: Vector2i = layer.map_to_local(Vector2i(0, 0))
 		var dx: Vector2i = Vector2i(layer.map_to_local(Vector2i(1, 0))) - og
 		var dy: Vector2i = Vector2i(layer.map_to_local(Vector2i(0, 1))) - og
+		_ltm = layer.local_to_map
 		_transform = Transform2D(dx, dy, og)
 
 	## Gets a point, in coordinates space, of
@@ -118,3 +122,7 @@ class MapLayout:
 	func get_point(cell: Vector2i, direction: _Direction = _Direction.NONE):
 		cell += _DirectionUtils.get_delta(direction)
 		return Vector2i(_transform * Vector2(cell))
+
+	## Given a position, computes its cell.
+	func local_to_map(point: Vector2i) -> Vector2i:
+		return _ltm.call(point)

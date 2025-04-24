@@ -67,11 +67,39 @@ var entity: Entity:
 
 var _initialized: bool
 
+func _set_signals():
+	# TODO set the signals as per https://github.com/AlephVault/unity-windrose/blob/main/Runtime/Authoring/Behaviours/Entities/Objects/MapObject.cs#L58.
+	pass
+
 func _init():
 	_entity = Entity.new(self, rule)
+	_set_signals()
 
 ## Initializes this object.
 func initialize():
-	if not _initialized:
-		# TODO listen for some signals.
-		_initialized = true
+	if Engine.is_editor_hint():
+		return
+	
+	if _initialized:
+		return
+
+	entity.initialize()
+	
+	var _parent = get_parent()
+	var _parent2 = null
+	if _parent != null:
+		_parent2 = _parent.get_parent()
+	if _parent2 is AlephVault__WindRose.Maps.Map and \
+	   _parent2.layout != null and \
+	   _parent is AlephVault__WindRose.Maps.Layers.EntitiesLayer:
+		if not _parent.initialized:
+			return
+		var cell = _parent2.layout.local_to_map(position)
+		var result = _parent.manager.attach(
+			entity.entity_rule, cell
+		)
+		if result.is_successful():
+			_initialized = true
+
+func _ready():
+	initialize()

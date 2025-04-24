@@ -84,6 +84,17 @@ var bypass: bool:
 			"EntitiesLayer", "bypass"
 		)
 
+var _initialized: bool = false
+
+## Whether it's already initialized or not.
+var initialized: bool:
+	get:
+		return _initialized
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesLayer", "initialized"
+		)
+
 func _init():
 	_manager = Manager.new(self, rule, bypass)
 

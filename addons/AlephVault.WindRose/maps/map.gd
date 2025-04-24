@@ -10,6 +10,8 @@ const _World = AlephVault__WindRose.Maps.World
 const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
 const _Direction = _DirectionUtils.Direction
 const _FloorLayer = AlephVault__WindRose.Maps.Layers.FloorLayer
+const _EntitiesLayer = AlephVault__WindRose.Maps.Layers.EntitiesLayer
+const _MapLayout = AlephVault__WindRose.Maps.Utils.MapLayout
 
 ## Use an index >= 0 (unique!) to register this
 ## map in its parent scope.
@@ -44,16 +46,28 @@ var size: Vector2i:
 @export var _gizmo_y_axis_color: Color = Color.BLUE
 @export var _gizmo_grid_color: Color = Color.YELLOW
 
-# The Floor layer
+# The Floor layer.
 var _floor_layer: _FloorLayer
 
-## Retrieves the Floor layers.
+## Retrieves the Floor layer.
 var floor_layer: _FloorLayer:
 	get:
 		return _floor_layer
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"Map", "floor_layer"
+		)
+
+# The map layout.
+var _layout: _MapLayout
+
+## Retrieves the map layout.
+var layout: _MapLayout:
+	get:
+		return _layout
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Map", "layout"
 		)
 
 ## Gets another map from the same world.
@@ -78,9 +92,14 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 # Identifies the layers recognized in
 # this map (directly from the children).
 func _identify_layers():
+	var first = null
 	for child in get_children():
 		if child is _FloorLayer:
+			if first == null:
+				first = child
 			_floor_layer = child
+	if first:
+		_layout = _MapLayout.new(first)
 
 # On tree enter it registers a new index
 # in the parent scope (if the parent is
