@@ -6,7 +6,7 @@ extends Resource
 
 ## Instantiates a rule object for the given entity.
 func create_rule(
-	entity: AlephVault__WindRose.Entities.Entity
+	entity: AlephVault__WindRose.Maps.MapEntity
 ) -> AlephVault__WindRose.Core.EntityRule:
 	assert(false, "EntityRuleSpec::create_rule(entity) must be implemented")
 	return null
