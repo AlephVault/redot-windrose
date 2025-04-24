@@ -62,19 +62,6 @@ var rule: AlephVault__WindRose.Core.EntitiesRule:
 		)
 
 
-var _map: _Map
-
-
-## The map it's attached to.
-var map: _Map:
-	get:
-		return _map
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntitiesLayer", "map"
-		)
-
-
 # The manager for this layer.
 var _manager: Manager
 
@@ -114,16 +101,6 @@ func _ready():
 		if _manager != null and manager.entities_rule == null:
 			# Unset and try again later.
 			_manager = null
-
-
-func enter_tree():
-	var parent = get_parent()
-	if parent is _Map:
-		_map = parent
-
-
-func _exit_tree() -> void:
-	_map = null
 
 
 ## We leave the _z_index in 30 here, explicitly.
