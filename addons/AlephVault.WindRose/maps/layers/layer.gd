@@ -32,3 +32,6 @@ func _enter_tree():
 		if z < 0:
 			z = 0
 		self.z_index = z
+
+func _exit_tree():
+	_map = null
