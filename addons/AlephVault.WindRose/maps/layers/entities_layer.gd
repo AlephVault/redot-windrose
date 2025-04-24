@@ -16,7 +16,7 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 			return _layer
 		set(value):
 			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-				"EntitiesLayer.manager", "layer"
+				"EntitiesLayer.Manager", "layer"
 			)
 	
 	func _init(layer, entities_rule: _EntitiesRule, bypass):
@@ -32,11 +32,11 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 ## instantiated out of it. 
 @export var _rule_spec: AlephVault__WindRose.Resources.EntitiesRuleSpec
 
-var _rule: AlephVault__WindRose.Core.EntitiesRule
+var _rule: _EntitiesRule
 
 ## The instantiated rule, out of the configured
 ## rule spec.
-var rule: AlephVault__WindRose.Core.EntitiesRule:
+var rule: _EntitiesRule:
 	get:
 		if is_instance_valid(_rule):
 			return _rule
@@ -84,18 +84,12 @@ var bypass: bool:
 			"EntitiesLayer", "bypass"
 		)
 
-func _ready():
-	super._ready()
-	if _manager == null:
-		_manager = Manager.new(self, rule, bypass)
-		if _manager != null and manager.entities_rule == null:
-			# Unset and try again later.
-			_manager = null
+func _init():
+	_manager = Manager.new(self, rule, bypass)
 
 ## Initializes the manager.
 func initialize():
-	if _manager:
-		manager.initialize()
+	_manager.initialize()
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet
