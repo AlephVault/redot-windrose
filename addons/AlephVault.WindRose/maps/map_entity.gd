@@ -1,6 +1,9 @@
 extends Node2D
 
 const _EntityRule = AlephVault__WindRose.Core.EntityRule
+const _EntitiesManager = AlephVault__WindRose.Core.EntitiesManager
+const _MapEM = AlephVault__WindRose.Maps.Layers.EntitiesLayer.Manager
+const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 
 ## An entities manager aware of this layer.
 class Entity extends AlephVault__WindRose.Core.Entity:
@@ -65,15 +68,132 @@ var entity: Entity:
 			"MapEntity", "entity"
 		)
 
-var _initialized: bool
+## The current cell.
+var cell: Vector2i:
+	get:
+		return entity.cell
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "cell"
+		)
+
+## The current opposite cell.
+var cellf: Vector2i:
+	get:
+		return entity.cell + entity.size - Vector2i.ONE
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "cellf"
+		)
+
+# TODO orientation property (orientation), and signal.
+# TODO speed property (float), and signal.
+# TODO state property (variant), and signal.
+
+## A signal telling to update typically visual objects
+## depending on this object. Connect a method to this
+## signal to hook to a post-_process(...) hook of this
+## object, after its position was updated.
+signal updated()
+
+# Whether it's initialized or not.
+var _initialized: bool = false
+var _destroyed: bool = false
+var _movement_count: int = -1
+const MAX_MOVEMENT_COUNT: int = (1 << 32) - 1
+
+# The current origin / target positions, in pixels.
+var _origin: Vector2i = Vector2i.ZERO
+var _target: Vector2i = Vector2i.ZERO
+
+var _queue_remaining_duration: float = 0
+
+func _increment_movement_counter():
+	if _movement_count == MAX_MOVEMENT_COUNT:
+		_movement_count = 0
+	else:
+		_movement_count += 1
+
+func _snap():
+	if _destroyed or entity == null or entity.manager == null:
+		return
+	position = get_parent().layout.get_point(entity.cell)
+
+func _on_attached(manager: _EntitiesManager, cell: Vector2i):
+	_increment_movement_counter()
+	if manager is _MapEM:
+		# The manager is already assigned to the entity.
+		# So we must, now, re-parent the object properly.
+		if self.get_parent() != null:
+			self.reparent(manager.layer)
+		else:
+			manager.layer.add_child(self)
+		# Then, adjust the position.
+		position = manager.layer.map.layout.get_point(cell)
+		rotation = 0
+		_origin = position
+		_snap()
+
+func _on_teleported(from_position: Vector2i, to_position: Vector2i):
+	_increment_movement_counter()
+	_snap()
+
+func _on_movement_started(
+	from_position: Vector2i, to_position: Vector2i, direction: _Direction
+):
+	_increment_movement_counter()
+
+func _on_movement_cancelled(
+	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
+):
+	_increment_movement_counter()
+	_queue_remaining_duration = 0
+	_snap()
+
+func _on_movement_finished(
+	from_position: Vector2i, to_position: Vector2i, direction: _Direction
+):
+	_increment_movement_counter()
+	_queue_remaining_duration = 0
+
+func _on_detached():
+	if _destroyed:
+		return
+	var _parent = self.get_parent()
+	if _parent != null:
+		_parent.remove_child(self)
+	var _gparent = _parent.get_parent()
+	if _gparent is AlephVault__WindRose.Maps.Scope:
+		_gparent.add_child(self)
 
 func _set_signals():
-	# TODO set the signals as per https://github.com/AlephVault/unity-windrose/blob/main/Runtime/Authoring/Behaviours/Entities/Objects/MapObject.cs#L58.
-	pass
+	var signals = entity.entity_rule.signals
+	if signals:
+		signals.on_attached.connect(_on_attached)
+		signals.on_teleported.connect(_on_teleported)
+		signals.on_movement_started.connect(_on_movement_started)
+		signals.on_movement_cancelled.connect(_on_movement_cancelled)
+		signals.on_movement_finished.connect(_on_movement_finished)
+		signals.on_detached.connect(_on_detached)
+
+func _unset_signals():
+	var signals = entity.entity_rule.signals
+	if signals:
+		signals.on_attached.disconnect(_on_attached)
+		signals.on_teleported.disconnect(_on_teleported)
+		signals.on_movement_started.disconnect(_on_movement_started)
+		signals.on_movement_cancelled.disconnect(_on_movement_cancelled)
+		signals.on_movement_finished.disconnect(_on_movement_finished)
+		signals.on_detached.disconnect(_on_detached)
 
 func _init():
 	_entity = Entity.new(self, rule)
 	_set_signals()
+
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		_destroyed = true
+		_unset_signals()
 
 ## Initializes this object.
 func initialize():
@@ -103,3 +223,19 @@ func initialize():
 
 func _ready():
 	initialize()
+
+# TODO attach() method.
+# TODO detach() method.
+# TODO teleport() method.
+# TODO finish_movement() method.
+# TODO start_movement() method.
+# TODO cancel_movement() method.
+
+func _movement_tick():
+	# TODO implement.
+	# TODO on no movement (current or pending), add: _snap().
+	pass
+
+func _process(delta: float):
+	_movement_tick()
+	updated.emit()
