@@ -86,9 +86,43 @@ var cellf: Vector2i:
 			"MapEntity", "cellf"
 		)
 
-# TODO orientation property (orientation), and signal.
-# TODO speed property (float), and signal.
-# TODO state property (variant), and signal.
+## The current orientation.
+@export var orientation: _Direction = _Direction.DOWN:
+	get:
+		return orientation
+	set(value):
+		if value == _Direction.NONE:
+			value = _Direction.DOWN
+		orientation = value
+		orientation_changed.emit(value)
+
+## A signal to tell the change of orientation.
+signal orientation_changed(orientation: _Direction)
+
+## The current speed.
+@export var speed: float:
+	get:
+		return speed
+	set(value):
+		speed = max(0, value)
+		speed_changed.emit(speed)
+
+## A signal to tell the change of speed.
+signal speed_changed(speed: float)
+
+## A state: IDLE.
+const STATE_IDLE: int = 0
+
+## The current state.
+var state: int = STATE_IDLE:
+	get:
+		return state
+	set(value):
+		state = value
+		state_changed.emit(state)
+
+## A signal to tell the change of state.
+signal state_changed(state: int)
 
 ## A signal telling to update typically visual objects
 ## depending on this object. Connect a method to this
@@ -189,6 +223,11 @@ func _unset_signals():
 func _init():
 	_entity = Entity.new(self, rule)
 	_set_signals()
+	# Fixing editor-set properties and triggering
+	# signals for the first time.
+	orientation = orientation
+	speed = speed
+	state = state
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
