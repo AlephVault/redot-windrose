@@ -7,9 +7,9 @@ extends AlephVault__WindRose.Maps.Layer
 func _z_index():
 	return 20
 
-@export var _rule_spec: AlephVault__WindRose.Rules.EntitiesRuleSpec
+@export var _rule_spec: AlephVault__WindRose.Core.EntitiesRuleSpec
 
-var _rule: AlephVault__WindRose.Rules.EntitiesRule
+var _rule: AlephVault__WindRose.Core.EntitiesRule
 
 ## Returns the associated rule, perhaps
 ## creating it first.

@@ -1,4 +1,4 @@
-extends AlephVault__WindRose.Rules.EntitiesRule
+extends AlephVault__WindRose.Core.EntitiesRule
 ## A Layer's EntitiesRule is an EntitiesRule that
 ## holds a reference to the related layer.
 

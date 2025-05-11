@@ -1,4 +1,4 @@
-extends AlephVault__WindRose.Rules.EntityRule
+extends AlephVault__WindRose.Core.EntityRule
 ## A Entity's EntityRule is an EntityRule that
 ## holds a reference to the related entity.
 

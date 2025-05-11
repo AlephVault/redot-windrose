@@ -3,9 +3,9 @@ extends Node2D
 ## objects can have movement and respond to
 ## stimuli from the map and other entities.
 
-@export var _rule_spec: AlephVault__WindRose.Rules.EntityRuleSpec
+@export var _rule_spec: AlephVault__WindRose.Core.EntityRuleSpec
 
-var _rule: AlephVault__WindRose.Rules.EntityRule
+var _rule: AlephVault__WindRose.Core.EntityRule
 
 ## Returns the associated rule, perhaps
 ## creating it first.
