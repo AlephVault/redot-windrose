@@ -1,6 +1,23 @@
-extends Node
+extends Object
 
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+
+## A current queued movement. It holds the direction
+## and the remaining timeout.
+class QueuedMovement extends Object:
+	"""
+	A pending movement intent. It only has direction
+	and timeout. The timeout is used to prune queued
+	movements that lasted for that much and haven't
+	been renewd by the end of the current movement.
+	"""
+	
+	var direction: _Direction
+	var expiration: float
+	
+	func _init(_direction: _Direction, _expiration: float):
+		direction = _direction
+		expiration = _expiration
 
 ## The current movement intent. It packs the details
 ## of a request related to a Node2D object in a 2D
@@ -26,12 +43,21 @@ class Movement extends Object:
 var _current_movement: Dictionary = {}
 
 # The queued movement of an entity.
-# Node2D -> Movement.
+# Node2D -> QueuedMovement.
 var _queued_movement: Dictionary = {}
 
 # A function to get the speed of an object. It
 # has a (object) -> float signature.
 var _get_speed
+
+# A function to get the next_frame signal. It
+# has a -> signal() signature.
+var _get_frame_signal
+
+# A function to get the delta for a starting
+# position and a movement direction. It has a
+# (Vector2, Direction) -> Vector2 signature.
+var _get_delta
 
 # A criterion that tells whether a movement can be
 # performed by a specific object. This criterion
@@ -52,6 +78,15 @@ var _movement_cancelled
 # finished. This callback has a (object, direction,
 # Vector2, Vector2) signature, with no return value.
 var _movement_finished
+
+# A number of frames the queued movements will last
+# for. This means that queued movements can expire
+# if not "renewed" close to the end of the current
+# movement and serves as a protection against press
+# of keys lasting many frames and performing two
+# movements instead of one due to multiple calls to
+# start_movement().
+var _queue_expiration
 
 # Tests whether an object can perform a movement
 # or not. If no criterion is set, returns null.
@@ -87,17 +122,23 @@ func _on_movement_finished(obj: Node2D, direction: _Direction,
 		print("_movement_finished is not assigned. The node's movement was finished:", obj)
 
 func _init(
+	get_frame_signal: Callable,
+	get_delta: Callable,
 	get_speed: Callable,
 	can_move = null,
 	movement_started = null,
 	movement_finished = null,
-	movement_cancelled = null
+	movement_cancelled = null,
+	queue_expiration = 5
 ) -> void:
+	_get_frame_signal = get_frame_signal
+	_get_delta = get_delta
 	_get_speed = get_speed
 	_can_move = can_move
 	_movement_started = movement_started
 	_movement_finished = movement_finished
 	_movement_cancelled = movement_cancelled
+	_queue_expiration = queue_expiration
 
 ## Starts a movement for an object.
 func start_movement(obj: Node2D, from_: Vector2, to_: Vector2, direction: _Direction):
@@ -117,7 +158,7 @@ func start_movement(obj: Node2D, from_: Vector2, to_: Vector2, direction: _Direc
 		_on_movement_started(obj, direction, from_, to_)
 		_movement(obj)
 	else:
-		_queued_movement[obj] = Movement.new(from_, to_, direction)
+		_queued_movement[obj] = QueuedMovement.new(direction, _queue_expiration)
 
 func _wait_frame() -> float:
 	"""
@@ -125,15 +166,37 @@ func _wait_frame() -> float:
 	"""
 
 	var t1 = Time.get_ticks_usec() / 1_000_000.0
-	await get_tree().process_frame
+	await _get_frame_signal.call()
 	var t2 = Time.get_ticks_usec() / 1_000_000.0
 	return t2 - t1
 
-func _movement_step(obj: Node2D, delta: float):
+func _queued_movement_expire(obj: Node2D, delta: float):
+	"""
+	Expires the queued movement a while. Pops it if it is
+	already expired.
+	"""
+	
+	if not _queued_movement.has(obj):
+		return
+	
+	var movement: QueuedMovement = _queued_movement[obj]
+	movement.expiration -= delta
+	if movement.expiration <= 0:
+		_queued_movement.erase(obj)
+	
+func _movement_step(obj: Node2D, delta: float) -> bool:
 	"""
 	Processes the movement's delta.
 	"""
+
+	# Abort if there's no current movement.
+	if not _current_movement.has(obj):
+		return false
 	
+	# Expire any queued movement a bit.
+	_queued_movement_expire(obj, delta)
+
+	# Get the current speed and compute the next step.
 	var speed = _get_speed.call(obj)
 	var movement: Movement = _current_movement[obj]
 	var next_step: Vector2 = obj.position.move_toward(
@@ -145,34 +208,41 @@ func _movement_step(obj: Node2D, delta: float):
 	# frame (this is a normal situation).
 	if next_step != movement.to_position:
 		obj.position = next_step
-		return
+		return true
 	
 	# By this point, the movement has finished one single
 	# step. We need to check whether there's a queued
 	# next movement for the object.
 	if _queued_movement.has(obj):
 		# Pop the next movement.
-		var next_movement = _queued_movement[obj]
+		var next_movement_direction = _queued_movement[obj].direction
+		var next_movement_to_position = movement.to_position + _get_delta.call(
+			movement.to_position, next_movement_direction
+		)
+		var next_movement_from_position = movement.to_position
 		_queued_movement.erase(obj)
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
 							  movement.to_position)
 		
 		# Return if the movement cannot be started.
-		if not _test_can_move(obj, next_movement.direction):
-			return
+		if not _test_can_move(obj, next_movement_direction):
+			return true
 		
 		# Process the next movement. Immediately continue
 		# if the direction is the same.
-		_current_movement[obj] = next_movement
-		_on_movement_started(obj, next_movement.direction,
-							 next_movement.from_position,
-							 next_movement.to_position)
-		if movement.direction == next_movement.direction:
+		_current_movement[obj] = Movement.new(
+			movement.to_position, next_movement_to_position,
+			next_movement_direction
+		)
+		_on_movement_started(obj, next_movement_direction,
+							 next_movement_from_position,
+							 next_movement_to_position)
+		if movement.direction == next_movement_direction:
 			# Compute, with the same current speed, the
 			# step toward the NEXT movement position.
 			obj.position = obj.position.move_toward(
-				next_movement.to_position, delta * speed
+				next_movement_to_position, delta * speed
 			)
 		else:
 			# Just assign the already computed next step.
@@ -180,7 +250,7 @@ func _movement_step(obj: Node2D, delta: float):
 	else:
 		# Use the retrieved position.
 		obj.position = next_step
-		pass
+	return true
 
 func _movement(obj: Node2D):
 	"""
@@ -189,9 +259,8 @@ func _movement(obj: Node2D):
 
 	obj.position = _current_movement[obj].from_position
 	while true:
-		if not _current_movement.has(obj):
+		if not _movement_step(obj, await _wait_frame()):
 			return
-		_movement_step(obj, await _wait_frame())
 
 ## Cancels a movement for an object.
 func cancel_movement(obj: Node2D):
