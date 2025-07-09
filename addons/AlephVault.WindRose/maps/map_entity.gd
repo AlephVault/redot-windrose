@@ -133,20 +133,10 @@ signal updated()
 # Whether it's initialized or not.
 var _initialized: bool = false
 var _destroyed: bool = false
-var _movement_count: int = -1
-const MAX_MOVEMENT_COUNT: int = (1 << 32) - 1
 
 # The current origin / target positions, in pixels.
 var _origin: Vector2i = Vector2i.ZERO
 var _target: Vector2i = Vector2i.ZERO
-
-var _queue_remaining_duration: float = 0
-
-func _increment_movement_counter():
-	if _movement_count == MAX_MOVEMENT_COUNT:
-		_movement_count = 0
-	else:
-		_movement_count += 1
 
 func _snap():
 	if _destroyed or entity == null or entity.manager == null:
@@ -154,7 +144,6 @@ func _snap():
 	position = get_parent().layout.get_point(entity.cell)
 
 func _on_attached(manager: _EntitiesManager, cell: Vector2i):
-	_increment_movement_counter()
 	if manager is _MapEM:
 		# The manager is already assigned to the entity.
 		# So we must, now, re-parent the object properly.
@@ -169,26 +158,22 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		_snap()
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
-	_increment_movement_counter()
 	_snap()
 
 func _on_movement_started(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
-	_increment_movement_counter()
+	pass
 
 func _on_movement_cancelled(
 	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
 ):
-	_increment_movement_counter()
-	_queue_remaining_duration = 0
 	_snap()
 
 func _on_movement_finished(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
-	_increment_movement_counter()
-	_queue_remaining_duration = 0
+	pass
 
 func _on_detached():
 	if _destroyed:
@@ -270,11 +255,5 @@ func _ready():
 # TODO start_movement() method.
 # TODO cancel_movement() method.
 
-func _movement_tick():
-	# TODO implement.
-	# TODO on no movement (current or pending), add: _snap().
-	pass
-
 func _process(delta: float):
-	_movement_tick()
 	updated.emit()
