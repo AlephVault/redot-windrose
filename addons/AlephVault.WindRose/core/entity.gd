@@ -149,7 +149,7 @@ func detach() -> _Response:
 func movement_start(direction: _Direction, continued: bool = false) -> _Response:
 	if _manager == null:
 		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
-	return _manager.movement_start(_entity_rule, direction, continued)
+	return _manager.movement_start(_entity_rule, direction)
 
 ## Tries to cancel a current movement.
 func movement_cancel() -> _Response:
