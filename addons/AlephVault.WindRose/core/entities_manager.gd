@@ -24,7 +24,7 @@ var entities_rule: _EntitiesRule:
 		)
 
 var _statuses: Dictionary
-
+var _movement_manager: AlephVault__WindRose.WREngine.MovementManager
 var _bypass
 
 ## Whether to bypass any veto or not. Useful
@@ -60,6 +60,26 @@ func _require_attached(entity_rule: _EntityRule) -> _Exception:
 func _init(entities_rule: _EntitiesRule, bypass) -> void:
 	_entities_rule = entities_rule
 	_bypass = bypass
+	_movement_manager = AlephVault__WindRose.WREngine.MovementManager.new(
+		# Function to get the frame signal.
+		func(): return _get_frame_signal(),
+		# Function to get the raw position.
+		func(position): return _get_point(position),
+		# Remember: The object is not just a Node2D here,
+		# but it is actually a MapEntity.Entity object.
+		func(entity): return entity.map_entity.speed,
+		# Applies the same logic to test whether the
+		# object can start the (new) movement or not.
+		func(entity, direction): return self._can_allocate(
+			entity.entity_rule, entity.map_entity.position, direction
+		),
+		# TODO IMPLEMENT THESE ONES PROPERLY.
+		(func(obj, direction, from_, to_): print("Rejecting movement:", obj, direction, from_, to_)),
+		(func(obj, direction, from_, to_): print("Starting movement:", obj, direction, from_, to_)),
+		(func(obj, direction, from_, to_): print("Finishing movement:", obj, direction, from_, to_)),
+		(func(obj, direction, from_, to_): print("Cancelling movement:", obj, direction, from_, to_)),
+		.25
+	)
 
 ## Initializes its state (and also the data of
 ## the underlying rule).
@@ -120,7 +140,7 @@ func detach(entity_rule: _EntityRule) -> _Response:
 ## Starts a movement for an entity.
 func movement_start(
 	entity_rule: _EntityRule,
-	direction: _Direction, continued: bool
+	direction: _Direction
 ) -> _Response:
 	var e: _Exception
 	# Check is attached.
@@ -136,7 +156,7 @@ func movement_start(
 	var position: Vector2i = status.position
 	var end_position: Vector2i = position + _DirectionUtils.get_delta(direction)
 	if not _can_allocate(
-		entity_rule, position, direction, continued
+		entity_rule, position, direction
 	):
 		entities_rule.on_movement_rejected(
 			entity_rule, position, end_position, direction
@@ -164,11 +184,21 @@ func movement_start(
 	)
 	return _Response.succeed(true)
 
+# Converts the cell point to the physical / game
+# point (useful for raw positions when this applies).
+func _get_point(cell: Vector2i):
+	return Vector2(cell)
+
+# Returns the appropriate signal to wait for.
+# Used in the related movement manager.
+func _get_frame_signal():
+	return null
+
 func _can_allocate(
 	entity_rule: _EntityRule,
-	position: Vector2i, direction: _Direction, continued: bool
+	position: Vector2i, direction: _Direction
 ) -> bool:
-	return bypass or entities_rule.can_move(entity_rule, position, direction, continued)
+	return bypass or entities_rule.can_move(entity_rule, position, direction)
 
 func _movement_started(
 	entity_rule: _EntityRule,
