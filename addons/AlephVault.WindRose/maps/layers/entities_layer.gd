@@ -7,7 +7,15 @@ const _EntitiesRule = AlephVault__WindRose.Core.EntitiesRule
 
 ## An entities manager aware of this layer.
 class Manager extends AlephVault__WindRose.Core.EntitiesManager:
+	"""
+	An entities manager related to an entities layer considers
+	specific entity object subtypes: MapEntity.Entity. This one
+	properly links the logic to their underlying MapEntity that
+	was it created for.
 	
+	Also, it will manage the objects themselves (their movement).
+	"""
+
 	var _layer
 	
 	## The layer this manager is bound to.
@@ -19,9 +27,16 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 				"EntitiesLayer.Manager", "layer"
 			)
 	
+	func _get_point(cell: Vector2i):
+		return _layer.map.layout.get_point(cell)
+	
+	func _get_frame_signal():
+		return _layer.get_tree().process_frame
+	
 	func _init(layer, entities_rule: _EntitiesRule, bypass):
 		super._init(entities_rule, bypass)
 		_layer = layer
+
 
 ## The associated entities rule. This one must be
 ## an EXTERNAL resource, defined in a resource file
