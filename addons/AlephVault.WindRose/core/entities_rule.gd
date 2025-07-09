@@ -112,7 +112,7 @@ func on_entity_attached(
 ## Tells whether an entity can start moving.
 func can_move(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
-	position: Vector2i, direction: _Direction, continued: bool
+	position: Vector2i, direction: _Direction
 ) -> bool:
 	return true
 
