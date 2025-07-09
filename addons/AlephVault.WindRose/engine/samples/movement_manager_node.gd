@@ -14,7 +14,7 @@ var manager: AlephVault__WindRose.WREngine.MovementManager:
 func _ready() -> void:
 	_manager = AlephVault__WindRose.WREngine.MovementManager.new(
 		(func(): return get_tree().process_frame),
-		(func(obj, direction): return Vector2(_DirectionUtils.get_delta(direction)) * Vector2(32, 32)),
+		(func(position): return Vector2(32, 32) * Vector2(position)),
 		(func(obj): return 64),
 		(func(obj, direction): return true),
 		(func(obj, direction, from_, to_): print("Movement rejected:", obj, direction, from_, to_)),
@@ -25,7 +25,7 @@ func _ready() -> void:
 	)
 
 func start_movement(obj: Node2D, direction: _Direction):
-	return _manager.start_movement(obj, obj.position, Vector2i(obj.position) + _DirectionUtils.get_delta(direction) * Vector2i(32, 32), direction)
+	return _manager.start_movement(obj, obj.position / Vector2(32, 32), direction)
 
 
 func cancel_movement(obj: Node2D):

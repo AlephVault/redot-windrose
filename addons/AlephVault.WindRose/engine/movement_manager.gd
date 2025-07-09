@@ -1,6 +1,7 @@
 extends Object
 
-const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
+const _Direction = _DirectionUtils.Direction
 
 ## A current queued movement. It holds the direction
 ## and the remaining timeout.
@@ -29,13 +30,21 @@ class Movement extends Object:
 	which can be changed on the fly.
 	"""
 
-	var from_position: Vector2
-	var to_position: Vector2
+	var from_position: Vector2i
+	var to_position: Vector2i
+	var raw_from_position: Vector2
+	var raw_to_position: Vector2
 	var direction: _Direction
 	
-	func _init(from_: Vector2, to_: Vector2, _direction: _Direction):
+	func _init(
+		from_: Vector2i, to_: Vector2i,
+		raw_from: Vector2, raw_to: Vector2,
+		_direction: _Direction
+	):
 		from_position = from_
 		to_position = to_
+		raw_from_position = raw_from
+		raw_to_position = raw_to
 		direction = _direction
 
 # The current movement of an entity.
@@ -54,10 +63,10 @@ var _get_speed
 # has a -> signal() signature.
 var _get_frame_signal
 
-# A function to get the delta for a starting
-# position and a movement direction. It has a
-# (Vector2, Direction) -> Vector2 signature.
-var _get_delta
+# A function to get the raw position for a given
+# logical position. It has a (Vector2i) -> Vector2
+# signature.
+var _get_raw_position
 
 # A criterion that tells whether a movement can be
 # performed by a specific object. This criterion
@@ -66,22 +75,22 @@ var _can_move
 
 # A callback that notifies when a movement was just
 # rejected. This callback has a (object, direction,
-# Vector2, Vector2) signature, with no return value.
+# Vector2i, Vector2i) signature, with no return value.
 var _movement_rejected
 
 # A callback that notifies when a movement was just
 # started. This callback has a (object, direction,
-# Vector2, Vector2) signature, with no return value.
+# Vector2i, Vector2i) signature, with no return value.
 var _movement_started
 
 # A callback that notifies when a movement was
 # cancelled. This callback has a (object, direction,
-# Vector2, Vector2) signature, with no return value.
+# Vector2i, Vector2i) signature, with no return value.
 var _movement_cancelled
 
 # A callback that notifies when a movement was
 # finished. This callback has a (object, direction,
-# Vector2, Vector2) signature, with no return value.
+# Vector2i, Vector2i) signature, with no return value.
 var _movement_finished
 
 # A number of frames the queued movements will last
@@ -104,7 +113,7 @@ func _test_can_move(obj: Node2D, direction: _Direction) -> bool:
 
 # Notifies a movement being rejected.
 func _on_movement_rejected(obj: Node2D, direction: _Direction,
-						   from_position: Vector2, to_position: Vector2):
+						   from_position: Vector2i, to_position: Vector2i):
 	if _movement_rejected != null:
 		_movement_rejected.call(obj, direction, from_position, to_position)
 	else:
@@ -112,7 +121,7 @@ func _on_movement_rejected(obj: Node2D, direction: _Direction,
 
 # Notifies a movement starting on an object.
 func _on_movement_started(obj: Node2D, direction: _Direction,
-						  from_position: Vector2, to_position: Vector2):
+						  from_position: Vector2i, to_position: Vector2i):
 	if _movement_started != null:
 		_movement_started.call(obj, direction, from_position, to_position)
 	else:
@@ -120,7 +129,7 @@ func _on_movement_started(obj: Node2D, direction: _Direction,
 
 # Notifies a movement cancellation on an object.
 func _on_movement_cancelled(obj: Node2D, direction: _Direction,
-						  from_position: Vector2, to_position: Vector2):
+							from_position: Vector2i, to_position: Vector2i):
 	if _movement_cancelled != null:
 		_movement_cancelled.call(obj, direction, from_position, to_position)
 	else:
@@ -128,7 +137,7 @@ func _on_movement_cancelled(obj: Node2D, direction: _Direction,
 
 # Notifies a movement finish on an object.
 func _on_movement_finished(obj: Node2D, direction: _Direction,
-						   from_position: Vector2, to_position: Vector2):
+						   from_position: Vector2i, to_position: Vector2i):
 	if _movement_finished != null:
 		_movement_finished.call(obj, direction, from_position, to_position)
 	else:
@@ -136,7 +145,7 @@ func _on_movement_finished(obj: Node2D, direction: _Direction,
 
 func _init(
 	get_frame_signal: Callable,
-	get_delta: Callable,
+	get_raw_position: Callable,
 	get_speed: Callable,
 	can_move = null,
 	movement_rejected = null,
@@ -146,7 +155,7 @@ func _init(
 	queue_expiration = 5
 ) -> void:
 	_get_frame_signal = get_frame_signal
-	_get_delta = get_delta
+	_get_raw_position = get_raw_position
 	_get_speed = get_speed
 	_can_move = can_move
 	_movement_rejected = movement_rejected
@@ -156,21 +165,26 @@ func _init(
 	_queue_expiration = queue_expiration
 
 ## Starts a movement for an object.
-func start_movement(obj: Node2D, from_: Vector2, to_: Vector2, direction: _Direction):
+func start_movement(obj: Node2D, from_: Vector2i, direction: _Direction):
 	"""
 	Starts a movement, or queues a movement if
 	another movement is already started.
 	"""
-	
+
 	if obj == null or direction == _Direction.NONE:
 		return false
+
+	var to_: Vector2i = from_ + _DirectionUtils.get_delta(direction)
 	
 	if not _current_movement.has(obj):
 		if not _test_can_move(obj, direction):
 			_on_movement_rejected(obj, direction, from_, to_)
 			return false
 
-		_current_movement[obj] = Movement.new(from_, to_, direction)
+		_current_movement[obj] = Movement.new(
+			from_, to_, _get_raw_position.call(from_), _get_raw_position.call(to_),
+			direction
+		)
 		_on_movement_started(obj, direction, from_, to_)
 		_movement(obj)
 		return true
@@ -218,13 +232,13 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 	var speed = _get_speed.call(obj)
 	var movement: Movement = _current_movement[obj]
 	var next_step: Vector2 = obj.position.move_toward(
-		movement.to_position, delta * speed
+		movement.raw_to_position, delta * speed
 	)
 	
 	# If next_step is not target, it means it is less.
 	# So we must assign the new position and stop this
 	# frame (this is a normal situation).
-	if next_step != movement.to_position:
+	if next_step != movement.raw_to_position:
 		obj.position = next_step
 		return true
 	
@@ -234,10 +248,10 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 	if _queued_movement.has(obj):
 		# Pop the next movement.
 		var next_movement_direction = _queued_movement[obj].direction
-		var next_movement_to_position = movement.to_position + _get_delta.call(
-			movement.to_position, next_movement_direction
-		)
+		var next_movement_to_position = movement.to_position + _DirectionUtils.get_delta(next_movement_direction)
 		var next_movement_from_position = movement.to_position
+		var next_movement_raw_to_position = _get_raw_position.call(next_movement_to_position)
+		var next_movement_raw_from_position = movement.raw_to_position
 		_queued_movement.erase(obj)
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
@@ -250,7 +264,8 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		# Process the next movement. Immediately continue
 		# if the direction is the same.
 		_current_movement[obj] = Movement.new(
-			movement.to_position, next_movement_to_position,
+			next_movement_from_position, next_movement_to_position,
+			next_movement_raw_from_position, next_movement_raw_to_position,
 			next_movement_direction
 		)
 		_on_movement_started(obj, next_movement_direction,
@@ -260,7 +275,7 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 			# Compute, with the same current speed, the
 			# step toward the NEXT movement position.
 			obj.position = obj.position.move_toward(
-				next_movement_to_position, delta * speed
+				next_movement_raw_to_position, delta * speed
 			)
 		else:
 			# Just assign the already computed next step.
