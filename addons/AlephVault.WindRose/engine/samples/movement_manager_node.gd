@@ -17,6 +17,7 @@ func _ready() -> void:
 		(func(obj, direction): return Vector2(_DirectionUtils.get_delta(direction)) * Vector2(32, 32)),
 		(func(obj): return 64),
 		(func(obj, direction): return true),
+		(func(obj, direction, from_, to_): print("Movement rejected:", obj, direction, from_, to_)),
 		(func(obj, direction, from_, to_): print("Starting movement:", obj, direction, from_, to_)),
 		(func(obj, direction, from_, to_): print("Finishing movement:", obj, direction, from_, to_)),
 		(func(obj, direction, from_, to_): print("Cancelling movement:", obj, direction, from_, to_)),

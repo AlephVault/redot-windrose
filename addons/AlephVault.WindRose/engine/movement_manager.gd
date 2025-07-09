@@ -65,6 +65,11 @@ var _get_delta
 var _can_move
 
 # A callback that notifies when a movement was just
+# rejected. This callback has a (object, direction,
+# Vector2, Vector2) signature, with no return value.
+var _movement_rejected
+
+# A callback that notifies when a movement was just
 # started. This callback has a (object, direction,
 # Vector2, Vector2) signature, with no return value.
 var _movement_started
@@ -97,6 +102,14 @@ func _test_can_move(obj: Node2D, direction: _Direction) -> bool:
 		print("_can_move is not assigned. Returning true for node:", obj)
 		return true
 
+# Notifies a movement being rejected.
+func _on_movement_rejected(obj: Node2D, direction: _Direction,
+						   from_position: Vector2, to_position: Vector2):
+	if _movement_rejected != null:
+		_movement_rejected.call(obj, direction, from_position, to_position)
+	else:
+		print("_movement_rejected is not assigned. The node could not move:", obj)
+
 # Notifies a movement starting on an object.
 func _on_movement_started(obj: Node2D, direction: _Direction,
 						  from_position: Vector2, to_position: Vector2):
@@ -126,6 +139,7 @@ func _init(
 	get_delta: Callable,
 	get_speed: Callable,
 	can_move = null,
+	movement_rejected = null,
 	movement_started = null,
 	movement_finished = null,
 	movement_cancelled = null,
@@ -135,6 +149,7 @@ func _init(
 	_get_delta = get_delta
 	_get_speed = get_speed
 	_can_move = can_move
+	_movement_rejected = movement_rejected
 	_movement_started = movement_started
 	_movement_finished = movement_finished
 	_movement_cancelled = movement_cancelled
@@ -148,17 +163,20 @@ func start_movement(obj: Node2D, from_: Vector2, to_: Vector2, direction: _Direc
 	"""
 	
 	if obj == null or direction == _Direction.NONE:
-		return
+		return false
 	
 	if not _current_movement.has(obj):
 		if not _test_can_move(obj, direction):
-			return
+			_on_movement_rejected(obj, direction, from_, to_)
+			return false
 
 		_current_movement[obj] = Movement.new(from_, to_, direction)
 		_on_movement_started(obj, direction, from_, to_)
 		_movement(obj)
+		return true
 	else:
 		_queued_movement[obj] = QueuedMovement.new(direction, _queue_expiration)
+		return null
 
 func _wait_frame() -> float:
 	"""
