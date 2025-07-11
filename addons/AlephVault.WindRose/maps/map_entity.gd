@@ -1,9 +1,13 @@
 extends Node2D
 
+const _Map = AlephVault__WindRose.Maps.Map
 const _EntityRule = AlephVault__WindRose.Core.EntityRule
 const _EntitiesManager = AlephVault__WindRose.Core.EntitiesManager
 const _MapEM = AlephVault__WindRose.Maps.Layers.EntitiesLayer.Manager
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+const _ExceptionUtils = AlephVault__WindRose.Utils.ExceptionUtils
+const _Exception = _ExceptionUtils.Exception
+const _Response = _ExceptionUtils.Response
 
 ## An entities manager aware of this layer.
 class Entity extends AlephVault__WindRose.Core.Entity:
@@ -66,6 +70,17 @@ var entity: Entity:
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"MapEntity", "entity"
+		)
+
+var _current_map: _Map
+
+## The current map.
+var current_map: _Map:
+	get:
+		return _current_map
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "current_map"
 		)
 
 ## The current cell.
@@ -156,6 +171,7 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		rotation = 0
 		_origin = position
 		_snap()
+		_current_map = manager.layer.map
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()
@@ -240,7 +256,7 @@ func initialize():
 			return
 		var cell = _parent2.layout.local_to_map(position)
 		var result = _parent.manager.attach(
-			entity.entity_rule, cell
+			entity, cell
 		)
 		if result.is_successful():
 			_initialized = true
@@ -248,12 +264,39 @@ func initialize():
 func _ready():
 	initialize()
 
-# TODO attach() method.
-# TODO detach() method.
-# TODO teleport() method.
-# TODO finish_movement() method.
-# TODO start_movement() method.
-# TODO cancel_movement() method.
+## Attaches this entity to a (new) map.
+func attach(map: _Map, to_position: Vector2i) -> _Response:
+	if _current_map == map:
+		return _Response.succeed(false)
+	elif _current_map != null:
+		return _Response.fail(_Exception.raise(
+			"already_attached", "This entity is already attached to a map"
+		))
+	return map.entities_layer.manager.attach(entity, to_position)
+
+## Detaches an object from the current map.
+func detach() -> _Response:
+	if _current_map == null:
+		return _Response.succeed(false)
+	return _current_map.entities_layer.manager.detach(entity)
+
+## Teleports the entity to a new position.
+func teleport(to_position: Vector2i) -> _Response:
+	if _current_map == null:
+		return _Response.succeed(false)
+	return _current_map.entities_layer.manager.teleport(entity, to_position)
+
+## Starts a movement to certain position.
+func start_movement(direction: _Direction) -> _Response:
+	if _current_map == null:
+		return _Response.succeed(false)
+	return _current_map.entities_layer.manager.movement_start(entity, direction)
+
+## Cancels the current movement, if any.
+func cancel_movement() -> _Response:
+	if _current_map == null:
+		return _Response.succeed(false)
+	return _current_map.entities_layer.manager.movement_cancel(entity)
 
 func _process(delta: float):
 	updated.emit()

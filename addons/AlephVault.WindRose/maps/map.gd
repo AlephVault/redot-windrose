@@ -58,6 +58,18 @@ var floor_layer: _FloorLayer:
 			"Map", "floor_layer"
 		)
 
+# The entities layer.
+var _entities_layer: _EntitiesLayer
+
+## Retrieves the Entities layer.
+var entities_layer: _EntitiesLayer:
+	get:
+		return _entities_layer
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Map", "entities_layer"
+		)
+
 # The map layout.
 var _layout: _MapLayout
 
@@ -98,6 +110,8 @@ func _identify_layers():
 			if first == null:
 				first = child
 			_floor_layer = child
+		elif child is _EntitiesLayer:
+			_entities_layer = child
 	if first:
 		_layout = _MapLayout.new(first)
 

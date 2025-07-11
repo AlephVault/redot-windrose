@@ -33,6 +33,12 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 	func _get_frame_signal():
 		return _layer.get_tree().process_frame
 	
+	func _get_object_for_entity(entity):
+		return entity.map_entity
+
+	func _get_entity_for_object(obj):
+		return obj.entity
+
 	func _init(layer, entities_rule: _EntitiesRule, bypass):
 		super._init(entities_rule, bypass)
 		_layer = layer

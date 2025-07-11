@@ -157,12 +157,6 @@ func movement_cancel() -> _Response:
 		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
 	return _manager.movement_cancel(_entity_rule)
 
-## Tries to finish a current movement.
-func movement_finish() -> _Response:
-	if _manager == null:
-		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
-	return _manager.movement_finish(_entity_rule)
-
 ## Tries to teleport the entity to a new position.
 func teleport(to_position: Vector2i, silent: bool = false) -> _Response:
 	if _manager == null:
