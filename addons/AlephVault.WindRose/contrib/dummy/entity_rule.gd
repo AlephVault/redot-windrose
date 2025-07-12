@@ -1,0 +1,1 @@
+extends AlephVault__WindRose.Core.EntityRule
