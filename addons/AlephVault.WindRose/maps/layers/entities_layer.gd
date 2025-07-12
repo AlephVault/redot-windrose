@@ -43,7 +43,6 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 		super._init(entities_rule, bypass)
 		_layer = layer
 
-
 ## The associated entities rule. This one must be
 ## an EXTERNAL resource, defined in a resource file
 ## (it cannot be an embedded resource), which is
