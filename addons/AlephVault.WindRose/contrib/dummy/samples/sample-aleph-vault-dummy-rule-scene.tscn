@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://sm1s6p7ybett"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_ivtdo"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_mq1ws"]
+[ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-tileset.tres" id="3_ucmo7"]
+
+[node name="Sample" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+script = ExtResource("1_ivtdo")
+
+[node name="FloorLayer" type="Node2D" parent="Map"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("2_mq1ws")
+
+[node name="Floor1" type="TileMapLayer" parent="Map/FloorLayer"]
+tile_set = ExtResource("3_ucmo7")

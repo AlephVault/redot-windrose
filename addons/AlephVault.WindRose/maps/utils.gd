@@ -34,6 +34,9 @@ const INVALID_TRANSFORM: Transform2D = Transform2D(
 ## The layout tracks the proper transform to use
 ## to understand the steps.
 class MapLayout:
+	# The layer to link to.
+	var _tilemap_layer: TileMapLayer
+	
 	# The layout type to use.
 	var _layout_type: MapLayoutType
 	
@@ -46,6 +49,14 @@ class MapLayout:
 	
 	# A callable to compute local-to-map.
 	var _ltm: Callable
+	
+	# A reference to the last tile shape being used.
+	# It will be null the first time.
+	var _last_shape = null
+	
+	# A reference to the last tile layout being used.
+	# It will be null the first time.
+	var _last_layout = null
 
 	## The layout type.
 	var layout_type: MapLayoutType:
@@ -85,9 +96,21 @@ class MapLayout:
 		if layer == null or layer.tile_set == null:
 			_invalid("Null or unset TileMapLayer object")
 			return
+
+		_tilemap_layer = layer
+		recompute()
+
+	func recompute():
+		if _tilemap_layer == null:
+			return
 		
-		var tile_set = layer.tile_set
+		var tile_set = _tilemap_layer.tile_set
 		var tile_size = tile_set.tile_size
+		
+		if _last_layout == tile_set.tile_layout and _last_shape == tile_set.tile_shape:
+			return
+		_last_layout = tile_set.tile_layout
+		_last_shape = tile_set.tile_shape
 		
 		## Then, check the cell type and size.
 		match tile_set.tile_shape:
@@ -110,10 +133,10 @@ class MapLayout:
 				return
 
 		## Now, preparing the vectors for the transform.
-		var og: Vector2i = layer.map_to_local(Vector2i(0, 0))
-		var dx: Vector2i = Vector2i(layer.map_to_local(Vector2i(1, 0))) - og
-		var dy: Vector2i = Vector2i(layer.map_to_local(Vector2i(0, 1))) - og
-		_ltm = layer.local_to_map
+		var og: Vector2i = _tilemap_layer.map_to_local(Vector2i(0, 0))
+		var dx: Vector2i = Vector2i(_tilemap_layer.map_to_local(Vector2i(1, 0))) - og
+		var dy: Vector2i = Vector2i(_tilemap_layer.map_to_local(Vector2i(0, 1))) - og
+		_ltm = _tilemap_layer.local_to_map
 		_transform = Transform2D(dx, dy, og)
 
 	## Gets a point, in coordinates space, of

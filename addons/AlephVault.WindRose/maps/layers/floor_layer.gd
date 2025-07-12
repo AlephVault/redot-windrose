@@ -1,3 +1,4 @@
+@tool
 extends AlephVault__WindRose.Maps.Layers.Layer
 ## The floor layer is one containing all the
 ## TileMapLayer instances that matter for this
@@ -30,6 +31,7 @@ func _ready():
 	if not _connected:
 		child_order_changed.connect(_child_order_changed)
 		_connected = true
+	_child_order_changed()
 
 ## We leave the _z_index in 10 here, explicitly.
 ## Other ones will be, most likely, greater in

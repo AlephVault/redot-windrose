@@ -12,6 +12,7 @@ const _Direction = _DirectionUtils.Direction
 const _FloorLayer = AlephVault__WindRose.Maps.Layers.FloorLayer
 const _EntitiesLayer = AlephVault__WindRose.Maps.Layers.EntitiesLayer
 const _MapLayout = AlephVault__WindRose.Maps.Utils.MapLayout
+const _MapLayoutType = AlephVault__WindRose.Maps.Utils.MapLayoutType
 
 ## Use an index >= 0 (unique!) to register this
 ## map in its parent scope.
@@ -107,13 +108,11 @@ func _identify_layers():
 	var first = null
 	for child in get_children():
 		if child is _FloorLayer:
-			if first == null:
-				first = child
 			_floor_layer = child
 		elif child is _EntitiesLayer:
 			_entities_layer = child
-	if first:
-		_layout = _MapLayout.new(first)
+	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
+		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
 
 # On tree enter it registers a new index
 # in the parent scope (if the parent is
@@ -131,19 +130,18 @@ func _enter_tree() -> void:
 # On tree exit releases the _identify_layers
 # hook (so it can connect lat).
 func _exit_tree() -> void:
-	child_order_changed.disconnect(_identify_layers)
+	if child_order_changed.is_connected(_identify_layers):
+		child_order_changed.disconnect(_identify_layers)
 	
 # The draw hook in the map
 func _draw() -> void:
-	# First, ensure there's a TileMapLayer.
-	if _floor_layer == null or _floor_layer.get_tilemaps_count() == 0:
-		return
 	var tile_map = _floor_layer.get_tilemap(0)
+	var go: Vector2 = _layout.grid_offset
 
 	var s: Vector2i = size
-	var s00: Vector2i = tile_map.map_to_local(Vector2i(0, 0))
-	var s01: Vector2i = tile_map.map_to_local(Vector2i(0, 1))
-	var s10: Vector2i = tile_map.map_to_local(Vector2i(1, 0))
+	var s00: Vector2i = tile_map.map_to_local(Vector2i(0, 0)) - go
+	var s01: Vector2i = tile_map.map_to_local(Vector2i(0, 1)) - go
+	var s10: Vector2i = tile_map.map_to_local(Vector2i(1, 0)) - go
 	var dx: Vector2i = s10 - s00
 	var dy: Vector2i = s01 - s00
 	var lx: Vector2i = dx * s.x
@@ -156,16 +154,26 @@ func _draw() -> void:
 	for y in range(1, s.y + 1):
 		# logical y
 		tdy += dy
-		draw_line(s00 + tdy, s00 + tdy + lx, c_)
+		draw_line(tdy, tdy + lx, c_)
 	for x in range(1, s.x + 1):
 		# logical x
 		tdx += dx
-		draw_line(s00 + tdx, s00 + tdx + ly, c_)
+		draw_line(tdx, tdx + ly, c_)
 	# logical y=0
-	draw_line(s00, s00 + lx, cx)
+	draw_line(Vector2(0, 0), lx, cx)
 	# logical x=0
-	draw_line(s00, s00 + ly, cy)
+	draw_line(Vector2(0, 0), ly, cy)
 
 func _process(_delta):
+	if _floor_layer == null or _floor_layer.get_tilemaps_count() == 0:
+		return
+	layout.recompute()
+	if layout.layout_type == _MapLayoutType.INVALID:
+		return
+	var tile_map = _floor_layer.get_tilemap(0)
+	var go: Vector2 = _layout.grid_offset
+	var s00: Vector2i = tile_map.map_to_local(Vector2i(0, 0)) - go
+	_floor_layer.position = Vector2(-s00)
+
 	if Engine.is_editor_hint():
 		queue_redraw()

@@ -77,7 +77,7 @@ func _on_detached():
 
 func _on_property_updated(property: String, old_value, new_value):
 	if _manager != null:
-		manager.property_updated(_entity_rule, property, old_value, new_value)
+		manager.property_updated(self, property, old_value, new_value)
 
 func _on_movement_started(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
@@ -131,16 +131,16 @@ func attach_to(
 ) -> _Response:
 	if manager:
 		if force:
-			manager.detach(_entity_rule)
+			manager.detach(self)
 		else:
 			return _Response.fail(_Exception.raise("already_attached", "Entity already attached to a manager"))
-	return manager.attach(_entity_rule, position)
+	return manager.attach(self, position)
 
 ## Attempts detachment from a manager.
 func detach() -> _Response:
 	if _manager == null:
 		return _Response.succeed(false)
-	var response: _Response = _manager.detach(_entity_rule)
+	var response: _Response = _manager.detach(self)
 	if response.is_successful():
 		return _Response.succeed(true)
 	return response
@@ -149,16 +149,16 @@ func detach() -> _Response:
 func movement_start(direction: _Direction, continued: bool = false) -> _Response:
 	if _manager == null:
 		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
-	return _manager.movement_start(_entity_rule, direction)
+	return _manager.movement_start(self, direction)
 
 ## Tries to cancel a current movement.
 func movement_cancel() -> _Response:
 	if _manager == null:
 		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
-	return _manager.movement_cancel(_entity_rule)
+	return _manager.movement_cancel(self)
 
 ## Tries to teleport the entity to a new position.
 func teleport(to_position: Vector2i, silent: bool = false) -> _Response:
 	if _manager == null:
 		return _Response.fail(_Exception.raise("not_attached", "Entity not attached to a manager"))
-	return _manager.teleport(_entity_rule, to_position, silent)
+	return _manager.teleport(self, to_position, silent)

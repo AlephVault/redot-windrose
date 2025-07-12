@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://nh16ijtmr4wn"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/engine/samples/movement_manager_node.gd" id="1_bia8q"]
+[ext_resource type="Texture2D" uid="uid://yg5rcgy186na" path="res://addons/AlephVault.WindRose/engine/samples/object.png" id="2_l84vd"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/engine/samples/movable_sprite.gd" id="3_kekpq"]
+
+[node name="Sample" type="Node2D"]
+
+[node name="MovementManager" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_bia8q")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_l84vd")
+script = ExtResource("3_kekpq")
