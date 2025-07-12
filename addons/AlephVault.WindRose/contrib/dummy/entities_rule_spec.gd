@@ -5,4 +5,6 @@ extends AlephVault__WindRose.Resources.EntitiesRuleSpec
 func create_rule(
 	entities_layer: AlephVault__WindRose.Maps.Layers.EntitiesLayer
 ) -> AlephVault__WindRose.Core.EntitiesRule:
-	return null
+	return AlephVault__WindRose.Contrib.Dummy.EntitiesRule.new(
+		entities_layer.map.size
+	)
