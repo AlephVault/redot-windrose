@@ -200,6 +200,7 @@ func _on_detached():
 	var _gparent = _parent.get_parent()
 	if _gparent is AlephVault__WindRose.Maps.Scope:
 		_gparent.add_child(self)
+	_current_map = null
 
 func _set_signals():
 	var signals = entity.entity_rule.signals

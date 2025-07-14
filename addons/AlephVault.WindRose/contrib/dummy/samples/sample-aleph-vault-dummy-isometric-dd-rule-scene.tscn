@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=4 uid="uid://sm1s6p7ybett"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_f1mbo"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_gnlb4"]
+[ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-isometric-dd-tileset.tres" id="3_qp86j"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/entities_layer.gd" id="4_f8eu6"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map_entity.gd" id="5_m4e4m"]
+
+[sub_resource type="Resource" id="Resource_4kdtt"]
+
+[node name="Sample" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_f1mbo")
+_size = Vector2i(5, 5)
+
+[node name="FloorLayer" type="Node2D" parent="Map"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("2_gnlb4")
+
+[node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAADAAEAAAAAAAAAAAACAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAMAAAAAAAAAAAACAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAADAAIAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAA=")
+tile_set = ExtResource("3_qp86j")
+
+[node name="EntitiesLayer" type="Node2D" parent="Map"]
+script = ExtResource("4_f8eu6")
+
+[node name="Character11" type="Node2D" parent="."]
+script = ExtResource("5_m4e4m")
+_rule_spec = SubResource("Resource_4kdtt")
+speed = 18.0

@@ -44,6 +44,9 @@ class MapLayout:
 	# and the movement of the objects in the map.
 	var _grid_offset: Vector2i
 
+	# The size of the cell.
+	var _cell_size: Vector2i
+
 	# The (linear) transform for the layouts.
 	var _transform: Transform2D
 	
@@ -74,6 +77,15 @@ class MapLayout:
 		set(value):
 			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 				"MapLayout", "grid_offset"
+			)
+	
+	## The offset (used for pivoting the grid painting).
+	var cell_size: Vector2i:
+		get:
+			return _cell_size
+		set(value):
+			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+				"MapLayout", "cell_size"
 			)
 	
 	## The transform for the steps.
@@ -117,14 +129,17 @@ class MapLayout:
 			TileSet.TileShape.TILE_SHAPE_SQUARE:
 				_layout_type = MapLayoutType.ORTHOGONAL
 				_grid_offset = tile_size / 2
+				_cell_size = tile_set.tile_size
 			TileSet.TileShape.TILE_SHAPE_ISOMETRIC:
 				match tile_set.tile_layout:
 					TileSet.TileLayout.TILE_LAYOUT_DIAMOND_DOWN:
 						_layout_type = MapLayoutType.ISOMETRIC_TOPDOWN
 						_grid_offset = Vector2i(0, tile_size.y / 2)
+						_cell_size = tile_set.tile_size
 					TileSet.TileLayout.TILE_LAYOUT_DIAMOND_RIGHT:
 						_layout_type = MapLayoutType.ISOMETRIC_LEFTRIGHT
 						_grid_offset = Vector2i(tile_size.x / 2, 0)
+						_cell_size = tile_set.tile_size
 					_:
 						_invalid("Invalid tile layout in the tile set object")
 						return

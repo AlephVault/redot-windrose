@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/engine/samples/movable_sprite.gd" id="3_kekpq"]
 
 [node name="Sample" type="Node2D"]
+metadata/_edit_group_ = true
 
 [node name="MovementManager" type="Node2D" parent="."]
 unique_name_in_owner = true
