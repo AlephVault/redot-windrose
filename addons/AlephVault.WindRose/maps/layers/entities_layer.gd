@@ -82,6 +82,10 @@ var _manager: Manager
 ## The manager for this layer.
 var manager: Manager:
 	get:
+		assert(
+			_manager == null,
+			"EntitiesLayer's manager is not initialized yet"
+		)
 		return _manager
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
@@ -115,11 +119,9 @@ var initialized: bool:
 			"EntitiesLayer", "initialized"
 		)
 
-func _init():
-	_manager = Manager.new(self, rule, bypass)
-
 ## Initializes the manager.
 func initialize():
+	_manager = Manager.new(self, rule, bypass)
 	_manager.initialize()
 
 ## We leave the _z_index in 30 here, explicitly.
