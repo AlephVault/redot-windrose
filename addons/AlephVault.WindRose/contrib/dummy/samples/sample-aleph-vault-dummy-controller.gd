@@ -23,7 +23,6 @@ func _change_character():
 	if _selected == 4:
 		_selected = 0
 	
-	print("_options:", _options)
 	_options[_selected].attach(%Map, Vector2i(0, 0))
 	_current = _options[_selected]
 

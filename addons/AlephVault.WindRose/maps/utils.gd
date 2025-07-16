@@ -43,6 +43,10 @@ class MapLayout:
 	# The offset to use for the grid rendering,
 	# and the movement of the objects in the map.
 	var _grid_offset: Vector2i
+	
+	# The offset to subtract to the objects in
+	# the map.
+	var _object_offset: Vector2i
 
 	# The size of the cell.
 	var _cell_size: Vector2i
@@ -123,6 +127,7 @@ class MapLayout:
 			return
 		_last_layout = tile_set.tile_layout
 		_last_shape = tile_set.tile_shape
+		_object_offset = tile_size / 2
 		
 		## Then, check the cell type and size.
 		match tile_set.tile_shape:
@@ -159,7 +164,7 @@ class MapLayout:
 	## and perhaps + a 1-step displacement.
 	func get_point(cell: Vector2i, direction: _Direction = _Direction.NONE):
 		cell += _DirectionUtils.get_delta(direction)
-		return Vector2i(_transform * Vector2(cell))
+		return Vector2i(_transform * Vector2(cell)) - _object_offset
 
 	## Given a position, computes its cell.
 	func local_to_map(point: Vector2i) -> Vector2i:

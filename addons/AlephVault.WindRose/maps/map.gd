@@ -105,7 +105,6 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 # Identifies the layers recognized in
 # this map (directly from the children).
 func _identify_layers():
-	print("Identifying layers...")
 	var first = null
 	for child in get_children():
 		if child is _FloorLayer:
