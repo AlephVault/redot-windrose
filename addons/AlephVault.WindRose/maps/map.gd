@@ -105,12 +105,14 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 # Identifies the layers recognized in
 # this map (directly from the children).
 func _identify_layers():
+	print("Identifying layers...")
 	var first = null
 	for child in get_children():
 		if child is _FloorLayer:
 			_floor_layer = child
 		elif child is _EntitiesLayer:
 			_entities_layer = child
+	print("GLORG(1)! Floor layer: ", _floor_layer, "Tilemaps: ", _floor_layer.get_tilemaps_count() if _floor_layer != null else 0)
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
 
@@ -125,6 +127,8 @@ func _enter_tree() -> void:
 			_scope = parent
 	_size = Vector2i(max(1, _size.x), max(1, _size.y))
 	child_order_changed.connect(_identify_layers)
+
+func _ready():
 	_identify_layers()
 
 # On tree exit releases the _identify_layers
@@ -135,6 +139,9 @@ func _exit_tree() -> void:
 	
 # The draw hook in the map
 func _draw() -> void:
+	if (_layout == null):
+		return
+	
 	var tile_map = _floor_layer.get_tilemap(0)
 	var go: Vector2 = _layout.grid_offset
 
@@ -167,6 +174,9 @@ func _draw() -> void:
 func _process(_delta):
 	if _floor_layer == null or _floor_layer.get_tilemaps_count() == 0:
 		return
+	if _layout == null:
+		return
+
 	layout.recompute()
 	if layout.layout_type == _MapLayoutType.INVALID:
 		return

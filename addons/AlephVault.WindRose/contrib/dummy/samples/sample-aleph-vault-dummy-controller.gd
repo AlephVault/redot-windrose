@@ -4,9 +4,7 @@ const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 
 var _selected: int = -1
 var _current: AlephVault__WindRose.Maps.MapEntity = null
-var _options: Array[AlephVault__WindRose.Maps.MapEntity] = [
-	%Char11, %Char12, %Char21, %Char22
-]
+var _options: Array[AlephVault__WindRose.Maps.MapEntity]
 var _change_pressed: bool = false
 
 func _change_character():
@@ -25,6 +23,7 @@ func _change_character():
 	if _selected == 4:
 		_selected = 0
 	
+	print("_options:", _options)
 	_options[_selected].attach(%Map, Vector2i(0, 0))
 	_current = _options[_selected]
 
@@ -37,6 +36,11 @@ func _move(direction: _Direction):
 		return
 	
 	_current.start_movement(direction)
+
+func _ready():
+	_options = [
+		%Character11, %Character12, %Character21, %Character22
+	]
 
 func _process(delta):
 	if Input.is_key_pressed(KEY_S):

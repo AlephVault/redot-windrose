@@ -11,11 +11,14 @@ var _sorted_layers: Array[TileMapLayer] = []
 # Gets the list of tilemap layers added to this floor
 # layer.
 func _child_order_changed():
+	print("GLORG(2)! Assessing children")
 	_sorted_layers.clear()
 
 	for child in get_children():
 		if child is TileMapLayer:
 			_sorted_layers.append(child)
+
+	print("GLORG(3)! Children: ", _sorted_layers)
 
 ## Gets a tilemap layer (being 0 the background
 ## tilemap layer, or closest to).

@@ -170,7 +170,7 @@ var _target: Vector2i = Vector2i.ZERO
 func _snap():
 	if _destroyed or entity == null or entity.manager == null:
 		return
-	position = get_parent().layout.get_point(entity.cell)
+	position = get_parent().map.layout.get_point(entity.cell)
 
 func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 	if manager is _MapEM:
@@ -257,8 +257,6 @@ func initialize():
 	orientation = orientation
 	speed = speed
 	state = state
-
-	entity.initialize()
 	
 	var _parent = get_parent()
 	var _parent2 = null

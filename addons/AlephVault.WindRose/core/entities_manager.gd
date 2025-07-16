@@ -52,7 +52,7 @@ func _require_not_attached(entity_rule: _EntityRule) -> _Exception:
 	return null
 
 func _require_attached(entity_rule: _EntityRule) -> _Exception:
-	if _statuses.has(entity_rule):
+	if not _statuses.has(entity_rule):
 		return _Exception.raise("not_attached", "The entity is not attached")
 	return null
 
@@ -66,14 +66,17 @@ func _init(entities_rule: _EntitiesRule, bypass) -> void:
 		func(): return _get_frame_signal(),
 		# Function to get the raw position.
 		func(position): return _get_point(position),
-		# Remember: The object is not just a Node2D here,
-		# but it is actually a MapEntity.Entity object.
-		func(entity): return entity.map_entity.speed,
+		# Function to get the speed of an object.s
+		_get_speed_for_object,
 		# Applies the same logic to test whether the
 		# object can start the (new) movement or not.
-		func(entity, direction): return self._can_allocate(
-			entity.entity_rule, entity.map_entity.position, direction
-		),
+		func(obj, direction):
+			print("GLORG(5)! Statuses: ", _statuses, "Obj: ", obj, "Entity: ", _get_entity_for_object(obj), "Direction: ", direction)
+			return self._can_allocate(
+				_get_entity_for_object(obj).entity_rule,
+				_statuses[_get_entity_for_object(obj).entity_rule].position,
+				direction
+			),
 		self._on_movement_rejected_callback,
 		self._on_movement_started_callback,
 		self._on_movement_finished_callback,
@@ -178,7 +181,7 @@ func movement_start(
 	entity: _Entity,
 	direction: _Direction
 ) -> _Response:
-	var entity_rule: _EntityRule = entity.entiy_rule
+	var entity_rule: _EntityRule = entity.entity_rule
 	var e: _Exception
 	# Check is attached.
 	e = _require_attached(entity_rule)
@@ -207,12 +210,16 @@ func _get_frame_signal():
 	return null
 
 # Returns the object associated to an entity.
-func _get_object_for_entity(entity):
+func _get_object_for_entity(entity: _Entity):
 	return null
 
 # Returns the entity associated to an object.
-func _get_entity_for_object(obj):
+func _get_entity_for_object(obj) -> _Entity:
 	return null
+
+# Returns the speed associated to an object.
+func _get_speed_for_object(obj) -> float:
+	return 0
 
 func _can_allocate(
 	entity_rule: _EntityRule,

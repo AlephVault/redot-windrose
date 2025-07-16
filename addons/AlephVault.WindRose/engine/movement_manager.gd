@@ -171,6 +171,7 @@ func start_movement(obj: Node2D, from_: Vector2i, direction: _Direction):
 	another movement is already started.
 	"""
 
+	print("GLORG(4)! Entity on start_movement is: ", obj)
 	if obj == null or direction == _Direction.NONE:
 		return false
 

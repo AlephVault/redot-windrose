@@ -43,6 +43,9 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 
 	func _get_entity_for_object(obj):
 		return obj.entity
+	
+	func _get_speed_for_object(obj) -> float:
+		return obj.speed
 
 	func _init(layer, entities_rule: _EntitiesRule, bypass):
 		super._init(entities_rule, bypass)
@@ -83,7 +86,7 @@ var _manager: Manager
 var manager: Manager:
 	get:
 		assert(
-			_manager == null,
+			_manager != null,
 			"EntitiesLayer's manager is not initialized yet"
 		)
 		return _manager
@@ -121,8 +124,17 @@ var initialized: bool:
 
 ## Initializes the manager.
 func initialize():
-	_manager = Manager.new(self, rule, bypass)
-	_manager.initialize()
+	if not _map:
+		return
+	
+	if not _initialized:
+		_manager = Manager.new(self, rule, bypass)
+		_manager.initialize()
+		_initialized = true
+
+func _ready():
+	super._ready()
+	initialize()
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet
