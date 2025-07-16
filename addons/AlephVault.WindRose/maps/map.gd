@@ -111,7 +111,6 @@ func _identify_layers():
 			_floor_layer = child
 		elif child is _EntitiesLayer:
 			_entities_layer = child
-	print("GLORG(1)! Floor layer: ", _floor_layer, "Tilemaps: ", _floor_layer.get_tilemaps_count() if _floor_layer != null else 0)
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
 

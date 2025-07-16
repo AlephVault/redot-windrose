@@ -171,7 +171,6 @@ func start_movement(obj: Node2D, from_: Vector2i, direction: _Direction):
 	another movement is already started.
 	"""
 
-	print("GLORG(4)! Entity on start_movement is: ", obj)
 	if obj == null or direction == _Direction.NONE:
 		return false
 
@@ -282,6 +281,9 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 			# Just assign the already computed next step.
 			obj.position = next_step
 	else:
+		_on_movement_finished(obj, movement.direction,
+							  movement.from_position,
+							  movement.to_position)
 		# Use the retrieved position.
 		obj.position = next_step
 	return true
@@ -291,7 +293,7 @@ func _movement(obj: Node2D):
 	Processes any current movement step by step.
 	"""
 
-	obj.position = _current_movement[obj].from_position
+	obj.position = _current_movement[obj].raw_from_position
 	while true:
 		if not _movement_step(obj, await _wait_frame()):
 			return

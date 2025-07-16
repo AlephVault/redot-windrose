@@ -71,7 +71,6 @@ func _init(entities_rule: _EntitiesRule, bypass) -> void:
 		# Applies the same logic to test whether the
 		# object can start the (new) movement or not.
 		func(obj, direction):
-			print("GLORG(5)! Statuses: ", _statuses, "Obj: ", obj, "Entity: ", _get_entity_for_object(obj), "Direction: ", direction)
 			return self._can_allocate(
 				_get_entity_for_object(obj).entity_rule,
 				_statuses[_get_entity_for_object(obj).entity_rule].position,
@@ -221,10 +220,32 @@ func _get_entity_for_object(obj) -> _Entity:
 func _get_speed_for_object(obj) -> float:
 	return 0
 
+# Tells whether the movement to the new direction
+# is inbound or not.
+func _is_movement_inbound(
+	entity_rule: _EntityRule,
+	position: Vector2i, direction: _Direction
+):
+	match direction:
+		_Direction.UP:
+			return position.y > 0
+		_Direction.DOWN:
+			return position.y < entities_rule.size.y - entity_rule.size.y
+		_Direction.LEFT:
+			return position.x > 0
+		_Direction.RIGHT:
+			return position.x < entities_rule.size.x - entity_rule.size.x
+		_:
+			return false
+
 func _can_allocate(
 	entity_rule: _EntityRule,
 	position: Vector2i, direction: _Direction
 ) -> bool:
+	var e_size: Vector2i = entity_rule.size
+	var es_size: Vector2i = entities_rule.size
+	if not _is_movement_inbound(entity_rule, position, direction):
+		return false
 	return bypass or entities_rule.can_move(entity_rule, position, direction)
 
 func _movement_started(

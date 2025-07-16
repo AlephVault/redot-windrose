@@ -170,9 +170,7 @@ var _target: Vector2i = Vector2i.ZERO
 func _snap():
 	if _destroyed or entity == null or entity.manager == null:
 		return
-	print("GLORG(6)! Snapping at: ", entity.cell)
 	position = get_parent().map.layout.get_point(entity.cell)
-	print("GLORG(7)! New position is: ", position)
 
 func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 	if manager is _MapEM:
