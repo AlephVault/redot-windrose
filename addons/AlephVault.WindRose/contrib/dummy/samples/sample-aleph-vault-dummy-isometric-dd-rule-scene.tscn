@@ -1,12 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://sm1s6p7ybett"]
+[gd_scene load_steps=6 format=4 uid="uid://sm1s6p7ybett"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_f1mbo"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_gnlb4"]
 [ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-isometric-dd-tileset.tres" id="3_qp86j"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/entities_layer.gd" id="4_f8eu6"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map_entity.gd" id="5_m4e4m"]
-
-[sub_resource type="Resource" id="Resource_4kdtt"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-entities-layer.gd" id="4_0xt3g"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-map-entity.gd" id="5_4lpc4"]
 
 [node name="Sample" type="Node2D"]
 
@@ -25,9 +23,8 @@ tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA
 tile_set = ExtResource("3_qp86j")
 
 [node name="EntitiesLayer" type="Node2D" parent="Map"]
-script = ExtResource("4_f8eu6")
+script = ExtResource("4_0xt3g")
 
 [node name="Character11" type="Node2D" parent="."]
-script = ExtResource("5_m4e4m")
-_rule_spec = SubResource("Resource_4kdtt")
+script = ExtResource("5_4lpc4")
 speed = 18.0

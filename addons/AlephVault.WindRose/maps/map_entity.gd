@@ -1,4 +1,10 @@
 extends Node2D
+## This is a map entity layer.
+##
+## Override this class' _create_rule to return a custom
+## instance of AlephVault__WindRose.Core.EntityRule.
+## This will be assigned internally to the `rule` field,
+## perhaps initialized from custom properties you define.
 
 const _Map = AlephVault__WindRose.Maps.Map
 const _EntityRule = AlephVault__WindRose.Core.EntityRule
@@ -27,16 +33,14 @@ class Entity extends AlephVault__WindRose.Core.Entity:
 		super._init(entity_rule)
 		_map_entity = map_entity
 
-## The associated entity rule. This one must be an
-## EXTERNAL resource, defined in a resource file
-## (it cannot be an embedded resource), which is
-## necessarily of a derived class.
-##
-## In the end, the actual entity rule will be
-## instantiated out of it. 
-@export var _rule_spec: AlephVault__WindRose.Resources.EntityRuleSpec
-
 var _rule: _EntityRule
+
+func _create_rule() -> _EntityRule:
+	"""
+	Creates an entity rule.
+	"""
+	
+	return null
 
 ## The instantiated rule, out of the configured
 ## rule spec.
@@ -45,14 +49,11 @@ var rule: _EntityRule:
 		if is_instance_valid(_rule):
 			return _rule
 
-		assert(
-			_rule_spec != null,
-			"The rule_spec is not set"
-		)
-		_rule = _rule_spec.create_rule(self)
+		_rule = _create_rule()
 		assert(
 			is_instance_valid(_rule),
-			"The rule is null"
+			"Implement entity_layer's _create_rule() to return a non-null " + 
+			"AlephVault__Windrose.Core.EntityRule instance"
 		)
 		return _rule
 	set(value):
@@ -83,6 +84,19 @@ var current_map: _Map:
 			"MapEntity", "current_map"
 		)
 
+## The map entity size, expressed as (width, height).
+@export_category("Topology")
+@export var _size: Vector2i = Vector2i(8, 6)
+
+## Gets the map entity size.
+var size: Vector2i:
+	get:
+		return _size
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "size"
+		)
+
 ## The current cell.
 var cell: Vector2i:
 	get:
@@ -95,7 +109,7 @@ var cell: Vector2i:
 ## The current opposite cell.
 var cellf: Vector2i:
 	get:
-		return entity.cell + entity.size - Vector2i.ONE
+		return entity.cell + size - Vector2i.ONE
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"MapEntity", "cellf"
@@ -222,15 +236,6 @@ func _unset_signals():
 		signals.on_movement_finished.disconnect(_on_movement_finished)
 		signals.on_detached.disconnect(_on_detached)
 
-func _init():
-	_entity = Entity.new(self, rule)
-	_set_signals()
-	# Fixing editor-set properties and triggering
-	# signals for the first time.
-	orientation = orientation
-	speed = speed
-	state = state
-
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		_destroyed = true
@@ -243,6 +248,15 @@ func initialize():
 	
 	if _initialized:
 		return
+
+	_size = Vector2i(max(_size.x, 1), max(_size.y, 1))
+	_entity = Entity.new(self, rule)
+	_set_signals()
+	# Fixing editor-set properties and triggering
+	# signals for the first time.
+	orientation = orientation
+	speed = speed
+	state = state
 
 	entity.initialize()
 	

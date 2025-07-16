@@ -1,6 +1,11 @@
 extends AlephVault__WindRose.Maps.Layers.Layer
-## This is an entities layer. It holds a reference
-## to a resource that will spawn an underlying rule.
+## This is an entities layer. It holds a reference to a
+## resource that will spawn an underlying rule.
+##
+## Override this class' _create_rule to return a custom
+## instance of AlephVault__WindRose.Core.EntitiesRule.
+## This will be assigned internally to the `rule` field,
+## perhaps initialized from custom properties you define.
 
 const _Map = AlephVault__WindRose.Maps.Map
 const _EntitiesRule = AlephVault__WindRose.Core.EntitiesRule
@@ -43,16 +48,14 @@ class Manager extends AlephVault__WindRose.Core.EntitiesManager:
 		super._init(entities_rule, bypass)
 		_layer = layer
 
-## The associated entities rule. This one must be
-## an EXTERNAL resource, defined in a resource file
-## (it cannot be an embedded resource), which is
-## necessarily of a derived class.
-##
-## In the end, the actual entities rule will be
-## instantiated out of it. 
-@export var _rule_spec: AlephVault__WindRose.Resources.EntitiesRuleSpec
-
 var _rule: _EntitiesRule
+
+func _create_rule() -> _EntitiesRule:
+	"""
+	Creates an entities rule.
+	"""
+	
+	return null
 
 ## The instantiated rule, out of the configured
 ## rule spec.
@@ -61,14 +64,11 @@ var rule: _EntitiesRule:
 		if is_instance_valid(_rule):
 			return _rule
 
-		assert(
-			_rule_spec != null,
-			"The rule_spec is not set"
-		)
-		_rule = _rule_spec.create_rule(self)
+		_rule = _create_rule()
 		assert(
 			is_instance_valid(_rule),
-			"The rule is null"
+			"Implement entities_layer's _create_rule() to return a non-null " + 
+			"AlephVault__Windrose.Core.EntitiesRule instance"
 		)
 		return _rule
 	set(value):
