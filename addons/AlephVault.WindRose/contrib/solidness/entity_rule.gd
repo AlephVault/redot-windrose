@@ -35,3 +35,26 @@ var solidness: Solidness:
 ## solidness rules (i.e. gets blocked by
 ## other solid objects) or not.
 var obeys_solidness: bool = true
+
+# Tells whether the movement allocation
+# is optimistic.
+var _optimistic: bool
+
+var optimistic: bool:
+	get:
+		return _optimistic
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntityRule", "optimistic"
+		)
+
+func _init(
+	size: Vector2i, root: bool = true,
+	obeys_solidness: bool = true,
+	solidness: Solidness = Solidness.SOLID,
+	optimistic: bool = false
+):
+	super._init(size, root)
+	self.obeys_solidness = obeys_solidness
+	_solidness = solidness
+	_optimistic = optimistic
