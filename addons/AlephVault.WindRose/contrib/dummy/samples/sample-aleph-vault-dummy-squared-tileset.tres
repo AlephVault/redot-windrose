@@ -1,12 +1,19 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://chxynxt0nfjpd"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://chxynxt0nfjpd"]
 
 [ext_resource type="Texture2D" uid="uid://c6ctmp4wxcaj2" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/square-cell.png" id="1_0fq7g"]
+[ext_resource type="Texture2D" uid="uid://4cq437qdijxn" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/square-blocked-cell.png" id="2_sa2mm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d6rpl"]
 texture = ExtResource("1_0fq7g")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j7aye"]
+texture = ExtResource("2_sa2mm")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
 [resource]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_d6rpl")
+sources/1 = SubResource("TileSetAtlasSource_j7aye")
