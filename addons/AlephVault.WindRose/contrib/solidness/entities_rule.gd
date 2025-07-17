@@ -14,7 +14,7 @@ extends AlephVault__WindRose.Core.EntitiesRule
 ## removed or teleported, or has its solidness changed,
 ## this array is updated.
 
-# The solidness array
+# The solidness array.
 var _solidness: Array[int]
 
 ## Initializes the global data, by allocating an array
@@ -118,3 +118,49 @@ func can_move(
 				position.y, entity_rule.size.y
 			)
 	return false
+
+func on_entity_attached(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	to_position: Vector2i
+) -> void:
+	pass
+
+func on_movement_started(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+	stage: MovementStartedStage
+) -> void:
+	pass
+
+func on_movement_finished(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+	stage: MovementConfirmedStage
+) -> void:
+	pass
+
+func on_movement_cancelled(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
+	stage: MovementClearedStage
+) -> void:
+	pass
+
+func on_teleported(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	from_position: Vector2i, to_position: Vector2i,
+	stage: TeleportedStage
+) -> void:
+	pass
+
+func on_property_updated(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	property: String, old_value, new_value
+) -> void:
+	pass
+
+func on_entity_detached(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	from_position: Vector2i
+) -> void:
+	pass
