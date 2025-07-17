@@ -115,7 +115,7 @@ func _identify_layers():
 			_entities_layer = child
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
-	if _entities_layer != null:
+	if _entities_layer != null and _entities_layer.has_method("initialize"):
 		_entities_layer.initialize()
 
 # On tree enter it registers a new index

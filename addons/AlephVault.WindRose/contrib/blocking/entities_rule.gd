@@ -51,7 +51,7 @@ func _get_blocking(cell: Vector2i) -> bool:
 
 ## Initializes the cell data structure,
 ## by creating a bitmap array with the
-##
+## blocking flags.
 func initialize_global_data():
 	_blocks = []
 	_blocks.resize(size.x * size.y)
@@ -105,7 +105,7 @@ func can_move(
 					return false
 			return true
 		_Direction.RIGHT:
-			# precondition: x < ES_X - E_X
+			# precondition: x < ES_W - E_W
 			for y_ in range(0, entity_rule.size.y):
 				var cell = Vector2i(position.x + entity_rule.size.x, y_ + position.y)
 				if _blocks[cell.x + cell.y * size.x]:

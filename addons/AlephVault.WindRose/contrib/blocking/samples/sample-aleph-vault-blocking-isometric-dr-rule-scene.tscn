@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_g04q1"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_vjsut"]
-[ext_resource type="TileSet" uid="uid://bk5i1ssl0oeh7" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-aleph-vault-blocking-isometric-dr-tileset.tres" id="3_70m67"]
+[ext_resource type="TileSet" uid="uid://bk5i1ssl0oeh7" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-isometric-dr-tileset.tres" id="3_70m67"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-entities-layer.gd" id="4_afynd"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-map-entity.gd" id="5_f1vrn"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="6_75myx"]
