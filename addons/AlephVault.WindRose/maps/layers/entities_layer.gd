@@ -132,10 +132,6 @@ func initialize():
 		_manager.initialize()
 		_initialized = true
 
-func _ready():
-	super._ready()
-	initialize()
-
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet
 ## of the characters.

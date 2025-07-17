@@ -104,6 +104,8 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 
 # Identifies the layers recognized in
 # this map (directly from the children).
+# It also performs a setup of the entities
+# layer (by calling initialize()).
 func _identify_layers():
 	var first = null
 	for child in get_children():
@@ -113,6 +115,8 @@ func _identify_layers():
 			_entities_layer = child
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
+	if _entities_layer != null:
+		_entities_layer.initialize()
 
 # On tree enter it registers a new index
 # in the parent scope (if the parent is
