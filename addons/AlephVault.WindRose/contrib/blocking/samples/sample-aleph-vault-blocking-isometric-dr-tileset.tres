@@ -1,17 +1,18 @@
 [gd_resource type="TileSet" load_steps=5 format=3 uid="uid://bk5i1ssl0oeh7"]
 
-[ext_resource type="Texture2D" uid="uid://chuuwy1yq2qrb" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/isometric-cell.png" id="1_gfe5h"]
-[ext_resource type="Texture2D" uid="uid://dyvbys0sm5d2y" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/isometric-blocked-cell.png" id="2_obg54"]
+[ext_resource type="Texture2D" uid="uid://chuuwy1yq2qrb" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/isometric-cell.png" id="1_kufew"]
+[ext_resource type="Texture2D" uid="uid://dyvbys0sm5d2y" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/isometric-blocked-cell.png" id="2_ge27c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s3pf5"]
-texture = ExtResource("1_gfe5h")
+texture = ExtResource("1_kufew")
 texture_region_size = Vector2i(32, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_btsls"]
-texture = ExtResource("2_obg54")
+texture = ExtResource("2_ge27c")
 texture_region_size = Vector2i(32, 16)
 0:0/0 = 0
+0:0/0/custom_data_0 = true
 
 [resource]
 tile_shape = 1
