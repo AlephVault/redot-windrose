@@ -96,6 +96,8 @@ func can_move(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	position: Vector2i, direction: _Direction
 ) -> bool:
+	if entity_rule.solidness == AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness.IRREGULAR:
+		return false
 	if not entity_rule.obeys_solidness:
 		return true
 	match direction:
