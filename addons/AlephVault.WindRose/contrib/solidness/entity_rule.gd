@@ -119,6 +119,8 @@ var obeys_solidness: bool = true
 # is optimistic.
 var _optimistic: bool
 
+## Tells whether the movement allocation
+## is optimistic.
 var optimistic: bool:
 	get:
 		return _optimistic
@@ -127,14 +129,27 @@ var optimistic: bool:
 			"EntityRule", "optimistic"
 		)
 
+# The related map entity.
+var _map_entity: AlephVault__WindRose.Maps.MapEntity
+
+## The related map entity.
+var map_entity: AlephVault__WindRose.Maps.MapEntity:
+	get:
+		return _map_entity
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntityRule", "map_entity"
+		)
+
 func _init(
-	size: Vector2i, root: bool = true,
-	obeys_solidness: bool = true,
+	map_entity: AlephVault__WindRose.Maps.MapEntity,
+	root: bool = true, obeys_solidness: bool = true,
 	solidness: Solidness = Solidness.SOLID,
 	mask: String = "",
 	optimistic: bool = false
 ):
-	super._init(size, root)
+	super._init(map_entity.size, root)
+	_map_entity = map_entity
 	self.obeys_solidness = obeys_solidness
 	_solidness = solidness
 	_mask = _fix_mask(mask)

@@ -6,7 +6,8 @@ extends Object
 ## and tell whether an object can be attached
 ## to the related map.
 
-const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
+const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
+const _Direction = _DirectionUtils.Direction
 
 ## Stage of the movement-start operation.
 ## Used to tell on_movement_started which

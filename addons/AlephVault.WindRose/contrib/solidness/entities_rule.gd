@@ -58,6 +58,62 @@ func _dec_col_solidness(x, y, height):
 	for y_ in range(y, y + height):
 		_dec_solidness(x, y_)
 
+# Increments an adjacent side of an object.
+func _inc_side(x, width, y, height, direction, solidness):
+	match direction:
+		_Direction.UP:
+			match solidness:
+				_Solidness.SOLID:
+					_inc_row_solidness(x, width, y - 1)
+				_Solidness.HOLE:
+					_dec_row_solidness(x, width, y - 1)
+		_Direction.DOWN:
+			match solidness:
+				_Solidness.SOLID:
+					_inc_row_solidness(x, width, y + height)
+				_Solidness.HOLE:
+					_dec_row_solidness(x, width, y + height)
+		_Direction.LEFT:
+			match solidness:
+				_Solidness.SOLID:
+					_inc_col_solidness(x - 1, y, height)
+				_Solidness.HOLE:
+					_dec_col_solidness(x - 1, y, height)
+		_Direction.RIGHT:
+			match solidness:
+				_Solidness.SOLID:
+					_inc_col_solidness(x + width, y, height)
+				_Solidness.HOLE:
+					_dec_col_solidness(x + width, y, height)
+
+# Decrements an adjacent side of an object.
+func _dec_side(x, width, y, height, direction, solidness):
+	match direction:
+		_Direction.UP:
+			match solidness:
+				_Solidness.SOLID:
+					_dec_row_solidness(x, width, y - 1)
+				_Solidness.HOLE:
+					_inc_row_solidness(x, width, y - 1)
+		_Direction.DOWN:
+			match solidness:
+				_Solidness.SOLID:
+					_dec_row_solidness(x, width, y + height)
+				_Solidness.HOLE:
+					_inc_row_solidness(x, width, y + height)
+		_Direction.LEFT:
+			match solidness:
+				_Solidness.SOLID:
+					_dec_col_solidness(x - 1, y, height)
+				_Solidness.HOLE:
+					_inc_col_solidness(x - 1, y, height)
+		_Direction.RIGHT:
+			match solidness:
+				_Solidness.SOLID:
+					_dec_col_solidness(x + width, y, height)
+				_Solidness.HOLE:
+					_inc_col_solidness(x + width, y, height)
+
 # Increments solidness by 1 in the specified square.
 func _inc_square_solidness(x, width, y, height):
 	for x_ in range(x, x + width):
@@ -93,6 +149,28 @@ func _dec_irregular_solidness(x, width, y, height, mask):
 			elif mask[index] < 1:
 				_inc_solidness(x_, y_)
 			index += 1
+
+# Increments a body's effect on solidness according to
+# the coordinates, dimensions, solidness type and mask.
+func _inc_body_solidness(x, width, y, height, solidness, mask):
+	match solidness:
+		_Solidness.SOLID:
+			_inc_square_solidness(x, width, y, height)
+		_Solidness.HOLE:
+			_dec_square_solidness(x, width, y, height)
+		_Solidness.IRREGULAR:
+			_inc_irregular_solidness(x, width, y, height, mask)
+
+# Decrements a body's effect on solidness according to
+# the coordinates, dimensions, solidness type and mask.
+func _dec_body_solidness(x, width, y, height, solidness, mask):
+	match solidness:
+		_Solidness.SOLID:
+			_dec_square_solidness(x, width, y, height)
+		_Solidness.HOLE:
+			_inc_square_solidness(x, width, y, height)
+		_Solidness.IRREGULAR:
+			_dec_irregular_solidness(x, width, y, height, mask)
 
 # Tells whether a row has at least 1 blocking.
 func _is_row_blocked(x, width, y) -> bool:
@@ -151,79 +229,85 @@ func on_entity_attached(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	to_position: Vector2i
 ) -> void:
-	match entity_rule.solidness:
-		_Solidness.SOLID:
-			_inc_square_solidness(
-				to_position.x, entity_rule.size.x,
-				to_position.y, entity_rule.size.y
-			)
-		_Solidness.HOLE:
-			_dec_square_solidness(
-				to_position.x, entity_rule.size.x,
-				to_position.y, entity_rule.size.y
-			)
-		_Solidness.IRREGULAR:
-			_inc_irregular_solidness(
-				to_position.x, entity_rule.size.x,
-				to_position.y, entity_rule.size.y,
-				entity_rule.mask
-			)
+	_inc_body_solidness(
+		to_position.x, entity_rule.size.x,
+		to_position.y, entity_rule.size.y,
+		entity_rule.solidness, entity_rule.mask
+	)
 
 func on_movement_started(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
 	stage: MovementStartedStage
 ) -> void:
-	pass
+	match stage:
+		MovementStartedStage.MovementAllocated:
+			if entity_rule.optimistic:
+				_dec_side(
+					end_position.x, entity_rule.size.x,
+					end_position.y, entity_rule.size.y,
+					_DirectionUtils.opposite_direction(direction),
+					entity_rule.solidness
+				)
+			_inc_side(
+				start_position.x, entity_rule.size.x,
+				start_position.y, entity_rule.size.y,
+				direction, entity_rule.solidness
+			)
 
 func on_movement_finished(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
 	stage: MovementConfirmedStage
 ) -> void:
-	pass
+	match stage:
+		MovementConfirmedStage.PositionChanged:
+			if entity_rule.optimistic:
+				return
+			_dec_side(
+				end_position.x, entity_rule.size.x,
+				end_position.y, entity_rule.size.y,
+				_DirectionUtils.opposite_direction(direction),
+				entity_rule.solidness
+			)
 
 func on_movement_cancelled(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
 	stage: MovementClearedStage
 ) -> void:
-	pass
+	match stage:
+		MovementClearedStage.Begin:
+			if entity_rule.optimistic:
+				_inc_side(
+					reverted_position.x, entity_rule.size.x,
+					reverted_position.y, entity_rule.size.y,
+					_DirectionUtils.opposite_direction(direction),
+					entity_rule.solidness
+				)
+			_dec_side(
+				start_position.x, entity_rule.size.x,
+				start_position.y, entity_rule.size.y,
+				direction, entity_rule.solidness
+			)
 
 func on_teleported(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
 ) -> void:
-	match entity_rule.solidness:
-		_Solidness.SOLID:
-			_dec_square_solidness(
-				from_position.x, entity_rule.size.x,
-				from_position.y, entity_rule.size.y
-			)
-			_inc_square_solidness(
-				to_position.x, entity_rule.size.x,
-				to_position.y, entity_rule.size.y
-			)
-		_Solidness.HOLE:
-			_inc_square_solidness(
-				from_position.x, entity_rule.size.x,
-				from_position.y, entity_rule.size.y
-			)
-			_dec_square_solidness(
-				to_position.x, entity_rule.size.x,
-				to_position.y, entity_rule.size.y
-			)
-		_Solidness.IRREGULAR:
-			_dec_irregular_solidness(
+	match stage:
+		TeleportedStage.Begin:
+			_dec_body_solidness(
 				from_position.x, entity_rule.size.x,
 				from_position.y, entity_rule.size.y,
-				entity_rule.mask
+				entity_rule.solidness, entity_rule.mask
 			)
-			_inc_irregular_solidness(
+		TeleportedStage.PositionChanged:
+			_inc_body_solidness(
 				to_position.x, entity_rule.size.x,
 				to_position.y, entity_rule.size.y,
-				entity_rule.mask
+				entity_rule.solidness, entity_rule.mask
 			)
 
 func on_property_updated(
@@ -232,25 +316,37 @@ func on_property_updated(
 ) -> void:
 	if old_value == new_value:
 		return
+	if property == "solidness":
+		entity_rule.map_entity.cancel_movement()
+		_dec_body_solidness(
+			entity_rule.map_entity.cell.x, entity_rule.size.x,
+			entity_rule.map_entity.cell.y, entity_rule.size.y,
+			old_value, entity_rule.mask
+		)
+		_inc_body_solidness(
+			entity_rule.map_entity.cell.x, entity_rule.size.x,
+			entity_rule.map_entity.cell.y, entity_rule.size.y,
+			new_value, entity_rule.mask
+		)
+	elif property == "solidness.mask":
+		entity_rule.map_entity.cancel_movement()
+		_dec_body_solidness(
+			entity_rule.map_entity.cell.x, entity_rule.size.x,
+			entity_rule.map_entity.cell.y, entity_rule.size.y,
+			entity_rule.solidness, old_value
+		)
+		_inc_body_solidness(
+			entity_rule.map_entity.cell.x, entity_rule.size.x,
+			entity_rule.map_entity.cell.y, entity_rule.size.y,
+			entity_rule.solidness, new_value
+		)
 
 func on_entity_detached(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	from_position: Vector2i
 ) -> void:
-	match entity_rule.solidness:
-		_Solidness.SOLID:
-			_dec_square_solidness(
-				from_position.x, entity_rule.size.x,
-				from_position.y, entity_rule.size.y
-			)
-		_Solidness.HOLE:
-			_inc_square_solidness(
-				from_position.x, entity_rule.size.x,
-				from_position.y, entity_rule.size.y
-			)
-		_Solidness.IRREGULAR:
-			_dec_irregular_solidness(
-				from_position.x, entity_rule.size.x,
-				from_position.y, entity_rule.size.y,
-				entity_rule.mask
-			)
+	_dec_body_solidness(
+		from_position.x, entity_rule.size.x,
+		from_position.y, entity_rule.size.y,
+		entity_rule.solidness, entity_rule.mask
+	)
