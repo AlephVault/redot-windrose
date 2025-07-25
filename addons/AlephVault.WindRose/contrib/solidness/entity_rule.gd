@@ -84,6 +84,15 @@ func _fix_mask(mask: String) -> Array[int]:
 	# to an integer mask.
 	return _str_mask_to_int(lines)
 
+func _check_int_mask(mask: Array[int]) -> bool:
+	var s = size.x * size.y
+	if len(mask) != s:
+		return false
+	for index in range(s):
+		if mask[index] < -1 or mask[index] > 1:
+			return false
+	return true
+
 ## The solidness for this object. Useful only on irregular
 ## solidness in the "solidness" property.. On update, it
 ## triggers signal: `on_property_updated("solidness.mask",
@@ -92,9 +101,14 @@ var mask: Array[int]:
 	get:
 		return _mask
 	set(value):
-		var old = _mask
-		_mask = value
-		on_property_updated.emit("solidness.mask", old, _mask)
+		if _check_int_mask(value):
+			var old = _mask
+			_mask = value
+			on_property_updated.emit("solidness.mask", old, _mask)
+		else:
+			AlephVault__WindRose.Utils.ExceptionUtils.Exception.raise(
+				"invalid_mask", "Invalid mask size or values"
+			)
 
 ## Tells whether this object follows the
 ## solidness rules (i.e. gets blocked by
