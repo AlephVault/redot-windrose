@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_f1mbo"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_gnlb4"]
 [ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-isometric-dd-tileset.tres" id="3_qp86j"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-entities-layer.gd" id="4_0xt3g"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-map-entity.gd" id="5_4lpc4"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/entities_layer.gd" id="4_2y11k"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/map_entity.gd" id="5_xo3gj"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="6_6e70a"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-controller.gd" id="6_yk50y"]
 
@@ -25,11 +25,11 @@ tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA
 tile_set = ExtResource("3_qp86j")
 
 [node name="EntitiesLayer" type="Node2D" parent="Map"]
-script = ExtResource("4_0xt3g")
+script = ExtResource("4_2y11k")
 
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_4lpc4")
+script = ExtResource("5_xo3gj")
 _size = Vector2i(1, 1)
 speed = 18.0
 
@@ -39,7 +39,7 @@ texture = ExtResource("6_6e70a")
 
 [node name="Character12" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_4lpc4")
+script = ExtResource("5_xo3gj")
 _size = Vector2i(2, 1)
 speed = 18.0
 
@@ -53,7 +53,7 @@ texture = ExtResource("6_6e70a")
 
 [node name="Character21" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_4lpc4")
+script = ExtResource("5_xo3gj")
 _size = Vector2i(1, 2)
 speed = 18.0
 
@@ -67,7 +67,7 @@ texture = ExtResource("6_6e70a")
 
 [node name="Character22" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_4lpc4")
+script = ExtResource("5_xo3gj")
 _size = Vector2i(2, 2)
 speed = 18.0
 
