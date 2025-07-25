@@ -14,6 +14,8 @@ extends AlephVault__WindRose.Core.EntitiesRule
 ## removed or teleported, or has its solidness changed,
 ## this array is updated.
 
+const _Solidness = AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness
+
 # The solidness array.
 var _solidness: Array[int]
 
@@ -68,6 +70,30 @@ func _dec_square_solidness(x, width, y, height):
 		for y_ in range(y, y + height):
 			_dec_solidness(x_, y_)
 
+# Increments/Decrements solidness by 1, depending on
+# the corresponding solidness mask position.
+func _inc_irregular_solidness(x, width, y, height, mask):
+	var index = 0
+	for y_ in range(y, y + height):
+		for x_ in range(x, x + width):
+			if mask[index] > 1:
+				_inc_solidness(x_, y_)
+			elif mask[index] < 1:
+				_dec_solidness(x_, y_)
+			index += 1
+
+# Decrements/Increments solidness by 1, depending on
+# the corresponding solidness mask position.
+func _dec_irregular_solidness(x, width, y, height, mask):
+	var index = 0
+	for y_ in range(y, y + height):
+		for x_ in range(x, x + width):
+			if mask[index] > 1:
+				_dec_solidness(x_, y_)
+			elif mask[index] < 1:
+				_inc_solidness(x_, y_)
+			index += 1
+
 # Tells whether a row has at least 1 blocking.
 func _is_row_blocked(x, width, y) -> bool:
 	for x_ in range(x, x + width):
@@ -96,7 +122,7 @@ func can_move(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	position: Vector2i, direction: _Direction
 ) -> bool:
-	if entity_rule.solidness == AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness.IRREGULAR:
+	if entity_rule.solidness == _Solidness.IRREGULAR:
 		return false
 	if not entity_rule.obeys_solidness:
 		return true
@@ -125,7 +151,23 @@ func on_entity_attached(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	to_position: Vector2i
 ) -> void:
-	pass
+	match entity_rule.solidness:
+		_Solidness.SOLID:
+			_inc_square_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y
+			)
+		_Solidness.HOLE:
+			_dec_square_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y
+			)
+		_Solidness.IRREGULAR:
+			_inc_irregular_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y,
+				entity_rule.mask
+			)
 
 func on_movement_started(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
@@ -153,16 +195,62 @@ func on_teleported(
 	from_position: Vector2i, to_position: Vector2i,
 	stage: TeleportedStage
 ) -> void:
-	pass
+	match entity_rule.solidness:
+		_Solidness.SOLID:
+			_dec_square_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y
+			)
+			_inc_square_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y
+			)
+		_Solidness.HOLE:
+			_inc_square_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y
+			)
+			_dec_square_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y
+			)
+		_Solidness.IRREGULAR:
+			_dec_irregular_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y,
+				entity_rule.mask
+			)
+			_inc_irregular_solidness(
+				to_position.x, entity_rule.size.x,
+				to_position.y, entity_rule.size.y,
+				entity_rule.mask
+			)
 
 func on_property_updated(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	property: String, old_value, new_value
 ) -> void:
-	pass
+	if old_value == new_value:
+		return
 
 func on_entity_detached(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	from_position: Vector2i
 ) -> void:
-	pass
+	match entity_rule.solidness:
+		_Solidness.SOLID:
+			_dec_square_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y
+			)
+		_Solidness.HOLE:
+			_inc_square_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y
+			)
+		_Solidness.IRREGULAR:
+			_dec_irregular_solidness(
+				from_position.x, entity_rule.size.x,
+				from_position.y, entity_rule.size.y,
+				entity_rule.mask
+			)
