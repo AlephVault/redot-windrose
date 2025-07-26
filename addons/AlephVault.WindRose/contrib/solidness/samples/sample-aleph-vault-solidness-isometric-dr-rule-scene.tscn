@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://btaoa1ocmasg5"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="1_l1vvs"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_lr2ft"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_0fg80"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="2_bwmri"]
+
+[node name="Sample-aleph-vault-solidness-isometric-dr-rule-scene" type="Node2D"]
+
+[node name="Map" type="Node2D" parent="."]
+script = ExtResource("1_lr2ft")
+
+[node name="FloorLayer" type="Node2D" parent="Map"]
+z_index = 10
+script = ExtResource("2_0fg80")
+
+[node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
+
+[node name="ControllerA" type="Node2D" parent="."]
+script = ExtResource("1_l1vvs")
+
+[node name="ControllerB" type="Node2D" parent="."]
+script = ExtResource("2_bwmri")
