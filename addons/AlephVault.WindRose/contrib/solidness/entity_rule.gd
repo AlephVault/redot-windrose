@@ -143,10 +143,11 @@ var map_entity: AlephVault__WindRose.Maps.MapEntity:
 
 func _init(
 	map_entity: AlephVault__WindRose.Maps.MapEntity,
-	root: bool = true, obeys_solidness: bool = true,
+	obeys_solidness: bool = true,
 	solidness: Solidness = Solidness.SOLID,
 	mask: String = "",
-	optimistic: bool = false
+	optimistic: bool = false,
+	root: bool = true
 ):
 	super._init(map_entity.size, root)
 	_map_entity = map_entity

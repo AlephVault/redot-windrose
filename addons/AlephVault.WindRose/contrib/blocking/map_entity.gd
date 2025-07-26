@@ -7,7 +7,6 @@ extends AlephVault__WindRose.Maps.MapEntity
 ## See AlephVault__WindRose.Contrib.Blocking.EntityRule
 ## for more details.
 
-
 func _create_rule() -> _EntityRule:
 	return AlephVault__WindRose.Contrib.Blocking.EntityRule.new(
 		size, true
