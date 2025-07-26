@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bko0jdljc8jiq"]
+[gd_scene load_steps=6 format=3 uid="uid://bko0jdljc8jiq"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_s6bq2"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_jbrjb"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="3_2h0tk"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="3_11ys0"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="4_jbvtg"]
 
@@ -9,12 +10,16 @@
 
 [node name="Map" type="Node2D" parent="."]
 script = ExtResource("1_s6bq2")
+_size = Vector2i(16, 12)
 
 [node name="FloorLayer" type="Node2D" parent="Map"]
 z_index = 10
 script = ExtResource("2_jbrjb")
 
 [node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
+
+[node name="EntitiesLayer" type="Node2D" parent="Map"]
+script = ExtResource("3_2h0tk")
 
 [node name="ControllerA" type="Node2D" parent="."]
 script = ExtResource("3_11ys0")
