@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_edcut"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_gs4ur"]
-[ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-isometric-dd-tileset.tres" id="3_6055d"]
+[ext_resource type="TileSet" uid="uid://dwyvwjbmxgko4" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-aleph-vault-blocking-isometric-dd-tileset.tres" id="3_w56s2"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/blocking/entities_layer.gd" id="4_gxoa0"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/blocking/map_entity.gd" id="5_j8hpg"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="6_vytuh"]
@@ -22,7 +22,7 @@ script = ExtResource("2_gs4ur")
 
 [node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
 tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAADAAEAAAAAAAAAAAACAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAMAAAAAAAAAAAACAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAADAAIAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAQAAAAAAAAAFAAIAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAADAAUAAAAAAAAAAAACAAUAAAAAAAAAAAABAAUAAAAAAAAAAAAAAAUAAAAAAAAAAAA=")
-tile_set = ExtResource("3_6055d")
+tile_set = ExtResource("3_w56s2")
 
 [node name="EntitiesLayer" type="Node2D" parent="Map"]
 script = ExtResource("4_gxoa0")
