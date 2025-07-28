@@ -35,8 +35,9 @@ position = Vector2(0, 96)
 script = ExtResource("7_noa4i")
 _solidness = 3
 _mask = "SSS
-SGG
-SSS"
+S
+SSS
+s"
 _size = Vector2i(3, 3)
 
 [node name="Sprite11" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]

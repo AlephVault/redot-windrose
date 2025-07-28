@@ -131,6 +131,9 @@ func initialize():
 		_manager = Manager.new(self, rule, bypass)
 		_manager.initialize()
 		_initialized = true
+		for obj in get_children():
+			if obj is AlephVault__WindRose.Maps.MapEntity:
+				obj.initialize()
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet

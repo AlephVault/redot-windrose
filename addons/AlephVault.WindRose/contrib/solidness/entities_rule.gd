@@ -28,19 +28,14 @@ func initialize_global_data():
 
 # Increments solidness by 1 in the specific cell.
 func _inc_solidness(x, y):
-	print("Incrementing solidness in cell: (", x, ", ", y, ") to: ", _solidness[y * size.x + x] + 1)
-	assert(_solidness[y * size.x + x] < 100)
 	_solidness[y * size.x + x] += 1
 
 # Decrements solidness by 1 in the specific cell.
 func _dec_solidness(x, y):
-	print("Decrementing solidness in cell: (", x, ", ", y, ") to: ", _solidness[y * size.x + x] - 1)
-	assert(_solidness[y * size.x + x] > -100)
 	_solidness[y * size.x + x] -= 1
 
 # Gets the solidness for the specific cell.
 func _get_solidness(x, y) -> int:
-	print("Solidness for cell: (", x, ", ", y, ") is:", _solidness[y * size.x + x])
 	return _solidness[y * size.x + x]
 
 # Increments solidness by 1 in the specific row.
@@ -137,9 +132,9 @@ func _inc_irregular_solidness(x, width, y, height, mask):
 	var index = 0
 	for y_ in range(y, y + height):
 		for x_ in range(x, x + width):
-			if mask[index] > 1:
+			if mask[index] > 0:
 				_inc_solidness(x_, y_)
-			elif mask[index] < 1:
+			elif mask[index] < 0:
 				_dec_solidness(x_, y_)
 			index += 1
 
@@ -149,9 +144,9 @@ func _dec_irregular_solidness(x, width, y, height, mask):
 	var index = 0
 	for y_ in range(y, y + height):
 		for x_ in range(x, x + width):
-			if mask[index] > 1:
+			if mask[index] > 0:
 				_dec_solidness(x_, y_)
-			elif mask[index] < 1:
+			elif mask[index] < 0:
 				_inc_solidness(x_, y_)
 			index += 1
 

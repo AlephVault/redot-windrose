@@ -243,7 +243,7 @@ func _notification(what):
 
 ## Initializes this object.
 func initialize():
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() and not EditorInterface.is_playing_scene():
 		return
 	
 	if _initialized:

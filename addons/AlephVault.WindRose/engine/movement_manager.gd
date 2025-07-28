@@ -175,7 +175,6 @@ func start_movement(obj: Node2D, from_: Vector2i, direction: _Direction):
 		return false
 
 	var to_: Vector2i = from_ + _DirectionUtils.get_delta(direction)
-	
 	if not _current_movement.has(obj):
 		if not _test_can_move(obj, direction):
 			_on_movement_rejected(obj, direction, from_, to_)
@@ -259,7 +258,7 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		
 		# Return if the movement cannot be started.
 		if not _test_can_move(obj, next_movement_direction):
-			return true
+			return false
 		
 		# Process the next movement. Immediately continue
 		# if the direction is the same.
@@ -280,13 +279,19 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		else:
 			# Just assign the already computed next step.
 			obj.position = next_step
+		# The movement is still running.
+		return true
 	else:
+		# Manually remove the current movement.
+		_current_movement.erase(obj)
+		# Trigger the ending callback.
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
 							  movement.to_position)
 		# Use the retrieved position.
 		obj.position = next_step
-	return true
+		# Abort, since there's no new movement.
+		return false
 
 func _movement(obj: Node2D):
 	"""
