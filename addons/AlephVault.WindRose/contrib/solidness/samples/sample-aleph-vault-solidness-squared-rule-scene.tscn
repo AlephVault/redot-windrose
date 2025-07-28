@@ -1,31 +1,194 @@
-[gd_scene load_steps=7 format=4 uid="uid://defpm07rlgyfk"]
+[gd_scene load_steps=9 format=4 uid="uid://ddgjq2jjl0f4"]
 
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_bd16q"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_e7dm2"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="3_b1i5v"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="3_h1o2w"]
-[ext_resource type="TileSet" uid="uid://ddatx5th38d5u" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-squared-tileset.tres" id="3_s5jf6"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="4_wcdmc"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_20wtn"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_aw0o2"]
+[ext_resource type="TileSet" uid="uid://ddatx5th38d5u" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-squared-tileset.tres" id="3_754lj"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="4_8weho"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_ujgf0"]
+[ext_resource type="Texture2D" uid="uid://p16ub6j2uh62" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/square-sprite.png" id="6_q8cgc"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="7_rjbsp"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="8_a3r8n"]
 
-[node name="Sample-aleph-vault-solidness-squared-rule-scene" type="Node2D"]
+[node name="Sample-aleph-vault-solidness-isometric-dd-rule-scene" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
-script = ExtResource("1_bd16q")
+unique_name_in_owner = true
+position = Vector2(200, 150)
+script = ExtResource("1_20wtn")
 _size = Vector2i(16, 12)
 
 [node name="FloorLayer" type="Node2D" parent="Map"]
 z_index = 10
-script = ExtResource("2_e7dm2")
+script = ExtResource("2_aw0o2")
 
 [node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAABAAoAAAAAAAAAAAABAAsAAAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAACAAkAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAADAAoAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAEAAkAAAAAAAAAAAAEAAoAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAkAAAAAAAAAAAAFAAoAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAAAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAGAAoAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAcAAAAAAAAAAAAHAAgAAAAAAAAAAAAHAAkAAAAAAAAAAAAHAAoAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAIAAYAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAAAAAAAAAAIAAkAAAAAAAAAAAAIAAoAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAAAAAAAAAAAAAAJAAEAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAJAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAJAAoAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAAAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAUAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAoAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAAAAAAAAAAAAAALAAEAAAAAAAAAAAALAAIAAAAAAAAAAAALAAMAAAAAAAAAAAALAAQAAAAAAAAAAAALAAUAAAAAAAAAAAALAAYAAAAAAAAAAAALAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAALAAoAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAAMAAMAAAAAAAAAAAAMAAQAAAAAAAAAAAAMAAUAAAAAAAAAAAAMAAYAAAAAAAAAAAAMAAcAAAAAAAAAAAAMAAgAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAoAAAAAAAAAAAAMAAsAAAAAAAAAAAANAAAAAAAAAAAAAAANAAEAAAAAAAAAAAANAAIAAAAAAAAAAAANAAMAAAAAAAAAAAANAAQAAAAAAAAAAAANAAUAAAAAAAAAAAANAAYAAAAAAAAAAAANAAcAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAANAAoAAAAAAAAAAAANAAsAAAAAAAAAAAAOAAAAAAAAAAAAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAAAAAAAAAAOAAcAAAAAAAAAAAAOAAgAAAAAAAAAAAAOAAkAAAAAAAAAAAAOAAoAAAAAAAAAAAAOAAsAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAEAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAMAAAAAAAAAAAAPAAQAAAAAAAAAAAAPAAUAAAAAAAAAAAAPAAYAAAAAAAAAAAAPAAcAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAkAAAAAAAAAAAAPAAoAAAAAAAAAAAAPAAsAAAAAAAAAAAA=")
-tile_set = ExtResource("3_s5jf6")
+tile_set = ExtResource("3_754lj")
 
 [node name="EntitiesLayer" type="Node2D" parent="Map"]
-script = ExtResource("3_h1o2w")
+script = ExtResource("4_8weho")
+
+[node name="Obstacle" type="Node2D" parent="Map/EntitiesLayer"]
+z_index = 34
+position = Vector2(128, 128)
+script = ExtResource("5_ujgf0")
+_solidness = 3
+_mask = "SSS
+S
+SSS
+s"
+_size = Vector2i(3, 3)
+
+[node name="Sprite11" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite12" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(48, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite13" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(80, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite21" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(16, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite31" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(16, 80)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite32" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(48, 80)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite33" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
+position = Vector2(80, 80)
+texture = ExtResource("6_q8cgc")
 
 [node name="ControllerA" type="Node2D" parent="."]
-script = ExtResource("3_b1i5v")
+script = ExtResource("7_rjbsp")
 
 [node name="ControllerB" type="Node2D" parent="."]
-script = ExtResource("4_wcdmc")
+script = ExtResource("8_a3r8n")
+
+[node name="Character11a" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(1, 1)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character11a"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character11b" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(1, 1)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character11b"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character12a" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(2, 1)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character12a"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite12" type="Sprite2D" parent="Character12a"]
+position = Vector2(48, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character12b" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(2, 1)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character12b"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite12" type="Sprite2D" parent="Character12b"]
+position = Vector2(48, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character21a" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(1, 2)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character21a"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite21" type="Sprite2D" parent="Character21a"]
+position = Vector2(16, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character21b" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(1, 2)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character21b"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite21" type="Sprite2D" parent="Character21b"]
+position = Vector2(16, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character22a" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(2, 2)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character22a"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite12" type="Sprite2D" parent="Character22a"]
+position = Vector2(48, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite21" type="Sprite2D" parent="Character22a"]
+position = Vector2(16, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite22" type="Sprite2D" parent="Character22a"]
+position = Vector2(48, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Character22b" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ujgf0")
+_size = Vector2i(2, 2)
+speed = 32.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character22b"]
+position = Vector2(16, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite12" type="Sprite2D" parent="Character22b"]
+position = Vector2(48, 16)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite21" type="Sprite2D" parent="Character22b"]
+position = Vector2(16, 48)
+texture = ExtResource("6_q8cgc")
+
+[node name="Sprite22" type="Sprite2D" parent="Character22b"]
+position = Vector2(48, 48)
+texture = ExtResource("6_q8cgc")

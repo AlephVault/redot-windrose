@@ -250,8 +250,11 @@ func initialize():
 		return
 
 	_size = Vector2i(max(_size.x, 1), max(_size.y, 1))
-	_entity = Entity.new(self, rule)
-	_set_signals()
+	# Initialize the entity only once.
+	if _entity == null:
+		_entity = Entity.new(self, rule)
+		_set_signals()
+
 	# Fixing editor-set properties and triggering
 	# signals for the first time.
 	orientation = orientation
@@ -263,7 +266,6 @@ func initialize():
 	if _parent != null:
 		_parent2 = _parent.get_parent()
 	if _parent2 is AlephVault__WindRose.Maps.Map and \
-	   _parent2.layout != null and \
 	   _parent is AlephVault__WindRose.Maps.Layers.EntitiesLayer:
 		if not _parent.initialized:
 			return
