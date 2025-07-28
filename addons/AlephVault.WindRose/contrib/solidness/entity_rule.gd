@@ -72,7 +72,7 @@ func _fix_mask(mask: String) -> Array[int]:
 	# Convert it to uppercase, split it,
 	# and keep only a maximum amount of
 	# lines: the height of this object.
-	var lines: Array[String] = mask.to_upper().split("\n").slice(0, size.y)
+	var lines: PackedStringArray = mask.to_upper().split("\n").slice(0, size.y)
 	# For each existing line, fix it.
 	for line_index in range(len(lines)):
 		lines[line_index] = _fix_mask_line(lines[line_index])

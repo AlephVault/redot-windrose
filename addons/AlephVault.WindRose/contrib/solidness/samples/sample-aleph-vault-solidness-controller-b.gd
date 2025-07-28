@@ -24,7 +24,7 @@ func _change_character():
 		_selected = 0
 	
 	_options[_selected].attach(%Map, Vector2i(
-		%Map.size.x - 1, %Map.size.y - 1
+		%Map.size.x - 2, %Map.size.y - 2
 	))
 	_current = _options[_selected]
 
