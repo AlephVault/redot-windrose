@@ -28,8 +28,23 @@ var map: AlephVault__WindRose.Maps.Map:
 			"EntitiesRule", "map"
 		)
 
+var _tileset_has_blocking: Dictionary = {}
+
+func _tilemap_layer_has_blocking_data_layer(floor: TileMapLayer) -> bool:
+	var tile_set: TileSet = floor.tile_set
+	if not _tileset_has_blocking.has(tile_set):
+		var count: int = tile_set.get_custom_data_layers_count()
+		_tileset_has_blocking[tile_set] = false
+		for index in range(count):
+			if tile_set.get_custom_data_layer_name(index) == DATA_LAYER:
+				_tileset_has_blocking[tile_set] = true
+				break
+	return _tileset_has_blocking[tile_set]
+
 # Tells whether a cell is blocking.
 func _get_blocking_from_layer(floor: TileMapLayer, cell: Vector2i):
+	if not _tilemap_layer_has_blocking_data_layer(floor):
+		return null
 	var data = floor.get_cell_tile_data(cell)
 	if data == null:
 		return null
