@@ -1,0 +1,259 @@
+[gd_scene load_steps=8 format=4 uid="uid://bc8v3g58be00a"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_w725l"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_1sn6e"]
+[ext_resource type="TileSet" uid="uid://dchcxityp7keo" path="res://addons/AlephVault.WindRose/contrib/neighbours/samples/sample-aleph-vault-neighbours-squared-tileset.tres" id="3_8m8q6"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/neighbours/entities_layer.gd" id="4_07gue"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/neighbours/map_entity.gd" id="5_kufsq"]
+[ext_resource type="Texture2D" uid="uid://cgpfkoopqji65" path="res://addons/AlephVault.WindRose/contrib/neighbours/samples/square-sprite.png" id="6_mb2xf"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/neighbours/samples/sample-aleph-vault-neighbours-controller.gd" id="7_tu0nw"]
+
+[node name="Sample-aleph-vault-neighbours-isometric-dd-rule-scene" type="Node2D"]
+
+[node name="Map11" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(120, 0)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map11"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map11/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer11" type="Node2D" parent="Map11" node_paths=PackedStringArray("_down_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_down_linked = NodePath("../../Map21/EntitiesLayer21")
+_right_linked = NodePath("../../Map12/EntitiesLayer12")
+_bypass = null
+
+[node name="Map12" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(344, 0)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map12"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map12/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer12" type="Node2D" parent="Map12" node_paths=PackedStringArray("_down_linked", "_left_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_down_linked = NodePath("../../Map22/EntitiesLayer22")
+_left_linked = NodePath("../../Map11/EntitiesLayer11")
+_right_linked = NodePath("../../Map13/EntitiesLayer13")
+_bypass = null
+
+[node name="Map13" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(568, 0)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map13"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map13/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer13" type="Node2D" parent="Map13" node_paths=PackedStringArray("_down_linked", "_left_linked")]
+script = ExtResource("4_07gue")
+_down_linked = NodePath("../../Map23/EntitiesLayer23")
+_left_linked = NodePath("../../Map12/EntitiesLayer12")
+_bypass = null
+
+[node name="Map21" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(120, 224)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map21"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map21/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer21" type="Node2D" parent="Map21" node_paths=PackedStringArray("_up_linked", "_down_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map11/EntitiesLayer11")
+_down_linked = NodePath("../../Map31/EntitiesLayer31")
+_right_linked = NodePath("../../Map22/EntitiesLayer22")
+_bypass = null
+
+[node name="Map22" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(344, 224)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map22"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map22/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer22" type="Node2D" parent="Map22" node_paths=PackedStringArray("_up_linked", "_down_linked", "_left_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map12/EntitiesLayer12")
+_down_linked = NodePath("../../Map32/EntitiesLayer32")
+_left_linked = NodePath("../../Map21/EntitiesLayer21")
+_right_linked = NodePath("../../Map23/EntitiesLayer23")
+_bypass = null
+
+[node name="Map23" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(568, 224)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map23"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map23/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer23" type="Node2D" parent="Map23" node_paths=PackedStringArray("_up_linked", "_down_linked", "_left_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map13/EntitiesLayer13")
+_down_linked = NodePath("../../Map33/EntitiesLayer33")
+_left_linked = NodePath("../../Map22/EntitiesLayer22")
+_bypass = null
+
+[node name="Map31" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(120, 448)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map31"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map31/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer31" type="Node2D" parent="Map31" node_paths=PackedStringArray("_up_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map21/EntitiesLayer21")
+_right_linked = NodePath("../../Map32/EntitiesLayer32")
+_bypass = null
+
+[node name="Map32" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(344, 448)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map32"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map32/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer32" type="Node2D" parent="Map32" node_paths=PackedStringArray("_up_linked", "_left_linked", "_right_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map22/EntitiesLayer22")
+_left_linked = NodePath("../../Map31/EntitiesLayer31")
+_right_linked = NodePath("../../Map33/EntitiesLayer33")
+_bypass = null
+
+[node name="Map33" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(568, 448)
+script = ExtResource("1_w725l")
+_size = Vector2i(6, 6)
+
+[node name="FloorLayer" type="Node2D" parent="Map33"]
+z_index = 10
+script = ExtResource("2_1sn6e")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Map33/FloorLayer"]
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAMAAQAAAAAAAAAFAAQAAQAAAAAAAAAFAAUAAQAAAAAAAAA=")
+tile_set = ExtResource("3_8m8q6")
+
+[node name="EntitiesLayer33" type="Node2D" parent="Map33" node_paths=PackedStringArray("_up_linked", "_left_linked")]
+script = ExtResource("4_07gue")
+_up_linked = NodePath("../../Map23/EntitiesLayer23")
+_left_linked = NodePath("../../Map32/EntitiesLayer32")
+_bypass = null
+
+[node name="Character11" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_kufsq")
+speed = 64.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character11"]
+position = Vector2(16, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Character12" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_kufsq")
+_size = Vector2i(2, 1)
+speed = 64.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character12"]
+position = Vector2(16, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Sprite12" type="Sprite2D" parent="Character12"]
+position = Vector2(48, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Character21" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_kufsq")
+_size = Vector2i(1, 2)
+speed = 64.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character21"]
+position = Vector2(16, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Sprite21" type="Sprite2D" parent="Character21"]
+position = Vector2(16, 48)
+texture = ExtResource("6_mb2xf")
+
+[node name="Character22" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_kufsq")
+_size = Vector2i(2, 2)
+speed = 64.0
+
+[node name="Sprite11" type="Sprite2D" parent="Character22"]
+position = Vector2(16, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Sprite12" type="Sprite2D" parent="Character22"]
+position = Vector2(48, 16)
+texture = ExtResource("6_mb2xf")
+
+[node name="Sprite21" type="Sprite2D" parent="Character22"]
+position = Vector2(16, 48)
+texture = ExtResource("6_mb2xf")
+
+[node name="Sprite22" type="Sprite2D" parent="Character22"]
+position = Vector2(48, 48)
+texture = ExtResource("6_mb2xf")
+
+[node name="Controller" type="Node2D" parent="."]
+script = ExtResource("7_tu0nw")
