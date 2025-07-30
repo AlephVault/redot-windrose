@@ -252,6 +252,12 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		var next_movement_raw_to_position = _get_raw_position.call(next_movement_to_position)
 		var next_movement_raw_from_position = movement.raw_to_position
 		_queued_movement.erase(obj)
+		# Prior to emiting the finished event, asssign
+		# the currently computed movement. We will,
+		# later, adjust it if there's a queued movement.
+		# So we'll also keep the current (prev) position.
+		var prev_position = obj.position
+		obj.position = next_step
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
 							  movement.to_position)
@@ -273,23 +279,20 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		if movement.direction == next_movement_direction:
 			# Compute, with the same current speed, the
 			# step toward the NEXT movement position.
-			obj.position = obj.position.move_toward(
+			obj.position = prev_position.move_toward(
 				next_movement_raw_to_position, delta * speed
 			)
-		else:
-			# Just assign the already computed next step.
-			obj.position = next_step
 		# The movement is still running.
 		return true
 	else:
 		# Manually remove the current movement.
 		_current_movement.erase(obj)
+		# Use the retrieved position.
+		obj.position = next_step
 		# Trigger the ending callback.
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
 							  movement.to_position)
-		# Use the retrieved position.
-		obj.position = next_step
 		# Abort, since there's no new movement.
 		return false
 
