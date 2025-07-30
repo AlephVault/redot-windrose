@@ -76,7 +76,6 @@ script = ExtResource("8_a3r8n")
 [node name="Character11a" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_ujgf0")
-_size = Vector2i(1, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11a"]
@@ -86,7 +85,6 @@ texture = ExtResource("6_q8cgc")
 [node name="Character11b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_ujgf0")
-_size = Vector2i(1, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11b"]

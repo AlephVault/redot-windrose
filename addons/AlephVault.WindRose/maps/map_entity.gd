@@ -86,7 +86,7 @@ var current_map: _Map:
 
 ## The map entity size, expressed as (width, height).
 @export_category("Topology")
-@export var _size: Vector2i = Vector2i(8, 6)
+@export var _size: Vector2i = Vector2i(1, 1)
 
 ## Gets the map entity size.
 var size: Vector2i:

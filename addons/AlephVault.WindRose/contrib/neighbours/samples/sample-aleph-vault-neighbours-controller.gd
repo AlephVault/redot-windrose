@@ -33,7 +33,6 @@ func _move(direction: _Direction):
 	
 	if _current == null or direction == _Direction.NONE:
 		return
-	
 	_current.start_movement(direction)
 
 func _ready():

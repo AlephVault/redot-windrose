@@ -9,5 +9,5 @@ extends AlephVault__WindRose.Maps.MapEntity
 
 func _create_rule() -> _EntityRule:
 	return AlephVault__WindRose.Contrib.Neighbours.EntityRule.new(
-		size, true
+		self, true
 	)
