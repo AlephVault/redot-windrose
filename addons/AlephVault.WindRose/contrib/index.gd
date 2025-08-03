@@ -4,5 +4,5 @@ extends Object
 const Dummy = preload("./dummy/index.gd")
 const Solidness = preload("./solidness/index.gd")
 const Blocking = preload("./blocking/index.gd")
-const Biomes = preload("./biomes/index.gd")
+const Navigability = preload("./navigability/index.gd")
 const Neighbours = preload("./neighbours/index.gd")
