@@ -119,6 +119,15 @@ var right_linked: AlephVault__WindRose.Contrib.Neighbours.EntitiesRule:
 		else:
 			_right_linked = value
 
+## Tells whether an entity can be attached
+## to the map. In this case, the entity has
+## the neighbours rule attached.
+func can_attach(
+	entity_rule: AlephVault__WindRose.Core.EntityRule,
+	cell: Vector2i
+) -> bool:
+	return entity_rule is AlephVault__WindRose.Contrib.Neighbours.EntityRule
+
 ## Construction takes the layer and the linked entities
 ## layers as well.
 func _init(
