@@ -129,7 +129,8 @@ func can_move(
 	return false
 
 ## Construction takes the map. This one is used
-## to get information from textures.
+## to get information from tilemap layers and
+## their cells.
 func _init(map: AlephVault__WindRose.Maps.Map):
 	_map = map
 	super._init(map.size)
