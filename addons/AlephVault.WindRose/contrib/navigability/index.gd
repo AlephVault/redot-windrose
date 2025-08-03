@@ -1,6 +1,6 @@
 extends Object
 
-# EntitiesRule
+const EntitiesRule = preload("./entities_rule.gd")
 const EntityRule = preload("./entity_rule.gd")
 const MapEntity = preload("./map_entity.gd")
-# EntitiesLayer
+const EntitiesLayer = preload("./entities_layer.gd")
