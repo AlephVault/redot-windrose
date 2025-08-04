@@ -7,8 +7,8 @@ extends AlephVault__WindRose.Core.EntitiesRule
 ## allow people to walk and ships to surf.
 
 ## The data layer to use.
-const NAVIGABILITY_TYPE: String = "navigability_type"
-const NAVIGABILITY_INCREMENTS: String = "navigability_increments"
+const NAVIGABILITY_TYPE_LAYER: String = "navigability_type"
+const NAVIGABILITY_INCREMENTS_LAYER: String = "navigability_increments"
 
 # The map this rule is related to.
 var _map: AlephVault__WindRose.Maps.Map
@@ -25,6 +25,96 @@ var map: AlephVault__WindRose.Maps.Map:
 			"EntitiesRule", "map"
 		)
 
+var _tileset_has_incremental: Dictionary = {}
+
+func _tilemap_layer_has_incremental_data_layer(floor: TileMapLayer) -> bool:
+	var tile_set: TileSet = floor.tile_set
+	if not _tileset_has_incremental.has(tile_set):
+		var count: int = tile_set.get_custom_data_layers_count()
+		_tileset_has_incremental[tile_set] = false
+		for index in range(count):
+			if tile_set.get_custom_data_layer_name(index) == NAVIGABILITY_INCREMENTS_LAYER:
+				_tileset_has_incremental[tile_set] = true
+				break
+	return _tileset_has_incremental[tile_set]
+
+func _get_incremental_from_layer(
+	floor: TileMapLayer,
+	cell: Vector2i
+):
+	if not _tilemap_layer_has_incremental_data_layer(floor):
+		return null
+	var data = floor.get_cell_tile_data(cell)
+	if data == null:
+		return null
+	var increments = data.get_custom_data(NAVIGABILITY_INCREMENTS_LAYER)
+	if not (increments is bool):
+		return null
+	return increments
+
+var _tileset_has_type: Dictionary = {}
+
+func _tilemap_layer_has_type_data_layer(floor: TileMapLayer) -> bool:
+	var tile_set: TileSet = floor.tile_set
+	if not _tileset_has_type.has(tile_set):
+		var count: int = tile_set.get_custom_data_layers_count()
+		_tileset_has_type[tile_set] = false
+		for index in range(count):
+			if tile_set.get_custom_data_layer_name(index) == NAVIGABILITY_INCREMENTS_LAYER:
+				_tileset_has_type[tile_set] = true
+				break
+	return _tileset_has_type[tile_set]
+
+func _get_type_from_layer(
+	floor: TileMapLayer,
+	cell: Vector2i
+):
+	if not _tilemap_layer_has_type_data_layer(floor):
+		return null
+	var data = floor.get_cell_tile_data(cell)
+	if data == null:
+		return null
+	var type_ = data.get_custom_data(NAVIGABILITY_TYPE_LAYER)
+	if not (type_ is int):
+		return null
+	return null
+
+# Given the current navigability, it gets
+# the navigability change for the given
+# cell and combines it with the current
+# navigability inferred from previous
+# layers to return the final navegability.
+func _get_next_navigability(
+	floor: TileMapLayer,
+	cell: Vector2i,
+	current_navigability: int
+) -> int:
+	var navigability_incremental = _get_incremental_from_layer(
+		floor, cell
+	)
+	if navigability_incremental == null:
+		# The cell does not define a navigability
+		# incremental flag, so we respect the current
+		# value of navigability.
+		return current_navigability
+	var navigability_type: int = _get_type_from_layer(
+		floor, cell
+	)
+	if navigability_type == null or (
+		navigability_type < 0 or navigability_type > 63
+	):
+		# The cell does not define a navigability
+		# type, so we respect the current value of
+		# navigability (alternatively: If the value
+		# of navigability is not valid, then it is
+		# ignored and also the current navigability
+		# value is returned).
+		return current_navigability
+	if navigability_incremental:
+		return current_navigability | (1 << navigability_type)
+	else:
+		return (1 << navigability_type)
+
 # Computes the navigability of a cell by
 # running through all the related tilemaps
 # and adding / replacing the navigability
@@ -33,8 +123,20 @@ var map: AlephVault__WindRose.Maps.Map:
 # exists (by default, a navigability of 1
 # is always present).
 func _get_navigability(cell: Vector2i) -> int:
-	# TODO implement this one!!!
-	return 0
+	var layer = map.floor_layer
+	if layer == null:
+		return 1
+	var count = layer.get_tilemaps_count()
+	# First, start the navigability at 1
+	# (this means: default / "walking"
+	# navigability).
+	var final_navigability = 1
+	for index in range(0, count):
+		final_navigability = _get_next_navigability(
+			layer.get_tilemap(index - 1), cell,
+			final_navigability
+		)
+	return final_navigability
 
 ## Initializes the cell data structure,
 ## by creating an integer array with the
