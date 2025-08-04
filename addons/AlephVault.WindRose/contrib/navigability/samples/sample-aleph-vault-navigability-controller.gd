@@ -60,7 +60,7 @@ func _process(delta):
 	
 	if Input.is_key_pressed(KEY_X):
 		if not _switch_pressed:
-			pass
+			_switch_navigability()
 		_switch_pressed = true
 	else:
 		_switch_pressed = false

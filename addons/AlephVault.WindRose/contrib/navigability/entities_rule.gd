@@ -77,7 +77,7 @@ func _get_type_from_layer(
 	var type_ = data.get_custom_data(NAVIGABILITY_TYPE_LAYER)
 	if not (type_ is int):
 		return null
-	return null
+	return type_
 
 # Given the current navigability, it gets
 # the navigability change for the given
@@ -97,11 +97,11 @@ func _get_next_navigability(
 		# incremental flag, so we respect the current
 		# value of navigability.
 		return current_navigability
-	var navigability_type: int = _get_type_from_layer(
+	var navigability_type = _get_type_from_layer(
 		floor, cell
 	)
 	if navigability_type == null or (
-		navigability_type < 0 or navigability_type > 63
+		navigability_type < 0 or navigability_type >= 64
 	):
 		# The cell does not define a navigability
 		# type, so we respect the current value of
@@ -133,7 +133,7 @@ func _get_navigability(cell: Vector2i) -> int:
 	var final_navigability = 1
 	for index in range(0, count):
 		final_navigability = _get_next_navigability(
-			layer.get_tilemap(index - 1), cell,
+			layer.get_tilemap(index), cell,
 			final_navigability
 		)
 	return final_navigability
@@ -182,6 +182,9 @@ func can_attach(
 ) -> bool:
 	return entity_rule is AlephVault__WindRose.Contrib.Navigability.EntityRule
 
+func _test_navigability(cell: Vector2i, value: int) -> bool:
+	return (_navigability_types[cell.x + cell.y * size.x] & (1 << value)) != 0
+
 ## Tells whether an entity can start moving.
 func can_move(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
@@ -192,28 +195,28 @@ func can_move(
 			# precondition: y > 0
 			for x_ in range(0, entity_rule.size.x):
 				var cell = Vector2i(x_ + position.x, position.y - 1)
-				if (_navigability_types[cell.x + cell.y * size.x] & (1 << entity_rule.navigability_type)) == 0:
+				if not _test_navigability(cell, entity_rule.navigability):
 					return false
 			return true
 		_Direction.DOWN:
 			# precondition: y < ES_H - E_H
 			for x_ in range(0, entity_rule.size.x):
 				var cell = Vector2i(x_ + position.x, position.y + entity_rule.size.y)
-				if (_navigability_types[cell.x + cell.y * size.x] & (1 << entity_rule.navigability_type)) == 0:
+				if not _test_navigability(cell, entity_rule.navigability):
 					return false
 			return true
 		_Direction.LEFT:
 			# precondition: x > 0
 			for y_ in range(0, entity_rule.size.y):
 				var cell = Vector2i(position.x - 1, y_ + position.y)
-				if (_navigability_types[cell.x + cell.y * size.x] & (1 << entity_rule.navigability_type)) == 0:
+				if not _test_navigability(cell, entity_rule.navigability):
 					return false
 			return true
 		_Direction.RIGHT:
 			# precondition: x < ES_W - E_W
 			for y_ in range(0, entity_rule.size.y):
 				var cell = Vector2i(position.x + entity_rule.size.x, y_ + position.y)
-				if (_navigability_types[cell.x + cell.y * size.x] & (1 << entity_rule.navigability_type)) == 0:
+				if not _test_navigability(cell, entity_rule.navigability):
 					return false
 			return true
 	return false

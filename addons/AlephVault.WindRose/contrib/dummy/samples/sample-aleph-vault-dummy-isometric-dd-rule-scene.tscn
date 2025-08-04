@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/entities_layer.gd" id="4_2y11k"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/map_entity.gd" id="5_xo3gj"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="6_6e70a"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/sample-aleph-vault-dummy-controller.gd" id="6_yk50y"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/sample-aleph-vault-navigability-controller.gd" id="7_twc6c"]
 
 [node name="Sample" type="Node2D"]
 
@@ -30,7 +30,6 @@ script = ExtResource("4_2y11k")
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_xo3gj")
-_size = Vector2i(1, 1)
 speed = 18.0
 
 [node name="Sprite" type="Sprite2D" parent="Character11"]
@@ -88,4 +87,4 @@ position = Vector2(0, 24)
 texture = ExtResource("6_6e70a")
 
 [node name="Controller" type="Node2D" parent="."]
-script = ExtResource("6_yk50y")
+script = ExtResource("7_twc6c")
