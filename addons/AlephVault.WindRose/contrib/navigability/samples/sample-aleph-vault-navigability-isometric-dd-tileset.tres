@@ -1,0 +1,68 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://cvrbq2h3tvuxy"]
+
+[ext_resource type="Texture2D" uid="uid://dgcprrr8laa2d" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-cell.png" id="1_gopob"]
+[ext_resource type="Texture2D" uid="uid://bdxnoxdjifbwu" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-water-cell.png" id="2_ghadb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h4tkr"]
+texture = ExtResource("1_gopob")
+texture_region_size = Vector2i(32, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x1mew"]
+texture = ExtResource("2_ghadb")
+texture_region_size = Vector2i(32, 16)
+1:0/0 = 0
+1:0/0/custom_data_0 = 1
+1:0/0/custom_data_1 = true
+2:0/0 = 0
+2:0/0/custom_data_0 = 1
+2:0/0/custom_data_1 = true
+3:0/0 = 0
+3:0/0/custom_data_0 = 1
+3:0/0/custom_data_1 = true
+0:1/0 = 0
+0:1/0/custom_data_0 = 1
+0:1/0/custom_data_1 = true
+1:1/0 = 0
+1:1/0/custom_data_0 = 1
+1:1/0/custom_data_1 = true
+2:1/0 = 0
+2:1/0/custom_data_0 = 1
+3:1/0 = 0
+3:1/0/custom_data_0 = 1
+3:1/0/custom_data_1 = true
+0:2/0 = 0
+0:2/0/custom_data_0 = 1
+0:2/0/custom_data_1 = true
+1:2/0 = 0
+1:2/0/custom_data_0 = 1
+1:2/0/custom_data_1 = true
+2:2/0 = 0
+2:2/0/custom_data_0 = 1
+2:2/0/custom_data_1 = true
+3:2/0 = 0
+3:2/0/custom_data_0 = 1
+3:2/0/custom_data_1 = true
+0:3/0 = 0
+0:3/0/custom_data_0 = 1
+0:3/0/custom_data_1 = true
+1:3/0 = 0
+1:3/0/custom_data_0 = 1
+1:3/0/custom_data_1 = true
+2:3/0 = 0
+2:3/0/custom_data_0 = 1
+2:3/0/custom_data_1 = true
+3:3/0 = 0
+3:3/0/custom_data_0 = 1
+3:3/0/custom_data_1 = true
+
+[resource]
+tile_shape = 1
+tile_layout = 5
+tile_size = Vector2i(32, 16)
+custom_data_layer_0/name = "navigability_type"
+custom_data_layer_0/type = 2
+custom_data_layer_1/name = "navigability_increments"
+custom_data_layer_1/type = 1
+sources/0 = SubResource("TileSetAtlasSource_h4tkr")
+sources/1 = SubResource("TileSetAtlasSource_x1mew")
