@@ -1,95 +1,96 @@
-[gd_scene load_steps=8 format=4 uid="uid://bdvts634fdywn"]
+[gd_scene load_steps=8 format=4 uid="uid://1qnuckfhmpwq"]
 
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/map_entity.gd" id="1_nagh0"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_pfor7"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_w80qk"]
-[ext_resource type="TileSet" uid="uid://cvrbq2h3tvuxy" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/sample-aleph-vault-navigability-isometric-dd-tileset.tres" id="3_tn7yi"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/entities_layer.gd" id="4_4mwa0"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/sample-aleph-vault-navigability-controller.gd" id="6_f5lfn"]
-[ext_resource type="Texture2D" uid="uid://cuc7fkvuwjv2u" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-sprite.png" id="6_hlsqi"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_brl2q"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_5tvif"]
+[ext_resource type="TileSet" uid="uid://cvrbq2h3tvuxy" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/sample-aleph-vault-navigability-isometric-dd-tileset.tres" id="3_cyhfq"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/entities_layer.gd" id="4_2tfm1"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/map_entity.gd" id="5_frgp1"]
+[ext_resource type="Texture2D" uid="uid://cuc7fkvuwjv2u" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-sprite.png" id="6_5xa51"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/sample-aleph-vault-navigability-controller.gd" id="7_8q34q"]
 
 [node name="Sample" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(400, 0)
-script = ExtResource("1_pfor7")
+script = ExtResource("1_brl2q")
 _size = Vector2i(16, 12)
 
 [node name="FloorLayer" type="Node2D" parent="Map"]
 z_index = 10
 position = Vector2(-16, 0)
-script = ExtResource("2_w80qk")
+script = ExtResource("2_5tvif")
 
 [node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAABAAoAAAAAAAAAAAABAAsAAAAAAAAAAAACAAAAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAACAAkAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAADAAcAAAAAAAAAAAADAAgAAAAAAAAAAAADAAkAAAAAAAAAAAADAAoAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAEAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAEAAkAAAAAAAAAAAAEAAoAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAkAAAAAAAAAAAAFAAoAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAAAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAcAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAkAAAAAAAAAAAAGAAoAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAcAAAAAAAAAAAAHAAgAAAAAAAAAAAAHAAkAAAAAAAAAAAAHAAoAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAAAAAAAAAAIAAkAAAAAAAAAAAAIAAoAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAAAAAAAAAAAAAAJAAEAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAJAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAJAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAJAAoAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAAAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAUAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAkAAAAAAAAAAAAKAAoAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAAAAAAAAAAAAAALAAEAAAAAAAAAAAALAAIAAAAAAAAAAAALAAMAAAAAAAAAAAALAAQAAAAAAAAAAAALAAUAAAAAAAAAAAALAAYAAAAAAAAAAAALAAcAAAAAAAAAAAALAAgAAAAAAAAAAAALAAkAAAAAAAAAAAALAAoAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAAMAAMAAAAAAAAAAAAMAAQAAAAAAAAAAAAMAAUAAAAAAAAAAAAMAAYAAAAAAAAAAAAMAAcAAAAAAAAAAAAMAAgAAAAAAAAAAAAMAAkAAAAAAAAAAAAMAAoAAAAAAAAAAAAMAAsAAAAAAAAAAAANAAAAAAAAAAAAAAANAAEAAAAAAAAAAAANAAIAAAAAAAAAAAANAAMAAAAAAAAAAAANAAQAAAAAAAAAAAANAAUAAAAAAAAAAAANAAYAAAAAAAAAAAANAAcAAAAAAAAAAAANAAgAAAAAAAAAAAANAAkAAAAAAAAAAAANAAoAAAAAAAAAAAANAAsAAAAAAAAAAAAOAAAAAAAAAAAAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAAAAAAAAAAOAAcAAAAAAAAAAAAOAAgAAAAAAAAAAAAOAAkAAAAAAAAAAAAOAAoAAAAAAAAAAAAOAAsAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAEAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAMAAAAAAAAAAAAPAAQAAAAAAAAAAAAPAAUAAAAAAAAAAAAPAAYAAAAAAAAAAAAPAAcAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAkAAAAAAAAAAAAPAAoAAAAAAAAAAAAPAAsAAAAAAAAAAAA=")
-tile_set = ExtResource("3_tn7yi")
+tile_set = ExtResource("3_cyhfq")
 
 [node name="Water" type="TileMapLayer" parent="Map/FloorLayer"]
 tile_map_data = PackedByteArray("AAAHAAYAAQACAAEAAAAHAAcAAQACAAEAAAAIAAYAAQACAAEAAAAIAAcAAQACAAEAAAAJAAYAAQACAAEAAAAJAAcAAQACAAEAAAAKAAYAAQACAAEAAAAKAAcAAQACAAEAAAALAAYAAQACAAEAAAALAAcAAQACAAEAAAAIAAUAAQACAAEAAAAJAAUAAQACAAEAAAAKAAUAAQACAAEAAAALAAUAAQACAAEAAAANAAMAAQACAAEAAAAMAAQAAQAAAAIAAAAIAAQAAQADAAEAAAAJAAQAAQADAAEAAAAKAAQAAQADAAEAAAALAAQAAQADAAEAAAAHAAQAAQADAAAAAAAHAAUAAQADAAMAAAAGAAUAAQAAAAEAAAAMAAIAAQADAAAAAAAMAAMAAQACAAAAAAANAAIAAQADAAEAAAAOAAIAAQADAAIAAAAOAAMAAQACAAIAAAAOAAQAAQABAAIAAAANAAQAAQABAAEAAAAMAAUAAQACAAIAAAAMAAYAAQACAAIAAAAMAAcAAQACAAIAAAAMAAgAAQABAAIAAAAHAAgAAQABAAEAAAAIAAgAAQABAAEAAAAJAAgAAQABAAEAAAAKAAgAAQABAAEAAAALAAgAAQABAAEAAAAGAAgAAQABAAAAAAAGAAYAAQACAAAAAAAGAAcAAQACAAAAAAAFAAUAAQABAAEAAAAEAAMAAQAAAAMAAAAFAAMAAQADAAEAAAAGAAMAAQADAAIAAAAGAAQAAQACAAIAAAAEAAUAAQABAAEAAAADAAUAAQABAAEAAAACAAUAAQABAAAAAAACAAMAAQACAAAAAAACAAQAAQACAAAAAAACAAIAAQADAAAAAAADAAIAAQADAAEAAAAEAAIAAQADAAIAAAADAAMAAQACAAEAAAADAAQAAQACAAEAAAAEAAQAAQACAAEAAAAFAAQAAQACAAEAAAA=")
-tile_set = ExtResource("3_tn7yi")
+tile_set = ExtResource("3_cyhfq")
 
-[node name="EntitiesLayer" type="Node2D" parent="Map"]
-script = ExtResource("4_4mwa0")
+[node name="EntitiesLayer" type="Node2D" parent="."]
+position = Vector2(400, 0)
+script = ExtResource("4_2tfm1")
 
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("1_nagh0")
+script = ExtResource("5_frgp1")
 speed = 22.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11"]
 position = Vector2(0, 8)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Character12" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("1_nagh0")
+script = ExtResource("5_frgp1")
 _size = Vector2i(2, 1)
 speed = 22.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character12"]
 position = Vector2(0, 8)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Sprite12" type="Sprite2D" parent="Character12"]
 position = Vector2(16, 16)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Character21" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("1_nagh0")
+script = ExtResource("5_frgp1")
 _size = Vector2i(1, 2)
 speed = 22.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character21"]
 position = Vector2(0, 8)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Sprite21" type="Sprite2D" parent="Character21"]
 position = Vector2(-16, 16)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Character22" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("1_nagh0")
+script = ExtResource("5_frgp1")
 _size = Vector2i(2, 2)
 speed = 22.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character22"]
 position = Vector2(0, 8)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Sprite12" type="Sprite2D" parent="Character22"]
 position = Vector2(16, 16)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Sprite21" type="Sprite2D" parent="Character22"]
 position = Vector2(-16, 16)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Sprite22" type="Sprite2D" parent="Character22"]
 position = Vector2(0, 24)
-texture = ExtResource("6_hlsqi")
+texture = ExtResource("6_5xa51")
 
 [node name="Controller" type="Node2D" parent="."]
-script = ExtResource("6_f5lfn")
+script = ExtResource("7_8q34q")

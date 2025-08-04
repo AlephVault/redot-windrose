@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://rkixn8ga6e1n" path="res://addons/AlephVault.WindRose/contrib/neighbours/samples/isometric-sprite.png" id="5_8o32v"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/neighbours/samples/sample-aleph-vault-neighbours-controller.gd" id="7_jl4bb"]
 
-[node name="Sample-aleph-vault-neighbours-isometric-dd-rule-scene" type="Node2D"]
+[node name="Sample" type="Node2D"]
 
 [node name="Map11" type="Node2D" parent="."]
 unique_name_in_owner = true

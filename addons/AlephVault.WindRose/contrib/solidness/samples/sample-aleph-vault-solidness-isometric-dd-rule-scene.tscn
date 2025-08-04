@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="7_noa4i"]
 [ext_resource type="Texture2D" uid="uid://pgxpjb06x15" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/isometric-sprite.png" id="8_60ya1"]
 
-[node name="Sample-aleph-vault-solidness-isometric-dd-rule-scene" type="Node2D"]
+[node name="Sample" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -77,7 +77,6 @@ script = ExtResource("4_jbvtg")
 [node name="Character11a" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_noa4i")
-_size = Vector2i(1, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11a"]
@@ -87,7 +86,6 @@ texture = ExtResource("8_60ya1")
 [node name="Character11b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_noa4i")
-_size = Vector2i(1, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11b"]

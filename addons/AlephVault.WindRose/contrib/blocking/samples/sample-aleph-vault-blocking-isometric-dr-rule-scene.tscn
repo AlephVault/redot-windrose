@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="6_75myx"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-aleph-vault-blocking-controller.gd" id="7_drqv4"]
 
-[node name="Sample2" type="Node2D"]
+[node name="Sample" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -30,7 +30,6 @@ script = ExtResource("4_0227t")
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_5w2h8")
-_size = Vector2i(1, 1)
 speed = 40.0
 
 [node name="Sprite" type="Sprite2D" parent="Character11"]

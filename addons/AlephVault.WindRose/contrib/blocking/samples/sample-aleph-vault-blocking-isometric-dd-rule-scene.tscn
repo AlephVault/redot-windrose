@@ -30,7 +30,6 @@ script = ExtResource("4_gxoa0")
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_j8hpg")
-_size = Vector2i(1, 1)
 speed = 40.0
 
 [node name="Sprite" type="Sprite2D" parent="Character11"]

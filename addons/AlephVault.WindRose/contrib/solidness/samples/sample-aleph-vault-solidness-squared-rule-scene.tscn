@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="7_rjbsp"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="8_a3r8n"]
 
-[node name="Sample-aleph-vault-solidness-isometric-dd-rule-scene" type="Node2D"]
+[node name="Sample" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
 unique_name_in_owner = true
