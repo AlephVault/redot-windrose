@@ -131,6 +131,8 @@ func can_move(
 ## Construction takes the map. This one is used
 ## to get information from tilemap layers and
 ## their cells.
-func _init(map: AlephVault__WindRose.Maps.Map):
-	_map = map
+func _init(
+	layer: AlephVault__WindRose.Maps.Layers.EntitiesLayer,
+):
+	_map = layer.map
 	super._init(map.size)
