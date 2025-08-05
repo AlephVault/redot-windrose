@@ -1,12 +1,10 @@
 extends AlephVault__WindRose.Maps.MapEntity
-## This map entity subclass ensures the solidness
-## entity rule is created for it.
-##
-## If this object has `obeys_solidness` in true, then
-## this object
-##
-## See AlephVault__WindRose.Contrib.Solidness.EntityRule
-## for more details.
+## This map entity makes use of a Simple rule,
+## which is a combination of Blocking, Solidness,
+## Navigability and Neighbours rules. Thus, this
+## class has the same properties of the other map
+## entity subclasses: blocking, solidness, neighbours,
+## and navigability-related properties.
 
 const _Solidness = AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness
 
@@ -36,7 +34,21 @@ var _optimistic: bool = false
 @export_multiline
 var _mask: String = ""
 
+@export_category("Navigability")
+
+## The navigability for this entity. It must be
+## a number between 0 and 63, being 0 the default
+## value (typically meaning: walking).
+@export
+var _navigability: int = 0
+
 func _create_rule() -> _EntityRule:
-	return AlephVault__WindRose.Contrib.Solidness.EntityRule.new(
-		self, _obeys_solidness, _solidness, _mask, _optimistic, true
+	return AlephVault__WindRose.Contrib.Simple.EntityRule.new(
+		self,
+		_obeys_solidness,
+		_solidness,
+		_mask,
+		_optimistic,
+		_navigability, 
+		true
 	)
