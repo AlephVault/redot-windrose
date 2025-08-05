@@ -5,7 +5,7 @@ extends AlephVault__WindRose.Maps.MapEntity
 ## If this object has `obeys_solidness` in true, then
 ## this object
 ##
-## See AlephVault__WindRose.Contrib.Blocking.EntityRule
+## See AlephVault__WindRose.Contrib.Solidness.EntityRule
 ## for more details.
 
 const _Solidness = AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness
