@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://bdvts634fdywn"]
+[gd_scene load_steps=9 format=4 uid="uid://clqjl2b7rjc2y"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_pfor7"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_w80qk"]

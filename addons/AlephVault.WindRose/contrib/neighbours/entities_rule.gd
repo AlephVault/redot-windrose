@@ -149,42 +149,44 @@ func on_movement_finished(
 	start_position: Vector2i, end_position: Vector2i, direction: _Direction,
 	stage: MovementConfirmedStage
 ) -> void:
-	match direction:
-		_Direction.LEFT:
-			if end_position.x == 0:
-				if is_instance_valid(left_linked):
-					entity_rule.map_entity.detach()
-					entity_rule.map_entity.attach(
-						left_linked.entities_layer.map,
-						Vector2i(
-							left_linked.entities_layer.map.size.x - entity_rule.size.x,
-							end_position.y
-						)
-					)
-		_Direction.UP:
-			if end_position.y == 0:
-				if is_instance_valid(up_linked):
-					entity_rule.map_entity.detach()
-					entity_rule.map_entity.attach(
-						up_linked.entities_layer.map,
-						Vector2i(
-							end_position.x,
-							up_linked.entities_layer.map.size.y - entity_rule.size.y,
-						)
-					)
-		_Direction.RIGHT:
-			if end_position.x == size.x - entity_rule.size.x:
-				if is_instance_valid(right_linked):
-					entity_rule.map_entity.detach()
-					entity_rule.map_entity.attach(
-						right_linked.entities_layer.map,
-						Vector2i(0, end_position.y)
-					)
-		_Direction.DOWN:
-			if end_position.y == size.y - entity_rule.size.y:
-				if is_instance_valid(down_linked):
-					entity_rule.map_entity.detach()
-					entity_rule.map_entity.attach(
-						down_linked.entities_layer.map,
-						Vector2i(end_position.x, 0)
-					)
+	match stage:
+		MovementConfirmedStage.End:
+			match direction:
+				_Direction.LEFT:
+					if end_position.x == 0:
+						if is_instance_valid(left_linked):
+							entity_rule.map_entity.detach()
+							entity_rule.map_entity.attach(
+								left_linked.entities_layer.map,
+								Vector2i(
+									left_linked.entities_layer.map.size.x - entity_rule.size.x,
+									end_position.y
+								)
+							)
+				_Direction.UP:
+					if end_position.y == 0:
+						if is_instance_valid(up_linked):
+							entity_rule.map_entity.detach()
+							entity_rule.map_entity.attach(
+								up_linked.entities_layer.map,
+								Vector2i(
+									end_position.x,
+									up_linked.entities_layer.map.size.y - entity_rule.size.y,
+								)
+							)
+				_Direction.RIGHT:
+					if end_position.x == size.x - entity_rule.size.x:
+						if is_instance_valid(right_linked):
+							entity_rule.map_entity.detach()
+							entity_rule.map_entity.attach(
+								right_linked.entities_layer.map,
+								Vector2i(0, end_position.y)
+							)
+				_Direction.DOWN:
+					if end_position.y == size.y - entity_rule.size.y:
+						if is_instance_valid(down_linked):
+							entity_rule.map_entity.detach()
+							entity_rule.map_entity.attach(
+								down_linked.entities_layer.map,
+								Vector2i(end_position.x, 0)
+							)
