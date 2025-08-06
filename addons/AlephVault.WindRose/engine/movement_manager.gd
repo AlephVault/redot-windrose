@@ -35,17 +35,23 @@ class Movement extends Object:
 	var raw_from_position: Vector2
 	var raw_to_position: Vector2
 	var direction: _Direction
+	var id: int
 	
 	func _init(
 		from_: Vector2i, to_: Vector2i,
 		raw_from: Vector2, raw_to: Vector2,
-		_direction: _Direction
+		_direction: _Direction, _id: int
 	):
 		from_position = from_
 		to_position = to_
 		raw_from_position = raw_from
 		raw_to_position = raw_to
 		direction = _direction
+		id = _id
+
+# The next movement id.
+const MAX_MOVEMENT_ID: int = 0x7fffffffffffffff
+var _next_movement_id: int = 0
 
 # The current movement of an entity.
 # Node2D -> Movement.
@@ -143,6 +149,13 @@ func _on_movement_finished(obj: Node2D, direction: _Direction,
 	else:
 		print("_movement_finished is not assigned. The node's movement was finished:", obj)
 
+func _get_movement_id() -> int:
+	if _next_movement_id == MAX_MOVEMENT_ID:
+		_next_movement_id = 0
+	else:
+		_next_movement_id += 1
+	return _next_movement_id
+
 func _init(
 	get_frame_signal: Callable,
 	get_raw_position: Callable,
@@ -180,12 +193,13 @@ func start_movement(obj: Node2D, from_: Vector2i, direction: _Direction):
 			_on_movement_rejected(obj, direction, from_, to_)
 			return false
 
+		var id = _get_movement_id()
 		_current_movement[obj] = Movement.new(
 			from_, to_, _get_raw_position.call(from_), _get_raw_position.call(to_),
-			direction
+			direction, id
 		)
 		_on_movement_started(obj, direction, from_, to_)
-		_movement(obj)
+		_movement(obj, id)
 		return true
 	else:
 		_queued_movement[obj] = QueuedMovement.new(direction, _queue_expiration)
@@ -215,7 +229,7 @@ func _queued_movement_expire(obj: Node2D, delta: float):
 	if movement.expiration <= 0:
 		_queued_movement.erase(obj)
 	
-func _movement_step(obj: Node2D, delta: float) -> bool:
+func _movement_step(obj: Node2D, delta: float, id: int) -> bool:
 	"""
 	Processes the movement's delta.
 	"""
@@ -233,6 +247,10 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 	var next_step: Vector2 = obj.position.move_toward(
 		movement.raw_to_position, delta * speed
 	)
+	
+	# If not in the same movement id, stop.
+	if movement.id != id:
+		return false
 	
 	# If next_step is not target, it means it is less.
 	# So we must assign the new position and stop this
@@ -271,7 +289,7 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		_current_movement[obj] = Movement.new(
 			next_movement_from_position, next_movement_to_position,
 			next_movement_raw_from_position, next_movement_raw_to_position,
-			next_movement_direction
+			next_movement_direction, id
 		)
 		_on_movement_started(obj, next_movement_direction,
 							 next_movement_from_position,
@@ -296,14 +314,14 @@ func _movement_step(obj: Node2D, delta: float) -> bool:
 		# Abort, since there's no new movement.
 		return false
 
-func _movement(obj: Node2D):
+func _movement(obj: Node2D, id: int):
 	"""
 	Processes any current movement step by step.
 	"""
 
 	obj.position = _current_movement[obj].raw_from_position
 	while true:
-		if not _movement_step(obj, await _wait_frame()):
+		if not _movement_step(obj, await _wait_frame(), id):
 			return
 
 ## Cancels a movement for an object.
