@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Redot WindRose"
-run/main_scene="res://addons/AlephVault.WindRose2/samples/scenes/main.tscn"
+run/main_scene="res://addons/AlephVault.WindRose/contrib/blocking/samples/sample-aleph-vault-blocking-isometric-dd-rule-scene.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
