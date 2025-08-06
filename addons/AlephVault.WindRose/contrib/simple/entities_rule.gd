@@ -110,6 +110,7 @@ func _init(
 	_left_linked: Callable,
 	_right_linked: Callable
 ):
+	super._init(layer.map.size)
 	_blocking_rule = AlephVault__WindRose.Contrib.Blocking.EntitiesRule.new(
 		layer
 	)
