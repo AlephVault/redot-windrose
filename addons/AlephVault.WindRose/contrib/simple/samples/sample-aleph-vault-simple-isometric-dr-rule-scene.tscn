@@ -113,7 +113,7 @@ script = ExtResource("5_oyd6f")
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11a"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character12a" type="Node2D" parent="."]
@@ -123,11 +123,11 @@ _size = Vector2i(2, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character12a"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite12" type="Sprite2D" parent="Character12a"]
-position = Vector2(16, 16)
+position = Vector2(32, -8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character21a" type="Node2D" parent="."]
@@ -137,11 +137,11 @@ _size = Vector2i(1, 2)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character21a"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite21" type="Sprite2D" parent="Character21a"]
-position = Vector2(-16, 16)
+position = Vector2(32, 8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character22a" type="Node2D" parent="."]
@@ -151,19 +151,19 @@ _size = Vector2i(2, 2)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character22a"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite12" type="Sprite2D" parent="Character22a"]
-position = Vector2(16, 16)
+position = Vector2(32, -8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite21" type="Sprite2D" parent="Character22a"]
-position = Vector2(-16, 16)
+position = Vector2(32, 8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite22" type="Sprite2D" parent="Character22a"]
-position = Vector2(0, 24)
+position = Vector2(48, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character11b" type="Node2D" parent="."]
@@ -172,7 +172,7 @@ script = ExtResource("5_oyd6f")
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character11b"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character12b" type="Node2D" parent="."]
@@ -182,11 +182,11 @@ _size = Vector2i(2, 1)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character12b"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite12" type="Sprite2D" parent="Character12b"]
-position = Vector2(16, 16)
+position = Vector2(32, -8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character21b" type="Node2D" parent="."]
@@ -196,11 +196,11 @@ _size = Vector2i(1, 2)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character21b"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite21" type="Sprite2D" parent="Character21b"]
-position = Vector2(-16, 16)
+position = Vector2(32, 8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Character22b" type="Node2D" parent="."]
@@ -210,19 +210,19 @@ _size = Vector2i(2, 2)
 speed = 32.0
 
 [node name="Sprite11" type="Sprite2D" parent="Character22b"]
-position = Vector2(0, 8)
+position = Vector2(16, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite12" type="Sprite2D" parent="Character22b"]
-position = Vector2(16, 16)
+position = Vector2(32, -8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite21" type="Sprite2D" parent="Character22b"]
-position = Vector2(-16, 16)
+position = Vector2(32, 8)
 texture = ExtResource("6_ppdqy")
 
 [node name="Sprite22" type="Sprite2D" parent="Character22b"]
-position = Vector2(0, 24)
+position = Vector2(48, 0)
 texture = ExtResource("6_ppdqy")
 
 [node name="ControllerA" type="Node2D" parent="."]
