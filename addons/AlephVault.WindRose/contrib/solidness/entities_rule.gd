@@ -29,14 +29,10 @@ func initialize_global_data():
 # Increments solidness by 1 in the specific cell.
 func _inc_solidness(x, y):
 	_solidness[y * size.x + x] += 1
-	print("Solidness at x:", x, " y:", y, " went to:",
-		  _solidness[y * size.x + x])
 
 # Decrements solidness by 1 in the specific cell.
 func _dec_solidness(x, y):
 	_solidness[y * size.x + x] -= 1
-	print("Solidness at x:", x, " y:", y, " went to:",
-		  _solidness[y * size.x + x])
 
 # Gets the solidness for the specific cell.
 func _get_solidness(x, y) -> int:

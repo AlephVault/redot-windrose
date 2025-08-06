@@ -296,7 +296,7 @@ func _on_movement_cancelled_callback(
 	)
 	entities_rule.on_movement_cancelled(
 		entity_rule, start_position, reverted_position, direction,
-		_EntitiesRule.MovementClearedStage.Begin
+		_EntitiesRule.MovementClearedStage.End
 	)
 
 func _on_movement_finished_callback(
