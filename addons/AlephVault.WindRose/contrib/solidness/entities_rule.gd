@@ -29,10 +29,14 @@ func initialize_global_data():
 # Increments solidness by 1 in the specific cell.
 func _inc_solidness(x, y):
 	_solidness[y * size.x + x] += 1
+	print("Solidness at x:", x, " y:", y, " went to:",
+		  _solidness[y * size.x + x])
 
 # Decrements solidness by 1 in the specific cell.
 func _dec_solidness(x, y):
 	_solidness[y * size.x + x] -= 1
+	print("Solidness at x:", x, " y:", y, " went to:",
+		  _solidness[y * size.x + x])
 
 # Gets the solidness for the specific cell.
 func _get_solidness(x, y) -> int:
@@ -182,7 +186,7 @@ func _is_row_blocked(x, width, y) -> bool:
 # Tells whether a column has at least 1 blocking.
 func _is_col_blocked(x, y, height) -> bool:
 	for y_ in range(y, y + height):
-		if _get_solidness(x, y_):
+		if _get_solidness(x, y_) > 0:
 			return true
 	return false
 
