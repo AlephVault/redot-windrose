@@ -133,7 +133,7 @@ signal orientation_changed(orientation: _Direction)
 	get:
 		return speed
 	set(value):
-		speed = max(0, value)
+		speed = max(0.001, value)
 		speed_changed.emit(speed)
 
 ## A signal to tell the change of speed.
