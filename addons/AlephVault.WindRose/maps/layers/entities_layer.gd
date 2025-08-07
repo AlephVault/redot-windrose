@@ -134,6 +134,11 @@ func initialize():
 		for obj in get_children():
 			if obj is AlephVault__WindRose.Maps.MapEntity:
 				obj.initialize()
+				if obj.current_map == null:
+					var cell = map.layout.local_to_map(obj.position)
+					var result = manager.attach(
+						obj.entity, cell
+					)
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet

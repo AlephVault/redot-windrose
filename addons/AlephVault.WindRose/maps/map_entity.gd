@@ -251,16 +251,15 @@ func initialize():
 
 	_size = Vector2i(max(_size.x, 1), max(_size.y, 1))
 	# Initialize the entity only once.
-	if _entity == null:
-		_entity = Entity.new(self, rule)
-		_set_signals()
+	_entity = Entity.new(self, rule)
+	_set_signals()
+	_initialized = true
 
 	# Fixing editor-set properties and triggering
 	# signals for the first time.
 	orientation = orientation
 	speed = speed
 	state = state
-	
 	var _parent = get_parent()
 	var _parent2 = null
 	if _parent != null:
@@ -273,8 +272,6 @@ func initialize():
 		var result = _parent.manager.attach(
 			entity, cell
 		)
-		if result.is_successful():
-			_initialized = true
 
 func _ready():
 	initialize()
