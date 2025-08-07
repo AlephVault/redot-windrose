@@ -12,8 +12,8 @@ The important elements related to this package are:
 
    1. `TileMapLayer` objects: They're in-scene objects used to represent tilemaps (e.g. floors).
    2. `TileSet` objects: They're in-project resource objects used to provide the tiles that will be used
-	  in `TileMapLayer` objects. A feature being used in the tilesets are the _data layers_, which are
-	  retrieved by the underlying logic of the related objects.
+      in `TileMapLayer` objects. A feature being used in the tilesets are the _data layers_, which are
+      retrieved by the underlying logic of the related objects.
 
 2. Maps: Contrary to what it might look, maps are not Tilemaps per se. They make use of tilemaps
    (TileMapLayer) objects in a more complex (yet manageable) way and also add a way to manage the objects
@@ -89,6 +89,62 @@ the chosen rule namespace. All those 6 rule namespaces have the following identi
   time, as part of a scene.
 
   1. As part of a scene, a map entity must start being a child of an entities layer. On `_ready`, the map entity
-	 will _initialize_ and recognize itself as part of the map. It will become _attached_ to the map.
+     will _initialize_ and recognize itself as part of the map. It will become _attached_ to the map.
+     
+     > If, for some reason, it is _not_ child of an entities layer, then the initialization logic will **not**
+       occur and must be triggered manually.
+     
+     > Also, being a child of an entities layer, if the object does not look fully contained in the map, it will
+       raise an error when trying to initialize and auto-attach to the map. Ensure that, in the editor, the
+       entity is _fully into the map_, which means: its in-tilemap position + its size (defined in the editor
+       for that object) is lower than or equal to the map size.
   
-  
+  2. Otherwise, by creating the entity at runtime (e.g. `obj = AlephVault__WindRose.Contrib.Simple.MapEntity.new(...)`),
+     the entity must have its `initialize()` method manually invoked (`obj.initialize()`) and, either immediately
+     or previously, be already added (_parented_) to the entities layer for it to interact in a map.
+
+In order to create a map in a scene (to be loaded directly or indirectly as an asset), the typical workflow is:
+
+  1. Create the Map node as a `Node2D`. Name it as you prefer.
+  2. As a child of the Map node, create the Floor Layer node as a `Node2D`. Name it as you prefer.
+  3. As another child of the Map node, create the Entities Layer node as a `Node2D`. Name it as you prefer.
+  4. As child / children of the Floor Layer node, create as many `TileMapLayer` nodes you need.
+     This also requires properly creating `TileSet` resources, and the proper tiles there-in.
+     **All the involved TileSet resources must be configured to use one of the allowed tile settings or
+     the entire map will not work properly**. The allowed settings are: Squared, Isometric (Diamond Right), and
+     Isometric (Diamond Down). **This is serious: others will not work**.
+  5. If planning to use Simple, Blocking, Navigability or another custom rule relying on tiles' data,
+     configure the TileSets' data layers and individual cells' data accordingly. This will be described later.
+  6. In the Map node, drag/attach the `addons/AlephVault.WindRose/maps/map.gd` script.
+  7. In the Floor Layer node, drag/attach the `addons/AlephVault.WindRose/maps/layers/floor_layer.gd` script.
+  8. In the Entities Layer node, drag/attach the **corresponding entities_layer.gd script**. For already provided
+     scripts, choose the proper path. For example, if planning to use the Simple rule, then the script to attach
+     is at `addons/AlephVault.WindRose/contrib/simple/entities_layer.gd`, while other out-of-the-box rules have
+     similar file paths. Then, configure all the needed properties (e.g. navigability and simple rules allow the
+     configuration of the neighbour maps for the four boundaries of the current map).
+  9. Configure the desired map's size. This is important.
+
+The next thing is to create an entity. In this case, the steps are:
+
+  1. Create the MapEntity node as a `Node2D`. Name it as you prefer.
+  2. Give anything you deem useful. As an example, consider adding a child `Sprite2D` to serve as a static image.
+  3. Drag/attach the **corresponding map_entity.gd script**. For already provided scripts, choose the proper path.
+     For example, if planning to use the Simple rule (matching the example with the entities layer defined earlier),
+     the path is: `addons/AlephVault.WindRose/contrib/simple/map_entity.gd`.
+  4. Configure a speed (the minimum speed will be 0.001), expressed in pixels / second, and a size (e.g. 1x1, which
+     is a typical setup for a character). You are free to configure an orientation. Also, configure all the other
+     properties that are useful (e.g. for navigability or simple map entity, the navigability attribute can be
+     configured to choose another non-default navigability).
+
+Once there, the maps and entities are ready to be used:
+
+  1. On `_enter_tree`, maps are typically initialized. If, for some reason, they're not, then you can manually call
+     `initialize()` on the map. Ensure it's already added into the scene when doing this.
+  2. As part of the map's initialization, its entities layer is initialized as well. If, for some reason, this did
+     not happen, then you can manually call `initialize()` on the entities layer child.
+  3. As part of the entities layer initialization, its children being map entities will have their `initialize()`
+     invoked as well. If for some reason this does not happen, or the objects are created later and / or not as
+     children of any entities layer, then you can call `initialize()` manually on them. It should also happen that,
+     if you create the object and add it as child of an entities layer in the same frame, then the object will
+     indeed automatically initialize and be attached to the parent entities layer and thus the grandparent map.
+
