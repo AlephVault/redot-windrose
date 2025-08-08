@@ -193,6 +193,90 @@ map instance itself. The life-cycle can be understood like this:
    The scope key and map index must be used together for this purpose, and any invalid value will cause the result
    to be `null` like in the previous cases.
 
+### General properties
+
+Let a valid map instance be: `var map: AlephVault__WindRose.Maps.Map`:
+
+- `scope: AlephVault__WindRose.Maps.Scope`: Returns the current scope, if scopes are used, this map is added to.
+  If it's not used / not under a valid scope, this value will be `null`.
+- `index: int`: Returns the current map index. Only meaningful if the map belongs to a scope. This property is
+  read-only at runtime (set at editor time).
+- `size: Vector2i`: Returns the size of the map. Each coordinate is integer and positive, and lower than or equal
+  to 4096 (this means: a map can be at most 4096x4096). This property is read-only at runtime (set at editor time).
+  Entities in this map will have their positions constrained by these dimensions.
+- `gizmo_x_axis_color`, `gizmo_y_axis_color` and `gizmo_grid_color`: These properties only serve for debugging
+  purposes in the editor, since they provide a grid ad hoc to track the objects even before the tilemaps have their
+  cells properly filled. All these properties are of type `Color`.
+- `floor_layer: AlephVault__WindRose.Maps.Layers.FloorLayer`: Returns the floor layer for the map. This layer is
+  read-only and set on initialization, by detecting a direct child being of this type.
+- `entities_layer: AlephVault__WindRose.Maps.Layers.EntitiesLayer`: Returns the entities layer for the map. This
+  layer is read-only and set on initialization, by detecting a direct child of this type. The actual type of layer
+  is a sub-type of entities layer, with its own logic, depending on the intended rule to apply to the map.
+- `layout: AlephVault__WindRose.Maps.Utils.MapLayout`: Returns the layout for the map. This layout is read-only and
+  detected from the map-related objects. Layouts are related to one of the three combinations of tilemap (actually:
+  tileset) properties that are allowed: squared, diamond-down isometric or diamond-right isometric.
+- `get_world_map(key: String, index: int) -> AlephVault__WindRose.Maps.Map`: Returns another map in the same world
+  this map belongs to. If it does not belong to any scope or the key / index are not valid, returns `null`.
+- `get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map`: Returns another map in the same world this map
+  belongs to. If it does not belong to any scope or the index is not valid, returns `null`.
+
+About maps, most of the logic is not tied to them directly, but to the underlying layers instead. These layers (as
+of today: entities layer and floor layer) must be created with the map, and will be detected on map's `_ready` and
+when the hierarchy changes (under normal conditions, it should not change).
+
+Let a valid floor layer instance be: `var floor_layer: AlephVault__WindRose.Maps.Layers.FloorLayer`:
+
+- `map: AlephVault__WindRose.Maps.Map`: Returns the parent map.
+- `get_tilemap(index: int) -> TileMapLayer`: Returns a child `TileMapLayer` by index.
+- `get_tilemaps_count() -> int`: Returns the number of children `TileMapLayer` objects.
+
+About floor layers, the only logic they perform is to auto-detect, on `_ready` and when the hierarchy changes (under
+normal conditions, it should not change), the list of tilemaps.
+
+Let a valid entities layer instance be: `var entities_layer: AlephVault__WindRose.Maps.Layers.EntitiesLayer` (but,
+actually, **a descendant of that type**, and not that type directly):
+
+- `rule: AlephVault__WindRose.Core.EntitiesRule`: Returns the rule related to this layer. When this property is
+  first-read, the creation of the underlying entities rule instance will take place (this only happens once). The
+  particular rule sub-type is determined by the custom logic of the current entities layer.
+- `manager: AlephVault__WindRose.Core.EntitiesRule.Manager`: Returns the underlying manager. Managers are special
+  internal objects that handle the whole movement (and thus: underlying rule execution) of an entities layer and
+  their entities. They effectively manage the lifecycle of each single frame and see in first row the movement of
+  the entities in the current layer.
+- `bypass: bool`: This flag allows the rule to always allow any movement from any entity in the layer. This only
+  makes sense if the game is a client connected to a server which, in place, does not have this flag active. In
+  the client case, however, everything is allowed since the true logic comes from the server. This property is
+  read-only and only set in the editor.
+- `initialized: bool`: Also a read-only property, this flag tells whether this layer is already initialized.
+- `initialize()`: This method is invoked by the parent map, but can be manually invoked if needed. This method
+  creates the internal `manager` and then detect all the children objects which are map entities and then, one
+  by one, it initializes each of those entities, properly attaching them to this entities layer.
+
+About entities layers, they have more properties and a custom rule instantiation according the sub-type of layer
+being used. They will be timely described in other sections.
+
+Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.MapEntity`:
+
+- `rule: AlephVault__WindRose.Core.EntityRule`: Returns the rule related to this entity. When this property
+  is first-read, the creation of the underlying entity rule instance will take place (this only happens once).
+  The particular rule sub-type is determiend by the custom logic of the current map entity. This property is
+  read-only.
+- `entity: AlephVault__WindRose.Core.EntityRule`: Returns the logical entity to be used. This is an underlying
+  model that triggers the internal logic related to the map (layer) it belongs. It does not trigger the actual
+  movement, but helps in all the related checks and triggers. This property is read-only.
+- `current_map: AlephVault__WindRose.Maps.Map`: Returns the current map this map entity is attached to. This
+  property is read-only.
+- `size: Vector2i`: Returns the dimensions of this entity. Each dimensions is greater than 0. This property
+  is read-only at runtime, and configurable via editor.
+- `cell: Vector2i`: Returns the current cell this object is attached to. If it is not attached to any map,
+  returns (-1, -1). If the object is not 1x1 in dimensions, this cell in particular references the top-left
+  corner of the entity.
+- `cellf: Vector2i`: If the object is 1x1, this is the same `cell` value. If the object is not 1x1, this
+  is the coordinate of the opposite corner (bottom-right) of the entity in the map.
+- `orientation: AlephVault__WindRose.Utils.DirectionUtils.Direction`: Sets or returns the orientation of
+  an entity. The signal `orientation_changed` is triggered with the new direction on assignment.
+
+
 ### Dummy rule-related properties and methods
 
 ### Blocking rule-related properties and methods
@@ -202,4 +286,6 @@ map instance itself. The life-cycle can be understood like this:
 ### Neighbours rule-related properties and methods
 
 ### Navigability rule-related properties and methods
+
+### Advanced development
 
