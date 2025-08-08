@@ -148,3 +148,58 @@ Once there, the maps and entities are ready to be used:
      if you create the object and add it as child of an entities layer in the same frame, then the object will
      indeed automatically initialize and be attached to the parent entities layer and thus the grandparent map.
 
+### Optional: World and scopes
+
+A single scene may have typically one world and many scopes inside the world. Scopes, in turn, can contain one or
+more maps each. Ideally, each scope serves as some sort of "level" and, while typically has one map, it can have
+more than one map, but they'd be visible / related at the same time. For online games, a concept of scope may have
+its own set of connections (i.e. all the connections in a single scope will notify each other through some sort of
+central server).
+
+This system of scopes and worlds is entirely optional, for maps can be used without them. The main and only element
+of this scope is a registry where the scope key will track to its scope, and in-scope map index will track to the
+map instance itself. The life-cycle can be understood like this:
+
+1. Instantiate (statically or dynamically) a World node (`AlephVault__WindRose.Maps.World`, child of `Node2D`).
+
+2. Instantiate (statically or dynamically) one or more Scope nodes.
+
+3. _Appoint_ each previously created scope (`AlephVault__WindRose.Maps.Scope`, child of `Node2D`) instance into the
+   world, by invoking `scope.appoint(world, "some-key")`. A scope cannot be registered twice in the same world, and
+   the same key (e.g. `"some-key"`) cannot be used twice in the same world as well. A `Response` is returned, which
+   has a `.is_successful()` method to test whether the appointment was successful or an error occurred. A scope cannot
+   be appointed to two different worlds.
+
+4. Retrieve the current key of the scope (as it was registered in the previous step) with `var _key: String = scope.key`.
+
+5. Retrieve a registered scope from the world: `var scope: AlephVault__WindRose.Maps.Scope = world.get_scope(key)`.
+   If the key is invalid, returns `null`.
+
+6. _Drop_ a previously appointed scope, by invoking `scope.drop()`. It returns a `Response` instance, which returns
+   `.is_successful()` method to test whether the drop was successful or not.
+
+7. Inside a scope, register a map (`AlephVault__WindRose.Maps.Map`, child of `Node2D`) automatically by adding it as
+   a child node. A map has its `index` (read-only, and must be unique across maps in the same scope) property that will
+   be used to auto-register the map in the scope.
+   
+   > Typically, scopes and maps are defined in a factory scene (to be dynamically instantiated, perhaps many times).
+     This is why the index is pre-defined as a static property inside the map.
+
+8. In a scope, you can retrieve a map by invoking `var _map: AlephVault__WindRose.Maps.Map = scope.get_map(index)`,
+   where the index is an integer that matches the index of an automatically registered map. It will return `null`
+   if the index is not valid.
+
+9. In a world, retrieve a map by invoking `var _map: AlephVault__WindRose.Maps.Map = world.get_map(key, index)`.
+   The scope key and map index must be used together for this purpose, and any invalid value will cause the result
+   to be `null` like in the previous cases.
+
+### Dummy rule-related properties and methods
+
+### Blocking rule-related properties and methods
+
+### Solidness rule-related properties and methods
+
+### Neighbours rule-related properties and methods
+
+### Navigability rule-related properties and methods
+
