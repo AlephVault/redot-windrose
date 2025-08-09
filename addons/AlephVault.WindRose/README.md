@@ -274,8 +274,93 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
 - `cellf: Vector2i`: If the object is 1x1, this is the same `cell` value. If the object is not 1x1, this
   is the coordinate of the opposite corner (bottom-right) of the entity in the map.
 - `orientation: AlephVault__WindRose.Utils.DirectionUtils.Direction`: Sets or returns the orientation of
-  an entity. The signal `orientation_changed` is triggered with the new direction on assignment.
+  this entity. The signal `orientation_changed` is triggered with the new direction on assignment.
+- `signal orientation_changed(AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A signal triggered when
+  the orientation changes in this entity. Features like animation, game logic, or potentially custom rules
+  can pay attention to this feature.
+- `speed: float`: Sets or returns the speed of this entity. The speed is expressed in pixels. The signal
+  `speed_changed` is triggered with the new speed on assignment. It is always clamped to be greater than or
+  equal to `0.001`.
+- `signal speed_changed(float)`: A signal triggered when the speed changes in this entity.
+- `state: int`: Sets or returns the state of this entity. Like with the orientation, the state is an optional
+  feature, highly used when in the need of animating the aesthetics of an entity. This is just a number, and
+  the default value is `AlephVault__WindRose.Maps.MapEntity.STATE_IDLE` (0). It is up to the developer to
+  give meaning to any state number. When this state is changed, it triggers `state_changed(state)`.
+- `signal state_changed(int)`: A signal triggered when the state changes in this entity.
+- `signal updated()`: A signal emitted on every frame for this entity. With this in mind, elements like visual
+  aesthetics manager can connect arbitrary parameterless callbacks so they know when an entity is being updated
+  (`_process`) and can act accordingly.
+- `func initialize()`: A function that is typically invoked automatically but can be manually invoked by the developer.
+  This function prepares the internal (logical) entity, size and signals for this map entity.
+- `func attach(map: AlephVault__WindRose.Maps.Map, to_position: Vector2i) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`:
+  A method to attach this map entity to a map. This entity must not be previously attached to the map. Also,
+  this entity's rule must be compatible to the entities rule in the entities layer of the target map (this
+  means: the developer must make sure the map's entities layer and the map entity come from the same parent
+  namespace or family). Once the object is attached, it begins to interact with the map and other objects
+  according to the underlying entity / entities rules pair. The result is a `Response` object, which has a
+  `.is_successful()` method to get whether it could be attached or not. The `current_map` property will be
+  updated after the invocation of this method, and must be `null` before the invocation of this method.
+  Proper signals will be triggered when the object is attached. If the object was already attached to a map,
+  the response will be successful, but with a `false` value rather than `true`.
+- `func detach() -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: This method causes the map entity to
+  be detached from whichever was the current map, if any. The `current_map` property must be non-`null` when
+  invoking this method (otherwise, the result will be a successful-yet-`false` one). It will become `null` after
+  invoking it.
+- `func teleport(to_position: Vector2i) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: This method causes
+  the map entity to go to a different position in the map, as long as it's valid. If the object is not attached to
+  a map, the result is successful but with a `false` value. Errors may be triggered (e.g. if the new position is
+  out of bounds in the current map). Proper signals will be triggered on success, telling that the object was
+  moved from a position to the new one automatically. Any current movement will be indirectly canceled prior to
+  the teleport to take place.
+- `func start_movement(direction: AlephVault__WindRose.Utils.DirectionUtils.Direction) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`:
+  This method causes the map entity to start a movement. It will succeed with a `false` value if the map entity is
+  not attached to a map or could not start moving because of reasons related to the underlying rules. If the entity
+  was already performing a movement, the new movement intent is stored as _queued_ for a very short time, automatically
+  starting if in that lapse the entity finished its current movement (in less than that very short time). This allows
+  a seamless movement and a smooth movement experience.
+- `func cancel_movement() -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: This method causes the current
+  movement, if any, to be canceled. The result will be successful with a value of `true` if the entity is attached
+  to a map and the rules allowed the movement to be canceled. Otherwise, it will be a successful result with a
+  `false` value.
 
+Finally, interacting with the signals for movements and teleport is done through the `rule` property:
+
+- `signal rule.signals.on_attached(manager, position: Vector2i)`: Triggered when the entity was attached to a
+  specific manager (get the Map reference through `manager.layer.map`) and at a given position (the entity's
+  top-left corner, if not 1x1, will be the one occupying that position).
+- `signal rule.signals.on_detached()`: Triggered when the entity was detached from its current map.
+- `signal rule.signals.on_movement_started(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
+  Triggered when the entity started moving in certain direction, from a specific source position to a specific
+  target position (both just 1 step away).
+- `signal rule.signals.on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
+  Triggered when the entity finished moving in a certain direction, from a specific source position to a specific
+  target position (both just 1 step away).
+- `signal rule.signals.on_movement_cancelled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
+  Triggered when the entity canceled moving in a certain direction, from a specific source position to a specific
+  target (reverted) position (both just 1 step away). If the entity was not currently moving, the direction will be
+  `AlephVault__WindRose.Utils.DirectionUtils.Direction.NONE`.
+- `signal rule.signals.on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the entity
+  was teleported to a new cell in the same map.
+- `signal rule.on_property_updated(prop: String, old_value, new_value)`: Triggered when a property notified being
+  changed in the rule. If the current rule is composed from many children rules, each child rule will have a way
+  of calling an emit of this signal in the parent rule. This is something that children rules must each do in their
+  own `on_property_updated` signal (forwarding an emit to the parent). However, from the perspective of the end
+  user / developer, just attending this signal as-is will have the job done for their purposes (however, creating
+  new rules will be covered in the advanced development section; take a look at the implementation of the `Simple`
+  entity rule, at `addons/AlephVault.WindRose/contrib/simple/entity_rule.gd`, to have an example of forwarding
+  from child to parent in the entity rule, and then take a loot at its `entities_rule.gd` to have an example of
+  forwarding from parent to child).
+
+With this description, development of rule-aware entities, and entities-aware game logic, can be implemented
+with no major problems. The next sections will cover specific topics like:
+
+1. Features of the dummy (null) rule.
+2. Features of the blocking rule.
+3. Features of the solidness rule.
+4. Features of the neighbours rule.
+5. Features of the navigability rule.
+6. Features of the simple rule.
+7. Advanced development: creating custom rules.
 
 ### Dummy rule-related properties and methods
 
@@ -286,6 +371,8 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
 ### Neighbours rule-related properties and methods
 
 ### Navigability rule-related properties and methods
+
+### Simple rule-related properties and methods
 
 ### Advanced development
 

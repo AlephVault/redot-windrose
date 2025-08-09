@@ -112,7 +112,7 @@ func attach(entity: _Entity, to_position: Vector2i) -> _Response:
 	# Hooks.
 	_attached(entity_rule, to_position)
 	# Everything ok.
-	return _Response.succeed(null)
+	return _Response.succeed(true)
 
 func _can_attach(entity_rule: _EntityRule, to_position: Vector2i) -> bool:
 	return bypass or entities_rule.can_attach(entity_rule, to_position)
@@ -139,7 +139,7 @@ func detach(entity: _Entity) -> _Response:
 	_statuses.erase(entity_rule)
 	entity_rule.trigger_on_detached()
 	# Everything ok.
-	return _Response.succeed(null)
+	return _Response.succeed(true)
 
 # Callback for when a movement has started.
 func _on_movement_started_callback(obj, direction, start_position, end_position):
@@ -369,7 +369,7 @@ func teleport(
 	)
 
 	# Everything ok.
-	return _Response.succeed(null)
+	return _Response.succeed(true)
 
 ## Reports a property being updated on an entity rule.
 func property_updated(

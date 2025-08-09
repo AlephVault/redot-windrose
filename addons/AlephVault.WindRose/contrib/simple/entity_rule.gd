@@ -61,6 +61,9 @@ var neighbours_rule: AlephVault__WindRose.Contrib.Neighbours.EntityRule:
 			"EntityRule", "neighbours_rule"
 		)
 
+func _forward_on_property_updated(property: String, old_value, new_value):
+	on_property_updated.emit(property, old_value, new_value)
+
 func _init(
 	map_entity: AlephVault__WindRose.Maps.MapEntity,
 	obeys_solidness: bool = true,
@@ -78,6 +81,7 @@ func _init(
 		map_entity, obeys_solidness, solidness,
 		mask, optimistic, false
 	)
+	_solidness_rule.on_property_updated.connect(_forward_on_property_updated)
 	_neighbours_rule = AlephVault__WindRose.Contrib.Neighbours.EntityRule.new(
 		map_entity, false
 	)
