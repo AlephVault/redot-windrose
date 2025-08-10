@@ -474,9 +474,46 @@ The relevant properties are:
   current rule (and map). In this case, `W` is the width of the current map. The entity will appear at position `(0, y)` in the
   new map.
 
+With this completely set up (it is optional, i.e. not all the directions need to have a mandatory map linked to it; even, the
+same map can always be used to have a wrapping / _torus-like_ effect for a map) there's no need of extra set-up.
+
 ### Navigability rule-related properties and methods
 
+The navigability rule is quite similar to the blocking rule, except that the map entity has a single property:
+
+- `navigability: int`: This value starts at 0 and can be between 0 and 63, both inclusive. With this in mind, when the next cell(s)
+  the map entity is trying to move to, by trying to move in certain direction, a navigability mask (64 bits) will be extracted from
+  each corresponding cell and, if the navigability of the entity is not a bit turned on in the navigability mask of the cell, then
+  the movement is not allowed for the entity. This is useful to have, e.g., walkable cells and water cells, where a ship or boat
+  should be needed, thus changing the navigability of the entity (e.g. it cannot walk in water and cannot row a boat in the ground).
+
+The _entities layer_ does not add new properties (which also means: the _entities rule_ does not add new properties). However, the
+trick is on each cell. Similar to the `blocking` rule, the `TileMapLayer` objects are traversed from bottommost to topmost, and a
+computation takes place to get the navigability mask for a cell (this computation is pre-cached - this will be discussed later in
+this section):
+
+1. Start with `mask: int = 1` for the `cell`.
+2. For each `tilemap` from bottommost to topmost:
+   - If, in the `tileset` there's no custom data layer named `navigability_type` or there's no custom data layer named `navigability_increments`,
+     then keep the current `mask`, unaltered. Those layers must be `int` and `bool`, respectively, or `mask` is, again, kept unaltered.
+   - Retrieve the values from those layers for the given `cell`. The type must be an integer between 0 or 63, both inclusive. Otherwise,
+     the `mask` will be kept unaltered.
+   - Now, we're on good values: If the value from `navigability_increments` is false, then `mask` gets assigned a 1-hot value for that bit.
+     For example, if `navigability_increments` is `false` and `navigability_type` is `5`, the `mask` becomes `32` (0000...0100000). However,
+     if `navigability_increments` is `true` and `navigability_type` is `5`, `mask` becomes `(mask | (1 << 5))`, activating the 5th bit. This
+     enables transitional navigability cells (e.g. shores).
+
 ### Simple rule-related properties and methods
+
+Again, this rule is a combination from all the previous rules (except for `dummy`, since it adds no logic at all).
+
+- All the properties described in the _map entity_ on each of the previous rules are added to this _map entity_.
+- All the properties described in the _entities layer_ on each of the previous rules are added to this _entities layer_. With the exception
+  that the neighbours-related properties (e.g. `up_linked` and so), at editor time, must be _entities layer_ of this (`simple`) type instead.
+- For both entity and entities rule, four members exist so they forward the logic properly: `navigability_rule`, `neighbours_rule`,
+  `solidness_rule` and `blocking_rule` (in both cases, and of the respective types).
+- **IMPORTANT**: All the notifications are forwarded, and all the criteria for allowing a movement in certain direction must be satisfied to
+  allow a movement, simultaneously.
 
 ### Advanced development
 
