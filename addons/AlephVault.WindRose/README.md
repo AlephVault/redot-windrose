@@ -364,11 +364,115 @@ with no major problems. The next sections will cover specific topics like:
 
 ### Dummy rule-related properties and methods
 
+There are no particular properties on either component of this dummy rule. This dummy rule allows any properly
+bounded behaviour.
+
 ### Blocking rule-related properties and methods
+
+There are no particular properties on either component of this blocking rule. However, in order to restrict the
+movement, tiles must tell whether they block or allow the movement for a given cell they're painted into. The blocking
+algorithm goes like this:
+
+1. Initially, each cell allows movement.
+2. From the topmost (`N-1`th `TileMapLayer` child of the _floor layer_) to the bottommost (0th `TileMapLayer` child of
+   the _floor layer_) tilemap, get the tile used at the cell to check and whether the tilemap uses a tileset that has
+   a custom data layer defiend with name `"blocking"` and boolean type. If there's no tile at that cell or the tileset
+   does not have such custom layer defined, skip this check for this tilemap. Otherwise, return whether the tile has
+   its `"blocking"` value (from the custom data layer) to `true` or `false`. This value is returned as the result and
+   used to determine whether the movement is blocked for that cell, or not.
+3. If no tilemap, for that cell, can determine (given the above criterion) whether the movement is blocked or not, then
+   the result is `false` (the movement is not blocked).
+
+When an entity tries to move in any direction where it finds (given, accordingly, its width or height) a cell marked
+as blocking, then movement in that direction is not allowed. There are no more checks and this check is static as long
+as the tilemaps are not changed.
+
+If a developer wants to change the contents of a tile for any tilemap in the map for a given (x, y) cell dynamically,
+then they must invoke `map.entities_layer.rule.update_cell_data(Vector2i(x, y))`. This will update the blocking data
+layer for that cell in particular.
 
 ### Solidness rule-related properties and methods
 
+The solidness rule is the only one, provided here, which has many properties to account for. Those properties exist
+only in the _entity rule_ (the rule that is part of the map entity). The properties, in this rule, are:
+
+- `obeys_solidness: bool`: If this property is `false`, then the movement of this entity is not restricted by solidness,
+  but only by the boundaries of the map. If it is `true` (default), then this rule applies for this entity. It is like
+  a convenient entity-side _bypass_, but useful in very few cases for games requiring solidness. On `false`, while the
+  entity does not have its movement restricted by this rule, it still modifies the current data to perhaps restrict the
+  movement of other objects.
+- `solidness: AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness`: Tells the solidness of this rule. This
+  value is an enumeration (the type supports members: `SOLID`, `GHOST`, `HOLE` or `IRREGULAR`). For the first 3 values,
+  the criterion applies _to the entire rectangular shape and size of the entity_. For the `IRREGULAR` value, this entity
+  is not enabled to move at all, but it modifies the current data _in a per-cell basis_ instead of a single criterion for
+  the entire rectangular shape and size of the entity. The solid, ghost or hole criteria will be explained later in this
+  section (irregular is already explained).
+- `mask: String`: Tells, at editor time, the mask to use for `IRREGULAR` solidness entities. It is ignored in other types.
+  The mask is a multiline string with character `'S'`, `'G'` or `'H'` (either lowercase or uppercase). Other characters
+  will be treated as `'G'`. Each line will be trimmed to be equal to the width of the entity and right-padded with `'G'`
+  if it is of less length. The total amount of lines will be trimmed to the height of the entity or padded with lines of
+  `'G...G'` characters for the width of the object, each line. Each character tells the per-cell rule described in the
+  `IRREGULAR` criterion in the `solidness` property. Examples:
+  
+  ```
+  For a 3x3 character:
+
+  SSS       SSS             SSS             SSS
+  S   means SGG    while    SG   also means SGG due to truncation and padding.
+  SSS       SSS             SSSS            SSS
+                            S
+  
+  For a 1x1 character:
+  
+  SGG
+  HH  means S due to truncation
+  S
+  ```
+
+- `optimistic: bool`: Tells that the movement is optimistic. This means that, when a movement is started, the final solidness
+  data in the map is automatically updated (which means: the solidness is added to the newly occupying cells, and it is
+  subtracted from the cells being left) so some use cases are allowed, like allowing a "train" of objects, which is not possible
+  when optimistic is `false`: in this case, the solidness of the cells being left is not subtracted until the entity reaches
+  the new position. However, the counterpart of this is that the entities marked with `optimistic` being `true` should not be
+  canceled when they move, or the experience may become glitchy.
+
+Now, this properties can all be set in the editor for the map entity (`MapEntity`) object. However, at runtime, these properties
+can all be modified by accessing `map_entity.rule.{property}`, like `map_entity.rule.solidness`.
+
 ### Neighbours rule-related properties and methods
+
+The neighbours rule doesn't restrict the movement but, optionally, can define maps that are connected to the boundaries. The
+relevant properties only exist in the _entities rule_ (`EntitiesRule`), and nothing in the map entity. In this case, setting
+the boundaries means that, for each direction, the developer is allowed to set the _next_ map whThere the entity must appear.
+For example: if the left boundary is set for a map (an _entities rule_, actually) and a map entity (with its _entity rule_)
+moves to a position `(0, y)` for any valid coordinate `y`, the map entity will be taken off the map and attached to the new
+map at coordinates `(W-1, y)` where `y` is the same coordinate (due to constraints, `y` will be a valid value in the new map),
+and `W` is the width of the new map.
+
+At editor time, the properties are set in the _entities layer_ and the target values must also be of type `EntitiesLayer` of
+the Neighbours namespace `AlephVault__WindRose.Contrib.Neighbours.EntitiesLayer`), although due to a limitation of the editor
+any `Node2D` object will be allowed. **Please note** that objects not being _entities layer_ of the said type will be ignored
+as if the respective property were not set.
+
+At runtime, however, the properties are accessed through `entities_layer.rule.{property}` and they will not be of the _entities
+layer_ type but, instead, of `AlephVault__WindRose.Contrib.Neighbours.EntitiesRule` type (they can be read or written).
+
+The relevant properties are:
+
+- `up_linked: AlephVault__WindRose.Contrib.Neighbours.EntitiesRule`: The rule of the map that will receive the map entity when
+  it moves to `(x, 0)` in the current map. The rule (and corresponding map), if not `null`, must have the same width of the
+  current rule (and map). The entity will appear at position `(x, H-1)` in the new map, where `H` is the height of the new map.
+- `down_linked: AlephVault__WindRose.Contrib.Neighbours.EntitiesRule`: The rule of the map that will receive the map entity when
+  it moves to `(x, H-1)` in the current map. The rule (and corresponding map), if not `null`, must have the same width of the
+  current rule (and map). In this case, `H` is the height of the current map. The entity will appear at position `(x, 0)` in the
+  new map.
+- `left_linked: AlephVault__WindRose.Contrib.Neighbours.EntitiesRule`: The rule of the map that will receive the map entity when
+  it moves to `(0, y)` in the current map. The rule (and corresponding map), if not `null`, must have the same width of the
+  current rule (and map). The entity will appear at position `(W-1, y)` in the new map, where `W` is the width of the new map.
+- `right_linked: AlephVault__WindRose.Contrib.Neighbours.EntitiesRule`: The rule of the map that will receive the map entity when
+  it moves to `(W-1, y)` in the current map. The rule (and corresponding map), if not `null`, must have the same width of the
+  current rule (and map). In this case, `W` is the width of the current map. The entity will appear at position `(0, y)` in the
+  new map.
 
 ### Navigability rule-related properties and methods
 
