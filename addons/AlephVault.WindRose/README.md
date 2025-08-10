@@ -503,6 +503,8 @@ this section):
      if `navigability_increments` is `true` and `navigability_type` is `5`, `mask` becomes `(mask | (1 << 5))`, activating the 5th bit. This
      enables transitional navigability cells (e.g. shores).
 
+If a developer wants to change the contents of a tile for any tilemap in the map for a given (x, y) cell dynamically, then they must invoke `map.entities_layer.rule.update_cell_data(Vector2i(x, y))`. This will update the navigability data layer for that cell in particular.
+
 ### Simple rule-related properties and methods
 
 Again, this rule is a combination from all the previous rules (except for `dummy`, since it adds no logic at all).
@@ -517,3 +519,225 @@ Again, this rule is a combination from all the previous rules (except for `dummy
 
 ### Advanced development
 
+This section is only needed for developers who need to create their own rules, or extend existing rules with new behaviour. In either case, the
+thing that is always needed is to have:
+
+- The `MapEntity` subclass, so objects with the intended rule are created.
+- The `EntityRule` subclass, which provides data from entities to assess the interactions.
+- The `EntitiesRule` subclass, which collects the data and performs the assessment for the interactions.
+- The `EntitiesLayer` subclass, which instantiates the entities rule properly.
+- Especially for the case of creating the four types entirely, putting them in the same folder and creating an `index.gd` is a good idea:
+
+  ```
+  # Assumming the four files are defined with these names:
+  const EntitiesRule = preload("./entities_rule.gd")
+  const EntityRule = preload("./entity_rule.gd")
+  const MapEntity = preload("./map_entity.gd")
+  const EntitiesLayer = preload("./entities_layer.gd")
+  ```
+
+So the actual logic resides in the entity rule and entities rule, but those objects are not game nodes: they're instead created by the proper
+game nodes objects, which are in this case the map entity and the entities layer.
+
+This section will describe how to define the new subclasses properly.
+
+#### Developing the entity rule (EntityRule)
+
+If a new entity rule subclass is needed, it must satisfy the following requirements:
+
+1. The file must inherit from: `AlephVault__WindRose.Core.EntityRule`:
+
+   ```
+   extends AlephVault__WindRose.Core.EntitiesRule
+   ```
+   
+   Alternatively, the file may inherit from a class that is already a child of `AlephVault__WindRose.Core.EntityRule`.
+
+2. If a custom `_init` method is needed, it must invoke `super._init(size: Vector2i, root: bool)`. The meaning of both arguments is:
+
+   - `root` lets the constructor determine whether the rule is a root rule or not. Being a root rule means being the one responsible of
+     forwarding signals that can be used by the entity (see the `signal rule.signals.{...}` properties in the section for general properties
+     of these objects). Usually, this argument _should receive a parameter from the new class' constructor_ but there are cases where the
+     `false` constant value should be passed instead. This is the case for when the rule has children rules, like in the `simple` rule.
+   - `size` must be variable, directly or not. Either a `Vector2i` argument from the new class' constructor, or another object providing
+     the size of the entity (e.g. a `map_entity: AlephVault__WindRose.Maps.MapEntity` argument and then passing `map_entity.size` to the
+     `super._init` method). In the end, it populates the `size` property of this entity rule.
+
+3. If children rules are instantiated as part of this new rule, it can be done on `_init` or perhaps a delayed initialization. Still,
+   after the creation of that child rule (which must receive the corresponding `root=false` argument), the _on property updated_ signal
+   must be forwarded upward, from the child to the parent, if the child class has properties that need to reflect their update on the
+   corresponding entities rule.
+   
+   Let's do this with a concrete example: A new rule that has a child rule of type `AlephVault__WindRose.Contrib.Solidness.EntityRule`:
+   
+   ```
+   var _solidness_rule: AlephVault__WindRose.Contrib.Solidness.EntityRule
+   
+   # Or, instead, omit this function and use: _property_was_updated
+   func _forward_on_property_updated(property: String, old_value, new_value):
+       # In this case, the property name is forwarded directly.
+       # If conflicts would exist, something could be forwarded
+       # like ("solidness:" + property), rather than just (property).
+       on_property_updated.emit(property, old_value, new_value)
+
+   func _init(
+       # In this case, rather than the size, the Solidness entity rule requires
+       # the map entity to be passes.
+       map_entity: AlephVault__WindRose.Maps.MapEntity,
+       
+       # Then, the properties. In this case, it may be sensible to forward all
+       # the properties, or only the needed ones while leaving others with
+       # some static / default values.
+       obeys_solidness: true,
+       solidness: AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness,
+       mask: String,
+       optimistic: true,
+       
+       # Finally, root should always ALWAYS be a variable.
+       root: bool
+   ):
+       # First, invoke the inherited `_init` with the proper arguments.
+       super._init(map_entity.size, root)
+       
+       # Then, create the child rule.
+       _solidness_rule = AlephVault__WindRose.Contrib.Solidness.EntityRule.new(
+           map_entity, obeys_solidness, solidness,
+           mask, optimistic, false
+       )
+       
+       # Third, since the solidness rule has properties that need to be
+       # updated, this must be forwarded:
+       _solidness_rule.on_property_updated.connect(_forward_on_property_updated) # or: _property_was_updated.
+   ```
+
+4. If a new property needs to be defined, which directly affects how the entity affects the global interaction data, then
+   the property must notify itself. An example with an `int` property:
+   
+   ```
+   var _my_property: int = 0
+
+   var my_property: int:
+       get:
+           return _my_property
+       set(value):
+           var old_value: int = _my_property
+           _my_property = value
+           # This performs de notification.
+           _property_was_updated("my_property", old_value, value)
+   ```
+
+#### Developing the entities rule (EntitiesRule)
+
+**This is the hardest element to develop**, as most of the features are implemented here.
+
+In order to create this rule, there are several elements to account for:
+
+1. Ensure the class inherits from `AlephVault__WindRose.Core.EntitiesRule` or a child of it:
+
+   ```
+   extends AlephVault__WindRose.Core.EntitiesRule
+   ```
+
+2. If overriding the `_init`, it must invoke `super._init(size: Vector2i)` somewhere. In the end, it populates the `size` property
+   of this entities rule. This is important, as global data will be initialized according to that `size`.
+
+3. Most entities rules, especially those who have logic to restrict movement of entities, need to initialize the data structures
+   that are needed for this logic. Typically, this involves an array with the total size, at least. And it is done in a specific
+   method for this purpose. Let's explore an example for the case of each array element having an `int` data:
+   
+   ```
+   var _data: Array[int]
+   var _other_data: Array[int]
+   
+   func initialize_global_data():
+       _data = []
+       _data.resize(size.x * size.y)
+       _other_data = []
+       _other_data.resize(size.x * size.y)
+   ```
+   
+   Then, have a logic to initialize / update per-cell data:
+   
+   ```
+   func initialize_cell_data(cell: Vector2i) -> void:
+       # This can be set to a different logic but, typically,
+       # this is the same as updating the cell's data:
+       update_cell_data(cell)
+   
+   func update_cell_data(cell: Vector2i) -> void:
+       # Assign the data to a particular value
+       _data[cell.y * size.x + cell.x] = compute_some_value(cell.x, cell.y)
+   ```
+
+4. In order to determine whether an entity can be attached to this entities rule (and this is recommended!) override this method:
+
+   ```
+   func can_attach(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       cell: Vector2i
+   ) -> bool:
+       # By default, it is:
+	   # return true
+	   return entity_rule is My.Namespace.EntityRule
+   ```
+   
+   And typically also this method:
+   
+   ```
+   func on_entity_attached(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       to_position: Vector2i
+   ) -> void:
+       # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
+       # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
+       pass
+   ```
+   
+   And this one:
+   
+   ```
+   func on_entity_detached(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       from_position: Vector2i
+   ) -> void:
+       # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
+       # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
+       # Ideally, doing the opposite of on_entity_attached.
+       pass
+   ```
+
+5. In order to determine whether an entity can be moved to certain direction override this method:
+
+   ```
+   func can_move(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       position: Vector2i, direction: _Direction
+   ) -> bool:
+       # Returns true if the movement is allowed.
+       # return true
+       #
+       # Account for the entity_rule.size in this logic.
+       return (whether entity_rule at position can move in direction)
+   ```
+
+   Also, implement this (e.g. updating `_other_data`) to reflect when movement was started.
+   
+   ```
+   func on_movement_started(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+       stage: MovementStartedStage
+   ) -> void:
+       # Update the data in the entities rule, e.g. `_other_data`, accounting
+       # for the start position, the end position, and the size of the entity
+       # rule. Also, perhaps the direction.
+       #
+       # The stage can be one out of the following values:
+       #
+       # Begin: This event has just started.
+       # MovementAllocated: The chosen direction has been set as current movement in the entity.
+       # End: The entity was just notified (i.e. the movement started signal) about this event.
+       #
+       # Different things can be done on different stages.
+       pass
+   ```
