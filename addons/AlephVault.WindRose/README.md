@@ -725,7 +725,8 @@ In order to create this rule, there are several elements to account for:
    ```
    func on_movement_started(
        entity_rule: AlephVault__WindRose.Core.EntityRule,
-       start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+       start_position: Vector2i, end_position: Vector2i,
+       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction,
        stage: MovementStartedStage
    ) -> void:
        # Update the data in the entities rule, e.g. `_other_data`, accounting
@@ -734,10 +735,52 @@ In order to create this rule, there are several elements to account for:
        #
        # The stage can be one out of the following values:
        #
-       # Begin: This event has just started.
+       # Begin: This event has just started. The entity does not have its movement assigned yet.
        # MovementAllocated: The chosen direction has been set as current movement in the entity.
        # End: The entity was just notified (i.e. the movement started signal) about this event.
        #
-       # Different things can be done on different stages.
+       # Different things can be done on different stages. Developers must **ALWAYS** ensure they
+       # `match stage:` to specific stages every code block they want, or that code block would
+       # execute many times!
+       pass
+   ```
+   
+   And, optionally, implement this (e.g. playing a mild low-frequency sound) for when the movement
+   is rejected:
+   
+   ```
+   func on_movement_rejected(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       start_position: Vector2i, end_position: Vector2i,
+       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+   ) -> void:
+       # Implement this for when the movement.
+       pass
+   ```
+   
+   And finally, implement this (e.g. again updating `_other_data`) for when the movement is completed.
+   Completing a movement means completing one single step of the movement, and it may happen that the
+   movement continues as the form of a new (seamlessly continued) movement.
+   
+   ```
+   func on_movement_finished(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+       stage: MovementConfirmedStage
+   ) -> void:
+       # Update the data in the entities rule, e.g. `_other_data`, accounting
+       # for the start position, the end position, and the size of the entity
+       # rule. Also, perhaps the direction.
+       #
+       # The stage can be one out of the following values:
+       #
+       # Begin: This event has just started. The entity does not have its position updated yet.
+       # PositionChanged: The position of the entity has been updated.
+       # MovementCleared: The current movement has been cleared for the entity. It is, now, not moving.
+       # End: The entity was just notified (i.e. the movement finished signal) about this event.
+       #
+       # Different things can be done on different stages. Developers must **ALWAYS** ensure they
+       # `match stage:` to specific stages every code block they want, or that code block would
+       # execute many times!
        pass
    ```

@@ -263,13 +263,6 @@ func _movement_step(obj: Node2D, delta: float, id: int) -> bool:
 	# step. We need to check whether there's a queued
 	# next movement for the object.
 	if _queued_movement.has(obj):
-		# Pop the next movement.
-		var next_movement_direction = _queued_movement[obj].direction
-		var next_movement_to_position = movement.to_position + _DirectionUtils.get_delta(next_movement_direction)
-		var next_movement_from_position = movement.to_position
-		var next_movement_raw_to_position = _get_raw_position.call(next_movement_to_position)
-		var next_movement_raw_from_position = movement.raw_to_position
-		_queued_movement.erase(obj)
 		# Prior to emiting the finished event, asssign
 		# the currently computed movement. We will,
 		# later, adjust it if there's a queued movement.
@@ -279,6 +272,22 @@ func _movement_step(obj: Node2D, delta: float, id: int) -> bool:
 		_on_movement_finished(obj, movement.direction,
 							  movement.from_position,
 							  movement.to_position)
+
+		# We move the queued movement erasure here. There
+		# is a reason: in _on_movement_finished the entities
+		# rule should be able to cancel the (next, pending)
+		# movement. So two things occur by this point:
+		# 1. Again, check the queued movement.
+		# 2. Get all the movement data.
+		# 3. Erase the queued movement.
+		if not _queued_movement.has(obj):
+			return false
+		var next_movement_direction = _queued_movement[obj].direction
+		var next_movement_to_position = movement.to_position + _DirectionUtils.get_delta(next_movement_direction)
+		var next_movement_from_position = movement.to_position
+		var next_movement_raw_to_position = _get_raw_position.call(next_movement_to_position)
+		var next_movement_raw_from_position = movement.raw_to_position
+		_queued_movement.erase(obj)
 		
 		# Return if the movement cannot be started.
 		if not _test_can_move(obj, next_movement_direction):
