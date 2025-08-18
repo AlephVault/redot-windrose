@@ -842,6 +842,10 @@ In order to create this rule, there are several elements to account for:
        # Implement this for when an entity is teleported from one position to another
        # position, always in the same (current) map.
        #
+       # Update the data in the entities rule, e.g. `_other_data`, accounting
+       # for the start position, the end position, and the size of the entity
+       # rule. Also, perhaps the direction.
+       #
        # The stage can be one out of the following values:
        #
        # Begin: The teleport just started.
@@ -849,3 +853,25 @@ In order to create this rule, there are several elements to account for:
        # End: The entity's signal `on_teleported` was just truggered.
        pass
    ```
+
+8. Finally, certain entities rules may want to update their data when an attached
+   entity changes one of their properties. There is a callback that is triggered
+   when an entity emits its `on_property_updated` signal (described in the previous
+   sub-section: developing the entity rule).
+   
+   The callback to attend a property change is:
+   
+   ```
+   func on_property_updated(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       property: String, old_value, new_value
+   ) -> void:
+       # Consider the old value to _undo_ the proper effects in the
+       # property update for the entity, and the new value to actually
+       # _do_ the proper effects in the property update for the entity.
+       #
+       # An example would be updating the `_other_data` according to the
+       # entity, the property, the old value and the new value.
+       pass
+   ```
+
