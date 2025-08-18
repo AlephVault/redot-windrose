@@ -719,6 +719,8 @@ In order to create this rule, there are several elements to account for:
        # Account for the entity_rule.size in this logic.
        return (whether entity_rule at position can move in direction)
    ```
+   
+   **Ensure no data modification is done in this function, or the game logic could break entirely**
 
    Also, implement this (e.g. updating `_other_data`) to reflect when movement was started.
    
@@ -782,5 +784,68 @@ In order to create this rule, there are several elements to account for:
        # Different things can be done on different stages. Developers must **ALWAYS** ensure they
        # `match stage:` to specific stages every code block they want, or that code block would
        # execute many times!
+       pass
+   ```
+
+6. Also, objects could perhaps _cancel_ the current movement. Canceling movement is always allowed by
+   the built-in entities rules, but there could be cases where canceling should be disables (i.e. cases
+   where the movement cannot be stopped by the user due to being forced in nature, like the flow of a
+   river or slippery tiles). In order to define whether an entity can cancel its current movement, this
+   method must be overridden:
+   
+   ```
+   func can_cancel_movement(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+   ) -> bool:
+       # Override this method to return false when the entity must
+       # not be allowed to cancel its current movement.
+       return true
+   ```
+   
+   **Like in the case of starting a movement, do not edit any data in this method, or the game logic could break**.
+   
+   Then, there's a callback for when the movement is canceled:
+   
+   ```
+   func on_movement_cancelled(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
+       stage: MovementClearedStage
+    ) -> void:
+       # Update the data in the entities rule, e.g. `_other_data`, accounting
+       # for the start position, the end position, and the size of the entity
+       # rule. Also, perhaps the direction.
+       #
+       # The direction will be `NONE` if there was no canceled previous movement.
+       # The logic will typically return early in that case, without doing no
+       # behaviour at all. However, in some cases, it may be useful to do some
+       # sort of aesthetic behaviour even in the `NONE` case.
+       #
+       # The stage can be one out of the following values:
+       # 
+       # Begin: The cancellation is just starting.
+       # MovementCleared: The previous movement was just cleared from the entity.
+       # End: The entity's signal `on_movement_cancelled` was just triggered.
+       pass
+   ```
+
+7. Teleporting an entity is always allowed. However, there's another callback that
+   could / should be implemented:
+   
+   ```
+   func on_teleported(
+       entity_rule: AlephVault__WindRose.Core.EntityRule,
+       from_position: Vector2i, to_position: Vector2i,
+       stage: TeleportedStage
+   ) -> void:
+       # Implement this for when an entity is teleported from one position to another
+       # position, always in the same (current) map.
+       #
+       # The stage can be one out of the following values:
+       #
+       # Begin: The teleport just started.
+       # PositionChanged: The entity has new position.
+       # End: The entity's signal `on_teleported` was just truggered.
        pass
    ```
