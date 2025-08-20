@@ -83,7 +83,7 @@ class MapLayout:
 				"MapLayout", "grid_offset"
 			)
 	
-	## The offset (used for pivoting the grid painting).
+	## The cell size.
 	var cell_size: Vector2i:
 		get:
 			return _cell_size
