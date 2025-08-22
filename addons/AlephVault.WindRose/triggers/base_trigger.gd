@@ -1,140 +1,258 @@
 extends Area2D
+## Triggers are a way to detect, in a WindRose-compatible way,
+## the movement inside an area. This is intended so when the
+## objects enter a trigger they may be affected in different
+## ways (according to trigger's logic) and at different times.
+##
+## In order to use a trigger, the developer must first derive
+## a subclass and implement the callbacks they want or perhaps
+## using one of the provided signals (both mechanisms are given
+## by this class as alternatives, being the signals the first
+## things that trigger, and then the callbacks, if any).
+##
+## The events that matter are:
+##
+## 1. Entity entered: An entity started being detected by this
+##    trigger, and the entity belongs to the same map.
+## 2. Entity staying: An entity is still being detected by this
+##    trigger, and the entity belongs to the same map.
+## 3. Entity moved: An entity that is staying just moved to
+##    another position in this map, while still being detected
+##    by this area.
+## 4. Entity left: An entity that was being detected by this
+##    trigger is no more detected. This is because it left the
+##    area of the trigger, the entire scene tree (e.g. being
+##    destroyed) or being detached from the map.
 
-# The current map entity this trigger relates to.
-var _map_entity: AlephVault__WindRose.Maps.MapEntity
+# #############################################
+# #############################################
+# ######## Event Callbacks and Signals ########
+# #############################################
+# #############################################
 
-# The shape to use.
-var _shape: CollisionShape2D = null
-
-# The offset to use for the shape.
-var _shape_offset: Vector2i = Vector2i(-1, -1)
-
-# The child to use for the area detection.
-var _child: CollisionShape2D
-
-## A signal telling an entity entered this area.
+## A signal telling when an entity just entered this map and
+## this trigger. This signal is emitted before invoking the
+## _entity_entered(entity) method in this class.
 signal entity_entered(entity: AlephVault__WindRose.Maps.MapEntity)
 
-## A signal telling an entity exited this area.
-signal entity_exited(entity: AlephVault__WindRose.Maps.MapEntity)
+## A signal telling when an entity is staying in this map and
+## this trigger. This signal occurs in a _process(d) call, and
+## occurs for all the entities in the trigger. This signal is
+## emitted before invoking the _entity_staying(entity) method
+## in this class.
+##
+## In terms of life-cycle, this event occurs repeatedly and
+## between entity_entered(entity) and entity_left(entity).
+signal entity_staying(entity: AlephVault__WindRose.Maps.MapEntity)
 
-func _make_area_shape(
-	layout_type: AlephVault__WindRose.Maps.Utils.MapLayoutType,
-	entity_size: Vector2i, cell_size: Vector2i
-) -> Array:
-	"""
-	Makes a shape's content and the offset for that shape.
-	"""
+## A signal telling when an entity has just moved in this map
+## and this trigger. This signal occurs as part of the signal
+## named on_movement_finished signal in the entity. Also, it is
+## emitted before invoking the _entity_moved(entity) method in
+## this class.
+##
+## In terms of life-cycle, this event occurs repeatedly and
+## between entity_entered(entity) and entity_left(entity).
+signal entity_moved(entity: AlephVault__WindRose.Maps.MapEntity)
 
-	var shape: Shape2D
-	var x_: Vector2i
-	var y_: Vector2i
-	var offset: Vector2i = Vector2i(-1, -1)
+## A signal telling that an entity left this trigger and/or the
+## map and/or the entire tree and/or was destroyed. This signal
+## is emitted before invoking the _entity_exited(entity) method
+## in this class.
+signal entity_left(entity: AlephVault__WindRose.Maps.MapEntity)
 
-	match layout_type:
-		AlephVault__WindRose.Maps.Utils.MapLayoutType.ORTHOGONAL:
-			shape = RectangleShape2D.new()
-			shape.size = entity_size * cell_size
-			offset = shape.size / 2.
-			shape.size -= Vector2(2, 2)
-		AlephVault__WindRose.Maps.Utils.MapLayoutType.ISOMETRIC_TOPDOWN:
-			shape = ConvexPolygonShape2D.new()
-			x_ = Vector2i(entity_size.x * cell_size.x, entity_size.x * cell_size.y) / 2
-			y_ = Vector2i(-entity_size.y * cell_size.x, entity_size.y * cell_size.y) / 2
-			shape.points = PackedVector2Array([
-				Vector2i(0, 1),
-				x_ + Vector2i(-1, 0),
-				x_ + y_ + Vector2i(0, -1),
-				y_ + Vector2i(1, 0)
-			])
-			offset = Vector2i(0, 0)
-		AlephVault__WindRose.Maps.Utils.MapLayoutType.ISOMETRIC_LEFTRIGHT:
-			shape = ConvexPolygonShape2D.new()
-			x_ = Vector2i(entity_size.x * cell_size.x, -entity_size.x * cell_size.y) / 2
-			y_ = Vector2i(entity_size.y * cell_size.x, entity_size.y * cell_size.y) / 2
-			shape.points = PackedVector2Array([
-				Vector2i(1, 0),
-				x_ + Vector2i(0, 1),
-				x_ + y_ + Vector2i(-1, 0),
-				y_ + Vector2i(0, -1)
-			])
-			offset = Vector2i(0, 0)
+## An optional callback to implement. To understand this event,
+## see entity_entered(entity) documentation.
+func _entity_entered(entity: AlephVault__WindRose.Maps.MapEntity):
+	pass
 
-	return [shape, offset]
+## An optional callback to implement. To understand this event,
+## see entity_staying(entity) documentation.
+func _entity_staying(entity: AlephVault__WindRose.Maps.MapEntity):
+	pass
 
-func _set_area_shape():
-	"""
-	Sets the shape for the current collider based
-	on the current map's layout and entity size.
-	"""
+## An optional callback to implement. To understand this event,
+## see entity_moved(entity) documentation.
+func _entity_moved(entity: AlephVault__WindRose.Maps.MapEntity):
+	pass
 
-	if _map_entity == null:
-		return
+## An optional callback to implement. To understand this event,
+## see entity_left(entity) documentation.
+func _entity_left(entity: AlephVault__WindRose.Maps.MapEntity):
+	pass
 
-	var map: AlephVault__WindRose.Maps.Map = _map_entity.current_map
-	if map == null:
-		return
-	
-	var cell_size: Vector2i = map.layout.cell_size
-	var size: Vector2i = _map_entity.size
-	var layout_type: AlephVault__WindRose.Maps.Utils.MapLayoutType = map.layout.layout_type
-	var r: Array = _make_area_shape(
-		layout_type, size, cell_size
-	)
-	_shape = r[0]
-	_shape_offset = r[1]
-	if _shape != null:
-		var child = CollisionShape2D.new()
-		child.shape = _shape
-		child.position = _shape_offset
-		_child = child
-		add_child(child)
-	elif _child != null:
-		_child.queue_free()
-		_child = null
+# Triggers the entity_entered event.
+func __trigger_entity_entered(entity):
+	entity_entered.emit(entity)
+	_entity_entered(entity)
 
-func _on_attached(em, pos):
-	_set_area_shape()
+# Triggers the entity_staying event.
+func __trigger_entity_staying(entity):
+	entity_staying.emit(entity)
+	_entity_staying(entity)
 
-func _clear_area_shape():
-	"""
-	Clears the area shape for the current collider.
-	"""
+# Triggers the entity_moved event.
+func __trigger_entity_moved(entity):
+	entity_moved.emit(entity)
+	_entity_moved(entity)
 
-	_shape = null
-	_shape_offset = Vector2i(-1, -1)
-	if _child != null:
-		_child.queue_free()
-		_child = null
+# Triggers the entity_left event.
+func __trigger_entity_left(entity):
+	entity_left.emit(entity)
+	_entity_left(entity)
 
-func _set_signals():
-	if not _map_entity.rule.signals.on_attached.is_connected(_on_attached):
-		_map_entity.rule.signals.on_attached.connect(_on_attached)
-	if not _map_entity.rule.signals.on_detached.is_connected(_clear_area_shape):
-		_map_entity.rule.signals.on_detached.connect(_clear_area_shape)
-	if _map_entity.current_map != null:
-		_set_area_shape()
+# #############################################
+# #############################################
+# ######## Entity life-cycle invariant ########
+# ######## Calls: __setup / __teardown ########
+# #############################################
+# #############################################
 
-func _clear_signals():
-	if _map_entity != null:
-		_clear_area_shape()
-		if _map_entity.rule.signals.on_attached.is_connected(_on_attached):
-			_map_entity.rule.signals.on_attached.disconnect(_on_attached)
-		if _map_entity.rule.signals.on_detached.is_connected(_clear_area_shape):
-			_map_entity.rule.signals.on_detached.disconnect(_clear_area_shape)
+var _map_entity: AlephVault__WindRose.Maps.MapEntity
 
-# On _enter_tree, track the entity.
-func _enter_tree():
-	var _parent = get_parent()
-	if _parent is AlephVault__WindRose.Maps.MapEntity:
-		_map_entity = _parent
-		_set_signals()
+func _enter_tree() -> void:
+	var parent = get_parent()
+	if parent is AlephVault__WindRose.Maps.MapEntity:
+		_map_entity = parent
+		__entity_set(_map_entity)
 
-# On _exit_tree, untrack the entity.
 func _exit_tree() -> void:
-	_clear_signals()
-	_map_entity = null
+	if _map_entity:
+		var e = _map_entity
+		_map_entity = null
+		__entity_cleared(e)
+
+func __entity_set(e: AlephVault__WindRose.Maps.MapEntity):
+	if not e.rule.signals.on_attached.is_connected(__entity_on_attached):
+		e.rule.signals.on_attached.connect(__entity_on_attached)
+	if not e.rule.signals.on_detached.is_connected(__entity_on_detached):
+		e.rule.signals.on_detached.connect(__entity_on_detached)
+	if e.current_map != null:
+		__setup()
+	
+func __entity_cleared(e: AlephVault__WindRose.Maps.MapEntity):
+	if e.rule.signals.on_attached.is_connected(__entity_on_attached):
+		e.rule.signals.on_attached.disconnect(__entity_on_attached)
+	if e.rule.signals.on_detached.is_connected(__entity_on_detached):
+		e.rule.signals.on_detached.disconnect(__entity_on_detached)
+	__teardown()
+
+func __entity_on_attached(em, pos):
+	__setup()
+
+func __entity_on_detached():
+	__teardown()
+
+# #############################################
+# #############################################
+# ########   In-map entity invariant   ########
+# #############################################
+# #############################################
+
+const _Shape = preload("./base_trigger_shape.gd")
+
+var __shape: _Shape
+
+func __setup():
+	"""
+	This method is executed when this object becomes
+	child of an entity that is attached to a map (i.e.
+	all the conditions become met by this point).
+	"""
+
+	if is_instance_valid(__shape):
+		__shape.queue_free()
+	__shape = _Shape.new()
+	__shape.update_shape_contents(
+		_map_entity.current_map.layout.layout_type,
+		_map_entity.size, _map_entity.current_map.layout.cell_size
+	)
+	add_child(__shape)
+	__start_registry()
+
+func __teardown():
+	"""
+	This method is executed when this object stops
+	being child of an entity that is attached to a
+	map (i.e. ANY of those conditions is broken).
+	"""
+
+	if is_instance_valid(__shape):
+		__shape.queue_free()
+	__shape = null
+	__stop_registry()
 
 func _process(delta):
-	if _child != null:
-		_child.position = _shape_offset
+	"""
+	Frame-processing involves checking the registry
+	and ticking on the registry. Also, ensuring the
+	shape is properly set up every time.
+	"""
+	
+	if not __registry_running:
+		return
+	
+	if not is_instance_valid(__shape):
+		__shape = _Shape.new()
+		__shape.update_shape_contents(
+			_map_entity.current_map.layout.layout_type,
+			_map_entity.size, _map_entity.current_map.layout.cell_size
+		)
+	var parent = __shape.get_parent()
+	if parent != self:
+		if parent != null:
+			parent.remove_child(__shape)
+		add_child(__shape)
+	__tick_all()
+
+func _area_entered(a: Area2D):
+	__add_element(a)
+
+func _body_entered(b: Node2D):
+	__add_element(b)
+
+func _area_exited(a: Area2D):
+	__remove_element(a)
+
+func _body_exited(b: Node2D):
+	__remove_element(b)
+
+# #############################################
+# #############################################
+# ########  Elements record invariant  ########
+# #############################################
+# #############################################
+
+# This flag tells whether the registry is running.
+# If false, it's not between __start_registry and
+# __stop_registry.
+var __registry_running: bool = false
+
+# The elements in the registry.
+var __registry_elements: Dictionary = {}
+
+func __start_registry():
+	var areas: Array = get_overlapping_areas()
+	for area in areas:
+		__add_element(area)
+	var bodies: Array = get_overlapping_bodies()
+	for body in bodies:
+		__add_element(body)
+	__registry_running = true
+
+func __stop_registry():
+	__registry_running = false
+	for e in __registry_elements.keys():
+		__remove_element(e)
+
+func __tick_all():
+	# TODO run the registry's tick for each entity.
+	pass
+
+func __add_element(e: Node2D):
+	# TODO add the element to the registry.
+	pass
+
+func __remove_element(e: Node2D):
+	# TODO remove the element from the registry.
+	pass
