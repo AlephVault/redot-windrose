@@ -153,6 +153,10 @@ const _Shape = preload("./base_trigger_shape.gd")
 
 var __shape: _Shape
 
+func __setup_later():
+	await get_tree().process_frame
+	__setup()
+
 func __setup():
 	"""
 	This method is executed when this object becomes
@@ -160,6 +164,17 @@ func __setup():
 	all the conditions become met by this point).
 	"""
 
+	# Under certain conditions, the .current_map of
+	# the entity is not set (e.g. if the on_attached
+	# callback is registered BEFORE the entity's one,
+	# mainly because this object is earlier in the
+	# tree before the entity has initialized in first
+	# place) then let's delay this function to be
+	# invoked later.
+	if _map_entity.current_map == null:
+		__setup_later()
+		return
+	
 	if is_instance_valid(__shape):
 		__shape.queue_free()
 	__shape = _Shape.new()
