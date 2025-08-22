@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://jq4ra8m7nhm"]
+[gd_scene load_steps=10 format=4 uid="uid://jq4ra8m7nhm"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_vmwo4"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_fp7xc"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="4_inl64"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_028r5"]
 [ext_resource type="Texture2D" uid="uid://pgxpjb06x15" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/isometric-sprite.png" id="6_t8wij"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/dummy.gd" id="7_5u88s"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="7_yen16"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="8_ar7nu"]
 
@@ -67,6 +68,9 @@ texture = ExtResource("6_t8wij")
 [node name="Sprite33" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
 position = Vector2(80, 0)
 texture = ExtResource("6_t8wij")
+
+[node name="Trigger" type="Area2D" parent="Map/EntitiesLayer/Obstacle"]
+script = ExtResource("7_5u88s")
 
 [node name="ControllerA" type="Node2D" parent="."]
 script = ExtResource("7_yen16")

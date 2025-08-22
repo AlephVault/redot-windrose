@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://ddgjq2jjl0f4"]
+[gd_scene load_steps=10 format=4 uid="uid://ddgjq2jjl0f4"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_20wtn"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_aw0o2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_ujgf0"]
 [ext_resource type="Texture2D" uid="uid://p16ub6j2uh62" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/square-sprite.png" id="6_q8cgc"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="7_rjbsp"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/dummy.gd" id="7_wr2bk"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="8_a3r8n"]
 
 [node name="Sample" type="Node2D"]
@@ -66,6 +67,9 @@ texture = ExtResource("6_q8cgc")
 [node name="Sprite33" type="Sprite2D" parent="Map/EntitiesLayer/Obstacle"]
 position = Vector2(80, 80)
 texture = ExtResource("6_q8cgc")
+
+[node name="Trigger" type="Area2D" parent="Map/EntitiesLayer/Obstacle"]
+script = ExtResource("7_wr2bk")
 
 [node name="ControllerA" type="Node2D" parent="."]
 script = ExtResource("7_rjbsp")
