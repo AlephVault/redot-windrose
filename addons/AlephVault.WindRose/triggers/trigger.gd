@@ -101,6 +101,8 @@ func __trigger_entity_left(entity):
 	entity_left.emit(entity)
 	_entity_left(entity)
 
+var __signals_set: bool = false
+
 func __setup():
 	"""
 	This method is executed when this object becomes
@@ -109,6 +111,12 @@ func __setup():
 	"""
 
 	super.__setup()
+	if not __signals_set:
+		__signals_set = true
+		area_entered.connect(__area_entered)
+		body_entered.connect(__body_entered)
+		area_exited.connect(__area_exited)
+		body_exited.connect(__body_exited)
 	__start_registry()
 
 func __teardown():
@@ -144,16 +152,16 @@ func _process(delta):
 		add_child(__shape)
 	__tick_all()
 
-func _area_entered(a: Area2D):
+func __area_entered(a: Area2D):
 	__add_element(a)
 
-func _body_entered(b: Node2D):
+func __body_entered(b: Node2D):
 	__add_element(b)
 
-func _area_exited(a: Area2D):
+func __area_exited(a: Area2D):
 	__remove_element(a)
 
-func _body_exited(b: Node2D):
+func __body_exited(b: Node2D):
 	__remove_element(b)
 
 # #############################################
@@ -231,7 +239,6 @@ func __tick(e: AlephVault__WindRose.Maps.MapEntity):
 		__trigger_entity_staying(e)
 
 func __add_element(e: Node2D):
-	print("Adding element:", e.name)
 	if not __registry_elements.has(e):
 		# First, create the record for this
 		# element being added.
@@ -245,7 +252,7 @@ func __add_element(e: Node2D):
 		var element_exited_tree = func():
 			__remove_element(e)
 		value.exited_tree = element_exited_tree
-		e.tree_exited.connect(value)
+		e.tree_exited.connect(value.exited_tree)
 		
 		# Now, in the lapse of this record
 		# existing, the object cannot change
@@ -262,7 +269,6 @@ func __add_element(e: Node2D):
 func __remove_element(e: Node2D):
 	if not __registry_elements.has(e):
 		return
-	print("Removing element:", e.name)
 	var existing: ElementRecord = __registry_elements[e]
 	if is_instance_valid(e) and e.tree_exited.is_connected(existing.exited_tree):
 		e.tree_exited.disconnect(existing.exited_tree)

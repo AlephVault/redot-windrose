@@ -11,4 +11,4 @@ func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
 	print('Entity moved:', e.name)
 
 func _entity_left(e: AlephVault__WindRose.Maps.MapEntity):
-	print('Entity entered:', e.name)
+	print('Entity exited:', e.name)
