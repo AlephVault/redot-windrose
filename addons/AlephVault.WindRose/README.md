@@ -875,3 +875,123 @@ In order to create this rule, there are several elements to account for:
        pass
    ```
 
+### Triggers
+
+There's also a feature to pay attention to, and it is: collisions. Collisions
+are provided by default by the engine, but this feature makes good use of them
+so some features and setup come out of the box. The classes to pay attention
+for are:
+
+1. `AlephVault__WindRose.Triggers.EntityArea2D`: An automatic area for an entity.
+2. `AlephVault__WindRose.Triggers.Trigger`: A trigger detecting those areas.
+
+Automatic areas are, in the end, `Area2D` objects that _must be children_ of
+entities (`AlephVault__WindRose.Maps.MapEntity`), and typically only one of
+those objects per entity. Defining the shape is not needed, as only rectangular
+shapes are supported (and this works as expected in isometric layouts as well:
+they're not actually _rectangles_ because the view is isometric, but logically
+they will collide according to their rectangular position) and the shape setup
+is automatic considering the entity size and the map's cell size.
+
+Other than that, they work as regular `Area2D` objects:
+
+1. They need a proper setup of layer and mask, and users may want specific values
+   there, so that collisions are not triggered under certain conditions.
+2. They will cause events on other `Area2D` objects / be caused those events (i.e.
+   signals like `area_entered(a: Area2D)` and so).
+
+However, they _don't_ need to have, preliminary, any `CollisionShape2D` object to
+be created for them as child, since they create and properly setup an object of
+that type automatically (unless users want an explicitly extra shape object to be
+added to that `Area2D` object).
+
+Objects of type `EntityArea2D` make little to no sense if no other `Area2D` objects
+are there to receive events for their collisions. Also, while tracking any other
+`Area2D` object is straightforward, tracking objects that are specifically entities
+(`AlephVault__WindRose.Maps.MapEntity`) _of the same map_ is not always that trivial,
+since there are many events and things that may happen / changes that may occur in
+the object (in terms of objects being attached / detached from maps or `Area2D` ones
+which move from one entity to the other). So the `Trigger` class has special features:
+it detects any `Area2D` object as always, but it forwards events related to entities
+(which will be direct parents of those `Area2D` objects) that are detected, if it is
+the case, and only if those entities belong to the same map.
+
+So, in order to work with `Trigger` (`AlephVault__WindRose.Triggers.Trigger`) objects,
+the developer must understand that they're actually `EntityArea2D` objects with more
+features: those in charge of detecting the associated `MapEntity` objects which are
+parents of any `Area2D` object being detected, if and only if those entities belong
+to the same map of the trigger. Then, two options:
+
+1. Create a subclass of the trigger and override some default methods. Consider this
+   as an example (this is actually `AlephVault__WindRose.Triggers.Dummy`'s contents):
+
+   ```
+   extends AlephVault__WindRose.Triggers.Trigger
+
+   func _entity_entered(e: AlephVault__WindRose.Maps.MapEntity):
+       print('Entity entered:', e.name)
+
+   func _entity_staying(e: AlephVault__WindRose.Maps.MapEntity):
+       print('Entity staying:', e.name)
+
+   func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
+       print('Entity moved:', e.name)
+
+   func _entity_left(e: AlephVault__WindRose.Maps.MapEntity):
+       print('Entity exited:', e.name)
+   ```
+   
+2. Do not create a subclass, but connect callbacks to the signals with the same names,
+   without underscores: `entity_entered`, `entity_staying`, `entity_moved`, `entity_left`.
+   All the signals have one single parameter being the involved map entity object.
+
+The meaning of the signals or methods (respectively - they go together) is this:
+
+1. `entity_entered` is triggered only once per interaction. The entity started being
+   detected by the `Trigger`, satisfying all the conditions: `layer` matching trigger's
+   `mask`, object being in scene tree, parent being `MapEntity`, and object being in the
+   same map.
+2. `entity_staying` is triggered on each frame (this related to `_process` in the `Trigger`)
+   after the `entity_entered`-related event.
+3. `entity_moved` is triggered after the `entity_entered`-related event, but only when the
+   entity finished a movement (this is ultimately implemented via the `on_movement_finished`
+   signal of the entity).
+4. `entity_left` is triggered only once per interaction. The entity ended being detected
+   by the `Trigger` because one of the conditions stopped being satisfied (`layer` not
+   matching `mask` anymore, or either of the entities is leaving the tree or the map).
+
+The order of the events is exactly that, but `entity_event` occurs once, `entity_staying`
+occurs once per frame, `entity_moved` occurs only on movement finishes, and `entity_left`
+occurs only once. After this cycle, somewhere in the future, perhaps a new interaction
+starts out of the entity being detected again (thus starting again with `entity_event`
+and repeating the cycle in the same way).
+
+Also, on each event, both signals and overrides can coexist. In this case:
+
+1. The signal `entity_xxxx` is emitted first.
+2. Then, the callback `_entity_xxxx` is invoked.
+
+Finally, some notes about these triggers and areas: _They can be added statically or dynamically_,
+and will start / stop working in the exact way they're added / removed from their respectively
+parent objects. This works out of the box in the same way it works out of the box for the provided
+features in the engine about `Area2D` objects.
+
+The typical layout for this to work is, either statically or at runtime, have a structure like this:
+
+```
+Map: AlephVault__WindRose.Maps.Map
+    EntitiesLayer: AlephVault__WindRose.Maps.Layers.EntitiesLayer (actually, a sub-type described earlier)
+        SomeEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
+            SomeArea2D: AlephVault__WindRose.Triggers.EntityArea2D (typically, no setup is needed)
+        SomeTriggerEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
+            SomeTrigger: AlephVault__WindRose.Triggers.Trigger (actually, a sub-type or with some signal callbacks)
+    ... other map layers (e.g. properly, the floors) ...
+```
+
+And this example, if the layer / masks are matching pairs, will work out of the box when moving the entity
+across the map.
+
+_Please note: The `MapEntity` might need some editor setup, depending on the sub-type. The same applies to
+the entities layer. Also, if the chosen `Trigger` subclass has its own implementation, it might require its
+own setup in the edior - However, `EntityArea2D` by itself does not need any special setup by default._
+
