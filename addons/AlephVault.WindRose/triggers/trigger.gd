@@ -1,4 +1,4 @@
-extends Area2D
+extends AlephVault__WindRose.Triggers.EntityArea2D
 ## Triggers are a way to detect, in a WindRose-compatible way,
 ## the movement inside an area. This is intended so when the
 ## objects enter a trigger they may be affected in different
@@ -101,62 +101,6 @@ func __trigger_entity_left(entity):
 	entity_left.emit(entity)
 	_entity_left(entity)
 
-# #############################################
-# #############################################
-# ######## Entity life-cycle invariant ########
-# ######## Calls: __setup / __teardown ########
-# #############################################
-# #############################################
-
-var _map_entity: AlephVault__WindRose.Maps.MapEntity
-
-func _enter_tree() -> void:
-	var parent = get_parent()
-	if parent is AlephVault__WindRose.Maps.MapEntity:
-		_map_entity = parent
-		__entity_set(_map_entity)
-
-func _exit_tree() -> void:
-	if _map_entity:
-		var e = _map_entity
-		_map_entity = null
-		__entity_cleared(e)
-
-func __entity_set(e: AlephVault__WindRose.Maps.MapEntity):
-	if not e.rule.signals.on_attached.is_connected(__entity_on_attached):
-		e.rule.signals.on_attached.connect(__entity_on_attached)
-	if not e.rule.signals.on_detached.is_connected(__entity_on_detached):
-		e.rule.signals.on_detached.connect(__entity_on_detached)
-	if e.current_map != null:
-		__setup()
-	
-func __entity_cleared(e: AlephVault__WindRose.Maps.MapEntity):
-	if e.rule.signals.on_attached.is_connected(__entity_on_attached):
-		e.rule.signals.on_attached.disconnect(__entity_on_attached)
-	if e.rule.signals.on_detached.is_connected(__entity_on_detached):
-		e.rule.signals.on_detached.disconnect(__entity_on_detached)
-	__teardown()
-
-func __entity_on_attached(em, pos):
-	__setup()
-
-func __entity_on_detached():
-	__teardown()
-
-# #############################################
-# #############################################
-# ########   In-map entity invariant   ########
-# #############################################
-# #############################################
-
-const _Shape = preload("./base_trigger_shape.gd")
-
-var __shape: _Shape
-
-func __setup_later():
-	await get_tree().process_frame
-	__setup()
-
 func __setup():
 	"""
 	This method is executed when this object becomes
@@ -164,25 +108,7 @@ func __setup():
 	all the conditions become met by this point).
 	"""
 
-	# Under certain conditions, the .current_map of
-	# the entity is not set (e.g. if the on_attached
-	# callback is registered BEFORE the entity's one,
-	# mainly because this object is earlier in the
-	# tree before the entity has initialized in first
-	# place) then let's delay this function to be
-	# invoked later.
-	if _map_entity.current_map == null:
-		__setup_later()
-		return
-	
-	if is_instance_valid(__shape):
-		__shape.queue_free()
-	__shape = _Shape.new()
-	__shape.update_shape_contents(
-		_map_entity.current_map.layout.layout_type,
-		_map_entity.size, _map_entity.current_map.layout.cell_size
-	)
-	add_child(__shape)
+	super.__setup()
 	__start_registry()
 
 func __teardown():
@@ -192,9 +118,7 @@ func __teardown():
 	map (i.e. ANY of those conditions is broken).
 	"""
 
-	if is_instance_valid(__shape):
-		__shape.queue_free()
-	__shape = null
+	super.__teardown()
 	__stop_registry()
 
 func _process(delta):
@@ -307,6 +231,7 @@ func __tick(e: AlephVault__WindRose.Maps.MapEntity):
 		__trigger_entity_staying(e)
 
 func __add_element(e: Node2D):
+	print("Adding element:", e.name)
 	if not __registry_elements.has(e):
 		# First, create the record for this
 		# element being added.
@@ -337,6 +262,7 @@ func __add_element(e: Node2D):
 func __remove_element(e: Node2D):
 	if not __registry_elements.has(e):
 		return
+	print("Removing element:", e.name)
 	var existing: ElementRecord = __registry_elements[e]
 	if is_instance_valid(e) and e.tree_exited.is_connected(existing.exited_tree):
 		e.tree_exited.disconnect(existing.exited_tree)

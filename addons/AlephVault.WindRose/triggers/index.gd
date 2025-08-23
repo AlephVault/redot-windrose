@@ -1,4 +1,5 @@
 extends Object
 
-const BaseTrigger = preload("./base_trigger.gd")
+const EntityArea2D = preload('./entity_area_2d.gd')
+const Trigger = preload("./trigger.gd")
 const Dummy = preload("./dummy.gd")

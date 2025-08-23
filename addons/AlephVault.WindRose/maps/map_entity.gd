@@ -176,6 +176,7 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 	if manager is _MapEM:
 		# The manager is already assigned to the entity.
 		# So we must, now, re-parent the object properly.
+		_current_map = manager.layer.map
 		if self.get_parent() != null:
 			self.reparent(manager.layer)
 		else:
@@ -185,7 +186,6 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		rotation = 0
 		_origin = position
 		_snap()
-		_current_map = manager.layer.map
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()

@@ -1,4 +1,4 @@
-extends AlephVault__WindRose.Triggers.BaseTrigger
+extends AlephVault__WindRose.Triggers.Trigger
 
 
 func _entity_entered(e: AlephVault__WindRose.Maps.MapEntity):
