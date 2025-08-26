@@ -24,10 +24,6 @@ func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
 	if not _is_fully_contained(e):
 		return
 	
-	var target: AlephVault__WindRose.Maps.MapEntity = _get_teleport_target()
-	if target == null or target.current_map == null:
-		return
-	
 	var delta: Vector2i = e.cell - map_entity.cell
 	_do_teleport(e, delta)
 
@@ -48,8 +44,10 @@ func _do_teleport(
 	e: AlephVault__WindRose.Maps.MapEntity,
 	delta: Vector2i
 ):
-	var target: AlephVault__WindRose.Maps.MapEntity = _get_teleport_target()
-	if e.current_map == target.current_map:
+	var target: AlephVault__WindRose.Maps.MapEntity = await _get_teleport_target()
+	if target == null or target.current_map == null:
+		return
+	elif e.current_map == target.current_map:
 		e.teleport(target.cell + delta)
 	else:
 		await _before_teleport(e)
