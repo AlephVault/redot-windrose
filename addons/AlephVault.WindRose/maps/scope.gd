@@ -6,6 +6,9 @@ const _Response = _ExceptionUtils.Response
 const _World = AlephVault__WindRose.Maps.World
 const _Map = AlephVault__WindRose.Maps.Map
 
+@export
+var _initial_key: String = ""
+
 var _key: String = ""
 var _world: _World = null
 var _maps: Dictionary = {}
@@ -41,6 +44,11 @@ func appoint(world: _World, key: String) -> _Response:
 	if response.is_successful():
 		_world = world
 		_key = key
+		var parent = get_parent()
+		if parent == null:
+			world.add_child(self)
+		elif parent != world:
+			reparent(world)
 	return response
 
 ## Drops from the currently attached world.
@@ -64,6 +72,13 @@ func _add_map(map: _Map, index: int) -> _Response:
 ## Gets a map by its index, or null.
 func get_map(index: int) -> _Map:
 	return _maps.get(index)
+
+func _enter_tree() -> void:
+	var parent = get_parent()
+	_initial_key = _initial_key.strip_edges()
+	if parent != _world and parent is AlephVault__WindRose.Maps.World and _initial_key != "":
+		appoint(parent, _initial_key)
+		_initial_key = ""
 
 func _exit_tree() -> void:
 	if _world != null:

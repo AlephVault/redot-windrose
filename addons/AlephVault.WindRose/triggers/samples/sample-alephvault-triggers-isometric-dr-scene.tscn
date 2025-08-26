@@ -1,3 +1,8 @@
-[gd_scene format=3 uid="uid://by63wrpsrrtj5"]
+[gd_scene load_steps=2 format=3 uid="uid://by63wrpsrrtj5"]
 
-[node name="Sample-alephvault-triggers-isometric-dr-scene" type="Node2D"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/world.gd" id="1_qcyhi"]
+
+[node name="Sample" type="Node2D"]
+
+[node name="World" type="Node2D" parent="."]
+script = ExtResource("1_qcyhi")
