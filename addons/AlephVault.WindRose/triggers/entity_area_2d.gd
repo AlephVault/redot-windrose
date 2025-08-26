@@ -15,6 +15,15 @@ extends Area2D
 
 var _map_entity: AlephVault__WindRose.Maps.MapEntity
 
+## The current entity this is trigger relates to.
+var map_entity: AlephVault__WindRose.Maps.MapEntity:
+	get:
+		return _map_entity
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Trigger", "map_entity"
+		)
+
 func _enter_tree() -> void:
 	var parent = get_parent()
 	if parent is AlephVault__WindRose.Maps.MapEntity:
