@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dj4kv4erlrsj3"]
+[gd_scene load_steps=7 format=3 uid="uid://dj4kv4erlrsj3"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/world.gd" id="1_uajio"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/scope.gd" id="2_3ui2i"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="3_rdo80"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="4_o2hnq"]
+[ext_resource type="TileSet" uid="uid://yajgalja40rp" path="res://addons/AlephVault.WindRose/triggers/samples/sample-alephvault-triggers-isometric-dd-tileset.tres" id="5_wdfic"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/entities_layer.gd" id="6_3hg43"]
 
 [node name="Sample" type="Node2D"]
 
@@ -12,10 +16,66 @@ script = ExtResource("1_uajio")
 script = ExtResource("2_3ui2i")
 _initial_key = "scope-1"
 
+[node name="Map11" type="Node2D" parent="World/Scope1"]
+script = ExtResource("3_rdo80")
+
+[node name="FloorLayer" type="Node2D" parent="World/Scope1/Map11"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("4_o2hnq")
+
+[node name="Floor" type="TileMapLayer" parent="World/Scope1/Map11/FloorLayer"]
+tile_set = ExtResource("5_wdfic")
+
+[node name="EntitiesLayer" type="Node2D" parent="World/Scope1/Map11"]
+script = ExtResource("6_3hg43")
+
 [node name="Scope2" type="Node2D" parent="World"]
 script = ExtResource("2_3ui2i")
 _initial_key = "scope-2"
 
+[node name="Map21" type="Node2D" parent="World/Scope2"]
+script = ExtResource("3_rdo80")
+
+[node name="FloorLayer" type="Node2D" parent="World/Scope2/Map21"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("4_o2hnq")
+
+[node name="Floor" type="TileMapLayer" parent="World/Scope2/Map21/FloorLayer"]
+tile_set = ExtResource("5_wdfic")
+
+[node name="EntitiesLayer" type="Node2D" parent="World/Scope2/Map21"]
+script = ExtResource("6_3hg43")
+
+[node name="Map22" type="Node2D" parent="World/Scope2"]
+script = ExtResource("3_rdo80")
+
+[node name="FloorLayer" type="Node2D" parent="World/Scope2/Map22"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("4_o2hnq")
+
+[node name="Floor" type="TileMapLayer" parent="World/Scope2/Map22/FloorLayer"]
+tile_set = ExtResource("5_wdfic")
+
+[node name="EntitiesLayer" type="Node2D" parent="World/Scope2/Map22"]
+script = ExtResource("6_3hg43")
+
 [node name="Scope3" type="Node2D" parent="World"]
 script = ExtResource("2_3ui2i")
 _initial_key = "scope-3"
+
+[node name="Map31" type="Node2D" parent="World/Scope3"]
+script = ExtResource("3_rdo80")
+
+[node name="FloorLayer" type="Node2D" parent="World/Scope3/Map31"]
+z_index = 10
+position = Vector2(-16, 0)
+script = ExtResource("4_o2hnq")
+
+[node name="Floor" type="TileMapLayer" parent="World/Scope3/Map31/FloorLayer"]
+tile_set = ExtResource("5_wdfic")
+
+[node name="EntitiesLayer" type="Node2D" parent="World/Scope3/Map31"]
+script = ExtResource("6_3hg43")
