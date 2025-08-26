@@ -1,8 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://by63wrpsrrtj5"]
+[gd_scene load_steps=3 format=3 uid="uid://by63wrpsrrtj5"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/world.gd" id="1_qcyhi"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/scope.gd" id="2_xthes"]
 
 [node name="Sample" type="Node2D"]
 
 [node name="World" type="Node2D" parent="."]
 script = ExtResource("1_qcyhi")
+
+[node name="Scope1" type="Node2D" parent="World"]
+script = ExtResource("2_xthes")
+_initial_key = "scope-1"
+
+[node name="Scope2" type="Node2D" parent="World"]
+script = ExtResource("2_xthes")
+_initial_key = "scope-2"
+
+[node name="Scope3" type="Node2D" parent="World"]
+script = ExtResource("2_xthes")
+_initial_key = "scope-3"
