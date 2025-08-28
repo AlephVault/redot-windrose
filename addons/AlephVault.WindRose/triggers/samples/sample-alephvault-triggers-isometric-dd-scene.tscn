@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://dj4kv4erlrsj3"]
+[gd_scene load_steps=11 format=4 uid="uid://dj4kv4erlrsj3"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/world.gd" id="1_uajio"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/scope.gd" id="2_3ui2i"]
@@ -7,6 +7,7 @@
 [ext_resource type="TileSet" uid="uid://yajgalja40rp" path="res://addons/AlephVault.WindRose/triggers/samples/sample-alephvault-triggers-isometric-dd-tileset.tres" id="5_wdfic"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/entities_layer.gd" id="6_3hg43"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/map_entity.gd" id="7_nerlc"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/teleports/simple_teleport.gd" id="8_q80lv"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="8_x2hgl"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/samples/sample-aleph-vault-triggers-controller.gd" id="9_o1bey"]
 
@@ -37,6 +38,27 @@ tile_set = ExtResource("5_wdfic")
 [node name="EntitiesLayer" type="Node2D" parent="World/Scope1/Map11"]
 script = ExtResource("6_3hg43")
 
+[node name="TeleportTo21" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer"]
+position = Vector2(-64, 32)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo21"]
+script = ExtResource("8_q80lv")
+target_scope_key = "scope-2"
+target_map_index = 0
+target_name = "TeleportTo11"
+
+[node name="TeleportTo22" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer"]
+position = Vector2(0, 64)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
+script = ExtResource("8_q80lv")
+target = NodePath("../../../../../Scope2/Map22/EntitiesLayer/TeleportTo12")
+target_map_index = 0
+
 [node name="Scope2" type="Node2D" parent="World"]
 script = ExtResource("2_3ui2i")
 _initial_key = "scope-2"
@@ -59,6 +81,39 @@ tile_set = ExtResource("5_wdfic")
 [node name="EntitiesLayer" type="Node2D" parent="World/Scope2/Map21"]
 script = ExtResource("6_3hg43")
 
+[node name="TeleportTo11" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer"]
+position = Vector2(64, 32)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo11"]
+script = ExtResource("8_q80lv")
+target_scope_key = "scope-1"
+target_map_index = 0
+target_name = "TeleportTo21"
+
+[node name="TeleportTo22" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer"]
+position = Vector2(32, 48)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo22"]
+script = ExtResource("8_q80lv")
+target_scope_key = "scope-2"
+target_map_index = 1
+target_name = "TeleportTo21"
+
+[node name="TeleportTo23" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer"]
+position = Vector2(0, 64)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo23"]
+script = ExtResource("8_q80lv")
+target_scope_key = "scope-3"
+target_map_index = 0
+target_name = "TeleportTo21"
+
 [node name="Map22" type="Node2D" parent="World/Scope2"]
 position = Vector2(552, 238)
 script = ExtResource("3_rdo80")
@@ -76,6 +131,32 @@ tile_set = ExtResource("5_wdfic")
 
 [node name="EntitiesLayer" type="Node2D" parent="World/Scope2/Map22"]
 script = ExtResource("6_3hg43")
+
+[node name="TeleportTo12" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer"]
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo12" node_paths=PackedStringArray("target")]
+script = ExtResource("8_q80lv")
+target = NodePath("../../../../../Scope1/Map11/EntitiesLayer/TeleportTo22")
+
+[node name="TeleportTo21" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer"]
+position = Vector2(-32, 16)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo21" node_paths=PackedStringArray("target")]
+script = ExtResource("8_q80lv")
+target = NodePath("../../../../Map21/EntitiesLayer/TeleportTo22")
+
+[node name="TeleportTo31" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer"]
+position = Vector2(-64, 32)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo31" node_paths=PackedStringArray("target")]
+script = ExtResource("8_q80lv")
+target = NodePath("../../../../../Scope3/Map31/EntitiesLayer/TeleportTo22")
 
 [node name="Scope3" type="Node2D" parent="World"]
 script = ExtResource("2_3ui2i")
@@ -98,6 +179,25 @@ tile_set = ExtResource("5_wdfic")
 
 [node name="EntitiesLayer" type="Node2D" parent="World/Scope3/Map31"]
 script = ExtResource("6_3hg43")
+
+[node name="TeleportTo21" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer"]
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo21"]
+script = ExtResource("8_q80lv")
+target_scope_key = "scope-2"
+target_map_index = 0
+target_name = "TeleportTo31"
+
+[node name="TeleportTo22" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer"]
+position = Vector2(64, 32)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+
+[node name="Trigger" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
+script = ExtResource("8_q80lv")
+target = NodePath("../../../../../Scope2/Map22/EntitiesLayer/TeleportTo31")
 
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
