@@ -2,6 +2,11 @@ extends AlephVault__WindRose.Triggers.Trigger
 ## Teleporters are a way to teleport objects across
 ## the same map or different maps.
 
+# Entities that are outsiders are entities that move
+# into the teleport by walking (instead of by being
+# teleported to this position).
+var _is_outsider: Dictionary = {}
+
 ## Returns the teleport target. If it is null, then
 ## no teleport will be performed.
 func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
@@ -21,11 +26,25 @@ func _is_fully_contained(e: AlephVault__WindRose.Maps.MapEntity) -> bool:
 # and, if matching completely, will be teleported to
 # a relevant position in the target.
 func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
-	if not _is_fully_contained(e):
+	if not _is_fully_contained(e) or not _is_outsider.get(e, false):
 		return
 	
 	var delta: Vector2i = e.cell - map_entity.cell
 	_do_teleport(e, delta)
+
+func _entity_spotted(e: AlephVault__WindRose.Maps.MapEntity):
+	# If the entity is not fully contained,
+	# this means it has not been spawned
+	# into the teleporter. Mark it as able
+	# to be teleported when fully contained.
+	if not _is_fully_contained(e):
+		_is_outsider[e] = true
+
+func _entity_left(e: AlephVault__WindRose.Maps.MapEntity):
+	# Clear any _is_outsider flag, as it
+	# is leaving, even if not teleporting.
+	if _is_outsider.has(e):
+		_is_outsider.erase(e)
 
 ## Implement this custom callback to do something before
 ## the teleport takes place. Typically, this method is
