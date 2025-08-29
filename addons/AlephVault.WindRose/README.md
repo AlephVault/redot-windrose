@@ -276,7 +276,8 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
 - `initial_position: Vector2i`: If this position is set both components to non-negative values, and the
   entity is being initialized in a map (this only makes sense when setting this up statically in the editor,
   not when creating the entity dynamically), then this position is used for the entity to be attached.
-  At runtime, this property is read-only.
+  At runtime, this property is read-only. If you don't set the initial position, then a best guess will be
+  done for the in-space position to calculate the in-map position.
 - `orientation: AlephVault__WindRose.Utils.DirectionUtils.Direction`: Sets or returns the orientation of
   this entity. The signal `orientation_changed` is triggered with the new direction on assignment.
 - `signal orientation_changed(AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A signal triggered when
