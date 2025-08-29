@@ -42,8 +42,9 @@ script = ExtResource("6_3hg43")
 position = Vector2(-64, 32)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(0, 4)
 
-[node name="Trigger" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo21"]
+[node name="Trigger" type="Area2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo21"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-2"
 target_map_index = 0
@@ -53,8 +54,9 @@ target_name = "TeleportTo11"
 position = Vector2(0, 64)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(4, 4)
 
-[node name="Trigger" type="Node2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
+[node name="Trigger" type="Area2D" parent="World/Scope1/Map11/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../../Scope2/Map22/EntitiesLayer/TeleportTo12")
 target_map_index = 0
@@ -85,8 +87,9 @@ script = ExtResource("6_3hg43")
 position = Vector2(64, 32)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(4, 0)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo11"]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo11"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-1"
 target_map_index = 0
@@ -96,8 +99,9 @@ target_name = "TeleportTo21"
 position = Vector2(32, 48)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(4, 2)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo22"]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo22"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-2"
 target_map_index = 1
@@ -107,8 +111,9 @@ target_name = "TeleportTo21"
 position = Vector2(0, 64)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(4, 4)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo23"]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo23"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-3"
 target_map_index = 0
@@ -135,8 +140,9 @@ script = ExtResource("6_3hg43")
 [node name="TeleportTo12" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer"]
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(0, 0)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo12" node_paths=PackedStringArray("target")]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo12" node_paths=PackedStringArray("target")]
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../../Scope1/Map11/EntitiesLayer/TeleportTo22")
 
@@ -144,8 +150,9 @@ target = NodePath("../../../../../Scope1/Map11/EntitiesLayer/TeleportTo22")
 position = Vector2(-32, 16)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(0, 2)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo21" node_paths=PackedStringArray("target")]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo21" node_paths=PackedStringArray("target")]
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../Map21/EntitiesLayer/TeleportTo22")
 
@@ -153,8 +160,9 @@ target = NodePath("../../../../Map21/EntitiesLayer/TeleportTo22")
 position = Vector2(-64, 32)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(0, 4)
 
-[node name="Trigger" type="Node2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo31" node_paths=PackedStringArray("target")]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map22/EntitiesLayer/TeleportTo31" node_paths=PackedStringArray("target")]
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../../Scope3/Map31/EntitiesLayer/TeleportTo22")
 
@@ -183,8 +191,9 @@ script = ExtResource("6_3hg43")
 [node name="TeleportTo21" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer"]
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(0, 0)
 
-[node name="Trigger" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo21"]
+[node name="Trigger" type="Area2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo21"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-2"
 target_map_index = 0
@@ -194,8 +203,9 @@ target_name = "TeleportTo31"
 position = Vector2(64, 32)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
+_initial_position = Vector2i(4, 0)
 
-[node name="Trigger" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
+[node name="Trigger" type="Area2D" parent="World/Scope3/Map31/EntitiesLayer/TeleportTo22" node_paths=PackedStringArray("target")]
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../../Scope2/Map22/EntitiesLayer/TeleportTo31")
 

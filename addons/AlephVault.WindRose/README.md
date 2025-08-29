@@ -273,6 +273,10 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   corner of the entity.
 - `cellf: Vector2i`: If the object is 1x1, this is the same `cell` value. If the object is not 1x1, this
   is the coordinate of the opposite corner (bottom-right) of the entity in the map.
+- `initial_position: Vector2i`: If this position is set both components to non-negative values, and the
+  entity is being initialized in a map (this only makes sense when setting this up statically in the editor,
+  not when creating the entity dynamically), then this position is used for the entity to be attached.
+  At runtime, this property is read-only.
 - `orientation: AlephVault__WindRose.Utils.DirectionUtils.Direction`: Sets or returns the orientation of
   this entity. The signal `orientation_changed` is triggered with the new direction on assignment.
 - `signal orientation_changed(AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A signal triggered when

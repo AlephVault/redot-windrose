@@ -135,7 +135,9 @@ func initialize():
 			if obj is AlephVault__WindRose.Maps.MapEntity:
 				obj.initialize()
 				if obj.current_map == null:
-					var cell = map.layout.local_to_map(obj.position)
+					var cell = map.layout.local_to_map(obj.position) \
+						if obj.initial_position.x < 0 or obj.initial_position.y < 0 else \
+						obj.initial_position
 					var result = manager.attach(
 						obj.entity, cell
 					)

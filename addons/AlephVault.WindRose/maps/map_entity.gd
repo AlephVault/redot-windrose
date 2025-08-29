@@ -115,6 +115,19 @@ var cellf: Vector2i:
 			"MapEntity", "cellf"
 		)
 
+## The initial position. Set it to values
+## greater than 0 in both components to
+## make it sure the entity is properly
+## placed on static initialization.
+@export var _initial_position: Vector2i = Vector2i(-1, -1)
+
+var initial_position: Vector2i:
+	get:
+		return _initial_position
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "initial_position"
+		)
 ## The current orientation.
 @export var orientation: _Direction = _Direction.DOWN:
 	get:
@@ -268,7 +281,9 @@ func initialize():
 	   _parent is AlephVault__WindRose.Maps.Layers.EntitiesLayer:
 		if not _parent.initialized:
 			return
-		var cell = _parent2.layout.local_to_map(position)
+		var cell = _parent2.layout.local_to_map(position) \
+			if _initial_position.x < 0 or _initial_position.y < 0 else \
+			_initial_position
 		var result = _parent.manager.attach(
 			entity, cell
 		)
