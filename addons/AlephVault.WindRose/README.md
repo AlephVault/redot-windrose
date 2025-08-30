@@ -1000,3 +1000,81 @@ _Please note: The `MapEntity` might need some editor setup, depending on the sub
 the entities layer. Also, if the chosen `Trigger` subclass has its own implementation, it might require its
 own setup in the edior - However, `EntityArea2D` by itself does not need any special setup by default._
 
+#### Teleporters
+
+Teleporters are a special kind of triggers which cause a teleport of an object:
+
+1. To another position in the same map.
+2. Somewhere in another map.
+3. Weird optional logic, like dynamically loading the map and then teleporting the object somewhere there.
+
+In particular, teleporters are subclasses of `AlephVault__WindRose.Triggers.Teleports.Teleport`. However,
+that class is abstract, to some extent, and users must define some inner behaviour there.
+
+The first thing to understand about teleports is that in order for a teleport to work:
+
+1. A proper target must be retrieved (this will be explained later) by the teleport trigger. It must be an
+   entity inside some map.
+2. An entity, the would-be teleported one, must be completely inside the area of the teleport trigger.
+3. That entity must have been outside prior to the teleport, somewhere. Otherwise, if a teleport is a big
+   area, an object may be found bouncing over and over between two reciprocal teleport triggers. So this
+   means that an object walking inside a teleporter while being teleported to that teleporter will not be
+   teleported agaun until it leaves the current teleporter's area first.
+
+This said, the behaviour to implement in children Teleport classes is this function:
+
+```
+func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
+    return (something)
+```
+
+In this case, the returned value must not be null and must have a `.current_map`, meaning that it must be
+in-scene and already attached to a map. If either condition is not satisfied by the returned target, then
+the teleport will silently not work (which might be desirable in some game scenarios).
+
+There's a particular, very simple, Teleport subclass: `AlephVault__WindRose.Triggers.Teleports.Teleport`.
+
+This class provides a particular implementation of the teleport's `_get_teleport_target` method and some
+editor-enabled fields to be set by the user. They come as follows:
+
+1. Target: While the editor supports any Node2D object, this will only work when the object is a `MapEntity`
+   object, valid instance, and belongs to a map (has `.current_map` distinct to null). In this case, then
+   the teleport will work against this target. Otherwise, the following 3 properties will be used to tell
+   what's the teleport target (it still must satisfy these conditions or the teleport will not work).
+2. Target Scope Key: The key of the scope (see `AlephVault__WindRose.Maps.Scope`) this map belongs to. If this
+   value is "" (empty string), then the same scope the map belogns to (if any) will be considered. Otherwise,
+   the teleport target must belong to a scope which in turn belongs to the same World this trigger's map's
+   scope belongs to, and has the specified key. If this is not the case, the teleport will not work.
+3. Target Map Index: The index of the map the target belongs to. If this value is -1, then the same map the
+   trigger belongs to will be considered. Otherwise, the teleport target must belong to a map in the same
+   scope the map of this trigger belongs to, and must have the specified map index. If this is not the case,
+   the teleport will not work.
+4. Target Name: It is the name of the node (as in the scene editor's hierarchy) that will be the target. If
+   no node satisfies this condition (given the proper Target Scope Key and Target Map Index), the teleport
+   will not work. Otherwise, that node will be retrieved. Again: the node must be an in-map `MapEntity`
+   object, valid instance, and belonging to the appropriate map given the lookup.
+
+This simple teleporter is more than enough for any in-editor-created scene, and many dynamic logics. However,
+this is not necessarily complete and any user may create their own Teleport subclasses where there are other
+needs for that `_get_teleport_target` function.
+
+The full set of functions that may be of interest when defining a Teleport subclass are these:
+
+```
+## This method retrieves the target of this teleport.
+func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
+    return (something)
+
+## Implement this custom callback to do something before
+## the teleport takes place. Typically, this method is
+## async and makes an animation or transition.
+func _before_teleport(e: AlephVault__WindRose.Maps.MapEntity):
+    pass
+
+## Implement this custom callback to do something after
+## the teleport takes place. Typically, this method is
+## async and makes an animation or transition.
+func _after_teleport(e: AlephVault__WindRose.Maps.MapEntity):
+    pass
+```
+

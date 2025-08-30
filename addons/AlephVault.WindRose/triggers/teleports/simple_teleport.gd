@@ -59,6 +59,8 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 	if is_instance_valid(target) and target is AlephVault__WindRose.Maps.MapEntity:
 		return target
 	var current_map = map_entity.current_map
+	if current_map == null:
+		return null
 	var scope_key: String = target_scope_key.strip_edges()
 	var map_index: int = target_map_index
 	var node_name: String = target_name.strip_edges()
@@ -84,6 +86,6 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 			node = current_map.get_world_map(scope_key, map_index).entities_layer.get_node(
 				node_name
 			)
-	if is_instance_valid(node) and node is AlephVault__WindRose.Maps.MapEntity:
+	if is_instance_valid(node) and node is AlephVault__WindRose.Maps.MapEntity and node.current_map != null:
 		return node
 	return null
