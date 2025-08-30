@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://dj4kv4erlrsj3"]
+[gd_scene load_steps=13 format=4 uid="uid://dj4kv4erlrsj3"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/world.gd" id="1_uajio"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/scope.gd" id="2_3ui2i"]
@@ -9,7 +9,9 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/dummy/map_entity.gd" id="7_nerlc"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/teleports/simple_teleport.gd" id="8_q80lv"]
 [ext_resource type="Texture2D" uid="uid://ch45h7l1epv3m" path="res://addons/AlephVault.WindRose/contrib/dummy/samples/isometric-sprite.png" id="8_x2hgl"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/dummy.gd" id="9_j52ei"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/samples/sample-aleph-vault-triggers-controller.gd" id="9_o1bey"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/entity_area_2d.gd" id="10_qpjo3"]
 
 [node name="Sample" type="Node2D"]
 
@@ -21,6 +23,7 @@ script = ExtResource("2_3ui2i")
 _initial_key = "scope-1"
 
 [node name="Map11" type="Node2D" parent="World/Scope1"]
+unique_name_in_owner = true
 position = Vector2(600, 150)
 script = ExtResource("3_rdo80")
 _index = 0
@@ -66,6 +69,7 @@ script = ExtResource("2_3ui2i")
 _initial_key = "scope-2"
 
 [node name="Map21" type="Node2D" parent="World/Scope2"]
+unique_name_in_owner = true
 position = Vector2(424, 174)
 script = ExtResource("3_rdo80")
 _index = 0
@@ -107,19 +111,20 @@ target_scope_key = "scope-2"
 target_map_index = 1
 target_name = "TeleportTo21"
 
-[node name="TeleportTo23" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer"]
+[node name="TeleportTo31" type="Node2D" parent="World/Scope2/Map21/EntitiesLayer"]
 position = Vector2(0, 64)
 script = ExtResource("7_nerlc")
 _size = Vector2i(2, 2)
 _initial_position = Vector2i(4, 4)
 
-[node name="Trigger" type="Area2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo23"]
+[node name="Trigger" type="Area2D" parent="World/Scope2/Map21/EntitiesLayer/TeleportTo31"]
 script = ExtResource("8_q80lv")
 target_scope_key = "scope-3"
 target_map_index = 0
 target_name = "TeleportTo21"
 
 [node name="Map22" type="Node2D" parent="World/Scope2"]
+unique_name_in_owner = true
 position = Vector2(552, 238)
 script = ExtResource("3_rdo80")
 _index = 1
@@ -171,6 +176,7 @@ script = ExtResource("2_3ui2i")
 _initial_key = "scope-3"
 
 [node name="Map31" type="Node2D" parent="World/Scope3"]
+unique_name_in_owner = true
 position = Vector2(376, 262)
 script = ExtResource("3_rdo80")
 _index = 0
@@ -209,6 +215,15 @@ _initial_position = Vector2i(4, 0)
 script = ExtResource("8_q80lv")
 target = NodePath("../../../../../Scope2/Map22/EntitiesLayer/TeleportTo31")
 
+[node name="Dummy" type="Node2D" parent="World/Scope3/Map31/EntitiesLayer"]
+position = Vector2(0, 32)
+script = ExtResource("7_nerlc")
+_size = Vector2i(2, 2)
+_initial_position = Vector2i(2, 2)
+
+[node name="Trigger" type="Area2D" parent="World/Scope3/Map31/EntitiesLayer/Dummy"]
+script = ExtResource("9_j52ei")
+
 [node name="Character11" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_nerlc")
@@ -217,6 +232,9 @@ speed = 18.0
 [node name="Sprite" type="Sprite2D" parent="Character11"]
 position = Vector2(0, 8)
 texture = ExtResource("8_x2hgl")
+
+[node name="Trigger" type="Area2D" parent="Character11"]
+script = ExtResource("10_qpjo3")
 
 [node name="Character12" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -232,6 +250,9 @@ texture = ExtResource("8_x2hgl")
 position = Vector2(16, 16)
 texture = ExtResource("8_x2hgl")
 
+[node name="Trigger" type="Area2D" parent="Character12"]
+script = ExtResource("10_qpjo3")
+
 [node name="Character21" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7_nerlc")
@@ -245,6 +266,9 @@ texture = ExtResource("8_x2hgl")
 [node name="Sprite2" type="Sprite2D" parent="Character21"]
 position = Vector2(-16, 16)
 texture = ExtResource("8_x2hgl")
+
+[node name="Trigger" type="Area2D" parent="Character21"]
+script = ExtResource("10_qpjo3")
 
 [node name="Character22" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -267,6 +291,9 @@ texture = ExtResource("8_x2hgl")
 [node name="Sprite4" type="Sprite2D" parent="Character22"]
 position = Vector2(0, 24)
 texture = ExtResource("8_x2hgl")
+
+[node name="Trigger" type="Area2D" parent="Character22"]
+script = ExtResource("10_qpjo3")
 
 [node name="Controller" type="Node2D" parent="."]
 script = ExtResource("9_o1bey")

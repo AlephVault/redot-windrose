@@ -71,19 +71,19 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 			# Look on the same scope, another map.
 			if current_map.scope == null:
 				return null
-			node = current_map.get_scope_map(map_index).get_node(node_name)
+			node = current_map.get_scope_map(map_index).entities_layer.get_node(node_name)
 	else:
 		if map_index < 0:
 			# Specifying the scope and not a valid
-			# map index results in failed lookup.
+			# map index results in failed lookup.s
 			return null
 		else:
 			# Look on a given scope and map.
 			if current_map.scope == null or current_map.scope.world == null:
 				return null
-			node = current_map.get_world_map(scope_key, map_index).get_node(
+			node = current_map.get_world_map(scope_key, map_index).entities_layer.get_node(
 				node_name
 			)
-	if is_instance_valid(target) and target is AlephVault__WindRose.Maps.MapEntity:
+	if is_instance_valid(node) and node is AlephVault__WindRose.Maps.MapEntity:
 		return node
 	return null

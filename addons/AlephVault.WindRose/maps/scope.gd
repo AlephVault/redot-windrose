@@ -56,7 +56,7 @@ func drop() -> _Response:
 	if _world == null:
 		return _Response.fail(_Exception.raise("not_appointed", "Not appointed to a world"))
 	_world._drop(key)
-	key = ""
+	_key = ""
 	_world = null
 	return _Response.succeed(null)
 

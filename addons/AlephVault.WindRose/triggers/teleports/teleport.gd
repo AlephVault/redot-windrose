@@ -19,8 +19,8 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 func _is_fully_contained(e: AlephVault__WindRose.Maps.MapEntity) -> bool:
 	return e.cell.x >= map_entity.cell.x and \
 		   e.cell.y >= map_entity.cell.y and \
-		   e.cellf.x <= map_entity.cell.x and \
-		   e.cellf.y <= map_entity.cell.y
+		   e.cellf.x <= map_entity.cellf.x and \
+		   e.cellf.y <= map_entity.cellf.y
 
 # Tells whether an entity is moved inside the teleport
 # and, if matching completely, will be teleported to
@@ -32,7 +32,7 @@ func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
 	var delta: Vector2i = e.cell - map_entity.cell
 	_do_teleport(e, delta)
 
-func _entity_spotted(e: AlephVault__WindRose.Maps.MapEntity):
+func _entity_entered(e: AlephVault__WindRose.Maps.MapEntity):
 	# If the entity is not fully contained,
 	# this means it has not been spawned
 	# into the teleporter. Mark it as able
