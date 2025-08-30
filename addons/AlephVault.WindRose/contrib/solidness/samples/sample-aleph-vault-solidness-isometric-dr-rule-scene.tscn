@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://jq4ra8m7nhm"]
+[gd_scene load_steps=9 format=4 uid="uid://jq4ra8m7nhm"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_vmwo4"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_fp7xc"]
@@ -6,10 +6,8 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="4_inl64"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_028r5"]
 [ext_resource type="Texture2D" uid="uid://pgxpjb06x15" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/isometric-sprite.png" id="6_t8wij"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/dummy.gd" id="7_5u88s"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-a.gd" id="7_yen16"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/samples/sample-aleph-vault-solidness-controller-b.gd" id="8_ar7nu"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose/triggers/entity_area_2d.gd" id="10_h577r"]
 
 [node name="Sample" type="Node2D"]
 
@@ -70,9 +68,6 @@ texture = ExtResource("6_t8wij")
 position = Vector2(80, 0)
 texture = ExtResource("6_t8wij")
 
-[node name="Trigger" type="Area2D" parent="Map/EntitiesLayer/Obstacle"]
-script = ExtResource("7_5u88s")
-
 [node name="ControllerA" type="Node2D" parent="."]
 script = ExtResource("7_yen16")
 
@@ -88,9 +83,6 @@ speed = 32.0
 position = Vector2(16, 0)
 texture = ExtResource("6_t8wij")
 
-[node name="Area2D" type="Area2D" parent="Character11a"]
-script = ExtResource("10_h577r")
-
 [node name="Character11b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_028r5")
@@ -99,9 +91,6 @@ speed = 32.0
 [node name="Sprite11" type="Sprite2D" parent="Character11b"]
 position = Vector2(16, 0)
 texture = ExtResource("6_t8wij")
-
-[node name="Area2D" type="Area2D" parent="Character11b"]
-script = ExtResource("10_h577r")
 
 [node name="Character12a" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -117,9 +106,6 @@ texture = ExtResource("6_t8wij")
 position = Vector2(32, -8)
 texture = ExtResource("6_t8wij")
 
-[node name="Area2D" type="Area2D" parent="Character12a"]
-script = ExtResource("10_h577r")
-
 [node name="Character12b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_028r5")
@@ -133,9 +119,6 @@ texture = ExtResource("6_t8wij")
 [node name="Sprite12" type="Sprite2D" parent="Character12b"]
 position = Vector2(32, -8)
 texture = ExtResource("6_t8wij")
-
-[node name="Area2D" type="Area2D" parent="Character12b"]
-script = ExtResource("10_h577r")
 
 [node name="Character21a" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -151,9 +134,6 @@ texture = ExtResource("6_t8wij")
 position = Vector2(32, 8)
 texture = ExtResource("6_t8wij")
 
-[node name="Area2D" type="Area2D" parent="Character21a"]
-script = ExtResource("10_h577r")
-
 [node name="Character21b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_028r5")
@@ -167,9 +147,6 @@ texture = ExtResource("6_t8wij")
 [node name="Sprite21" type="Sprite2D" parent="Character21b"]
 position = Vector2(32, 8)
 texture = ExtResource("6_t8wij")
-
-[node name="Area2D" type="Area2D" parent="Character21b"]
-script = ExtResource("10_h577r")
 
 [node name="Character22a" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -193,9 +170,6 @@ texture = ExtResource("6_t8wij")
 position = Vector2(48, 0)
 texture = ExtResource("6_t8wij")
 
-[node name="Area2D" type="Area2D" parent="Character22a"]
-script = ExtResource("10_h577r")
-
 [node name="Character22b" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_028r5")
@@ -217,6 +191,3 @@ texture = ExtResource("6_t8wij")
 [node name="Sprite22" type="Sprite2D" parent="Character22b"]
 position = Vector2(48, 0)
 texture = ExtResource("6_t8wij")
-
-[node name="Area2D" type="Area2D" parent="Character22b"]
-script = ExtResource("10_h577r")
