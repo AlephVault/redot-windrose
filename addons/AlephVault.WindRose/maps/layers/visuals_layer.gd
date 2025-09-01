@@ -7,6 +7,26 @@ extends AlephVault__WindRose.Maps.Layers.Layer
 class SubLayer extends Node2D:
 	pass
 
+# The initialized sub-layers of this layer.
+var _sub_layers: Array[SubLayer] = []
+
+# The callback to get the effective level for the
+# coordinates of the entity.
+var _get_level: Callable
+
+# The callback to get the effective sub-level for
+# the coordinates of the entity and the current
+# level computed in the other callback.
+var _get_sub_level: Callable
+
+# Pre-condition: By this point, the layer is fully
+# initialized so the _sub_layers exist.
+func _fix_level(v: VisualsContainer):
+	var l: int = _get_level.call(v._map_entity)
+	var l_: int = _get_sub_level.call(l, v._map_entity)
+	v.reparent(_sub_layers[l])
+	v.z_index = l_
+
 ## A container related to a MapEntity and container
 ## of its children of type MapEntityVisual.
 class VisualsContainer extends Node2D:
@@ -29,6 +49,60 @@ class VisualsContainer extends Node2D:
 		for child in get_children():
 			if child is AlephVault__WindRose.Maps.MapEntityVisual:
 				child.resume()
+	
+	## Binds this object to a new entity.
+	func bind_entity(e: AlephVault__WindRose.Maps.MapEntity):
+		if not is_instance_valid(e) or is_instance_valid(_map_entity):
+			return
+		var map: AlephVault__WindRose.Maps.Map = e.current_map
+		if not is_instance_valid(map):
+			return
+		var layer: AlephVault__WindRose.Maps.Layers.VisualsLayer = map.visuals_layer
+		if not is_instance_valid(layer):
+			return
+		
+		var s = self
+		var on_movement_finished: Callable = func(
+			from_position: Vector2i, to_position: Vector2i,
+			direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+		):
+			layer._fix_level(s)
+		var on_teleported: Callable = func(
+			from_position: Vector2i, to_position: Vector2i
+		):
+			layer._fix_level(s)
+		var on_exit_tree: Callable
+		on_exit_tree = func():
+			# Reparent the children of this object to the
+			# parent entity. Then, destroy this object.
+			# Also, disconnect this callback.
+			if is_instance_valid(e):
+				for c in get_children():
+					if c is AlephVault__WindRose.Maps.MapEntityVisual:
+						c.reparent(e)
+			else:
+				for c in get_children():
+					if c is AlephVault__WindRose.Maps.MapEntityVisual:
+						c.queue_free()
+			e.tree_exiting.disconnect(on_exit_tree)
+			e.rule.signals.on_movement_finished.disconnect(on_movement_finished)
+			e.rule.signals.on_teleported.disconnect(on_teleported)
+			_map_entity = null
+			s.queue_free()
+
+		# Connect the tree_exiting, on_movement_finished and on_teleported callbacks.
+		e.tree_exiting.connect(on_exit_tree)
+		e.rule.signals.on_teleported.connect(on_teleported)
+		e.rule.signals.on_movement_finished.connect(on_movement_finished)
+		# Assign the proper entity.
+		_map_entity = e
+		# Also, grab the entity's children and put them
+		# right here.
+		for c in e.get_children():
+			if c is AlephVault__WindRose.Maps.MapEntityVisual:
+				c.reparent(e)
+		# Finally, set this object to the proper position.
+		layer._fix_level(self)
 
 # Whether it's initialized or not.
 var _initialized: bool = false
@@ -41,18 +115,6 @@ var initialized: bool:
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"VisualsLayer", "initialized"
 		)
-
-# The initialized sub-layers of this layer.
-var _sub_layers: Array[SubLayer] = []
-
-# The callback to get the effective level for the
-# coordinates of the entity.
-var _get_level: Callable
-
-# The callback to get the effective sub-level for
-# the coordinates of the entity and the current
-# level computed in the other callback.
-var _get_sub_level: Callable
 
 ## Initializes this visuals layer (e.g. the size
 ## and sub-layers associated to this visuals layer
