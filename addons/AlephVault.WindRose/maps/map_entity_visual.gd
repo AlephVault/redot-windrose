@@ -3,3 +3,14 @@ extends Sprite2D
 ## behaviour and is attached to an entity. Entities
 ## can have many of these objects as representations
 ## (e.g. character shapes, effects, overlays, ...).
+
+func _process(delta):
+	position = Vector2.ZERO
+
+## pauses any animation logic.
+func pause():
+	pass
+
+## Resumes any animation logic.
+func resume():
+	pass

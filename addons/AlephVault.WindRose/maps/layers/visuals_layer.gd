@@ -7,6 +7,29 @@ extends AlephVault__WindRose.Maps.Layers.Layer
 class SubLayer extends Node2D:
 	pass
 
+## A container related to a MapEntity and container
+## of its children of type MapEntityVisual.
+class VisualsContainer extends Node2D:
+	var _map_entity: AlephVault__WindRose.Maps.MapEntity
+	
+	func _process(delta):
+		if _map_entity != null:
+			global_position = _map_entity.global_position
+	
+	## Pauses this object's visual animation
+	## by pausing children's visual animations.
+	func pause():
+		for child in get_children():
+			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+				child.pause()
+	
+	## Resumes this object's visual animation
+	## by resuming children's visual animations.
+	func resume():
+		for child in get_children():
+			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+				child.resume()
+
 # Whether it's initialized or not.
 var _initialized: bool = false
 
@@ -74,12 +97,14 @@ func initialize():
 		_get_level = l
 		_get_sub_level = l_
 		_sub_layers.clear()
+		var pivot: int = min(0, 4096 - L)
 		for index in range(L):
 			var node = SubLayer.new()
 			node.name = "SubLevel-" + str(index)
+			node.position = Vector2(0, 0)
+			node.z_index = pivot + index
 			_sub_layers.append(node)
 			add_child(node)
-			node.position = Vector2(0, 0)
 
 ## We leave the _z_index in 50 here, explicitly.
 ## We leave space for few layers under the feet
