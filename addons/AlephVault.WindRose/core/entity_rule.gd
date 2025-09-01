@@ -30,10 +30,10 @@ class Signals:
 		from_position: Vector2i, reverted_position: Vector2i,
 		direction: _Direction
 	)
-	## Signal telling a teleport occurred.
 	signal _on_teleported_internal(
 		from_position: Vector2i, to_position: Vector2i
 	)
+	## Signal telling a teleport occurred.
 	signal on_teleported(
 		from_position: Vector2i, to_position: Vector2i
 	)
