@@ -95,6 +95,17 @@ var manager: Manager:
 			"EntitiesLayer", "manager"
 		)
 
+var _paused: bool
+
+## Whether this entities layer is paused or not.
+var paused: bool:
+	get:
+		return _paused
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"EntitiesLayer", "paused"
+		)
+
 ## Whether to ensure that, locally, the rules
 ## are bypassed (useful for stuff like online
 ## games where the truth is server-side).
@@ -131,6 +142,10 @@ func initialize():
 		_manager = Manager.new(self, rule, bypass)
 		_manager.initialize()
 		_initialized = true
+		if _map.paused:
+			pause()
+		else:
+			resume()
 		for obj in get_children():
 			if obj is AlephVault__WindRose.Maps.MapEntity:
 				obj.initialize()
@@ -141,6 +156,20 @@ func initialize():
 					var result = manager.attach(
 						obj.entity, cell
 					)
+
+## Pauses this layer and all of its children entities.
+func pause():
+	_paused = true
+	for child in get_children():
+		if child is AlephVault__WindRose.Maps.MapEntity:
+			child.pause()
+
+## Resumes this layer and all of its children entities.
+func resume():
+	_paused = false
+	for child in get_children():
+		if child is AlephVault__WindRose.Maps.MapEntity:
+			child.resume()
 
 ## We leave the _z_index in 30 here, explicitly.
 ## We leave space for few layers under the feet

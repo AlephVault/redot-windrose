@@ -12,8 +12,8 @@ The important elements related to this package are:
 
    1. `TileMapLayer` objects: They're in-scene objects used to represent tilemaps (e.g. floors).
    2. `TileSet` objects: They're in-project resource objects used to provide the tiles that will be used
-      in `TileMapLayer` objects. A feature being used in the tilesets are the _data layers_, which are
-      retrieved by the underlying logic of the related objects.
+	  in `TileMapLayer` objects. A feature being used in the tilesets are the _data layers_, which are
+	  retrieved by the underlying logic of the related objects.
 
 2. Maps: Contrary to what it might look, maps are not Tilemaps per se. They make use of tilemaps
    (TileMapLayer) objects in a more complex (yet manageable) way and also add a way to manage the objects
@@ -89,19 +89,19 @@ the chosen rule namespace. All those 6 rule namespaces have the following identi
   time, as part of a scene.
 
   1. As part of a scene, a map entity must start being a child of an entities layer. On `_ready`, the map entity
-     will _initialize_ and recognize itself as part of the map. It will become _attached_ to the map.
-     
-     > If, for some reason, it is _not_ child of an entities layer, then the initialization logic will **not**
-       occur and must be triggered manually.
-     
-     > Also, being a child of an entities layer, if the object does not look fully contained in the map, it will
-       raise an error when trying to initialize and auto-attach to the map. Ensure that, in the editor, the
-       entity is _fully into the map_, which means: its in-tilemap position + its size (defined in the editor
-       for that object) is lower than or equal to the map size.
+	 will _initialize_ and recognize itself as part of the map. It will become _attached_ to the map.
+	 
+	 > If, for some reason, it is _not_ child of an entities layer, then the initialization logic will **not**
+	   occur and must be triggered manually.
+	 
+	 > Also, being a child of an entities layer, if the object does not look fully contained in the map, it will
+	   raise an error when trying to initialize and auto-attach to the map. Ensure that, in the editor, the
+	   entity is _fully into the map_, which means: its in-tilemap position + its size (defined in the editor
+	   for that object) is lower than or equal to the map size.
   
   2. Otherwise, by creating the entity at runtime (e.g. `obj = AlephVault__WindRose.Contrib.Simple.MapEntity.new(...)`),
-     the entity must have its `initialize()` method manually invoked (`obj.initialize()`) and, either immediately
-     or previously, be already added (_parented_) to the entities layer for it to interact in a map.
+	 the entity must have its `initialize()` method manually invoked (`obj.initialize()`) and, either immediately
+	 or previously, be already added (_parented_) to the entities layer for it to interact in a map.
 
 In order to create a map in a scene (to be loaded directly or indirectly as an asset), the typical workflow is:
 
@@ -109,19 +109,19 @@ In order to create a map in a scene (to be loaded directly or indirectly as an a
   2. As a child of the Map node, create the Floor Layer node as a `Node2D`. Name it as you prefer.
   3. As another child of the Map node, create the Entities Layer node as a `Node2D`. Name it as you prefer.
   4. As child / children of the Floor Layer node, create as many `TileMapLayer` nodes you need.
-     This also requires properly creating `TileSet` resources, and the proper tiles there-in.
-     **All the involved TileSet resources must be configured to use one of the allowed tile settings or
-     the entire map will not work properly**. The allowed settings are: Squared, Isometric (Diamond Right), and
-     Isometric (Diamond Down). **This is serious: others will not work**.
+	 This also requires properly creating `TileSet` resources, and the proper tiles there-in.
+	 **All the involved TileSet resources must be configured to use one of the allowed tile settings or
+	 the entire map will not work properly**. The allowed settings are: Squared, Isometric (Diamond Right), and
+	 Isometric (Diamond Down). **This is serious: others will not work**.
   5. If planning to use Simple, Blocking, Navigability or another custom rule relying on tiles' data,
-     configure the TileSets' data layers and individual cells' data accordingly. This will be described later.
+	 configure the TileSets' data layers and individual cells' data accordingly. This will be described later.
   6. In the Map node, drag/attach the `addons/AlephVault.WindRose/maps/map.gd` script.
   7. In the Floor Layer node, drag/attach the `addons/AlephVault.WindRose/maps/layers/floor_layer.gd` script.
   8. In the Entities Layer node, drag/attach the **corresponding entities_layer.gd script**. For already provided
-     scripts, choose the proper path. For example, if planning to use the Simple rule, then the script to attach
-     is at `addons/AlephVault.WindRose/contrib/simple/entities_layer.gd`, while other out-of-the-box rules have
-     similar file paths. Then, configure all the needed properties (e.g. navigability and simple rules allow the
-     configuration of the neighbour maps for the four boundaries of the current map).
+	 scripts, choose the proper path. For example, if planning to use the Simple rule, then the script to attach
+	 is at `addons/AlephVault.WindRose/contrib/simple/entities_layer.gd`, while other out-of-the-box rules have
+	 similar file paths. Then, configure all the needed properties (e.g. navigability and simple rules allow the
+	 configuration of the neighbour maps for the four boundaries of the current map).
   9. Configure the desired map's size. This is important.
 
 The next thing is to create an entity. In this case, the steps are:
@@ -129,24 +129,24 @@ The next thing is to create an entity. In this case, the steps are:
   1. Create the MapEntity node as a `Node2D`. Name it as you prefer.
   2. Give anything you deem useful. As an example, consider adding a child `Sprite2D` to serve as a static image.
   3. Drag/attach the **corresponding map_entity.gd script**. For already provided scripts, choose the proper path.
-     For example, if planning to use the Simple rule (matching the example with the entities layer defined earlier),
-     the path is: `addons/AlephVault.WindRose/contrib/simple/map_entity.gd`.
+	 For example, if planning to use the Simple rule (matching the example with the entities layer defined earlier),
+	 the path is: `addons/AlephVault.WindRose/contrib/simple/map_entity.gd`.
   4. Configure a speed (the minimum speed will be 0.001), expressed in pixels / second, and a size (e.g. 1x1, which
-     is a typical setup for a character). You are free to configure an orientation. Also, configure all the other
-     properties that are useful (e.g. for navigability or simple map entity, the navigability attribute can be
-     configured to choose another non-default navigability).
+	 is a typical setup for a character). You are free to configure an orientation. Also, configure all the other
+	 properties that are useful (e.g. for navigability or simple map entity, the navigability attribute can be
+	 configured to choose another non-default navigability).
 
 Once there, the maps and entities are ready to be used:
 
   1. On `_enter_tree`, maps are typically initialized. If, for some reason, they're not, then you can manually call
-     `initialize()` on the map. Ensure it's already added into the scene when doing this.
+	 `initialize()` on the map. Ensure it's already added into the scene when doing this.
   2. As part of the map's initialization, its entities layer is initialized as well. If, for some reason, this did
-     not happen, then you can manually call `initialize()` on the entities layer child.
+	 not happen, then you can manually call `initialize()` on the entities layer child.
   3. As part of the entities layer initialization, its children being map entities will have their `initialize()`
-     invoked as well. If for some reason this does not happen, or the objects are created later and / or not as
-     children of any entities layer, then you can call `initialize()` manually on them. It should also happen that,
-     if you create the object and add it as child of an entities layer in the same frame, then the object will
-     indeed automatically initialize and be attached to the parent entities layer and thus the grandparent map.
+	 invoked as well. If for some reason this does not happen, or the objects are created later and / or not as
+	 children of any entities layer, then you can call `initialize()` manually on them. It should also happen that,
+	 if you create the object and add it as child of an entities layer in the same frame, then the object will
+	 indeed automatically initialize and be attached to the parent entities layer and thus the grandparent map.
 
 ### Optional: World and scopes
 
@@ -183,7 +183,7 @@ map instance itself. The life-cycle can be understood like this:
    be used to auto-register the map in the scope.
    
    > Typically, scopes and maps are defined in a factory scene (to be dynamically instantiated, perhaps many times).
-     This is why the index is pre-defined as a static property inside the map.
+	 This is why the index is pre-defined as a static property inside the map.
 
 8. In a scope, you can retrieve a map by invoking `var _map: AlephVault__WindRose.Maps.Map = scope.get_map(index)`,
    where the index is an integer that matches the index of an automatically registered map. It will return `null`
@@ -203,12 +203,16 @@ Let a valid map instance be: `var map: AlephVault__WindRose.Maps.Map`:
   read-only at runtime (set at editor time).
 - `size: Vector2i`: Returns the size of the map. Each coordinate is integer and positive, and lower than or equal
   to 4096 (this means: a map can be at most 4096x4096). This property is read-only at runtime (set at editor time).
-  Entities in this map will have their positions constrained by these dimensions.
+  Entities in this map will have their positions constrained by these dimensions. The dimensions are constrained
+  to be between `(1, 1)` and `(4096, 4096)`.
 - `gizmo_x_axis_color`, `gizmo_y_axis_color` and `gizmo_grid_color`: These properties only serve for debugging
   purposes in the editor, since they provide a grid ad hoc to track the objects even before the tilemaps have their
   cells properly filled. All these properties are of type `Color`.
 - `floor_layer: AlephVault__WindRose.Maps.Layers.FloorLayer`: Returns the floor layer for the map. This layer is
   read-only and set on initialization, by detecting a direct child being of this type.
+- `visuals_layer: AlephVault__WindRose.Maps.Layers.VisualsLayer`: Returns the visuals layer for the map. This layer
+  is read-only and set on initialization, by detecting a direct child being of this type. Visuals layers have their
+  own section: `Understanding Entity Visuals`. This layer is optional.
 - `entities_layer: AlephVault__WindRose.Maps.Layers.EntitiesLayer`: Returns the entities layer for the map. This
   layer is read-only and set on initialization, by detecting a direct child of this type. The actual type of layer
   is a sub-type of entities layer, with its own logic, depending on the intended rule to apply to the map.
@@ -219,6 +223,9 @@ Let a valid map instance be: `var map: AlephVault__WindRose.Maps.Map`:
   this map belongs to. If it does not belong to any scope or the key / index are not valid, returns `null`.
 - `get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map`: Returns another map in the same world this map
   belongs to. If it does not belong to any scope or the index is not valid, returns `null`.
+- `func pause()`: Pauses this map and its EntitiesLayer.
+- `func resume()`: Resumes this map and its EntitiesLayer.
+- `var paused: bool`: Tells whether this map is paused or not (see the previous two methods).
 
 About maps, most of the logic is not tied to them directly, but to the underlying layers instead. These layers (as
 of today: entities layer and floor layer) must be created with the map, and will be detected on map's `_ready` and
@@ -251,6 +258,12 @@ actually, **a descendant of that type**, and not that type directly):
 - `initialize()`: This method is invoked by the parent map, but can be manually invoked if needed. This method
   creates the internal `manager` and then detect all the children objects which are map entities and then, one
   by one, it initializes each of those entities, properly attaching them to this entities layer.
+- `func pause()`: Pauses this entities layer and all of their MapEntity contained objects. They get to be still
+  / frozen, but visible when they should be visible.
+- `func resume()`: Resumes this entities layer and all of their MapEntity contained objects. They get to be
+  animated again.
+- `var paused: bool`: Tells whether this entities layer is paused or not (see the previous two methods).
+
 
 About entities layers, they have more properties and a custom rule instantiation according the sub-type of layer
 being used. They will be timely described in other sections.
@@ -327,6 +340,15 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   movement, if any, to be canceled. The result will be successful with a value of `true` if the entity is attached
   to a map and the rules allowed the movement to be canceled. Otherwise, it will be a successful result with a
   `false` value.
+- `func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)`: Adds a visual to this entity. There is a section
+  for this feature: `Understanding Entity Visuals`.
+- `func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)`: Removes a visual from this entity. There is a
+  section for this feature: `Understanding Entity Visuals`.
+- `func pause()`: Pauses this entity's visual (`AlephVault__WindRose.Maps.MapEntityVisual`) objects. They get to be
+  still / frozen, but visible when they should be visible.
+- `func resume()`: Resumes this entity's visual (`AlephVault__WindRose.Maps.MapEntityVisual`) objects. They get to be
+  animated again.
+- `var paused: bool`: Tells whether this entity is paused or not (see the previous two methods).
 
 Finally, interacting with the signals for movements and teleport is done through the `rule` property:
 
@@ -425,7 +447,7 @@ only in the _entity rule_ (the rule that is part of the map entity). The propert
   SSS       SSS             SSS             SSS
   S   means SGG    while    SG   also means SGG due to truncation and padding.
   SSS       SSS             SSSS            SSS
-                            S
+							S
   
   For a 1x1 character:
   
@@ -500,13 +522,13 @@ this section):
 1. Start with `mask: int = 1` for the `cell`.
 2. For each `tilemap` from bottommost to topmost:
    - If, in the `tileset` there's no custom data layer named `navigability_type` or there's no custom data layer named `navigability_increments`,
-     then keep the current `mask`, unaltered. Those layers must be `int` and `bool`, respectively, or `mask` is, again, kept unaltered.
+	 then keep the current `mask`, unaltered. Those layers must be `int` and `bool`, respectively, or `mask` is, again, kept unaltered.
    - Retrieve the values from those layers for the given `cell`. The type must be an integer between 0 or 63, both inclusive. Otherwise,
-     the `mask` will be kept unaltered.
+	 the `mask` will be kept unaltered.
    - Now, we're on good values: If the value from `navigability_increments` is false, then `mask` gets assigned a 1-hot value for that bit.
-     For example, if `navigability_increments` is `false` and `navigability_type` is `5`, the `mask` becomes `32` (0000...0100000). However,
-     if `navigability_increments` is `true` and `navigability_type` is `5`, `mask` becomes `(mask | (1 << 5))`, activating the 5th bit. This
-     enables transitional navigability cells (e.g. shores).
+	 For example, if `navigability_increments` is `false` and `navigability_type` is `5`, the `mask` becomes `32` (0000...0100000). However,
+	 if `navigability_increments` is `true` and `navigability_type` is `5`, `mask` becomes `(mask | (1 << 5))`, activating the 5th bit. This
+	 enables transitional navigability cells (e.g. shores).
 
 If a developer wants to change the contents of a tile for any tilemap in the map for a given (x, y) cell dynamically, then they must invoke `map.entities_layer.rule.update_cell_data(Vector2i(x, y))`. This will update the navigability data layer for that cell in particular.
 
@@ -561,12 +583,12 @@ If a new entity rule subclass is needed, it must satisfy the following requireme
 2. If a custom `_init` method is needed, it must invoke `super._init(size: Vector2i, root: bool)`. The meaning of both arguments is:
 
    - `root` lets the constructor determine whether the rule is a root rule or not. Being a root rule means being the one responsible of
-     forwarding signals that can be used by the entity (see the `signal rule.signals.{...}` properties in the section for general properties
-     of these objects). Usually, this argument _should receive a parameter from the new class' constructor_ but there are cases where the
-     `false` constant value should be passed instead. This is the case for when the rule has children rules, like in the `simple` rule.
+	 forwarding signals that can be used by the entity (see the `signal rule.signals.{...}` properties in the section for general properties
+	 of these objects). Usually, this argument _should receive a parameter from the new class' constructor_ but there are cases where the
+	 `false` constant value should be passed instead. This is the case for when the rule has children rules, like in the `simple` rule.
    - `size` must be variable, directly or not. Either a `Vector2i` argument from the new class' constructor, or another object providing
-     the size of the entity (e.g. a `map_entity: AlephVault__WindRose.Maps.MapEntity` argument and then passing `map_entity.size` to the
-     `super._init` method). In the end, it populates the `size` property of this entity rule.
+	 the size of the entity (e.g. a `map_entity: AlephVault__WindRose.Maps.MapEntity` argument and then passing `map_entity.size` to the
+	 `super._init` method). In the end, it populates the `size` property of this entity rule.
 
 3. If children rules are instantiated as part of this new rule, it can be done on `_init` or perhaps a delayed initialization. Still,
    after the creation of that child rule (which must receive the corresponding `root=false` argument), the _on property updated_ signal
@@ -580,39 +602,39 @@ If a new entity rule subclass is needed, it must satisfy the following requireme
    
    # Or, instead, omit this function and use: _property_was_updated
    func _forward_on_property_updated(property: String, old_value, new_value):
-       # In this case, the property name is forwarded directly.
-       # If conflicts would exist, something could be forwarded
-       # like ("solidness:" + property), rather than just (property).
-       on_property_updated.emit(property, old_value, new_value)
+	   # In this case, the property name is forwarded directly.
+	   # If conflicts would exist, something could be forwarded
+	   # like ("solidness:" + property), rather than just (property).
+	   on_property_updated.emit(property, old_value, new_value)
 
    func _init(
-       # In this case, rather than the size, the Solidness entity rule requires
-       # the map entity to be passes.
-       map_entity: AlephVault__WindRose.Maps.MapEntity,
-       
-       # Then, the properties. In this case, it may be sensible to forward all
-       # the properties, or only the needed ones while leaving others with
-       # some static / default values.
-       obeys_solidness: true,
-       solidness: AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness,
-       mask: String,
-       optimistic: true,
-       
-       # Finally, root should always ALWAYS be a variable.
-       root: bool
+	   # In this case, rather than the size, the Solidness entity rule requires
+	   # the map entity to be passes.
+	   map_entity: AlephVault__WindRose.Maps.MapEntity,
+	   
+	   # Then, the properties. In this case, it may be sensible to forward all
+	   # the properties, or only the needed ones while leaving others with
+	   # some static / default values.
+	   obeys_solidness: true,
+	   solidness: AlephVault__WindRose.Contrib.Solidness.EntityRule.Solidness,
+	   mask: String,
+	   optimistic: true,
+	   
+	   # Finally, root should always ALWAYS be a variable.
+	   root: bool
    ):
-       # First, invoke the inherited `_init` with the proper arguments.
-       super._init(map_entity.size, root)
-       
-       # Then, create the child rule.
-       _solidness_rule = AlephVault__WindRose.Contrib.Solidness.EntityRule.new(
-           map_entity, obeys_solidness, solidness,
-           mask, optimistic, false
-       )
-       
-       # Third, since the solidness rule has properties that need to be
-       # updated, this must be forwarded:
-       _solidness_rule.on_property_updated.connect(_forward_on_property_updated) # or: _property_was_updated.
+	   # First, invoke the inherited `_init` with the proper arguments.
+	   super._init(map_entity.size, root)
+	   
+	   # Then, create the child rule.
+	   _solidness_rule = AlephVault__WindRose.Contrib.Solidness.EntityRule.new(
+		   map_entity, obeys_solidness, solidness,
+		   mask, optimistic, false
+	   )
+	   
+	   # Third, since the solidness rule has properties that need to be
+	   # updated, this must be forwarded:
+	   _solidness_rule.on_property_updated.connect(_forward_on_property_updated) # or: _property_was_updated.
    ```
 
 4. If a new property needs to be defined, which directly affects how the entity affects the global interaction data, then
@@ -622,13 +644,13 @@ If a new entity rule subclass is needed, it must satisfy the following requireme
    var _my_property: int = 0
 
    var my_property: int:
-       get:
-           return _my_property
-       set(value):
-           var old_value: int = _my_property
-           _my_property = value
-           # This performs de notification.
-           _property_was_updated("my_property", old_value, value)
+	   get:
+		   return _my_property
+	   set(value):
+		   var old_value: int = _my_property
+		   _my_property = value
+		   # This performs de notification.
+		   _property_was_updated("my_property", old_value, value)
    ```
 
 #### Developing the entities rule (EntitiesRule)
@@ -655,33 +677,33 @@ In order to create this rule, there are several elements to account for:
    var _other_data: Array[int]
    
    func initialize_global_data():
-       _data = []
-       _data.resize(size.x * size.y)
-       _other_data = []
-       _other_data.resize(size.x * size.y)
+	   _data = []
+	   _data.resize(size.x * size.y)
+	   _other_data = []
+	   _other_data.resize(size.x * size.y)
    ```
    
    Then, have a logic to initialize / update per-cell data:
    
    ```
    func initialize_cell_data(cell: Vector2i) -> void:
-       # This can be set to a different logic but, typically,
-       # this is the same as updating the cell's data:
-       update_cell_data(cell)
+	   # This can be set to a different logic but, typically,
+	   # this is the same as updating the cell's data:
+	   update_cell_data(cell)
    
    func update_cell_data(cell: Vector2i) -> void:
-       # Assign the data to a particular value
-       _data[cell.y * size.x + cell.x] = compute_some_value(cell.x, cell.y)
+	   # Assign the data to a particular value
+	   _data[cell.y * size.x + cell.x] = compute_some_value(cell.x, cell.y)
    ```
 
 4. In order to determine whether an entity can be attached to this entities rule (and this is recommended!) override this method:
 
    ```
    func can_attach(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       cell: Vector2i
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   cell: Vector2i
    ) -> bool:
-       # By default, it is:
+	   # By default, it is:
 	   # return true
 	   return entity_rule is My.Namespace.EntityRule
    ```
@@ -690,39 +712,39 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_entity_attached(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       to_position: Vector2i
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   to_position: Vector2i
    ) -> void:
-       # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
-       # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
-       pass
+	   # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
+	   # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
+	   pass
    ```
    
    And this one:
    
    ```
    func on_entity_detached(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       from_position: Vector2i
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   from_position: Vector2i
    ) -> void:
-       # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
-       # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
-       # Ideally, doing the opposite of on_entity_attached.
-       pass
+	   # Perhaps updating _other_data[(to_position.y + j) * size.x + (to_position.x + i)]
+	   # for each i in 0..(entity.size.x - 1), j in 0..(entity.size.y - 1) accordingly.
+	   # Ideally, doing the opposite of on_entity_attached.
+	   pass
    ```
 
 5. In order to determine whether an entity can be moved to certain direction override this method:
 
    ```
    func can_move(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       position: Vector2i, direction: _Direction
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   position: Vector2i, direction: _Direction
    ) -> bool:
-       # Returns true if the movement is allowed.
-       # return true
-       #
-       # Account for the entity_rule.size in this logic.
-       return (whether entity_rule at position can move in direction)
+	   # Returns true if the movement is allowed.
+	   # return true
+	   #
+	   # Account for the entity_rule.size in this logic.
+	   return (whether entity_rule at position can move in direction)
    ```
    
    **Ensure no data modification is done in this function, or the game logic could break entirely**
@@ -731,25 +753,25 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_movement_started(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       start_position: Vector2i, end_position: Vector2i,
-       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction,
-       stage: MovementStartedStage
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   start_position: Vector2i, end_position: Vector2i,
+	   direction: AlephVault__WindRose.Utils.DirectionUtils.Direction,
+	   stage: MovementStartedStage
    ) -> void:
-       # Update the data in the entities rule, e.g. `_other_data`, accounting
-       # for the start position, the end position, and the size of the entity
-       # rule. Also, perhaps the direction.
-       #
-       # The stage can be one out of the following values:
-       #
-       # Begin: This event has just started. The entity does not have its movement assigned yet.
-       # MovementAllocated: The chosen direction has been set as current movement in the entity.
-       # End: The entity was just notified (i.e. the movement started signal) about this event.
-       #
-       # Different things can be done on different stages. Developers must **ALWAYS** ensure they
-       # `match stage:` to specific stages every code block they want, or that code block would
-       # execute many times!
-       pass
+	   # Update the data in the entities rule, e.g. `_other_data`, accounting
+	   # for the start position, the end position, and the size of the entity
+	   # rule. Also, perhaps the direction.
+	   #
+	   # The stage can be one out of the following values:
+	   #
+	   # Begin: This event has just started. The entity does not have its movement assigned yet.
+	   # MovementAllocated: The chosen direction has been set as current movement in the entity.
+	   # End: The entity was just notified (i.e. the movement started signal) about this event.
+	   #
+	   # Different things can be done on different stages. Developers must **ALWAYS** ensure they
+	   # `match stage:` to specific stages every code block they want, or that code block would
+	   # execute many times!
+	   pass
    ```
    
    And, optionally, implement this (e.g. playing a mild low-frequency sound) for when the movement
@@ -757,12 +779,12 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_movement_rejected(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       start_position: Vector2i, end_position: Vector2i,
-       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   start_position: Vector2i, end_position: Vector2i,
+	   direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
    ) -> void:
-       # Implement this for when the movement.
-       pass
+	   # Implement this for when the movement.
+	   pass
    ```
    
    And finally, implement this (e.g. again updating `_other_data`) for when the movement is completed.
@@ -771,25 +793,25 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_movement_finished(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       start_position: Vector2i, end_position: Vector2i, direction: _Direction,
-       stage: MovementConfirmedStage
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   start_position: Vector2i, end_position: Vector2i, direction: _Direction,
+	   stage: MovementConfirmedStage
    ) -> void:
-       # Update the data in the entities rule, e.g. `_other_data`, accounting
-       # for the start position, the end position, and the size of the entity
-       # rule. Also, perhaps the direction.
-       #
-       # The stage can be one out of the following values:
-       #
-       # Begin: This event has just started. The entity does not have its position updated yet.
-       # PositionChanged: The position of the entity has been updated.
-       # MovementCleared: The current movement has been cleared for the entity. It is, now, not moving.
-       # End: The entity was just notified (i.e. the movement finished signal) about this event.
-       #
-       # Different things can be done on different stages. Developers must **ALWAYS** ensure they
-       # `match stage:` to specific stages every code block they want, or that code block would
-       # execute many times!
-       pass
+	   # Update the data in the entities rule, e.g. `_other_data`, accounting
+	   # for the start position, the end position, and the size of the entity
+	   # rule. Also, perhaps the direction.
+	   #
+	   # The stage can be one out of the following values:
+	   #
+	   # Begin: This event has just started. The entity does not have its position updated yet.
+	   # PositionChanged: The position of the entity has been updated.
+	   # MovementCleared: The current movement has been cleared for the entity. It is, now, not moving.
+	   # End: The entity was just notified (i.e. the movement finished signal) about this event.
+	   #
+	   # Different things can be done on different stages. Developers must **ALWAYS** ensure they
+	   # `match stage:` to specific stages every code block they want, or that code block would
+	   # execute many times!
+	   pass
    ```
 
 6. Also, objects could perhaps _cancel_ the current movement. Canceling movement is always allowed by
@@ -800,12 +822,12 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func can_cancel_movement(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
    ) -> bool:
-       # Override this method to return false when the entity must
-       # not be allowed to cancel its current movement.
-       return true
+	   # Override this method to return false when the entity must
+	   # not be allowed to cancel its current movement.
+	   return true
    ```
    
    **Like in the case of starting a movement, do not edit any data in this method, or the game logic could break**.
@@ -814,25 +836,25 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_movement_cancelled(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
-       stage: MovementClearedStage
-    ) -> void:
-       # Update the data in the entities rule, e.g. `_other_data`, accounting
-       # for the start position, the end position, and the size of the entity
-       # rule. Also, perhaps the direction.
-       #
-       # The direction will be `NONE` if there was no canceled previous movement.
-       # The logic will typically return early in that case, without doing no
-       # behaviour at all. However, in some cases, it may be useful to do some
-       # sort of aesthetic behaviour even in the `NONE` case.
-       #
-       # The stage can be one out of the following values:
-       # 
-       # Begin: The cancellation is just starting.
-       # MovementCleared: The previous movement was just cleared from the entity.
-       # End: The entity's signal `on_movement_cancelled` was just triggered.
-       pass
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
+	   stage: MovementClearedStage
+	) -> void:
+	   # Update the data in the entities rule, e.g. `_other_data`, accounting
+	   # for the start position, the end position, and the size of the entity
+	   # rule. Also, perhaps the direction.
+	   #
+	   # The direction will be `NONE` if there was no canceled previous movement.
+	   # The logic will typically return early in that case, without doing no
+	   # behaviour at all. However, in some cases, it may be useful to do some
+	   # sort of aesthetic behaviour even in the `NONE` case.
+	   #
+	   # The stage can be one out of the following values:
+	   # 
+	   # Begin: The cancellation is just starting.
+	   # MovementCleared: The previous movement was just cleared from the entity.
+	   # End: The entity's signal `on_movement_cancelled` was just triggered.
+	   pass
    ```
 
 7. Teleporting an entity is always allowed. However, there's another callback that
@@ -840,23 +862,23 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_teleported(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       from_position: Vector2i, to_position: Vector2i,
-       stage: TeleportedStage
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   from_position: Vector2i, to_position: Vector2i,
+	   stage: TeleportedStage
    ) -> void:
-       # Implement this for when an entity is teleported from one position to another
-       # position, always in the same (current) map.
-       #
-       # Update the data in the entities rule, e.g. `_other_data`, accounting
-       # for the start position, the end position, and the size of the entity
-       # rule. Also, perhaps the direction.
-       #
-       # The stage can be one out of the following values:
-       #
-       # Begin: The teleport just started.
-       # PositionChanged: The entity has new position.
-       # End: The entity's signal `on_teleported` was just truggered.
-       pass
+	   # Implement this for when an entity is teleported from one position to another
+	   # position, always in the same (current) map.
+	   #
+	   # Update the data in the entities rule, e.g. `_other_data`, accounting
+	   # for the start position, the end position, and the size of the entity
+	   # rule. Also, perhaps the direction.
+	   #
+	   # The stage can be one out of the following values:
+	   #
+	   # Begin: The teleport just started.
+	   # PositionChanged: The entity has new position.
+	   # End: The entity's signal `on_teleported` was just truggered.
+	   pass
    ```
 
 8. Finally, certain entities rules may want to update their data when an attached
@@ -868,16 +890,16 @@ In order to create this rule, there are several elements to account for:
    
    ```
    func on_property_updated(
-       entity_rule: AlephVault__WindRose.Core.EntityRule,
-       property: String, old_value, new_value
+	   entity_rule: AlephVault__WindRose.Core.EntityRule,
+	   property: String, old_value, new_value
    ) -> void:
-       # Consider the old value to _undo_ the proper effects in the
-       # property update for the entity, and the new value to actually
-       # _do_ the proper effects in the property update for the entity.
-       #
-       # An example would be updating the `_other_data` according to the
-       # entity, the property, the old value and the new value.
-       pass
+	   # Consider the old value to _undo_ the proper effects in the
+	   # property update for the entity, and the new value to actually
+	   # _do_ the proper effects in the property update for the entity.
+	   #
+	   # An example would be updating the `_other_data` according to the
+	   # entity, the property, the old value and the new value.
+	   pass
    ```
 
 ### Triggers
@@ -934,16 +956,16 @@ to the same map of the trigger. Then, two options:
    extends AlephVault__WindRose.Triggers.Trigger
 
    func _entity_entered(e: AlephVault__WindRose.Maps.MapEntity):
-       print('Entity entered:', e.name)
+	   print('Entity entered:', e.name)
 
    func _entity_staying(e: AlephVault__WindRose.Maps.MapEntity):
-       print('Entity staying:', e.name)
+	   print('Entity staying:', e.name)
 
    func _entity_moved(e: AlephVault__WindRose.Maps.MapEntity):
-       print('Entity moved:', e.name)
+	   print('Entity moved:', e.name)
 
    func _entity_left(e: AlephVault__WindRose.Maps.MapEntity):
-       print('Entity exited:', e.name)
+	   print('Entity exited:', e.name)
    ```
    
 2. Do not create a subclass, but connect callbacks to the signals with the same names,
@@ -985,12 +1007,12 @@ The typical layout for this to work is, either statically or at runtime, have a 
 
 ```
 Map: AlephVault__WindRose.Maps.Map
-    EntitiesLayer: AlephVault__WindRose.Maps.Layers.EntitiesLayer (actually, a sub-type described earlier)
-        SomeEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
-            SomeArea2D: AlephVault__WindRose.Triggers.EntityArea2D (typically, no setup is needed)
-        SomeTriggerEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
-            SomeTrigger: AlephVault__WindRose.Triggers.Trigger (actually, a sub-type or with some signal callbacks)
-    ... other map layers (e.g. properly, the floors) ...
+	EntitiesLayer: AlephVault__WindRose.Maps.Layers.EntitiesLayer (actually, a sub-type described earlier)
+		SomeEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
+			SomeArea2D: AlephVault__WindRose.Triggers.EntityArea2D (typically, no setup is needed)
+		SomeTriggerEntity: AlephVault__WindRose.Maps.MapEntity (actually, a sub-type described earlier)
+			SomeTrigger: AlephVault__WindRose.Triggers.Trigger (actually, a sub-type or with some signal callbacks)
+	... other map layers (e.g. properly, the floors) ...
 ```
 
 And this example, if the layer / masks are matching pairs, will work out of the box when moving the entity
@@ -1025,7 +1047,7 @@ This said, the behaviour to implement in children Teleport classes is this funct
 
 ```
 func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
-    return (something)
+	return (something)
 ```
 
 In this case, the returned value must not be null and must have a `.current_map`, meaning that it must be
@@ -1063,18 +1085,136 @@ The full set of functions that may be of interest when defining a Teleport subcl
 ```
 ## This method retrieves the target of this teleport.
 func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
-    return (something)
+	return (something)
 
 ## Implement this custom callback to do something before
 ## the teleport takes place. Typically, this method is
 ## async and makes an animation or transition.
 func _before_teleport(e: AlephVault__WindRose.Maps.MapEntity):
-    pass
+	pass
 
 ## Implement this custom callback to do something after
 ## the teleport takes place. Typically, this method is
 ## async and makes an animation or transition.
 func _after_teleport(e: AlephVault__WindRose.Maps.MapEntity):
-    pass
-```
+	pass
 
+### Understanding Entity Visuals
+
+Entity Visuals are an optional feature, enabled to ensure proper bi-dimensional z-index is used on the visual
+aspect of `MapEntity` objects automatically (games will work perfectly without this feature, but this feature
+enables just a minor change and almost seamless integration to update the z-index properly).
+
+In order to enable this feature, first add a child `AlephVault__WindRose.Maps.Layers.VisualsLayer` object (it
+is a `Node2D` object) to a map (a `Node2D` of type `AlephVault__WindRose.Maps.Map`). This is typically done
+statically (in scene editor) or dynamically but always before the map gets called its `initialize()` method
+(this typically involves instantiating each node in the structure dynamically and in the same frame, always
+prior to adding the map to the scene tree).
+
+The next step is, for each of the entities that matter (e.g. this typically does not matter for entities like
+triggers, which are almost always invisible in nature). For this to work, for each entity, this can be done:
+
+1. First, the entity should have child `AlephVault__WindRose.Maps.MapEntityVisual` objects. One or more, and
+   each with different `z_index` values (this is optional but recommended). This can, actually, be changed
+   at anytime and there are convenience methods (that will be described later) to do that properly, which
+   account for the different moments of a `MapEntity` (i.e. being added to a map with `VisualsLayer` or not).
+2. Second, ensure all the relevant maps must have their `VisualsLayer` added to them.
+3. Then, add (attach) the entity to the map via the described methods in the first sections of this README.md.
+
+This will cause the entity's visuals to be properly added and tracked (real-time updated) when the entity
+moves or teleports: Their visuals are added together into a new object (related to this current entity) of type
+`AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer`. These containers are `Node2D` objects which
+track and move (and pause / resume) all the visuals related to a single entity, and move along the current
+global position of the related entity. These objects are destroyed (and their children, which are those visuals
+of type `MapEntityVisual`, re-parented back to the owning `MapEntity` object) when the related `MapEntity`
+object leaves the map.
+
+In order to manipulate these objects, two methods must be accounted for:
+
+- `func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)` adds a new visual to an entity. For this to
+  work, the visual must not have any parent at all. After calling this method, the visual becomes added to the
+  entity, either as direct child of the entity (if the entity is not inside any map with `VisualsLayer`) or
+  direct child of the `VisualsContainer` of that entity (if the entity is inside a map with such layer - the
+  property being looked up is `(map).visuals_layer` being not null & valid instance). The added visual becomes
+  visible (`visible` = `true`) if the entity is inside a map with `visuals_layer` != null. Otherwise, it
+  becomes invisible (`visible` = `false`).
+- `func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)` removes an existing visual from an entity.
+  For this to work, the visual must have this entity as parent: either the entity itself, if the entity is
+  not attached to a map with a `VisualsLayer` child, or from the related `VisualsContainer` otherwise. The
+  removed visual becomes invisible (`visible` = `false`).
+
+These functions are _not_ equal to trivial calls of `add_child`, `remove_child` or `reparent`. Also, these
+functions can be called at any time, being the entity inside a map with `visuals_layer` != null, or not.
+
+Also, entities can be _paused_. When they're paused, their animations will not be processed (i.e. will become
+still), which means that all the attached visuals will be _paused_ as well. The methods to pause, resume, and
+check the pause state are:
+
+- `func pause()`: Pauses the current entity and related visuals container, if any. All their visuals, current or
+  future, will be paused as well.
+- `func resume()`: Resumes the current entity and related visuals container, if any. All their visuals, current
+  or future, will be resumed as well.
+- `var paused: bool`: Tells the current status of an entity: it is paused or not.
+
+These two methods are typically not meant to be invoked by a developer directly, but there are cases where it
+could make sense to invoke them.
+
+#### Related class: VisualsLayer
+
+The layer class is `AlephVault__WindRose.Maps.Layers.VisualsLayer`, which will use a z_index of 50, and has
+the following properties and methods:
+
+- `var initialized: bool`: Tells whether this layer is initialized or not. This is `true` if and only if this
+  layer was added to a map prior to it being called `initialize()`. This layer will not work if it's not already
+  initialized.
+- `initialize()`: Initializes the layer, preparing the structure to do some sort of double-z-index so all the
+  entities are sorted, somehow working around the z_index limitation.
+
+It has no more public methods or properties, and will work out of the box. `initialize()` is not meant to be
+arbitrarily invoked by a developer, quite like `initialize()` in the Entities Layer.
+
+#### Related class: VisualsLayer.SubLayer
+
+This is the first nesting level inside a VisualsLayer. It does not offer any extra method out of `Node2D` methods.
+The full path is: `AlephVault__WindRose.Maps.Layers.VisualsLayer.SubLayer`.
+
+#### Related class: VisualsLayer.VisualsContainer
+
+The full path is: `AlephVault__WindRose.Maps.Layers.VisualsLayer.SubLayer`. This is a class tied to the `MapEntity`
+class, since one instance will exist for each MapEntity instance attached to the VisualsLayer-enabled map. In this
+case, this class groups all the map entity's visual objects under the same space.
+
+It has the following methods:
+
+- `func pause()`: Called by the map entity's `pause()` method, it freezes everything in the visual.
+- `func resume()`: Called by the map entity's `resume()` method, it resumes everything in the visual.
+- `func update(delta: float)`: It's called by the map entity's `_process(delta: float)` when this object exists,
+  due to the map entity being added into a VisualsLayer-enabled map.
+- `func bind_entity()`: Called by the map entity when it's attached to a VisualsLayer-enabled map, right after
+  this container is created.
+
+None of these methods are meant for the user to invoke them directly.
+
+#### Related class: MapEntityVisual
+
+The full path is `AlephVault__WindRose.Maps.MapEntityVisual`. This is the parent visual class and has many useful
+methods which will be invoked by the engine appropriately:
+
+- `func reset()`: Implementation for when this visual is just added to a VisualContainer and its animation should
+  start over. This is up to the user.
+- `func pause()`: Implementation for when the object is paused (from the downstream logic described in the previous
+  classes). Implement `_pause()` to have an idempotent logic - never override `pause()` method.
+- `func resume()`: Implementation for when the object is resumed (from the downstream logic described in the previous
+  classes). Implement `_resume()` to have an idempotent logic - never override `resume()` method.
+- `func update(delta: float)`: Implementation for when the object is updated (from the `update` method in the container).
+- `var paused: bool`: Tells whether this visual is paused or not.
+
+This object extends from `Sprite2D` and the base implementation is to do nothing at all (this object implements its
+own `_process` to fix its local position to `(0, 0)` but other than that no logic is implemented), which is a good
+implementation for objects that do not animate in any way after having set their image (typically in a static way,
+like a custom pre-fabricated scene resource file).
+
+Developers are free (and perhaps encouraged) to create children classes out of `MapEntityVisual` for their own logic.
+
+Typically, implementing `_pause() / _resume()` is not needed, but implementing `update(delta)` is the critical part of
+a visual (e.g. frame-by-frame animation), along with `reset()`.

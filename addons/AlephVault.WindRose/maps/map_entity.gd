@@ -75,6 +75,17 @@ var entity: Entity:
 			"MapEntity", "entity"
 		)
 
+var _paused: bool
+
+## Whether this entity is paused or not.
+var paused: bool:
+	get:
+		return _paused
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "paused"
+		)
+
 var _current_map: _Map
 
 ## The current map.
@@ -196,6 +207,11 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 			self.reparent(manager.layer)
 		else:
 			manager.layer.add_child(self)
+			if manager.layer.paused:
+				self.pause()
+			else:
+				self.resume()
+
 		# Then, adjust the position.
 		position = manager.layer.map.layout.get_point(cell)
 		rotation = 0
@@ -349,8 +365,14 @@ func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual):
 
 	if is_instance_valid(_visuals_container):
 		_visuals_container.add_child(v)
+		v.visible = true
 	else:
 		add_child(v)
+		v.visible = false
+	if paused:
+		v.pause()
+	else:
+		v.resume()
 
 ## Removes a MapEntityVisual from this entity.
 func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual):
@@ -370,6 +392,19 @@ func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual):
 		return
 
 	parent.remove_child(v)
+	v.visible = false
+
+## Pauses an entity and its animations.
+func pause():
+	_paused = true
+	if is_instance_valid(_visuals_container):
+		_visuals_container.pause()
+
+## Resumes an entity and its animations.
+func resume():
+	_paused = false
+	if is_instance_valid(_visuals_container):
+		_visuals_container.resume()
 
 func _process(delta: float):
 	updated.emit()

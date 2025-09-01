@@ -92,6 +92,7 @@ class VisualsContainer extends Node2D:
 				for c in get_children():
 					if c is AlephVault__WindRose.Maps.MapEntityVisual:
 						c.reparent(e)
+						c.visible = false
 			else:
 				for c in get_children():
 					if c is AlephVault__WindRose.Maps.MapEntityVisual:
@@ -108,11 +109,17 @@ class VisualsContainer extends Node2D:
 		e.rule.signals.on_movement_finished.connect(on_movement_finished)
 		# Assign the proper entity.
 		_map_entity = e
+		if e.paused:
+			pause()
+		else:
+			resume()
 		# Also, grab the entity's children and put them
 		# right here.
 		for c in e.get_children():
 			if c is AlephVault__WindRose.Maps.MapEntityVisual:
 				c.reparent(e)
+				c.visible = true
+				c.reset()
 		# Finally, set this object to the proper position.
 		layer._fix_level(self)
 
@@ -179,20 +186,6 @@ func initialize():
 			node.z_index = pivot + index
 			_sub_layers.append(node)
 			add_child(node)
-
-## Pauses all the visuals containers' animations.
-func pause():
-	for sl in _sub_layers:
-		for c in sl.get_children():
-			if c is AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer:
-				c.pause()
-
-## Resumes all the visuals containers' animations.
-func resume():
-	for sl in _sub_layers:
-		for c in sl.get_children():
-			if c is AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer:
-				c.resume()
 
 ## We leave the _z_index in 50 here, explicitly.
 ## We leave space for few layers under the feet

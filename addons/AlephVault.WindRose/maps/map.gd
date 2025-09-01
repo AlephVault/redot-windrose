@@ -30,6 +30,17 @@ var scope: _Scope:
 			"Map", "scope"
 		)
 
+var _paused: bool
+
+## Whether this entities layer is paused or not.
+var paused: bool:
+	get:
+		return _paused
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Map", "paused"
+		)
+
 ## The map size, expressed as (width, height).
 @export_category("Topology")
 @export var _size: Vector2i = Vector2i(8, 6)
@@ -114,6 +125,18 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 	if _scope == null:
 		return null
 	return _scope.get_map(index)
+
+## Pauses this map and its entities layer.
+func pause():
+	_paused = true
+	if _entities_layer != null:
+		_entities_layer.pause()
+
+## Resumes this map and its entities layer.
+func resume():
+	_paused = true
+	if _entities_layer != null:
+		_entities_layer.resume()
 
 # Identifies the layers recognized in
 # this map (directly from the children).
