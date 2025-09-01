@@ -14,3 +14,7 @@ func pause():
 ## Resumes any animation logic.
 func resume():
 	pass
+
+## Updates any animation logic.
+func update(delta: float):
+	pass

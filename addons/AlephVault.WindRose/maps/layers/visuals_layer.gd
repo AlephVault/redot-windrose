@@ -31,6 +31,7 @@ func _fix_level(v: VisualsContainer):
 ## of its children of type MapEntityVisual.
 class VisualsContainer extends Node2D:
 	var _map_entity: AlephVault__WindRose.Maps.MapEntity
+	var _paused: bool = false
 	
 	func _process(delta):
 		if _map_entity != null:
@@ -39,6 +40,7 @@ class VisualsContainer extends Node2D:
 	## Pauses this object's visual animation
 	## by pausing children's visual animations.
 	func pause():
+		_paused = true
 		for child in get_children():
 			if child is AlephVault__WindRose.Maps.MapEntityVisual:
 				child.pause()
@@ -46,9 +48,19 @@ class VisualsContainer extends Node2D:
 	## Resumes this object's visual animation
 	## by resuming children's visual animations.
 	func resume():
+		_paused = false
 		for child in get_children():
 			if child is AlephVault__WindRose.Maps.MapEntityVisual:
 				child.resume()
+	
+	## Updates a single frame of animation.
+	func update(delta: float):
+		if _paused:
+			return
+
+		for child in get_children():
+			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+				child.update(delta)
 	
 	## Binds this object to a new entity.
 	func bind_entity(e: AlephVault__WindRose.Maps.MapEntity):
@@ -167,6 +179,20 @@ func initialize():
 			node.z_index = pivot + index
 			_sub_layers.append(node)
 			add_child(node)
+
+## Pauses all the visuals containers' animations.
+func pause():
+	for sl in _sub_layers:
+		for c in sl.get_children():
+			if c is AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer:
+				c.pause()
+
+## Resumes all the visuals containers' animations.
+func resume():
+	for sl in _sub_layers:
+		for c in sl.get_children():
+			if c is AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer:
+				c.resume()
 
 ## We leave the _z_index in 50 here, explicitly.
 ## We leave space for few layers under the feet

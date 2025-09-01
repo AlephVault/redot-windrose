@@ -15,6 +15,8 @@ const _ExceptionUtils = AlephVault__WindRose.Utils.ExceptionUtils
 const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
 
+var _visuals_container: AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer
+
 ## An entities manager aware of this layer.
 class Entity extends AlephVault__WindRose.Core.Entity:
 	
@@ -199,6 +201,18 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		rotation = 0
 		_origin = position
 		_snap()
+		# Also, if the map has the visuals layer, then
+		# proceed to create and bind the visuals entity.
+		if _current_map.visuals_layer != null:
+			var vc = AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer.new()
+			_visuals_container = AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer.new()
+			_visuals_container.bind_entity(self)
+			var _tree_exited: Callable
+			_tree_exited = func():
+				_visuals_container.tree_exited.disconnect(_tree_exited)
+				if vc == _visuals_container:
+					_visuals_container = null
+			_visuals_container.tree_exited.connect(_tree_exited)
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()
@@ -327,3 +341,5 @@ func cancel_movement() -> _Response:
 
 func _process(delta: float):
 	updated.emit()
+	if _visuals_container != null:
+		_visuals_container.update(delta)
