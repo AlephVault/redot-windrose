@@ -11,6 +11,7 @@ const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
 const _Direction = _DirectionUtils.Direction
 const _FloorLayer = AlephVault__WindRose.Maps.Layers.FloorLayer
 const _EntitiesLayer = AlephVault__WindRose.Maps.Layers.EntitiesLayer
+const _VisualsLayer = AlephVault__WindRose.Maps.Layers.VisualsLayer
 const _MapLayout = AlephVault__WindRose.Maps.Utils.MapLayout
 const _MapLayoutType = AlephVault__WindRose.Maps.Utils.MapLayoutType
 
@@ -71,6 +72,18 @@ var entities_layer: _EntitiesLayer:
 			"Map", "entities_layer"
 		)
 
+# The visuals layer.
+var _visuals_layer: _VisualsLayer
+
+## Retrieves the Visuals layer.
+var visuals_layer: _VisualsLayer:
+	get:
+		return _visuals_layer
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Map", "visuals_layer"
+		)
+
 # The map layout.
 var _layout: _MapLayout
 
@@ -108,26 +121,32 @@ func get_scope_map(index: int) -> AlephVault__WindRose.Maps.Map:
 # layer (by calling initialize()).
 func _identify_layers():
 	var first = null
+	var _editor = Engine.is_editor_hint() and not EditorInterface.is_playing_scene()
 	for child in get_children():
 		if child is _FloorLayer:
 			_floor_layer = child
 		elif child is _EntitiesLayer:
 			_entities_layer = child
+		elif child is _VisualsLayer:
+			_visuals_layer = child
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
-	if _entities_layer != null and (not Engine.is_editor_hint() or EditorInterface.is_playing_scene()):
+	if _entities_layer != null and not _editor:
 		_entities_layer.initialize()
+	if _visuals_layer != null and not _editor:
+		_visuals_layer.initialize()
 
 # On tree enter it registers a new index
 # in the parent scope (if the parent is
 # a scope).
 func _enter_tree() -> void:
 	var parent = get_parent()
-	if parent is _Scope and _index >= 0 and _scope == null:
-		var _result = parent._add_map(self, _index)
-		if _result.is_successful():
-			_scope = parent
-	_size = Vector2i(max(1, _size.x), max(1, _size.y))
+	if not Engine.is_editor_hint() or EditorInterface.is_playing_scene():
+		if parent is _Scope and _index >= 0 and _scope == null:
+			var _result = parent._add_map(self, _index)
+			if _result.is_successful():
+				_scope = parent
+	_size = Vector2i(min(4096, max(1, _size.x)), min(4096, max(1, _size.y)))
 	child_order_changed.connect(_identify_layers)
 
 func _ready():
