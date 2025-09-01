@@ -339,6 +339,38 @@ func cancel_movement() -> _Response:
 		return _Response.succeed(false)
 	return _current_map.entities_layer.manager.movement_cancel(entity)
 
+## Adds a MapEntityVisual to this entity.
+func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual):
+	if v.get_parent() != null:
+		AlephVault__WindRose.Utils.ExceptionUtils.Exception.raise(
+			"already_parented", "This MapEntityVisual has already a parent"
+		)
+		return
+
+	if is_instance_valid(_visuals_container):
+		_visuals_container.add_child(v)
+	else:
+		add_child(v)
+
+## Removes a MapEntityVisual from this entity.
+func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual):
+	if not is_instance_valid(v):
+		return
+	
+	var parent: Node2D = null
+	if is_instance_valid(_visuals_container):
+		parent = _visuals_container
+	else:
+		parent = self
+	
+	if parent != v.get_parent():
+		AlephVault__WindRose.Utils.ExceptionUtils.Exception.raise(
+			"parent_mismatch", "This MapEntityVisual does not have this entity as parent"
+		)
+		return
+
+	parent.remove_child(v)
+
 func _process(delta: float):
 	updated.emit()
 	if _visuals_container != null:
