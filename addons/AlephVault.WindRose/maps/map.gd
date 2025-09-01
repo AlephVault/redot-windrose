@@ -131,10 +131,10 @@ func _identify_layers():
 			_visuals_layer = child
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
-	if _entities_layer != null and not _editor:
-		_entities_layer.initialize()
 	if _visuals_layer != null and not _editor:
 		_visuals_layer.initialize()
+	if _entities_layer != null and not _editor:
+		_entities_layer.initialize()
 
 # On tree enter it registers a new index
 # in the parent scope (if the parent is
