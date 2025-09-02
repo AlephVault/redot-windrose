@@ -171,6 +171,16 @@ const STATE_IDLE: int = 0
 ## A state: MOVING.
 const STATE_MOVING: int = 1
 
+## Tells which state to set as stopped when
+## the object stops moving or is just attached.
+func _get_idle_state() -> int:
+	return STATE_IDLE
+
+## Tells which state to set as moving when
+## the object starts moving.
+func _get_moving_state() -> int:
+	return STATE_MOVING
+
 ## The current state.
 var state: int = STATE_IDLE:
 	get:
@@ -206,6 +216,7 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		# The manager is already assigned to the entity.
 		# So we must, now, re-parent the object properly.
 		_current_map = manager.layer.map
+		state = _get_idle_state()
 		if self.get_parent() != null:
 			self.reparent(manager.layer)
 		else:
@@ -235,23 +246,26 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()
+	state = _get_idle_state()
 
 func _on_movement_started(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
-	pass
+	state = _get_moving_state()
 
 func _on_movement_cancelled(
 	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
 ):
 	_snap()
+	state = _get_idle_state()
 
 func _on_movement_finished(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
-	pass
+	state = _get_idle_state()
 
 func _on_detached():
+	state = _get_idle_state()
 	if _destroyed:
 		return
 	var _parent = self.get_parent()
