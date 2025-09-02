@@ -42,7 +42,7 @@ class VisualsContainer extends Node2D:
 	func pause():
 		_paused = true
 		for child in get_children():
-			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+			if child is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 				child.pause()
 	
 	## Resumes this object's visual animation
@@ -50,7 +50,7 @@ class VisualsContainer extends Node2D:
 	func resume():
 		_paused = false
 		for child in get_children():
-			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+			if child is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 				child.resume()
 	
 	## Updates a single frame of animation.
@@ -59,7 +59,7 @@ class VisualsContainer extends Node2D:
 			return
 
 		for child in get_children():
-			if child is AlephVault__WindRose.Maps.MapEntityVisual:
+			if child is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 				child.update(delta)
 	
 	## Binds this object to a new entity.
@@ -90,12 +90,12 @@ class VisualsContainer extends Node2D:
 			# Also, disconnect this callback.
 			if is_instance_valid(e):
 				for c in get_children():
-					if c is AlephVault__WindRose.Maps.MapEntityVisual:
+					if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 						c.reparent(e)
 						c.visible = false
 			else:
 				for c in get_children():
-					if c is AlephVault__WindRose.Maps.MapEntityVisual:
+					if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 						c.queue_free()
 			e.tree_exiting.disconnect(on_exit_tree)
 			e.rule.signals.on_movement_finished.disconnect(on_movement_finished)
@@ -116,7 +116,7 @@ class VisualsContainer extends Node2D:
 		# Also, grab the entity's children and put them
 		# right here.
 		for c in e.get_children():
-			if c is AlephVault__WindRose.Maps.MapEntityVisual:
+			if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 				c.reparent(s)
 				c.visible = true
 				c.setup(e)

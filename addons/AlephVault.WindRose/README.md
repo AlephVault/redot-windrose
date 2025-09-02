@@ -340,14 +340,14 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   movement, if any, to be canceled. The result will be successful with a value of `true` if the entity is attached
   to a map and the rules allowed the movement to be canceled. Otherwise, it will be a successful result with a
   `false` value.
-- `func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)`: Adds a visual to this entity. There is a section
-  for this feature: `Understanding Entity Visuals`.
-- `func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)`: Removes a visual from this entity. There is a
+- `func add_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)`: Adds a visual to this entity. There is a
   section for this feature: `Understanding Entity Visuals`.
-- `func pause()`: Pauses this entity's visual (`AlephVault__WindRose.Maps.MapEntityVisual`) objects. They get to be
-  still / frozen, but visible when they should be visible.
-- `func resume()`: Resumes this entity's visual (`AlephVault__WindRose.Maps.MapEntityVisual`) objects. They get to be
-  animated again.
+- `func remove_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)`: Removes a visual from this entity.
+  There is a section for this feature: `Understanding Entity Visuals`.
+- `func pause()`: Pauses this entity's visual (`AlephVault__WindRose.Maps.Visuals.MapEntityVisual`) objects. They
+  get to be still / frozen, but visible when they should be visible.
+- `func resume()`: Resumes this entity's visual (`AlephVault__WindRose.Maps.Visuals.MapEntityVisual`) objects. They
+  get to be animated again.
 - `var paused: bool`: Tells whether this entity is paused or not (see the previous two methods).
 
 Finally, interacting with the signals for movements and teleport is done through the `rule` property:
@@ -1114,7 +1114,7 @@ prior to adding the map to the scene tree).
 The next step is, for each of the entities that matter (e.g. this typically does not matter for entities like
 triggers, which are almost always invisible in nature). For this to work, for each entity, this can be done:
 
-1. First, the entity should have child `AlephVault__WindRose.Maps.MapEntityVisual` objects. One or more, and
+1. First, the entity should have child `AlephVault__WindRose.Maps.Visuals.MapEntityVisual` objects. One or more, and
    each with different `z_index` values (this is optional but recommended). This can, actually, be changed
    at anytime and there are convenience methods (that will be described later) to do that properly, which
    account for the different moments of a `MapEntity` (i.e. being added to a map with `VisualsLayer` or not).
@@ -1131,14 +1131,14 @@ object leaves the map.
 
 In order to manipulate these objects, two methods must be accounted for:
 
-- `func add_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)` adds a new visual to an entity. For this to
+- `func add_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` adds a new visual to an entity. For this to
   work, the visual must not have any parent at all. After calling this method, the visual becomes added to the
   entity, either as direct child of the entity (if the entity is not inside any map with `VisualsLayer`) or
   direct child of the `VisualsContainer` of that entity (if the entity is inside a map with such layer - the
   property being looked up is `(map).visuals_layer` being not null & valid instance). The added visual becomes
   visible (`visible` = `true`) if the entity is inside a map with `visuals_layer` != null. Otherwise, it
   becomes invisible (`visible` = `false`).
-- `func remove_visual(v: AlephVault__WindRose.Maps.MapEntityVisual)` removes an existing visual from an entity.
+- `func remove_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` removes an existing visual from an entity.
   For this to work, the visual must have this entity as parent: either the entity itself, if the entity is
   not attached to a map with a `VisualsLayer` child, or from the related `VisualsContainer` otherwise. The
   removed visual becomes invisible (`visible` = `false`).
@@ -1197,7 +1197,7 @@ None of these methods are meant for the user to invoke them directly.
 
 #### Related class: MapEntityVisual
 
-The full path is `AlephVault__WindRose.Maps.MapEntityVisual`. This is the parent visual class and has many useful
+The full path is `AlephVault__WindRose.Maps.Visuals.MapEntityVisual`. This is the parent visual class and has many useful
 methods which will be invoked by the engine appropriately:
 
 - `func setup(e: AlephVault__WindRose.Maps.MapEntity)`: Sets this visual to the related entity. Once the entity is
