@@ -1200,14 +1200,26 @@ None of these methods are meant for the user to invoke them directly.
 The full path is `AlephVault__WindRose.Maps.MapEntityVisual`. This is the parent visual class and has many useful
 methods which will be invoked by the engine appropriately:
 
-- `func reset()`: Implementation for when this visual is just added to a VisualContainer and its animation should
-  start over. This is up to the user.
+- `func setup(e: AlephVault__WindRose.Maps.MapEntity)`: Sets this visual to the related entity. Once the entity is
+  set, `_setup()` is invoked. Implement `_setup()` to have a setup logic - never override this `setup(e)` method.
+  This setup occurs when this visual is added to its container (i.e. right when an object is attached to a
+  VisualsLayer-enabled map).
+- `func teardown(e: AlephVault__WindRose.Maps.MapEntity)`: Sets this visual to the related entity. Once the entity
+  is set, `_teardown()` is invoked. Implement `_teardown()` to have a setup logic - never override this `teardown(e)`
+  method. This setup occurs when this visual is added to its container (i.e. right when an object is attached to a
+  VisualsLayer-enabled map).
 - `func pause()`: Implementation for when the object is paused (from the downstream logic described in the previous
-  classes). Implement `_pause()` to have an idempotent logic - never override `pause()` method.
+  classes). Implement `_pause()` to have an idempotent logic - never override this `pause()` method.
 - `func resume()`: Implementation for when the object is resumed (from the downstream logic described in the previous
-  classes). Implement `_resume()` to have an idempotent logic - never override `resume()` method.
-- `func update(delta: float)`: Implementation for when the object is updated (from the `update` method in the container).
+  classes). Implement `_resume()` to have an idempotent logic - never override this `resume()` method.
+- `func update(delta: float)`: This method is invoked when the object is updated (from the `update` method in the
+  container). This method is **not** invoked if the related entity is not set. Implement `_update(delta)` to have
+  a logic for each cycle - never override this `update(delta)` method.
 - `var paused: bool`: Tells whether this visual is paused or not.
+- `var map_entity: AlephVault__WindRose.Maps.MapEntity`: Retrieves the map entity associated to this visual. This
+  occurs when the setup is done and before the teardown is done.
+
+None of these methods are meant for the user to invoke them directly.
 
 This object extends from `Sprite2D` and the base implementation is to do nothing at all (this object implements its
 own `_process` to fix its local position to `(0, 0)` but other than that no logic is implemented), which is a good
@@ -1216,5 +1228,5 @@ like a custom pre-fabricated scene resource file).
 
 Developers are free (and perhaps encouraged) to create children classes out of `MapEntityVisual` for their own logic.
 
-Typically, implementing `_pause() / _resume()` is not needed, but implementing `update(delta)` is the critical part of
-a visual (e.g. frame-by-frame animation), along with `reset()`.
+Typically, implementing `_pause() / _resume()` is not needed, but implementing `_update(delta)` is the critical part
+of a visual (e.g. frame-by-frame animation), along with `_setup(e)` and perhaps `_teardown()`.

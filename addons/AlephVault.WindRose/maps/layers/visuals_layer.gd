@@ -117,9 +117,9 @@ class VisualsContainer extends Node2D:
 		# right here.
 		for c in e.get_children():
 			if c is AlephVault__WindRose.Maps.MapEntityVisual:
-				c.reparent(e)
+				c.reparent(s)
 				c.visible = true
-				c.reset()
+				c.setup(e)
 		# Finally, set this object to the proper position.
 		layer._fix_level(self)
 
