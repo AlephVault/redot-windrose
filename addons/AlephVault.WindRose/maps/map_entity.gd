@@ -168,6 +168,9 @@ signal speed_changed(speed: float)
 ## A state: IDLE.
 const STATE_IDLE: int = 0
 
+## A state: MOVING.
+const STATE_MOVING: int = 1
+
 ## The current state.
 var state: int = STATE_IDLE:
 	get:

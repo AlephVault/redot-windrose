@@ -243,4 +243,8 @@ class FullSetup:
 	## the chosen frame. If only the down direction is set,
 	## then it applies it regardless the direction.
 	func apply(sprite: Sprite2D, state_key: String, direction: _Direction, frame: int):
-		get_state(state_key).apply(sprite, direction, frame)
+		var state = get_state(state_key)
+		if is_instance_valid(state):
+			state.apply(sprite, direction, frame)
+		else:
+			state.image = null
