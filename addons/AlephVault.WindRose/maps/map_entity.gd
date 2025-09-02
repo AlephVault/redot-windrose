@@ -149,10 +149,10 @@ var initial_position: Vector2i:
 		if value == _Direction.NONE:
 			value = _Direction.DOWN
 		orientation = value
-		orientation_changed.emit(value)
+		on_orientation_changed.emit(value)
 
 ## A signal to tell the change of orientation.
-signal orientation_changed(orientation: _Direction)
+signal on_orientation_changed(orientation: _Direction)
 
 ## The current speed.
 @export var speed: float:
@@ -160,10 +160,10 @@ signal orientation_changed(orientation: _Direction)
 		return speed
 	set(value):
 		speed = max(0.001, value)
-		speed_changed.emit(speed)
+		on_speed_changed.emit(speed)
 
 ## A signal to tell the change of speed.
-signal speed_changed(speed: float)
+signal on_speed_changed(speed: float)
 
 ## A state: IDLE.
 const STATE_IDLE: int = 0
@@ -187,10 +187,10 @@ var state: int = STATE_IDLE:
 		return state
 	set(value):
 		state = value
-		state_changed.emit(state)
+		on_state_changed.emit(state)
 
 ## A signal to tell the change of state.
-signal state_changed(state: int)
+signal on_state_changed(state: int)
 
 ## A signal telling to update typically visual objects
 ## depending on this object. Connect a method to this

@@ -34,8 +34,8 @@ class Provider:
 ## 4. The number of horizontal frames.
 class FramesetSetup:
 	
-	# The underlying image. This one can be changed
-	# on the fly if needed.
+	## The underlying image. This one can be changed
+	## on the fly if needed.
 	var image: Texture2D
 	
 	# The underlying region.
@@ -92,7 +92,8 @@ class FramesetSetup:
 		self._vertically_distributed = vertically_distributed
 
 	## Applies this setup into a sprite for the chosen frame.
-	func apply(sprite: Sprite2D, frame: int):
+	## Returns the effective index of the applied frame.
+	func apply(sprite: Sprite2D, frame: int) -> int:
 		if self._image == null:
 			sprite.texture = null
 		else:
@@ -108,6 +109,7 @@ class FramesetSetup:
 				sprite.vframes = 1
 				sprite.hframes = n_frames
 			sprite.frame = frame % n_frames
+		return sprite.frame
 
 ## A setup for a single state, which can involve
 ## one single frameset or multiple framesets, one
@@ -175,8 +177,9 @@ class StateSetup:
 
 	## Applies a direction-dependent setup into a sprite for
 	## the chosen frame. If only the down direction is set,
-	## then it applies it regardless the direction.
-	func apply(sprite: Sprite2D, direction: _Direction, frame: int):
+	## then it applies it regardless the direction. Returns
+	## the effective index of the applied frame.
+	func apply(sprite: Sprite2D, direction: _Direction, frame: int) -> int:
 		var frameset_setup: FramesetSetup = null
 		match direction:
 			_Direction.UP:
@@ -188,9 +191,20 @@ class StateSetup:
 			_Direction.RIGHT:
 				frameset_setup = _right if _right != null else _down
 		if not is_instance_valid(frameset_setup):
-			sprite.image = null
+			sprite.texture = null
+			return 0
 		else:
-			frameset_setup.apply(sprite, frame)
+			return frameset_setup.apply(sprite, frame)
+	
+	## Sets the given image in all the internal framesets.
+	func set_image(image: Texture2D):
+		_down.image = image
+		if _up:
+			_up.image = image
+		if _left:
+			_left.image = image
+		if _right:
+			_right.image = image
 
 const _STATE_IDLE = AlephVault__WindRose.Maps.MapEntity.STATE_IDLE
 
@@ -248,12 +262,83 @@ class FullSetup:
 
 	## Applies a state-dependent setup into a sprite for
 	## the chosen frame. If only the down direction is set,
-	## then it applies it regardless the direction.
+	## then it applies it regardless the direction. Returns
+	## the effective index of the applied frame.
 	func apply(
 		sprite: Sprite2D, state_key: int, direction: _Direction, frame: int
 	):
 		var state = get_state(state_key)
 		if is_instance_valid(state):
-			state.apply(sprite, direction, frame)
+			return state.apply(sprite, direction, frame)
 		else:
-			state.image = null
+			sprite.texture = null
+			return 0
+
+# The assigned full setup.
+var full_setup: FullSetup
+
+# The current state.
+var _state: int = _STATE_IDLE
+
+# The current orientation.
+var _orientation: _Direction = _Direction.DOWN
+
+# The current frame.
+var _frame: int = 0
+
+func _on_state_changed(s: int):
+	_state = s
+	_frame = 0
+	_apply()
+
+func _on_orientation_changed(o: _Direction):
+	_orientation = o
+	_frame = 0
+	_apply()
+
+# Applies a current frame to this sprite, from current
+# direction and current state.
+func _apply():
+	if is_instance_valid(full_setup):
+		_frame = full_setup.apply(self, _state, _orientation, _frame)
+		_frame += 1
+	else:
+		texture = null
+		_frame = 0
+
+func _setup():
+	map_entity.on_state_changed.connect(_on_state_changed)
+	map_entity.on_orientation.connect(_on_orientation_changed)
+	_state = map_entity.state
+	_orientation = map_entity.orientation
+	_frame = 0
+	_apply()
+
+func _teardown():
+	map_entity.on_state_changed.disconnect(_on_state_changed)
+	map_entity.on_orientation_changed.disconnect(_on_orientation_changed)
+	texture = null
+
+func _update(delta: float):
+	if is_instance_valid(full_setup):
+		_apply()
+
+## Sets the image for a given state. The state must exist.
+func set_image(state: int, image: Texture2D):
+	if not is_instance_valid(full_setup):
+		AlephVault__WindRose.Utils.ExceptionUtils.Exception.raise(
+			"invalid_setup",
+			"Cannot set the image for any state since the full setup is not " +
+			"properly set"
+		)
+		return
+	if state == _STATE_IDLE:
+		full_setup.default_state.set_image(image)
+	else:
+		var state_setup = full_setup.get_state(state)
+		if state_setup == full_setup.default_state:
+			AlephVault__WindRose.Utils.ExceptionUtils.Exception.raise(
+				"invalid_state", "The chosen state key is not set: " + str(state)
+			)
+			return
+		state_setup.set_image(image)

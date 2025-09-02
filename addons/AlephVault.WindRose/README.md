@@ -292,19 +292,19 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   At runtime, this property is read-only. If you don't set the initial position, then a best guess will be
   done for the in-space position to calculate the in-map position.
 - `orientation: AlephVault__WindRose.Utils.DirectionUtils.Direction`: Sets or returns the orientation of
-  this entity. The signal `orientation_changed` is triggered with the new direction on assignment.
-- `signal orientation_changed(AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A signal triggered when
-  the orientation changes in this entity. Features like animation, game logic, or potentially custom rules
-  can pay attention to this feature.
+  this entity. The signal `on_orientation_changed` is triggered with the new direction on assignment.
+- `signal on_orientation_changed(AlephVault__WindRose.Utils.DirectionUtils.Direction)`: A signal triggered
+  when the orientation changes in this entity. Features like animation, game logic, or potentially custom
+  rules can pay attention to this feature.
 - `speed: float`: Sets or returns the speed of this entity. The speed is expressed in pixels. The signal
-  `speed_changed` is triggered with the new speed on assignment. It is always clamped to be greater than or
-  equal to `0.001`.
-- `signal speed_changed(float)`: A signal triggered when the speed changes in this entity.
+  `on_speed_changed` is triggered with the new speed on assignment. It is always clamped to be greater than
+  or equal to `0.001`.
+- `signal on_speed_changed(float)`: A signal triggered when the speed changes in this entity.
 - `state: int`: Sets or returns the state of this entity. Like with the orientation, the state is an optional
   feature, highly used when in the need of animating the aesthetics of an entity. This is just a number, and
   the default value is `AlephVault__WindRose.Maps.MapEntity.STATE_IDLE` (0). It is up to the developer to
-  give meaning to any state number. When this state is changed, it triggers `state_changed(state)`.
-- `signal state_changed(int)`: A signal triggered when the state changes in this entity.
+  give meaning to any state number. When this state is changed, it triggers `on_state_changed(state)`.
+- `signal on_state_changed(int)`: A signal triggered when the state changes in this entity.
 - `signal updated()`: A signal emitted on every frame for this entity. With this in mind, elements like visual
   aesthetics manager can connect arbitrary parameterless callbacks so they know when an entity is being updated
   (`_process`) and can act accordingly.
