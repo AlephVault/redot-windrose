@@ -3,6 +3,11 @@ extends AlephVault__WindRose.Maps.Visuals.MapEntityVisual
 ## provider. This provider is the responsible of updating
 ## the image to use, by using the current delta and entity.
 ## The change is done in-place in this (Sprite2D) object.
+##
+## This class is complete on itself but not recommended
+## to be used by itself. Instead, children classes would
+## be created (as some sort of recipes) to ease the users
+## at editor time.
 
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 
@@ -187,15 +192,17 @@ class StateSetup:
 		else:
 			frameset_setup.apply(sprite, frame)
 
+const _STATE_IDLE = AlephVault__WindRose.Maps.MapEntity.STATE_IDLE
+
 ## A setup for multiple states. A first setup is specified
 ## for the default state (empty string, ""), and then a
 ## dictionary mapping [state: String] => (setup: StateSetup).
 class FullSetup:
 	
-	# The default state setup, for key "".
+	# The default state setup, for key STATE_IDLE.
 	var _default_state: StateSetup
 	
-	## The default state setup, for key "".
+	## The default state setup, for key STATE_IDLE.
 	var default_state: StateSetup:
 		get:
 			return _default_state
@@ -210,7 +217,7 @@ class FullSetup:
 	## Retrieves one of the states. If it is not
 	## available (non-existing key), then returns
 	## the default state.
-	func get_state(key: String) -> StateSetup:
+	func get_state(key: int) -> StateSetup:
 		return _states.get(key, _default_state)
 	
 	func _init(default_setup: StateSetup, custom_states: Dictionary = {}):
@@ -222,18 +229,18 @@ class FullSetup:
 		else:
 			_default_state = default_state
 		for key in custom_states.keys():
-			if key == "":
-				custom_states.erase("")
+			if key == _STATE_IDLE:
+				custom_states.erase(_STATE_IDLE)
 				push_warning(
-					"The custom_states cannot contain an entry for the empty " +
-					"string, since the empty string is used for the default " +
-					"state. The entry will be removed"
+					"The custom_states cannot contain an entry for the state " +
+					"o (STATE_IDLE), since the empty string is used for the " +
+					"default state. The entry will be removed"
 				)
 			var value = custom_states[key]
 			if not (is_instance_valid(value) and value is StateSetup):
 				custom_states.erase(key)
 				push_warning(
-					"The custom_states has, at key: " + key + ", an object " +
+					"The custom_states has, at key: " + str(key) + ", an object " +
 					"which is either not a valid instance or not an instance " +
 					"of StateSetup. The entry will be removed"
 				)
@@ -242,7 +249,9 @@ class FullSetup:
 	## Applies a state-dependent setup into a sprite for
 	## the chosen frame. If only the down direction is set,
 	## then it applies it regardless the direction.
-	func apply(sprite: Sprite2D, state_key: String, direction: _Direction, frame: int):
+	func apply(
+		sprite: Sprite2D, state_key: int, direction: _Direction, frame: int
+	):
 		var state = get_state(state_key)
 		if is_instance_valid(state):
 			state.apply(sprite, direction, frame)
