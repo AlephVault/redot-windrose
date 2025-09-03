@@ -23,6 +23,9 @@ The important elements related to this package are:
    to a map, detached from a map, teleported inside a map, moved inside a map, or even aborting a movement
    inside a map.
 
+4. Map Entity Visual: Visual aspects are, optionally, managed in a separate way (on top of the tilemaps
+   and even the map entities) to have a better visualization on their own (e.g. a better z_index system).
+
 ## Installation
 
 This package might be available in the Redot/Godot Asset Library. However, it can also be installed
@@ -1230,3 +1233,7 @@ Developers are free (and perhaps encouraged) to create children classes out of `
 
 Typically, implementing `_pause() / _resume()` is not needed, but implementing `_update(delta)` is the critical part
 of a visual (e.g. frame-by-frame animation), along with `_setup(e)` and perhaps `_teardown()`.
+
+#### Related convenience subclass: AutoMapEntityVisual
+
+The full path is `AlephVault__WindRose.Maps.Visuals.AutoMapEntityVisual`.
