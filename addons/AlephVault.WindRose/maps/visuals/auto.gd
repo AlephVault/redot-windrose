@@ -75,10 +75,37 @@ class FramesetSetup:
 			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 				"SimpleProviderSetup", "n_frames"
 			)
-
+	
+	# Whether the reference point for the offset is centered
+	# or not (left-top-based).
+	var _centered: bool
+	
+	## Whether the reference point for the offset is centered
+	## or not (left-top-based).
+	var centered: bool:
+		get:
+			return _centered
+		set(value):
+			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+				"SimpleProviderSetup", "centered"
+			)
+	
+	# The offset to apply to the sprite.
+	var _offset: Vector2i
+	
+	## The offset to apply to the sprite.
+	var offset: Vector2i:
+		get:
+			return _offset
+		set(value):
+			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+				"SimpleProviderSetup", "offset"
+			)
+	
 	func _init(
 		image: Texture2D, region: Rect2i, n_frames: int,
-		vertically_distributed: bool
+		vertically_distributed: bool, centered: bool = true,
+		offset: Vector2i = Vector2i(0, 0)
 	):
 		if image == null:
 			region = Rect2i(0, 0, 0, 0)
@@ -90,6 +117,8 @@ class FramesetSetup:
 		n_frames = max(1, n_frames)
 		self._n_frames = n_frames
 		self._vertically_distributed = vertically_distributed
+		self._offset = offset
+		self._centered = centered
 
 	## Applies this setup into a sprite for the chosen frame.
 	## Returns the effective index of the applied frame.
@@ -99,6 +128,8 @@ class FramesetSetup:
 		else:
 			if sprite.texture != image:
 				sprite.texture = image
+			sprite.centered = centered
+			sprite.offset = offset
 			sprite.region_enabled = true
 			sprite.region_filter_clip_enabled = true
 			sprite.region_rect = region
