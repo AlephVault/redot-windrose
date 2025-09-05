@@ -102,6 +102,14 @@ class FramesetSetup:
 				"SimpleProviderSetup", "offset"
 			)
 	
+	## Creating a FramesetSetup takes the
+	## properties that have the same meaning
+	## in the Sprite2D objects: image (matches:
+	## texture), region: (matches: region_rect),
+	## centered and offset. Also, n_frames and
+	## vertically_distributed tells the allowed
+	## frames to infer (how many and whether in
+	## row or in column).
 	func _init(
 		image: Texture2D, region: Rect2i, n_frames: int,
 		vertically_distributed: bool, centered: bool = true,
@@ -192,6 +200,13 @@ class StateSetup:
 				"StateSetup", "right"
 			)
 	
+	## Creating this frameset setup takes at least one
+	## non-null FramesetSetup object and optionally 3
+	## other FramesetSetup instances. In this latter
+	## case, those will be used to differentiate the
+	## visual aspects of the object looking left, right
+	## or up (otherwise, the same down-facing aesthetic
+	## will be used in either case).
 	func _init(
 		down: FramesetSetup, up: FramesetSetup = null,
 		left: FramesetSetup = null, right: FramesetSetup = null
@@ -240,8 +255,8 @@ class StateSetup:
 const _STATE_IDLE = AlephVault__WindRose.Maps.MapEntity.STATE_IDLE
 
 ## A setup for multiple states. A first setup is specified
-## for the default state (empty string, ""), and then a
-## dictionary mapping [state: String] => (setup: StateSetup).
+## for the default state (0, zero), and then a dictionary
+## mapping [state: int] => (setup: StateSetup).
 class FullSetup:
 	
 	# The default state setup, for key STATE_IDLE.
@@ -305,7 +320,9 @@ class FullSetup:
 			sprite.texture = null
 			return 0
 
-# The assigned full setup.
+## The assigned full setup. By setting this property, this
+## visual becomes active and showing images depending on the
+## current orientation and / or state of the owning entity.
 var full_setup: FullSetup
 
 # The current state.
