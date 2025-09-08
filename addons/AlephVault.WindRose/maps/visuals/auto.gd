@@ -354,7 +354,12 @@ func _apply():
 		texture = null
 		_frame = 0
 
+# Creates the full setup.
+func _make_full_setup() -> FullSetup:
+	return null
+
 func _setup():
+	full_setup = _make_full_setup()
 	map_entity.on_state_changed.connect(_on_state_changed)
 	map_entity.on_orientation.connect(_on_orientation_changed)
 	_state = map_entity.state

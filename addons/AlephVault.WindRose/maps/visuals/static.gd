@@ -17,9 +17,13 @@ extends AlephVault__WindRose.Maps.Visuals.AutoMapEntityVisual
 ##   be silently ignored and overridden.
 ## - flip_h & flip_v: Can be set on editor, as always. Can be
 ##   changed at runtime.
-## - h_frames, v_frames, frame and frame_coords: Setting them at
-##   editor time will be pointless, since they'll be overridden
-##   at runtime.
+## - hframes, vframes: Depending on the Vertically Distributed
+##   properties, these will be paid attention to at editor time:
+##   if true, then vframes will be considered and hframes will
+##   be forced to 1, while if false, then hframes will be
+##   considered and vframes will be forced to 1.
+## - frame and frame_coords: Setting them at editor time will be
+##   pointless, since they'll be overridden at runtime.
 ## - region_rect: Can be set at editor, as always. Trying to set
 ##   it at runtime will be silently ignored and overridden.
 ## - region_enabled and filter_clip_enabled: Setting them at
@@ -43,3 +47,46 @@ extends AlephVault__WindRose.Maps.Visuals.AutoMapEntityVisual
 ## - full_setup: AlephVault__WindRose.Maps.Visuals.AutoMapEntityVisual.FullSetup:
 ##   Holds the entire visual setup for this object, as described in the Auto-
 ##   visual class.
+
+## Whether the frames are distributed vertically or not (i.e. horizontally)
+## inside the image (either the full image size or using one or more region
+## rectangles). The number of frames to pay attention for, when generating
+## these animations, will come from the vframes or hframes property (this
+## depends on whether this property is true or false).
+@export var _vertically_distributed: bool = true
+
+## The rectangle where the up-facing frames are located.
+@export var _region_rect_up: Rect2 = Rect2(0, 0, 0, 0)
+
+## The rectangle where the left-facing frames are located.
+@export var _region_rect_left: Rect2 = Rect2(0, 0, 0, 0)
+
+## The rectangle where the right-facing frames are located.
+@export var _region_rect_right: Rect2 = Rect2(0, 0, 0, 0)
+
+func __valid_region_rect(rect: Rect2) -> bool:
+	return rect.position.x >= 0 and rect.position.y >= 0 and \
+		   rect.size.x > 0 and rect.size.y > 0
+
+# Creates the full setup.
+func _make_full_setup() -> FullSetup:
+	return FullSetup.new(
+		StateSetup.new(
+			FramesetSetup.new(
+				texture, _region_rect_up, vframes if _vertically_distributed else hframes,
+				_vertically_distributed, centered, offset
+			) if __valid_region_rect(_region_rect_up) else null,
+			FramesetSetup.new(
+				texture, region_rect, vframes if _vertically_distributed else hframes,
+				_vertically_distributed, centered, offset
+			),
+			FramesetSetup.new(
+				texture, _region_rect_left, vframes if _vertically_distributed else hframes,
+				_vertically_distributed, centered, offset
+			) if __valid_region_rect(_region_rect_left) else null,
+			FramesetSetup.new(
+				texture, _region_rect_right, vframes if _vertically_distributed else hframes,
+				_vertically_distributed, centered, offset
+			) if __valid_region_rect(_region_rect_right) else null,
+		)
+	)
