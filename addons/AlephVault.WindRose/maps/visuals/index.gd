@@ -2,5 +2,5 @@ extends Object
 
 const MapEntityVisual = preload("./base.gd")
 const AutoMapEntityVisual = preload("./auto.gd")
-const StaticEntityVisual = preload("./static.gd")
-const MovableEntityVisual = preload("./movable.gd")
+const StaticMapEntityVisual = preload("./static.gd")
+const MovableMapEntityVisual = preload("./movable.gd")
