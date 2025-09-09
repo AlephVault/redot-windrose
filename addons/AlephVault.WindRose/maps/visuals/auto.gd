@@ -372,9 +372,22 @@ func _teardown():
 	map_entity.on_orientation_changed.disconnect(_on_orientation_changed)
 	texture = null
 
+## The amount of frames per second to animate.
+@export var fps: int = 0
+
+# The accumulated frame time.
+var _accumulated: float = 0
+
 func _update(delta: float):
-	if is_instance_valid(full_setup):
-		_apply()
+	_apply()
+	if fps > 0:
+		if _accumulated > (1 / fps):
+			_frame += 1
+			_accumulated = _accumulated - 1. * floor(_accumulated * fps) / fps
+		else:
+			_accumulated += delta
+	else:
+		_accumulated = 0
 
 ## Sets the image for a given state. The state must exist.
 func set_image(state: int, image: Texture2D):
