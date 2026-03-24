@@ -235,7 +235,7 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		# proceed to create and bind the visuals entity.
 		if _current_map.visuals_layer != null:
 			var vc = AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer.new()
-			_visuals_container = AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer.new()
+			_visuals_container = vc
 			_visuals_container.bind_entity(self)
 			var _tree_exited: Callable
 			_tree_exited = func():
@@ -382,6 +382,7 @@ func add_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual):
 
 	if is_instance_valid(_visuals_container):
 		_visuals_container.add_child(v)
+		v.setup(self)
 		v.visible = true
 	else:
 		add_child(v)
@@ -408,6 +409,8 @@ func remove_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual):
 		)
 		return
 
+	if is_instance_valid(_visuals_container):
+		v.teardown(self)
 	parent.remove_child(v)
 	v.visible = false
 

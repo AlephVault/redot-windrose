@@ -1101,6 +1101,7 @@ func _before_teleport(e: AlephVault__WindRose.Maps.MapEntity):
 ## async and makes an animation or transition.
 func _after_teleport(e: AlephVault__WindRose.Maps.MapEntity):
 	pass
+```
 
 ### Understanding Entity Visuals
 
@@ -1117,9 +1118,9 @@ prior to adding the map to the scene tree).
 The next step is, for each of the entities that matter (e.g. this typically does not matter for entities like
 triggers, which are almost always invisible in nature). For this to work, for each entity, this can be done:
 
-1. First, the entity should have child `AlephVault__WindRose.Maps.Visuals.MapEntityVisual` objects. One or more, and
-   each with different `z_index` values (this is optional but recommended). This can, actually, be changed
-   at anytime and there are convenience methods (that will be described later) to do that properly, which
+1. First, the entity should have child `AlephVault__WindRose.Maps.Visuals.MapEntityVisual` objects. One or more,
+   and each with different `z_index` values (this is optional but recommended). This can, actually, be changed
+   at any time and there are convenience methods (that will be described later) to do that properly, which
    account for the different moments of a `MapEntity` (i.e. being added to a map with `VisualsLayer` or not).
 2. Second, ensure all the relevant maps must have their `VisualsLayer` added to them.
 3. Then, add (attach) the entity to the map via the described methods in the first sections of this README.md.
@@ -1128,23 +1129,24 @@ This will cause the entity's visuals to be properly added and tracked (real-time
 moves or teleports: Their visuals are added together into a new object (related to this current entity) of type
 `AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer`. These containers are `Node2D` objects which
 track and move (and pause / resume) all the visuals related to a single entity, and move along the current
-global position of the related entity. These objects are destroyed (and their children, which are those visuals
-of type `MapEntityVisual`, re-parented back to the owning `MapEntity` object) when the related `MapEntity`
-object leaves the map.
+global position of the related entity. These objects are destroyed when the related `MapEntity` object leaves
+the map, and all the visuals are removed from the container and added back to the owning `MapEntity` object.
 
 In order to manipulate these objects, two methods must be accounted for:
 
-- `func add_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` adds a new visual to an entity. For this to
-  work, the visual must not have any parent at all. After calling this method, the visual becomes added to the
-  entity, either as direct child of the entity (if the entity is not inside any map with `VisualsLayer`) or
-  direct child of the `VisualsContainer` of that entity (if the entity is inside a map with such layer - the
+- `func add_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` adds a new visual to an entity. For
+  this to work, the visual must not have any parent at all. After calling this method, the visual becomes added
+  to the entity, either as direct child of the entity (if the entity is not inside any map with `VisualsLayer`)
+  or direct child of the `VisualsContainer` of that entity (if the entity is inside a map with such layer - the
   property being looked up is `(map).visuals_layer` being not null & valid instance). The added visual becomes
   visible (`visible` = `true`) if the entity is inside a map with `visuals_layer` != null. Otherwise, it
-  becomes invisible (`visible` = `false`).
-- `func remove_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` removes an existing visual from an entity.
-  For this to work, the visual must have this entity as parent: either the entity itself, if the entity is
+  becomes invisible (`visible` = `false`). If added to a `VisualsContainer`, then `setup(entity)` is also
+  invoked.
+- `func remove_visual(v: AlephVault__WindRose.Maps.Visuals.MapEntityVisual)` removes an existing visual from an
+  entity. For this to work, the visual must have this entity as parent: either the entity itself, if the entity is
   not attached to a map with a `VisualsLayer` child, or from the related `VisualsContainer` otherwise. The
-  removed visual becomes invisible (`visible` = `false`).
+  removed visual becomes invisible (`visible` = `false`). If removed from a `VisualsContainer`, then
+  `teardown(entity)` is also invoked.
 
 These functions are _not_ equal to trivial calls of `add_child`, `remove_child` or `reparent`. Also, these
 functions can be called at any time, being the entity inside a map with `visuals_layer` != null, or not.
