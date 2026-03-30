@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bi2ulo2upiq4u"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/barn/sample-aleph-vault-barn.gd" id="1_amtxl"]
+
+[node name="Sample-aleph-vault-barn-usage" type="Node2D"]
+
+[node name="SmallBarn" type="Sprite2D" parent="."]
+position = Vector2(32, 448)
+centered = false
+script = ExtResource("1_amtxl")
+
+[node name="MediumBarn" type="Sprite2D" parent="."]
+position = Vector2(256, 448)
+centered = false
+script = ExtResource("1_amtxl")
+flavor = 1
+
+[node name="BigBarn" type="Sprite2D" parent="."]
+position = Vector2(480, 448)
+centered = false
+script = ExtResource("1_amtxl")
+flavor = 2
