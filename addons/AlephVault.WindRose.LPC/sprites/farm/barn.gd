@@ -27,7 +27,10 @@ const _FLAVOR_REGION_RECTS := {
 }
 
 
-const _GATE_REGION_RECT = Rect2i(32, 320, 160, 416)
+const _GATE_REGION_RECT = Rect2i(32, 320, 128, 96)
+
+
+var _gate: Sprite2D = null
 
 
 ## The flavor for this barn. It displays a different image
@@ -38,20 +41,20 @@ const _GATE_REGION_RECT = Rect2i(32, 320, 160, 416)
 		_update_sprite()
 
 
+## The status of the gate. It can be open or closed. It displays
+## the gate if open, or hides it if closed.
+@export var gate_status: GateStatus = GateStatus.CLOSED:
+	set(value):
+		gate_status = value
+		_update_sprite()
+
+
 func _init() -> void:
 	_update_sprite()
 
 
 func _ready() -> void:
 	_update_sprite()
-	set_process(true)
-
-func _process(delta):
-	queue_redraw() # This calls the _draw() function
-
-func _draw():
-	# Draw a red circle with a radius of 5 pixels at the pivot (local 0, 0)
-	draw_circle(Vector2.ZERO, 5, Color(1, 0, 0))
 
 func _validate_property(property: Dictionary) -> void:
 	if property.name in [
@@ -78,3 +81,28 @@ func _update_sprite() -> void:
 	region_filter_clip_enabled = true
 	offset = Vector2i(0, -region_rect.size.y)
 	centered = false
+	if not is_instance_valid(_gate):
+		_gate = Sprite2D.new()
+	var _gate_parent = _gate.get_parent()
+	if _gate_parent == null:
+		add_child(_gate)
+	elif _gate_parent != self:
+		_gate.reparent(self)
+	
+	if gate_status == GateStatus.CLOSED:
+		_gate.texture = BARN_TEXTURE
+		_gate.hframes = 1
+		_gate.vframes = 1
+		_gate.frame = 0
+		_gate.frame_coords = Vector2i.ZERO
+		_gate.region_enabled = true
+		_gate.region_rect = _GATE_REGION_RECT
+		_gate.region_filter_clip_enabled = true
+		_gate.offset = Vector2i(0, -_gate.region_rect.size.y)
+		_gate.centered = false
+		_gate.scale = Vector2i.ONE
+		_gate.rotation = 0
+		_gate.position = Vector2i((region_rect.size.x - _GATE_REGION_RECT.size.x) / 2, 0)
+		_gate.visible = true
+	else:
+		_gate.visible = false
