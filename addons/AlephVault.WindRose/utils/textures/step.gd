@@ -121,8 +121,15 @@ func _init(
 ## Alpha-blends this step source rectangle into the
 ## given target image at the configured target position.
 func blend_into(target_image: Image):
+	assert(not invalid, "This step is invalid. It cannot be processed")
 	assert(target_image != null, "A valid target image is required")
-	var source_image: Image = _texture.get_image()
-	assert(source_image != null, "The step texture must expose image data")
-	assert(source_image.get_format() == _FORMAT, "The step texture must use RGBA8 format")
-	target_image.blend_rect(source_image, _source_rect, _target_position)
+	if not invalid and target_image != null:
+		var source_image: Image = _texture.get_image()
+		assert(source_image != null, "The step texture must expose image data")
+		if source_image == null:
+			return
+		var valid_format: bool = source_image.get_format() == _FORMAT
+		assert(valid_format, "The step texture must use RGBA8 format")
+		if not valid_format:
+			return
+		target_image.blend_rect(source_image, _source_rect, _target_position)
