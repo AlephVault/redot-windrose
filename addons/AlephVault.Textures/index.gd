@@ -1,0 +1,2 @@
+class_name AlephVault__Textures
+extends Object
