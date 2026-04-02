@@ -3,18 +3,45 @@ extends Object
 ## all the references that track this entry. Also,
 ## whether this element is queued for disposal or
 ## not (instead: being an active entry).
+##
+## The entry also has a mean to have its value
+## disposed.
 
 var _value
 var _references: Dictionary = {}
 var _queued: bool = false
+var _disposed: bool = false
+var _dispose: Callable
+
+const _NOOP = func(): null
 
 ## Returns the current value for this entry.
 var value:
     get:
         return value
+    set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Entry", "value"
+		)
 
-func _init(value):
+## Returns whether this entry is disposed or not.
+var disposed: bool:
+    get:
+        return _disposed
+    set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Entry", "disposed"
+		)
+
+func _init(value, dispose: Callable = _NOOP):
     _value = value
+    _dispose = dispose
+
+## Disposes the current entry.
+func dispose():
+    if not _disposed:
+        _dispose.call()
+        _disposed = true
 
 ## Prunes all the references that belong to objects
 ## that are not valid references anymore (i.e. were
