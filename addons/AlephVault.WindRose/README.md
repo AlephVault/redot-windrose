@@ -1,6 +1,6 @@
 # WindRose
 
-This package provides features to create games with discrete, bi-directional, RPG movement games with
+This package provides features to create games with discrete, bidirectional, RPG movement games with
 cell-fixed movement games (suitable for deterministic MMORPG games).
 
 ## Main Elements
