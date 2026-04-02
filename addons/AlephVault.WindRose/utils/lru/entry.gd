@@ -9,16 +9,16 @@ extends Object
 
 var _value
 var _references: Dictionary = {}
-var _queued: bool = false
+var queued: bool = false
 var _disposed: bool = false
 var _dispose: Callable
 
-const _NOOP = func(): null
+const NOOP = func(): null
 
 ## Returns the current value for this entry.
 var value:
     get:
-        return value
+        return _value
     set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"Entry", "value"
@@ -33,7 +33,16 @@ var disposed: bool:
 			"Entry", "disposed"
 		)
 
-func _init(value, dispose: Callable = _NOOP):
+## Returns the dict of references.
+var references: Dictionary:
+	get:
+		return _references
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"Entry", "references"
+		)
+
+func _init(value, dispose: Callable = NOOP):
     _value = value
     _dispose = dispose
 
