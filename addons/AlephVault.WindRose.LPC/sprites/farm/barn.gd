@@ -2,7 +2,7 @@
 extends Sprite2D
 
 
-const BARN_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-barn.png")
+const _BARN_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-barn.png")
 
 
 ## The flavor (size) of the barn.
@@ -71,21 +71,10 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
-func _fix_sprite(sprite: Sprite2D, texture: Texture2D, region_rect: Rect2i):
-	sprite.texture = texture
-	sprite.hframes = 1
-	sprite.vframes = 1
-	sprite.frame = 0
-	sprite.frame_coords = Vector2i.ZERO
-	sprite.region_enabled = true
-	sprite.region_rect = region_rect
-	sprite.region_filter_clip_enabled = true
-	sprite.offset = Vector2i(0, -region_rect.size.y)
-	sprite.centered = false
-
-
 func _update_sprite() -> void:
-	_fix_sprite(self, BARN_TEXTURE, _FLAVOR_REGION_RECTS.get(flavor, _FLAVOR_REGION_RECTS[Flavor.SMALL]))
+	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
+		self, _BARN_TEXTURE, _FLAVOR_REGION_RECTS.get(flavor, _FLAVOR_REGION_RECTS[Flavor.SMALL])
+	)
 	if not is_instance_valid(_gate):
 		_gate = Sprite2D.new()
 	var _gate_parent = _gate.get_parent()
@@ -95,7 +84,9 @@ func _update_sprite() -> void:
 		_gate.reparent(self)
 	
 	if gate_status == GateStatus.CLOSED:
-		_fix_sprite(_gate, BARN_TEXTURE, _GATE_REGION_RECT)
+		AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
+			_gate, _BARN_TEXTURE, _GATE_REGION_RECT
+		)
 		_gate.scale = Vector2i.ONE
 		_gate.rotation = 0
 		_gate.position = Vector2i((region_rect.size.x - _GATE_REGION_RECT.size.x) / 2, 0)
