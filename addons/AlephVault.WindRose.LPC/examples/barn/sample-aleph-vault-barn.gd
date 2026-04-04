@@ -1,4 +1,4 @@
-extends AlephVault__WindRose__LPC.Sprites.Farm.Barn
+extends AlephVault__WindRose__LPC.Visuals.Farm.Barn
 
 var _was_space_pressed := false
 

@@ -24,7 +24,10 @@ var _get_sub_level: Callable
 func _fix_level(v: VisualsContainer):
 	var l: int = _get_level.call(v._map_entity)
 	var l_: int = _get_sub_level.call(l, v._map_entity)
-	v.reparent(_sub_layers[l])
+	if v.get_parent():
+		v.reparent(_sub_layers[l])
+	else:
+		_sub_layers[l].add_child(v)
 	v.z_index = l_
 
 ## A container related to a MapEntity and container

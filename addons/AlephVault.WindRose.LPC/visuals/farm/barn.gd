@@ -1,5 +1,5 @@
 @tool
-extends Sprite2D
+extends AlephVault__WindRose.Maps.Visuals.MapEntityVisual
 
 
 const _BARN_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-barn.png")
@@ -54,6 +54,27 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	_update_sprite()
+
+
+func _setup():
+	_update_sprite()
+
+
+func _teardown():
+	if is_instance_valid(_gate):
+		_gate.visible = false
+
+
+func _pause():
+	pass
+
+
+func _resume():
+	pass
+
+
+func _update(_delta: float):
 	_update_sprite()
 
 
