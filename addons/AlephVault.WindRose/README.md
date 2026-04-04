@@ -1239,3 +1239,10 @@ of a visual (e.g. frame-by-frame animation), along with `_setup(e)` and perhaps 
 #### Related convenience subclass: AutoMapEntityVisual
 
 The full path is `AlephVault__WindRose.Maps.Visuals.AutoMapEntityVisual`.
+
+## Utils
+
+Some lower-level helpers are documented separately:
+
+- [utils/LRU.md](./utils/LRU.md): Reference-counted LRU caches and the global cache registry.
+- [utils/TEXTURES.md](./utils/TEXTURES.md): Texture composition steps, contexts, and LRU-backed texture reuse.

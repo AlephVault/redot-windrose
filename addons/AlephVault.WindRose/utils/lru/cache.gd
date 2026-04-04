@@ -75,7 +75,7 @@ func _trim_queue():
 ## getting the entry returns null. Otherwise, it returns
 ## the entry's value and also associates the entry to
 ## the object in the second argument, tying the reference.
-func get(entry_key: String, obj) -> _Response:
+func get_value(entry_key: String, obj) -> _Response:
 	var response: _Response = _require_object(obj)
 	if not response.is_successful():
 		return response
@@ -92,7 +92,7 @@ func get(entry_key: String, obj) -> _Response:
 ## given as well (on null, the dispose is a noop).
 ## It also associates it to the object acting as a
 ## reference / requester.
-func set(entry_key: String, value, dispose, obj) -> _Response:
+func set_value(entry_key: String, value, dispose, obj) -> _Response:
 	var response: _Response = _require_object(obj)
 	if not response.is_successful():
 		return response
@@ -110,7 +110,7 @@ func set(entry_key: String, value, dispose, obj) -> _Response:
 ## Deletes a reference for an entry. Once the reference
 ## is removed, it evaluates the possibility to send it
 ## to the LRU disposal queue. It also prunes the queue.
-func delete(entry_key: String, obj) -> _Response:
+func delete_value(entry_key: String, obj) -> _Response:
 	var response: _Response = _require_object(obj)
 	if not response.is_successful():
 		return response
@@ -127,7 +127,7 @@ func delete(entry_key: String, obj) -> _Response:
 
 ## Tells whether the cache has this element. This includes
 ## elements that are in the LRU disposal queue.
-func has(entry_key: String) -> bool:
+func has_value(entry_key: String) -> bool:
 	return _entries.has(entry_key)
 
 func clear():

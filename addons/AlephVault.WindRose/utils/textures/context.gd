@@ -128,7 +128,7 @@ func _build_texture() -> Texture2D:
 
 ## Gets an already cached texture for this context or
 ## builds and stores it in the configured LRU cache.
-func get(obj, cache_key: String) -> Texture2D:
+func get_texture(obj, cache_key: String) -> Texture2D:
 	assert(not invalid, "This context is invalid. It cannot be processed")
 	if invalid:
 		return null
@@ -137,19 +137,19 @@ func get(obj, cache_key: String) -> Texture2D:
 	if cache == null:
 		return null
 
-	var get_response = cache.get(_final_key, obj)
+	var get_response = cache.get_value(_final_key, obj)
 	if get_response.is_successful():
 		var cached_texture: Texture2D = get_response.value
 		if cached_texture != null:
 			return cached_texture
 
 	var built_texture: Texture2D = _build_texture()
-	var set_response = cache.set(_final_key, built_texture, null, obj)
+	var set_response = cache.set_value(_final_key, built_texture, null, obj)
 	return set_response.value
 
 ## Removes the caller reference for this context final key
 ## from the configured LRU cache.
-func dispose(obj, cache_key: String):
+func dispose_texture(obj, cache_key: String):
 	assert(not invalid, "This context is invalid. It cannot be processed")
 	if invalid:
 		return
@@ -158,4 +158,4 @@ func dispose(obj, cache_key: String):
 	if cache == null:
 		return
 
-	cache.delete(_final_key, obj)
+	cache.delete_value(_final_key, obj)
