@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" load_steps=5 format=3 uid="uid://cvrbq2h3tvuxy"]
 
-[ext_resource type="Texture2D" uid="uid://dgcprrr8laa2d" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-cell.png" id="1_gopob"]
-[ext_resource type="Texture2D" uid="uid://bdxnoxdjifbwu" path="res://addons/AlephVault.WindRose/contrib/navigability/samples/isometric-water-cell.png" id="2_ghadb"]
+[ext_resource type="Texture2D" uid="uid://dgcprrr8laa2d" path="res://addons/AlephVault.WindRose/contrib/simple/samples/isometric-cell.png" id="1_gopob"]
+[ext_resource type="Texture2D" uid="uid://bdxnoxdjifbwu" path="res://addons/AlephVault.WindRose/contrib/simple/samples/isometric-water-cell.png" id="2_ghadb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h4tkr"]
 texture = ExtResource("1_gopob")
