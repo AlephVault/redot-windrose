@@ -10,8 +10,7 @@ Both resources are orthogonal (these LPC tiles are only orthogonal) and only 32x
 Licenses
 --------
 
-The assets contained in this package come from the LPC authoring contest. Credits must be given,
-for those assets, to:
+The assets contained in this package come from the LPC authoring contest. Credits must be given (for those assets) to:
 
 1. For the tiles:
 

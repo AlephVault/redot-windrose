@@ -9,6 +9,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	super(_delta)
 	var is_space_pressed := Input.is_physical_key_pressed(KEY_SPACE)
 
 	if is_space_pressed and not _was_space_pressed:
