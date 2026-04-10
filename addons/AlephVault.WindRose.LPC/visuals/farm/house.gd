@@ -1,237 +1,191 @@
-extends Sprite2D
+@tool
+extends AlephVault__WindRose.Maps.Visuals.MapEntityVisual
 
 
 const _HOUSE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-house.png")
+const _Step := AlephVault__WindRose.Utils.Textures.Step
+const _Context := AlephVault__WindRose.Utils.Textures.Context
+
+const _TEXTURE_SIZE := Vector2i(288, 288)
+const _BLOCK_SIZE := Vector2i(288, 288)
+const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
 
 
-# A generic block size, since the rework
-# on the texture was done for this size.
-const _BLOCK_SIZE = Vector2i(288, 288)
-
-
-# The size of the ceiling (includes blank,
-# placeholder, space).
-const _CEILING_SIZE = _BLOCK_SIZE
-
-
-# The size of the walls (includes blank,
-# placeholder, space).
-const _WALLS_SIZE = _BLOCK_SIZE
-
-
-# The size of the chimmey (includes blank,
-# placeholder, space).
-const _CHIMMEY_SIZE = _BLOCK_SIZE
-
-
-## The theming of the bricks. Theming can
-## be applied differently for chimmeys,
-## walls or ceilings.
-enum BrickTheme {
-	LITEBLUE = 0,
-	LITEGRAY = 1,
+## The brick color used by the house body parts.
+enum BrickColor {
+	LIGHT_BLUE = 0,
+	LIGHT_GRAY = 1,
 	GRAY = 2,
-	LITEBROWN = 3,
+	LIGHT_BROWN = 3,
 	BROWN = 4,
-	RED = 5
+	RED = 5,
 }
 
 
-# Aligned indices for the brick themes for
-# the ceilings.
-const _CEILING_INDICES = [
-	Vector2i(0, 0), 	Vector2i(1, 0), 	Vector2i(2, 0),
-	Vector2i(0, 1), 	Vector2i(1, 1), 	Vector2i(2, 1),
+const _CEILING_INDICES := [
+	Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0),
+	Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1),
+]
+
+const _WALLS_INDICES := [
+	Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2),
+	Vector2i(0, 3), Vector2i(1, 3), Vector2i(2, 3),
+]
+
+const _CHIMNEY_INDICES := [
+	Vector2i(3, 0), Vector2i(4, 0), Vector2i(5, 0),
+	Vector2i(3, 1), Vector2i(4, 1), Vector2i(5, 1),
 ]
 
 
-# Aligned indices for the brick themes for
-# the walls.
-const _WALLS_INDICES = [
-	Vector2i(0, 2), 	Vector2i(1, 2), 	Vector2i(2, 2),
-	Vector2i(0, 3), 	Vector2i(1, 3), 	Vector2i(2, 3),
-]
-
-
-# Aligned indices for the brick themes for
-# the chimmeys.
-const _CHIMMEY_INDICES = [
-	Vector2i(3, 0), 	Vector2i(4, 0), 	Vector2i(5, 0),
-	Vector2i(3, 1), 	Vector2i(4, 1), 	Vector2i(5, 1),
-]
-
-
-# The pivot of the doorframes.
-const _DOORFRAME_PIVOT = Vector2i(960, 960)
-
-
-# The size of the door frames.
-const _DOORFRAME_SIZE = Vector2i(64, 64)
-
-
-# The position of the door frame in the house.
-const _DOORFRAME_POSITION = Vector2i(80, 48)
-
-
-## The theming for the door frames.
-enum DoorFrameTheme {
-	LITEORANGE = 0,
-	DIMORANGE = 1,
-	ORANGE = 2,
-	LITEBROWN = 3,
-	DIMBROWN = 4,
-	BROWN = 5,
-	LITEGRAY = 6,
-	DIMGRAY = 7,
-	GRAY = 8,
-	LITEBLUE = 9,
-	DIMBLUE = 10,
-	BLUE = 11
-}
-
-
-# Aligned indices for the themes for the door frames.
-const _DOORFRAME_INDICES = [
-	Vector2i(0, 0), 	Vector2i(1, 0), 	Vector2i(2, 0),
-	Vector2i(3, 0), 	Vector2i(4, 0), 	Vector2i(5, 0),
-	Vector2i(0, 1), 	Vector2i(1, 1), 	Vector2i(2, 1),
-	Vector2i(3, 1), 	Vector2i(4, 1), 	Vector2i(5, 1),
-]
-
-
-## The theme for the walls. It will use
-## a different image depending on this value.
-@export var walls_theme: BrickTheme:
+## The LRU cache name used for composed house textures.
+@export var texture_cache_name: String = "farm_house":
 	set(value):
-		walls_theme = value
+		var next_value := value.strip_edges()
+		assert(next_value != "", "The texture cache name must not be empty")
+		if next_value == "":
+			return
+		if texture_cache_name == next_value:
+			return
+		_release_texture()
+		texture_cache_name = next_value
 		_update_sprite()
 
 
-## The theme for the ceiling. It will use
-## a different image depending on this value.
-@export var ceiling_theme: BrickTheme:
+## The wall color variant.
+@export var wall_color: BrickColor = BrickColor.LIGHT_BLUE:
 	set(value):
-		ceiling_theme = value
+		if wall_color == value:
+			return
+		_release_texture()
+		wall_color = value
 		_update_sprite()
 
 
-## The theme for the chimmey. It will use
-## a different image depending on this value.
-@export var chimmey_theme: BrickTheme:
+## The ceiling color variant.
+@export var ceiling_color: BrickColor = BrickColor.LIGHT_BLUE:
 	set(value):
-		chimmey_theme = value
+		if ceiling_color == value:
+			return
+		_release_texture()
+		ceiling_color = value
 		_update_sprite()
 
 
-## The theme for the doorframe. It will use
-## a different image depending on this value.
-@export var doorframe_theme: DoorFrameTheme:
+## The chimney color variant.
+@export var chimney_color: BrickColor = BrickColor.LIGHT_BLUE:
 	set(value):
-		doorframe_theme = value
+		if chimney_color == value:
+			return
+		_release_texture()
+		chimney_color = value
 		_update_sprite()
 
 
-## Whether the window is lit or not.
-@export var is_window_lit: bool:
-	set(value):
-		is_window_lit = value
-		_update_sprite()
+var _texture_context = null
 
 
-# The position of the lit version of the window.
-const _LIT_WINDOW_POSITION = Vector2i(1184, 1088)
+func _init() -> void:
+	_update_sprite()
 
 
-# The position of the window, in a house.
-const _WINDOW_PIVOT = Vector2i(160, 64)
+func _ready() -> void:
+	_update_sprite()
 
 
-# The size of the window.
-const _WINDOW_SIZE = Vector2i(32, 32)
+func _setup():
+	_update_sprite()
 
 
-# The actual chimmey sprite.
-var _chimmey: Sprite2D
+func _teardown():
+	_release_texture()
 
 
-# The actual ceiling sprite.
-var _ceiling: Sprite2D
+func _pause():
+	pass
 
 
-# The lit window sprite.
-var _lit_window: Sprite2D
+func _resume():
+	pass
 
 
-# The doorframe window sprite.
-var _doorframe: Sprite2D
+func _update(_delta: float):
+	_update_sprite()
 
 
-# Creates and ensures a sprite for an attribute.
-func _ensure_sprite(attribute: String) -> Sprite2D:
-	var sprite = get(attribute)
-	if not is_instance_valid(sprite):
-		set(attribute, Sprite2D.new())
-		sprite = get(attribute)
-	var _parent = sprite.get_parent()
-	if _parent == null:
-		add_child(sprite)
-	elif _parent != self:
-		sprite.reparent(self)
-	sprite.rotation = 0
-	sprite.scale = Vector2.ONE
-	return sprite
+func _validate_property(property: Dictionary) -> void:
+	if property.name in [
+		"texture",
+		"hframes",
+		"vframes",
+		"frame",
+		"frame_coords",
+		"region_enabled",
+		"region_rect",
+		"region_filter_clip_enabled",
+	]:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
-# Updates the sprite to properly reflect the
-# ceiling, walls, doorframe, chimmey and window.
-func _update_sprite():
-	var walls = self
-	var ceiling = _ensure_sprite("_ceiling")
-	var chimmey = _ensure_sprite("_chimmey")
-	var lit_window = _ensure_sprite("_lit_window")
-	var doorframe = _ensure_sprite("_doorframe")
-	
-	# The z_index == 1 will belong to
-	# the door itself, open or not.
-	# The z_index == 2 will belong to
-	# the thing behind the door.
-	doorframe.z_index = 3
-	doorframe.position = _DOORFRAME_POSITION
-	# The stairs will also use z_index
-	# to 3, like the frame.
-	lit_window.z_index = 4
-	lit_window.position = _LIT_WINDOW_POSITION
-	ceiling.z_index = 5
-	ceiling.position = Vector2.ZERO
-	chimmey.z_index = 6
-	chimmey.position = Vector2.ZERO
-
-	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		self, _HOUSE_TEXTURE, Rect2i(
-			_WALLS_SIZE * _WALLS_INDICES[int(walls_theme)], _WALLS_SIZE
+func _ensure_cache(cache_name: String) -> void:
+	if not AlephVault__WindRose.Utils.LRU.Registry.has(cache_name):
+		AlephVault__WindRose.Utils.LRU.Registry.define(
+			cache_name, _DEFAULT_CACHE_MAX_DISPOSAL_SIZE
 		)
+
+
+func _make_step(part: String, source_rect: Rect2i) -> Object:
+	return _Step.new(part, _HOUSE_TEXTURE, source_rect, Vector2i.ZERO)
+
+
+func _build_context():
+	return _Context.new(
+		_TEXTURE_SIZE.x,
+		_TEXTURE_SIZE.y,
+		[
+			_make_step(
+				"wall_%d" % int(wall_color),
+				Rect2i(_BLOCK_SIZE * _WALLS_INDICES[int(wall_color)], _BLOCK_SIZE)
+			),
+			_make_step(
+				"ceiling_%d" % int(ceiling_color),
+				Rect2i(_BLOCK_SIZE * _CEILING_INDICES[int(ceiling_color)], _BLOCK_SIZE)
+			),
+			_make_step(
+				"chimney_%d" % int(chimney_color),
+				Rect2i(_BLOCK_SIZE * _CHIMNEY_INDICES[int(chimney_color)], _BLOCK_SIZE)
+			),
+		]
 	)
-	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		doorframe, _HOUSE_TEXTURE, Rect2i(
-			_DOORFRAME_PIVOT + _DOORFRAME_SIZE * _DOORFRAME_INDICES[int(doorframe_theme)],
-			_DOORFRAME_SIZE
-		)
-	)
-	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		lit_window, _HOUSE_TEXTURE, Rect2i(
-			_WINDOW_PIVOT, _WINDOW_SIZE
-		)
-	)
-	lit_window.visible = is_window_lit
-	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		ceiling, _HOUSE_TEXTURE, Rect2i(
-			_CEILING_SIZE * _CEILING_INDICES[int(ceiling_theme)], _CEILING_SIZE
-		)
-	)
-	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		chimmey, _HOUSE_TEXTURE, Rect2i(
-			_CHIMMEY_SIZE * _CHIMMEY_INDICES[int(ceiling_theme)], _CHIMMEY_SIZE
-		)
-	)
-	# TODO choose and place the door.
-	# TODO choose and place some contents.
+
+
+func _release_texture() -> void:
+	if _texture_context != null and texture_cache_name.strip_edges() != "":
+		_texture_context.dispose_texture(self, texture_cache_name)
+	_texture_context = null
+
+
+func _update_sprite() -> void:
+	var cache_name := texture_cache_name.strip_edges()
+	if cache_name == "":
+		return
+
+	_ensure_cache(cache_name)
+	var next_context = _build_context()
+	if next_context.invalid:
+		return
+
+	if _texture_context != null and _texture_context.final_key != next_context.final_key:
+		_texture_context.dispose_texture(self, cache_name)
+
+	_texture_context = next_context
+	texture = _texture_context.get_texture(self, cache_name)
+	hframes = 1
+	vframes = 1
+	frame = 0
+	frame_coords = Vector2i.ZERO
+	region_enabled = false
+	region_rect = Rect2i(Vector2i.ZERO, _TEXTURE_SIZE)
+	region_filter_clip_enabled = false
+	offset = Vector2i(0, -_TEXTURE_SIZE.y)
+	centered = false
