@@ -143,7 +143,6 @@ func resume():
 # It also performs a setup of the entities
 # layer (by calling initialize()).
 func _identify_layers():
-	print("Identifying layers...")
 	var first = null
 	var _editor = Engine.is_editor_hint() and not EditorInterface.is_playing_scene()
 	for child in get_children():
@@ -153,10 +152,8 @@ func _identify_layers():
 			_entities_layer = child
 		elif child is _VisualsLayer:
 			_visuals_layer = child
-	print("Detecting tilemaps...")
 	if _floor_layer != null and _floor_layer.get_tilemaps_count() > 0:
 		_layout = _MapLayout.new(_floor_layer.get_tilemap(0))
-		print("Layout is:", _layout)
 	if _visuals_layer != null and not _editor:
 		_visuals_layer.initialize()
 	if _entities_layer != null and not _editor:
