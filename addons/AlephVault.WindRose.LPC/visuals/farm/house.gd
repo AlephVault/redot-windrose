@@ -35,21 +35,33 @@ enum DoorColor {
 	WHITE = 4,
 	MID_WHITE = 5,
 	MID_DARK = 6,
-	DARK = 7
+	DARK = 7,
+	BROWN1_LIGHT = 8,
+	BROWN1_MID_LIGHT = 9,
+	BROWN1_MID_DARK = 10,
+	BROWN1_DARK = 11,
+	BROWN2_LIGHT = 12,
+	BROWN2_MID_LIGHT = 13,
+	BROWN2_MID_DARK = 14,
+	BROWN2_DARK = 15
 }
 
 
 ## The color of the doorframe. Please note that it
 ## is different to the color of the door.
 enum DoorframeColor {
-	BROWN1_LIGHT = 0,
-	BROWN1_MID_LIGHT = 1,
-	BROWN1_MID_DARK = 2,
-	BROWN1_DARK = 3,
-	BROWN2_LIGHT = 4,
-	BROWN2_MID_LIGHT = 5,
-	BROWN2_MID_DARK = 6,
-	BROWN2_DARK = 7
+	ORANGE_LIGHT = 0,
+	ORANGE_MID = 1,
+	ORANGE_DARK = 2,
+	BROWN_LIGHT = 3,
+	BROWN_MID = 4,
+	BROWN_DARK = 5,
+	GRAY_LIGHT = 6,
+	GRAY_MID = 7,
+	GRAY_DARK = 8,
+	BLUE_LIGHT = 9,
+	BLUE_MID = 10,
+	BLUE_DARK = 11
 }
 
 
@@ -154,7 +166,7 @@ const _CHIMNEY_INDICES := [
 
 
 ## Whether the door has windows or not.
-@export var doorframe_color: DoorframeColor = DoorframeColor.BROWN1_LIGHT:
+@export var doorframe_color: DoorframeColor = DoorframeColor.ORANGE_LIGHT:
 	set(value):
 		if doorframe_color == value:
 			return
