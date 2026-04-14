@@ -7,6 +7,34 @@ This package contains LPC-related resources which are optional to the WindRose g
 
 Both resources are orthogonal (these LPC tiles are only orthogonal) and only 32x32 tiles.
 
+Usage
+-----
+
+To use the farm visuals, a matching LPC visual must be added to the entity that should render it. The sections below describe the public properties exposed by each available farm visual.
+
+### Barn
+
+The barn visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Barn`.
+
+- `flavor`: Selects the barn size variant. Available values are `SMALL`, `MEDIUM`, and `BIG`.
+- `gate_status`: Controls whether the front gate is rendered as `OPEN` or `CLOSED`.
+
+### House
+
+The house visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.House`.
+
+- `texture_cache_name`: LRU cache key used for the composed house texture.
+- `wall_color`: Selects the wall brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.
+- `ceiling_color`: Selects the ceiling brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.
+- `chimney_color`: Selects the chimney brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.
+- `lights_on`: Enables the lit overlays used by the house.
+- `door_color`: Selects the door color. Available values are `RED`, `YELLOW`, `GREEN`, `BLUE`, `WHITE`, `MID_WHITE`, `MID_DARK`, `DARK`, `BROWN1_LIGHT`, `BROWN1_MID_LIGHT`, `BROWN1_MID_DARK`, `BROWN1_DARK`, `BROWN2_LIGHT`, `BROWN2_MID_LIGHT`, `BROWN2_MID_DARK`, and `BROWN2_DARK`.
+- `door_is_open`: Controls whether the door is open.
+- `door_has_windows`: Controls whether the closed-door variant uses windows.
+- `doorframe_color`: Selects the doorframe color. Available values are `ORANGE_LIGHT`, `ORANGE_MID`, `ORANGE_DARK`, `BROWN_LIGHT`, `BROWN_MID`, `BROWN_DARK`, `GRAY_LIGHT`, `GRAY_MID`, `GRAY_DARK`, `BLUE_LIGHT`, `BLUE_MID`, and `BLUE_DARK`.
+- `has_doorframe`: Controls whether the doorframe is rendered.
+- `doorsteps_color`: Selects the doorstep color. Available values are `GRAY_LIGHT`, `GRAY_DARK`, `BLUE_LIGHT`, `BLUE_MID_LIGHT`, `BLUE_MID`, `BLUE_MID_DARK`, and `BLUE_DARK`.
+
 Licenses
 --------
 
