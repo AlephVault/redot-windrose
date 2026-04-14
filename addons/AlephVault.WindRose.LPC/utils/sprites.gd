@@ -13,3 +13,4 @@ static func fix_static_sprite(sprite: Sprite2D, texture: Texture2D, region_rect:
 	sprite.region_filter_clip_enabled = true
 	sprite.offset = Vector2i(0, -region_rect.size.y)
 	sprite.centered = false
+	print("Region rect is:", region_rect)
