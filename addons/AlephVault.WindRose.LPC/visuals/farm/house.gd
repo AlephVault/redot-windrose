@@ -9,6 +9,9 @@ const _Context := AlephVault__WindRose.Utils.Textures.Context
 const _TEXTURE_SIZE := Vector2i(288, 288)
 const _BLOCK_SIZE := Vector2i(288, 288)
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
+const _WINDOW_LIGHTS_ON_POSITION := Vector2i(160, 192)
+const _WINDOW_LIGHTS_ON_SIZE := Vector2i(32, 32)
+const _WINDOW_LIGHTS_ON_SOURCE_POSITION := Vector2i(1184, 1088)
 
 
 ## The brick color used by the house body parts.
@@ -82,6 +85,16 @@ const _CHIMNEY_INDICES := [
 		_update_sprite()
 
 
+## Whether the lit window overlay must be added.
+@export var window_lights_on: bool = false:
+	set(value):
+		if window_lights_on == value:
+			return
+		_release_texture()
+		window_lights_on = value
+		_update_sprite()
+
+
 var _texture_context = null
 
 
@@ -134,29 +147,34 @@ func _ensure_cache(cache_name: String) -> void:
 		)
 
 
-func _make_step(part: String, source_rect: Rect2i) -> Object:
-	return _Step.new(part, _HOUSE_TEXTURE, source_rect, Vector2i.ZERO)
+func _make_step(part: String, source_rect: Rect2i, target_position: Vector2i = Vector2i.ZERO) -> Object:
+	return _Step.new(part, _HOUSE_TEXTURE, source_rect, target_position)
 
 
 func _build_context():
-	return _Context.new(
-		_TEXTURE_SIZE.x,
-		_TEXTURE_SIZE.y,
-		[
+	var steps := [
+		_make_step(
+			"wall_%d" % int(wall_color),
+			Rect2i(_BLOCK_SIZE * _WALLS_INDICES[int(wall_color)], _BLOCK_SIZE)
+		),
+		_make_step(
+			"ceiling_%d" % int(ceiling_color),
+			Rect2i(_BLOCK_SIZE * _CEILING_INDICES[int(ceiling_color)], _BLOCK_SIZE)
+		),
+		_make_step(
+			"chimney_%d" % int(chimney_color),
+			Rect2i(_BLOCK_SIZE * _CHIMNEY_INDICES[int(chimney_color)], _BLOCK_SIZE)
+		),
+	]
+	if window_lights_on:
+		steps.append(
 			_make_step(
-				"wall_%d" % int(wall_color),
-				Rect2i(_BLOCK_SIZE * _WALLS_INDICES[int(wall_color)], _BLOCK_SIZE)
-			),
-			_make_step(
-				"ceiling_%d" % int(ceiling_color),
-				Rect2i(_BLOCK_SIZE * _CEILING_INDICES[int(ceiling_color)], _BLOCK_SIZE)
-			),
-			_make_step(
-				"chimney_%d" % int(chimney_color),
-				Rect2i(_BLOCK_SIZE * _CHIMNEY_INDICES[int(chimney_color)], _BLOCK_SIZE)
-			),
-		]
-	)
+				"window_lights_on",
+				Rect2i(_WINDOW_LIGHTS_ON_SOURCE_POSITION, _WINDOW_LIGHTS_ON_SIZE),
+				_WINDOW_LIGHTS_ON_POSITION
+			)
+		)
+	return _Context.new(_TEXTURE_SIZE.x, _TEXTURE_SIZE.y, steps)
 
 
 func _release_texture() -> void:

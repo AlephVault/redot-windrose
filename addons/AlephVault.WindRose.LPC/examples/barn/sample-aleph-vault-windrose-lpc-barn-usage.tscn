@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="6_x4da0"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/barn/sample-aleph-vault-barn.gd" id="7_eqswl"]
 
-[node name="Sample-aleph-vault-barn-usage" type="Node2D"]
+[node name="Sample-aleph-vault-windrose-barn-usage" type="Node2D"]
 
 [node name="Map" type="Node2D" parent="."]
 script = ExtResource("1_x3khs")
