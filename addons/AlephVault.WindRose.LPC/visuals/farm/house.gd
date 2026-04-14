@@ -28,6 +28,9 @@ const _DOOR_CLOSED_WITHOUT_WINDOWS_ROW_0_SOURCE_POSITION := Vector2i(960, 864)
 const _DOOR_CLOSED_WITHOUT_WINDOWS_ROW_1_SOURCE_POSITION := Vector2i(960, 912)
 const _DOOR_BLACK_RECTANGLE_SOURCE_POSITION := Vector2i(1360, 1040)
 const _DOOR_LIGHT_RECTANGLE_SOURCE_POSITION := Vector2i(1360, 976)
+const _DOORSTEPS_SIZE := Vector2i(32, 32)
+const _DOORSTEPS_POSITION := Vector2i(96, 240)
+const _DOORSTEPS_ROW_0_SOURCE_POSITION := Vector2i(960, 1104)
 
 
 ## The brick color used by the house body parts.
@@ -78,6 +81,19 @@ enum DoorframeColor {
 	BLUE_LIGHT = 9,
 	BLUE_MID = 10,
 	BLUE_DARK = 11
+}
+
+
+## The color of the door stairs. Please note that it
+## is different to the color of the bricks and ceiling.
+enum DoorstepsColor {
+	GRAY_LIGHT = 0,
+	GRAY_DARK = 1,
+	BLUE_LIGHT = 2,
+	BLUE_MID_LIGHT = 3,
+	BLUE_MID = 4,
+	BLUE_MID_DARK = 5,
+	BLUE_DARK = 6
 }
 
 
@@ -201,6 +217,16 @@ const _CHIMNEY_INDICES := [
 		_update_sprite()
 
 
+## The color of the door steps.
+@export var doorsteps_color: DoorstepsColor = DoorstepsColor.GRAY_LIGHT:
+	set(value):
+		if doorsteps_color == value:
+			return
+		_release_texture()
+		doorsteps_color = value
+		_update_sprite()
+
+
 var _texture_context = null
 
 
@@ -269,6 +295,10 @@ func _make_row8_rect(row_0_origin: Vector2i, row_1_origin: Vector2i, index: int,
 	var column := index % 8
 	var origin := row_0_origin if row == 0 else row_1_origin
 	return Rect2i(origin + Vector2i(size.x * column, 0), size)
+
+
+func _make_row7_rect(row_0_origin: Vector2i, index: int, size: Vector2i) -> Rect2i:
+	return Rect2i(row_0_origin + Vector2i(size.x * index, 0), size)
 
 
 func _build_context():
@@ -348,6 +378,17 @@ func _build_context():
 				_DOOR_POSITION
 			)
 		)
+	steps.append(
+		_make_step(
+			"doorsteps_%d" % int(doorsteps_color),
+			_make_row7_rect(
+				_DOORSTEPS_ROW_0_SOURCE_POSITION,
+				int(doorsteps_color),
+				_DOORSTEPS_SIZE
+			),
+			_DOORSTEPS_POSITION
+		)
+	)
 	if lights_on:
 		steps.append(
 			_make_step(

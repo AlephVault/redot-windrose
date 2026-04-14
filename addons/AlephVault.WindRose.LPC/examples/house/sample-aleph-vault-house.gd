@@ -10,6 +10,7 @@ var _was_s_pressed := false
 var _was_d_pressed := false
 var _was_f_pressed := false
 var _was_r_pressed := false
+var _was_t_pressed := false
 
 
 func _ready() -> void:
@@ -28,6 +29,7 @@ func _process(_delta: float) -> void:
 	var is_d_pressed := Input.is_physical_key_pressed(KEY_D)
 	var is_f_pressed := Input.is_physical_key_pressed(KEY_F)
 	var is_r_pressed := Input.is_physical_key_pressed(KEY_R)
+	var is_t_pressed := Input.is_physical_key_pressed(KEY_T)
 
 	if is_q_pressed and not _was_q_pressed:
 		wall_color = _next_brick_color(wall_color)
@@ -56,6 +58,9 @@ func _process(_delta: float) -> void:
 	if is_r_pressed and not _was_r_pressed:
 		has_doorframe = not has_doorframe
 
+	if is_t_pressed and not _was_t_pressed:
+		doorsteps_color = _next_doorsteps_color(doorsteps_color)
+
 	_was_q_pressed = is_q_pressed
 	_was_w_pressed = is_w_pressed
 	_was_e_pressed = is_e_pressed
@@ -65,6 +70,7 @@ func _process(_delta: float) -> void:
 	_was_d_pressed = is_d_pressed
 	_was_f_pressed = is_f_pressed
 	_was_r_pressed = is_r_pressed
+	_was_t_pressed = is_t_pressed
 	queue_redraw()
 
 
@@ -78,6 +84,10 @@ func _next_door_color(color: DoorColor) -> int:
 
 func _next_doorframe_color(color: DoorframeColor) -> int:
 	return (int(color) + 1) % DoorframeColor.size()
+
+
+func _next_doorsteps_color(color: DoorstepsColor) -> int:
+	return (int(color) + 1) % DoorstepsColor.size()
 
 
 func _draw() -> void:
