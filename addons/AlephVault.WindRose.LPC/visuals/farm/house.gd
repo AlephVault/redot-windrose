@@ -12,6 +12,22 @@ const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
 const _WINDOW_LIGHTS_ON_POSITION := Vector2i(160, 192)
 const _WINDOW_LIGHTS_ON_SIZE := Vector2i(32, 32)
 const _WINDOW_LIGHTS_ON_SOURCE_POSITION := Vector2i(1184, 1088)
+const _DOORFRAME_SIZE := Vector2i(64, 64)
+const _DOORFRAME_POSITION := Vector2i(80, 176)
+const _DOORFRAME_ROW_0_SOURCE_POSITION := Vector2i(960, 960)
+const _DOORFRAME_ROW_1_SOURCE_POSITION := Vector2i(960, 1024)
+const _DOOR_SIZE := Vector2i(32, 48)
+const _DOOR_POSITION := Vector2i(96, 192)
+const _DOOR_OPEN_ROW_0_SOURCE_POSITION := Vector2i(960, 672)
+const _DOOR_OPEN_ROW_1_SOURCE_POSITION := Vector2i(960, 720)
+const _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_OFF_ROW_0_SOURCE_POSITION := Vector2i(960, 768)
+const _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_OFF_ROW_1_SOURCE_POSITION := Vector2i(960, 816)
+const _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_ON_ROW_0_SOURCE_POSITION := Vector2i(1216, 768)
+const _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_ON_ROW_1_SOURCE_POSITION := Vector2i(1216, 816)
+const _DOOR_CLOSED_WITHOUT_WINDOWS_ROW_0_SOURCE_POSITION := Vector2i(960, 864)
+const _DOOR_CLOSED_WITHOUT_WINDOWS_ROW_1_SOURCE_POSITION := Vector2i(960, 912)
+const _DOOR_BLACK_RECTANGLE_SOURCE_POSITION := Vector2i(1360, 1040)
+const _DOOR_LIGHT_RECTANGLE_SOURCE_POSITION := Vector2i(1360, 976)
 
 
 ## The brick color used by the house body parts.
@@ -165,7 +181,7 @@ const _CHIMNEY_INDICES := [
 		_update_sprite()
 
 
-## Whether the door has windows or not.
+## The color of the doorframe.
 @export var doorframe_color: DoorframeColor = DoorframeColor.ORANGE_LIGHT:
 	set(value):
 		if doorframe_color == value:
@@ -175,7 +191,7 @@ const _CHIMNEY_INDICES := [
 		_update_sprite()
 
 
-## Whether the door has windows or not.
+## Whether the doorframe is used or not.
 @export var has_doorframe: bool = true:
 	set(value):
 		if has_doorframe == value:
@@ -241,6 +257,20 @@ func _make_step(part: String, source_rect: Rect2i, target_position: Vector2i = V
 	return _Step.new(part, _HOUSE_TEXTURE, source_rect, target_position)
 
 
+func _make_row6_rect(row_0_origin: Vector2i, row_1_origin: Vector2i, index: int, size: Vector2i) -> Rect2i:
+	var row := int(index / 6)
+	var column := index % 6
+	var origin := row_0_origin if row == 0 else row_1_origin
+	return Rect2i(origin + Vector2i(size.x * column, 0), size)
+
+
+func _make_row8_rect(row_0_origin: Vector2i, row_1_origin: Vector2i, index: int, size: Vector2i) -> Rect2i:
+	var row := int(index / 8)
+	var column := index % 8
+	var origin := row_0_origin if row == 0 else row_1_origin
+	return Rect2i(origin + Vector2i(size.x * column, 0), size)
+
+
 func _build_context():
 	var steps := [
 		_make_step(
@@ -256,6 +286,68 @@ func _build_context():
 			Rect2i(_BLOCK_SIZE * _CHIMNEY_INDICES[int(chimney_color)], _BLOCK_SIZE)
 		),
 	]
+	if has_doorframe:
+		steps.append(
+			_make_step(
+				"doorframe_%d" % int(doorframe_color),
+				_make_row6_rect(
+					_DOORFRAME_ROW_0_SOURCE_POSITION,
+					_DOORFRAME_ROW_1_SOURCE_POSITION,
+					int(doorframe_color),
+					_DOORFRAME_SIZE
+				),
+				_DOORFRAME_POSITION
+			)
+		)
+	if door_is_open:
+		steps.append(
+			_make_step(
+				"door_back_%s" % ("lights_on" if lights_on else "lights_off"),
+				Rect2i(
+					_DOOR_LIGHT_RECTANGLE_SOURCE_POSITION if lights_on else _DOOR_BLACK_RECTANGLE_SOURCE_POSITION,
+					_DOOR_SIZE
+				),
+				_DOOR_POSITION
+			)
+		)
+		steps.append(
+			_make_step(
+				"door_open_%d" % int(door_color),
+				_make_row8_rect(
+					_DOOR_OPEN_ROW_0_SOURCE_POSITION,
+					_DOOR_OPEN_ROW_1_SOURCE_POSITION,
+					int(door_color),
+					_DOOR_SIZE
+				),
+				_DOOR_POSITION
+			)
+		)
+	elif door_has_windows:
+		steps.append(
+			_make_step(
+				"door_closed_windows_%d_%s" % [int(door_color), "lights_on" if lights_on else "lights_off"],
+				_make_row8_rect(
+					_DOOR_CLOSED_WITH_WINDOWS_LIGHTS_ON_ROW_0_SOURCE_POSITION if lights_on else _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_OFF_ROW_0_SOURCE_POSITION,
+					_DOOR_CLOSED_WITH_WINDOWS_LIGHTS_ON_ROW_1_SOURCE_POSITION if lights_on else _DOOR_CLOSED_WITH_WINDOWS_LIGHTS_OFF_ROW_1_SOURCE_POSITION,
+					int(door_color),
+					_DOOR_SIZE
+				),
+				_DOOR_POSITION
+			)
+		)
+	else:
+		steps.append(
+			_make_step(
+				"door_closed_solid_%d" % int(door_color),
+				_make_row8_rect(
+					_DOOR_CLOSED_WITHOUT_WINDOWS_ROW_0_SOURCE_POSITION,
+					_DOOR_CLOSED_WITHOUT_WINDOWS_ROW_1_SOURCE_POSITION,
+					int(door_color),
+					_DOOR_SIZE
+				),
+				_DOOR_POSITION
+			)
+		)
 	if lights_on:
 		steps.append(
 			_make_step(
