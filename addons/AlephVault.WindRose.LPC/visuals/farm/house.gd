@@ -25,6 +25,34 @@ enum BrickColor {
 }
 
 
+## The color of the door. Please note that is
+## is different to the color of the doorframes.
+enum DoorColor {
+	RED = 0,
+	YELLOW = 1,
+	GREEN = 2,
+	BLUE = 3,
+	WHITE = 4,
+	MID_WHITE = 5,
+	MID_DARK = 6,
+	DARK = 7
+}
+
+
+## The color of the doorframe. Please note that it
+## is different to the color of the door.
+enum DoorframeColor {
+	BROWN1_LIGHT = 0,
+	BROWN1_MID_LIGHT = 1,
+	BROWN1_MID_DARK = 2,
+	BROWN1_DARK = 3,
+	BROWN2_LIGHT = 4,
+	BROWN2_MID_LIGHT = 5,
+	BROWN2_MID_DARK = 6,
+	BROWN2_DARK = 7
+}
+
+
 const _CEILING_INDICES := [
 	Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0),
 	Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1),
@@ -85,13 +113,63 @@ const _CHIMNEY_INDICES := [
 		_update_sprite()
 
 
-## Whether the lit window overlay must be added.
-@export var window_lights_on: bool = false:
+## Whether the lights are on or not.
+@export var lights_on: bool = false:
 	set(value):
-		if window_lights_on == value:
+		if lights_on == value:
 			return
 		_release_texture()
-		window_lights_on = value
+		lights_on = value
+		_update_sprite()
+
+
+## The door color.
+@export var door_color: DoorColor = DoorColor.RED:
+	set(value):
+		if door_color == value:
+			return
+		_release_texture()
+		door_color = value
+		_update_sprite()
+
+
+## Whether the door is open or not.
+@export var door_is_open: bool = false:
+	set(value):
+		if door_is_open == value:
+			return
+		_release_texture()
+		door_is_open = value
+		_update_sprite()
+
+
+## Whether the door has windows or not.
+@export var door_has_windows: bool = false:
+	set(value):
+		if door_has_windows == value:
+			return
+		_release_texture()
+		door_has_windows = value
+		_update_sprite()
+
+
+## Whether the door has windows or not.
+@export var doorframe_color: DoorframeColor = DoorframeColor.BROWN1_LIGHT:
+	set(value):
+		if doorframe_color == value:
+			return
+		_release_texture()
+		doorframe_color = value
+		_update_sprite()
+
+
+## Whether the door has windows or not.
+@export var has_doorframe: bool = true:
+	set(value):
+		if has_doorframe == value:
+			return
+		_release_texture()
+		has_doorframe = value
 		_update_sprite()
 
 
@@ -166,7 +244,7 @@ func _build_context():
 			Rect2i(_BLOCK_SIZE * _CHIMNEY_INDICES[int(chimney_color)], _BLOCK_SIZE)
 		),
 	]
-	if window_lights_on:
+	if lights_on:
 		steps.append(
 			_make_step(
 				"window_lights_on",
