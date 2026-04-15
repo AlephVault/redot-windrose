@@ -35,6 +35,13 @@ The house visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.House
 - `has_doorframe`: Controls whether the doorframe is rendered.
 - `doorsteps_color`: Selects the doorstep color. Available values are `GRAY_LIGHT`, `GRAY_DARK`, `BLUE_LIGHT`, `BLUE_MID_LIGHT`, `BLUE_MID`, `BLUE_MID_DARK`, and `BLUE_DARK`.
 
+### Fruit Trees
+
+The fruit-tree visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.FruitTrees`.
+
+- `tree_type`: Selects the rendered tree species and fruit variant. Available values are `RED_APPLES`, `GREEN_APPLES`, `YELLOW_APPLES`, `VARIEGATED_APPLES`, `GOLDEN_APPLES`, `LEMON`, `LIME`, `TANGERINE`, `ORANGE`, `PEACH`, `MANGO1`, `MANGO2`, `RED_CHERRY`, `YELLOW_PEAR`, `BROWN_PEAR`, `GREEN_PEAR`, `PURPLE_PLUM`, `BROWN_COCONUT`, and `YELLOW_BANANA`.
+- `tree_stage`: Selects the rendered growth stage. Available values are `BABY`, `SMALL`, `GROWING`, `ADULT`, `FRUITS_SMALL`, `FRUITS_GROWING`, and `FRUITS_READY`.
+
 Licenses
 --------
 
