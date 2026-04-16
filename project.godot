@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Redot WindRose"
-run/main_scene="res://addons/AlephVault.WindRose.LPC/examples/crop/sample-aleph-vault-windrose-lpc-crops-usage.tscn"
+run/main_scene="res://addons/AlephVault.WindRose.LPC/examples/fruit-tree/sample-aleph-vault-windrose-lpc-fruit-trees-usage.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 

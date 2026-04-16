@@ -200,18 +200,18 @@ The assets contained in this package come from the LPC authoring contest. Credit
 
 4. For the trees:
 
-       "[LPC] Fruit Trees" by bluecarrot16, Joshua Taylor, and cynicmusic. Commissioned by castelonia.
+	   "[LPC] Fruit Trees" by bluecarrot16, Joshua Taylor, and cynicmusic. Commissioned by castelonia.
 	
-       CC-BY-SA 3.0 / GPL 3.0
+	   CC-BY-SA 3.0 / GPL 3.0
 	
-       ## BASED ON:
+	   ## BASED ON:
 	
-       Fruit and Veggie Inventory
-       JT = Joshua Taylor
-       CC-BY-SA 3.0 / GPL 3.0
-       https://opengameart.org/content/fruit-and-veggie-inventory
+	   Fruit and Veggie Inventory
+	   JT = Joshua Taylor
+	   CC-BY-SA 3.0 / GPL 3.0
+	   https://opengameart.org/content/fruit-and-veggie-inventory
 	
-       Pixelsphere 32x32 Tileset + Grass + Trees
-       cynicmusic
-       CC0
-       http://opengameart.org/content/pixelsphere-32x32-tileset-grass-trees
+	   Pixelsphere 32x32 Tileset + Grass + Trees
+	   cynicmusic
+	   CC0
+	   http://opengameart.org/content/pixelsphere-32x32-tileset-grass-trees

@@ -32,4 +32,7 @@ _initial_position = Vector2i(8, 8)
 [node name="CropVisual" type="Sprite2D" parent="Map/EntitiesLayer/Crop"]
 script = ExtResource("6_2soag")
 
+[node name="CropVisual" type="Sprite2D" parent="Map/EntitiesLayer/Crop/CropVisual"]
+script = ExtResource("6_2soag")
+
 [node name="VisualsLayer" type="Node2D" parent="Map"]

@@ -1,0 +1,14 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://ce5fsusqmd34n"]
+
+[ext_resource type="Texture2D" uid="uid://c010l2v0c4yhr" path="res://addons/AlephVault.WindRose.LPC/examples/fruit-tree/square-cell.png" id="1_1hinf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8rlnt"]
+texture = ExtResource("1_1hinf")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+custom_data_layer_0/name = "blocking"
+custom_data_layer_0/type = 1
+sources/1 = SubResource("TileSetAtlasSource_8rlnt")

@@ -73,32 +73,32 @@ enum TreeType {
 # Now, notice how rows 6 and 9 are used and not
 # the 7 and 8 rows. This is because, for these
 # fruit trees, three frames are distributed. The
-# first stage, for RED_APPLES, is at 800 while the
-# second stage is at 700. The same applies to the
+# first stage, for RED_APPLES, is at 700 while the
+# second stage is at 600. The same applies to the
 # 900 or MANGO1: They are distributed vertically
-# where the first fruit stage is at 1100 and the
-# secund fruit stage is at 100. Then, the later
-# fruit stage (ripe and ready) is the 900 one.
+# where the first fruit stage is at 1000 and the
+# secund fruit stage is at 900. Then, the later
+# fruit stage (ripe and ready) is the 800 one.
 const _FRUIT_STAGE_COORDINATES: Dictionary = {
-	TreeType.RED_APPLES: 600, # Row 6, column 0
-	TreeType.GREEN_APPLES: 601, # Row 6, column 1
-	TreeType.YELLOW_APPLES: 602, # Row 6, column 2
-	TreeType.VARIEGATED_APPLES: 603, # Row 6, column 3
-	TreeType.GOLDEN_APPLES: 604, # Row 6, column 4
-	TreeType.LEMON: 605, # Row 6, column 5
-	TreeType.LIME: 606, # Row 6, column 6
-	TreeType.TANGERINE: 607, # Row 6, column 7
-	TreeType.ORANGE: 608, # Row 6, column 8
-	TreeType.PEACH: 609, # Row 6, column 9
-	TreeType.MANGO1: 900, # Row 9, column 0
-	TreeType.MANGO2: 901, # Row 9, column 1
-	TreeType.RED_CHERRY: 902, # Row 9, column 2
-	TreeType.YELLOW_PEAR: 903, # Row 9, column 3
-	TreeType.BROWN_PEAR: 904, # Row 9, column 4
-	TreeType.GREEN_PEAR: 905, # Row 9, column 5
-	TreeType.PURPLE_PLUM: 907, # Row 9, column 7
-	TreeType.BROWN_COCONUT: 908, # Row 9, column 8
-	TreeType.YELLOW_BANANA: 909, # Row 9, column 9
+	TreeType.RED_APPLES: 500, # Row 6, column 0
+	TreeType.GREEN_APPLES: 501, # Row 6, column 1
+	TreeType.YELLOW_APPLES: 502, # Row 6, column 2
+	TreeType.VARIEGATED_APPLES: 503, # Row 6, column 3
+	TreeType.GOLDEN_APPLES: 504, # Row 6, column 4
+	TreeType.LEMON: 505, # Row 6, column 5
+	TreeType.LIME: 506, # Row 6, column 6
+	TreeType.TANGERINE: 507, # Row 6, column 7
+	TreeType.ORANGE: 508, # Row 6, column 8
+	TreeType.PEACH: 509, # Row 6, column 9
+	TreeType.MANGO1: 800, # Row 9, column 0
+	TreeType.MANGO2: 801, # Row 9, column 1
+	TreeType.RED_CHERRY: 802, # Row 9, column 2
+	TreeType.YELLOW_PEAR: 803, # Row 9, column 3
+	TreeType.BROWN_PEAR: 804, # Row 9, column 4
+	TreeType.GREEN_PEAR: 805, # Row 9, column 5
+	TreeType.PURPLE_PLUM: 807, # Row 9, column 7
+	TreeType.BROWN_COCONUT: 808, # Row 9, column 8
+	TreeType.YELLOW_BANANA: 809, # Row 9, column 9
 }
 
 

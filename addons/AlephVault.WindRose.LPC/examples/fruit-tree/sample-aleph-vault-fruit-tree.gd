@@ -1,4 +1,4 @@
-extends AlephVault__WindRose__LPC.Visuals.Farm.FruitTrees
+extends AlephVault__WindRose__LPC.Visuals.Farm.FruitTree
 
 
 var _was_q_pressed := false
