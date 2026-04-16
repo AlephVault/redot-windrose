@@ -103,7 +103,7 @@ enum CropStatus {
 
 const _CROP_SIZE := Vector2i(32, 64)
 const _CROP_COLUMNS := 32
-const _CROP_TYPES_PER_STAGE_ROW := 3
+const _CROP_STATUSES := 5
 
 
 ## The crop type to render.
@@ -172,7 +172,7 @@ func _get_crop_region_rect(type: CropType, status: CropStatus) -> Rect2i:
 	var crop_stage_index := int(crop_stage)
 	
 	var crop_row := int(crop_index / _CROP_COLUMNS)
-	var stage_row := int(status) + _CROP_TYPES_PER_STAGE_ROW * crop_row
+	var stage_row := int(status) + _CROP_STATUSES * crop_row
 	return Rect2i(Vector2i(crop_column * _CROP_SIZE.x, stage_row * _CROP_SIZE.y), _CROP_SIZE)
 
 
