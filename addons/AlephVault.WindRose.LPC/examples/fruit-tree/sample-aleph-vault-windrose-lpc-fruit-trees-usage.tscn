@@ -15,6 +15,7 @@ script = ExtResource("1_xqtrw")
 _size = Vector2i(36, 20)
 
 [node name="FloorLayer" type="Node2D" parent="Map"]
+z_index = 10
 script = ExtResource("1_hkm0k")
 
 [node name="Floor" type="TileMapLayer" parent="Map/FloorLayer"]
