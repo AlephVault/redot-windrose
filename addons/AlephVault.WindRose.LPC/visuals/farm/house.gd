@@ -35,65 +35,65 @@ const _DOORSTEPS_ROW_0_SOURCE_POSITION := Vector2i(960, 1104)
 
 ## The brick color used by the house body parts.
 enum BrickColor {
-	LIGHT_BLUE = 0,
-	LIGHT_GRAY = 1,
-	GRAY = 2,
-	LIGHT_BROWN = 3,
-	BROWN = 4,
-	RED = 5,
+	LIGHT_BLUE,
+	LIGHT_GRAY,
+	GRAY,
+	LIGHT_BROWN,
+	BROWN,
+	RED,
 }
 
 
 ## The color of the door. Please note that is
 ## is different to the color of the doorframes.
 enum DoorColor {
-	RED = 0,
-	YELLOW = 1,
-	GREEN = 2,
-	BLUE = 3,
-	WHITE = 4,
-	MID_WHITE = 5,
-	MID_DARK = 6,
-	DARK = 7,
-	BROWN1_LIGHT = 8,
-	BROWN1_MID_LIGHT = 9,
-	BROWN1_MID_DARK = 10,
-	BROWN1_DARK = 11,
-	BROWN2_LIGHT = 12,
-	BROWN2_MID_LIGHT = 13,
-	BROWN2_MID_DARK = 14,
-	BROWN2_DARK = 15
+	RED,
+	YELLOW,
+	GREEN,
+	BLUE,
+	WHITE,
+	MID_WHITE,
+	MID_DARK,
+	DARK,
+	BROWN1_LIGHT,
+	BROWN1_MID_LIGHT,
+	BROWN1_MID_DARK,
+	BROWN1_DARK,
+	BROWN2_LIGHT,
+	BROWN2_MID_LIGHT,
+	BROWN2_MID_DARK,
+	BROWN2_DARK
 }
 
 
 ## The color of the doorframe. Please note that it
 ## is different to the color of the door.
 enum DoorframeColor {
-	ORANGE_LIGHT = 0,
-	ORANGE_MID = 1,
-	ORANGE_DARK = 2,
-	BROWN_LIGHT = 3,
-	BROWN_MID = 4,
-	BROWN_DARK = 5,
-	GRAY_LIGHT = 6,
-	GRAY_MID = 7,
-	GRAY_DARK = 8,
-	BLUE_LIGHT = 9,
-	BLUE_MID = 10,
-	BLUE_DARK = 11
+	ORANGE_LIGHT,
+	ORANGE_MID,
+	ORANGE_DARK,
+	BROWN_LIGHT,
+	BROWN_MID,
+	BROWN_DARK,
+	GRAY_LIGHT,
+	GRAY_MID,
+	GRAY_DARK,
+	BLUE_LIGHT,
+	BLUE_MID,
+	BLUE_DARK
 }
 
 
 ## The color of the door stairs. Please note that it
 ## is different to the color of the bricks and ceiling.
 enum DoorstepsColor {
-	GRAY_LIGHT = 0,
-	GRAY_DARK = 1,
-	BLUE_LIGHT = 2,
-	BLUE_MID_LIGHT = 3,
-	BLUE_MID = 4,
-	BLUE_MID_DARK = 5,
-	BLUE_DARK = 6
+	GRAY_LIGHT,
+	GRAY_DARK,
+	BLUE_LIGHT,
+	BLUE_MID_LIGHT,
+	BLUE_MID,
+	BLUE_MID_DARK,
+	BLUE_DARK
 }
 
 

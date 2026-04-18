@@ -24,38 +24,38 @@ const _TREE_SIZE: Vector2i = Vector2i(96, 128)
 # down to (x=T, y=0). Four frames.
 enum _BaseTreeType {
 	APPLE = 0,
-	CITRIC = 1,
-	TROPICAL = 2,
-	CHERRY = 3,
-	PEAR = 4,
-	PLUM = 6,
-	PALMTREE = 7,
-	BANANA = 8
+	CITRIC,
+	TROPICAL,
+	CHERRY,
+	PEAR,
+	PLUM,
+	PALMTREE,
+	BANANA
 }
 
 
 enum TreeType {
 	# Apple
 	RED_APPLES = 0,
-	GREEN_APPLES = 1,
-	YELLOW_APPLES = 2,
-	VARIEGATED_APPLES = 3,
-	GOLDEN_APPLES = 4,
+	GREEN_APPLES,
+	YELLOW_APPLES,
+	VARIEGATED_APPLES,
+	GOLDEN_APPLES,
 	# Citric
 	LEMON = 100,
-	LIME = 101,
-	TANGERINE = 102,
-	ORANGE = 103,
+	LIME,
+	TANGERINE,
+	ORANGE,
 	# Tropical
 	PEACH = 200,
-	MANGO1 = 201,
-	MANGO2 = 202,
+	MANGO1,
+	MANGO2,
 	# Cherry
 	RED_CHERRY = 300,
 	# Pear
 	YELLOW_PEAR = 400,
-	BROWN_PEAR = 401,
-	GREEN_PEAR = 402,
+	BROWN_PEAR,
+	GREEN_PEAR,
 	# Plums
 	PURPLE_PLUM = 600,
 	# Coconuts
@@ -106,13 +106,13 @@ const _FRUIT_STAGE_COORDINATES: Dictionary = {
 ## to a young tree growing. The 5-7 stages refer to
 ## the adult tree producing fruits.
 enum TreeStage {
-	BABY = 0,
-	SMALL = 1,
-	GROWING = 2,
-	ADULT = 3,
-	FRUITS_SMALL = 4,
-	FRUITS_GROWING = 5,
-	FRUITS_READY = 6
+	BABY,
+	SMALL,
+	GROWING,
+	ADULT,
+	FRUITS_SMALL,
+	FRUITS_GROWING,
+	FRUITS_READY
 }
 
 
