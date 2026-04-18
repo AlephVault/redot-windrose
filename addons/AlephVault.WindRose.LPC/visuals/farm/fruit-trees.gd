@@ -28,7 +28,7 @@ enum _BaseTreeType {
 	TROPICAL,
 	CHERRY,
 	PEAR,
-	PLUM,
+	PLUM = 6,
 	PALMTREE,
 	BANANA
 }
