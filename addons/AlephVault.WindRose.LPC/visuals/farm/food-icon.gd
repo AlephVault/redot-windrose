@@ -67,6 +67,36 @@ const _AP_SEAFOOD2 = _AP + _SUBCATEGORY_SPAN * 3
 ## All the food types defined here are supported in
 ## one of the images
 enum FoodType {
+	# Bread and pastries: Group 1.
+	VIENNA_SMALL = _BP1,
+	LOAF_WHITE_BREAD,
+	VIENNA_LARGE,
+	BAGUETTE,
+	PULLMAN_LOAF_RYE,
+	COBURG_LARGE,
+	ROUND_ROLL,
+	WIDE_BAGUETTE,
+	BRAIDED,
+	CIABATTA,
+	CROSSED,
+	CROSSED2,
+	FOCACCIA,
+	BRAIDED2,
+	BREADSTICKS,
+	TORTILLAS,
+	
+	# Bread and pastries: Group 2.
+	ENGLISH_MUFFIN = _BP2,
+	KAISER_ROLL,
+	SESAME_BUN,
+	CRESCENT_ROLL,
+	COBURG_ROLL,
+	MUFFIN,
+	COB_BOULE_ROLL,
+	PRETZEL,
+	CROISSANT,
+	BAGEL,
+	
 	# Animal products: Milk/Egg-derived products.
 	BRIE_CHEESE = _AP_MILK_EGGS,
 	GOUDA_CHEESE,
