@@ -410,8 +410,6 @@ enum FoodType {
 	WALNUT,
 	MACADAMIA,
 	TAMARIND
-	
-	# TODO: Add bread and pastries.
 }
 
 ## The presentation of the food. Typically: small,
