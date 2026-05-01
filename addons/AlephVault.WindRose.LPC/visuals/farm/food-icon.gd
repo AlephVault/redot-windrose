@@ -266,6 +266,7 @@ enum FoodType {
 	CORN2,
 	SUGAR_CANE,
 	AMARANTH,
+    # Row 4
 	ASPARAGUS,
 	AGAVE,
 	ALOE,
