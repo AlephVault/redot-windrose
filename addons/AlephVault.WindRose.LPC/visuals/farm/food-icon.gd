@@ -464,14 +464,18 @@ func _pick_data(value: FoodType, presentation: FoodPresentation) -> Array:
 				tx, pivot, size
 			] 
 		elif subcategory == _AP_CATTLE_MEAT:
+			var pivot_override = null
 			if value == FoodType.BACK_RIBS or value == FoodType.RIB_ROAST:
 				if presentation == FoodPresentation.MEDIUM:
 					presentation = FoodPresentation.SMALL
 				elif presentation == FoodPresentation.BIG:
 					size = _BIG_ICON_SIZE
+					pivot_override = Vector2i(32 * index, 32 * 6)
 			elif value == FoodType.TURKEY:
 				presentation = FoodPresentation.SMALL
 			pivot = Vector2i(32 * index, 32 * (int(presentation) + 5))
+			if pivot_override != null:
+				pivot = pivot_override
 			return [
 				tx, pivot, size
 			] 
