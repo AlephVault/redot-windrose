@@ -363,7 +363,7 @@ enum FoodType {
 	POMEGRANATE,
 	OLIVES,
 	STARFRUIT,
-	POPPY1,
+	POPPY,
 	CHERIMOYA,
 	SOURSOP,
 	FIGS,
@@ -385,21 +385,20 @@ enum FoodType {
 	BAY_LAUREL,
 	CINNAMON,
 	AVOCADO,
-	POPPY2,
 	NUTMEG,
 	PEPPERCORN,
-	BRAZIL_NUT,
-	PERSIMMON,
-	GUAVA,
-	CLOVE,
-	ALLSPICE,
 	KOLA,
+	PERSIMMON,
+	BRAZIL_NUT,
 	DURIAN,
 	CACAO,
+	CLOVE,
+	ALLSPICE,
+	GUAVA,
 	MANGO1,
 	MANGO2,
-	PISTACHIO,
 	SUMAC,
+	PISTACHIO,
 	CASHEW,
 	CHESTNUT,
 	PECAN,
@@ -425,7 +424,7 @@ enum FoodPresentation {
 # Picks the appropriate elements to be used when
 # generating the rectangle.
 @warning_ignore("integer_division")
-func _pick_data(value: FoodType, presentation: FoodPresentation):
+func _pick_data(value: FoodType, presentation: FoodPresentation) -> Array:
 	var value_: int = int(value)
 	var tx: Texture2D
 	var pivot: Vector2i
@@ -453,7 +452,7 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 				tx, pivot, size
 			]
 
-		return null
+		return []
 	elif category == _AP:
 		tx = _ANIMAL_PRODUCTS_TEXTURE
 		if presentation == FoodPresentation.BATCH:
@@ -487,7 +486,7 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 				tx, pivot, size
 			] 
 		
-		return null
+		return []
 	elif category == _FV:
 		tx = _FRUITS_AND_VEGGIES_TEXTURE
 		if presentation == FoodPresentation.BATCH:
@@ -509,7 +508,7 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 				tx, pivot, size
 			]
 	
-	return null
+	return []
 
 
 ## The food item to render.
@@ -573,11 +572,12 @@ func _validate_property(property: Dictionary) -> void:
 
 
 func _update_sprite() -> void:
-	var data = _pick_data(food_type, food_presentation)
-	if data == null:
+	var data := _pick_data(food_type, food_presentation)
+	if data.is_empty():
 		return
+	var tx: Texture2D = data[0]
+	var pivot: Vector2i = data[1]
+	var size: Vector2i = data[2]
 	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
-		self,
-		data[0],
-		Rect2i(data[1], data[2])
+		self, tx, Rect2i(pivot, size)
 	)
