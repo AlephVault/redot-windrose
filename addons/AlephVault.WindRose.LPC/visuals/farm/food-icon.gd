@@ -431,24 +431,24 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 	var pivot: Vector2i
 	var size: Vector2i = _ICON_SIZE
 
-	var category: int = (value_ / _CATEGORY_SPAN) * _CATEGORY_SPAN
-	var subcategory: int = (value_ / _SUBCATEGORY_SPAN) * _SUBCATEGORY_SPAN
+	var category: int = int(value_ / _CATEGORY_SPAN) * _CATEGORY_SPAN
+	var subcategory: int = int(value_ / _SUBCATEGORY_SPAN) * _SUBCATEGORY_SPAN
 	var index: int = value_ - subcategory
 	
 	if category == _BP:
 		tx = _BREAD_AND_PASTRY_TEXTURE
 		if presentation == FoodPresentation.BATCH:
-			presentation == FoodPresentation.BIG
+			presentation = FoodPresentation.BIG
 
 		if subcategory == _BP1:
-			pivot = Vector2(32 * index, 32 * int(presentation))
+			pivot = Vector2i(32 * index, 32 * int(presentation))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _BP2:
 			# The index 21 corresponds to the in-image position
 			# Of the first image in the second section.
-			pivot = Vector2(32 * (index + 21), 32 * int(presentation))
+			pivot = Vector2i(32 * (index + 21), 32 * int(presentation))
 			return [
 				tx, pivot, size
 			]
@@ -457,32 +457,32 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 	elif category == _AP:
 		tx = _ANIMAL_PRODUCTS_TEXTURE
 		if presentation == FoodPresentation.BATCH:
-			presentation == FoodPresentation.BIG
+			presentation = FoodPresentation.BIG
 	
 		if subcategory == _AP_MILK_EGGS:
-			pivot = Vector2(32 * index, 32 * int(presentation))
+			pivot = Vector2i(32 * index, 32 * int(presentation))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _AP_CATTLE_MEAT:
-			pivot = Vector2(32 * index, 32 * (int(presentation) + 5))
 			if value == FoodType.BACK_RIBS or value == FoodType.RIB_ROAST:
 				if presentation == FoodPresentation.MEDIUM:
 					presentation = FoodPresentation.SMALL
 				elif presentation == FoodPresentation.BIG:
 					size = _BIG_ICON_SIZE
 			elif value == FoodType.TURKEY:
-				presentation == FoodPresentation.SMALL
+				presentation = FoodPresentation.SMALL
+			pivot = Vector2i(32 * index, 32 * (int(presentation) + 5))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _AP_SEAFOOD1:
-			pivot = Vector2(32 * index, 32 * (int(presentation) + 15))
+			pivot = Vector2i(32 * index, 32 * (int(presentation) + 15))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _AP_SEAFOOD2:
-			pivot = Vector2(32 * (index + 28), 32 * (int(presentation) + 15))
+			pivot = Vector2i(32 * (index + 28), 32 * (int(presentation) + 15))
 			return [
 				tx, pivot, size
 			] 
@@ -494,19 +494,90 @@ func _pick_data(value: FoodType, presentation: FoodPresentation):
 			size = _BATCHED_ICON_SIZE
 		
 		if subcategory == _FV_VEGS:
-			pivot = Vector2(32 * (index % 32), 32 * (int(presentation) + 5 * (index / 32)))
+			pivot = Vector2i(32 * (index % 32), 32 * (int(presentation) + 5 * (index / 32)))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _FV_SHROOMS:
-			pivot = Vector2(32 * index, 800 + 32 * int(presentation))
+			pivot = Vector2i(32 * index, 800 + 32 * int(presentation))
 			return [
 				tx, pivot, size
 			] 
 		elif subcategory == _FV_FRUITS:
-			pivot = Vector2(32 * (index % 32), 960 + 32 * (int(presentation) + 5 * (index / 32)))
+			pivot = Vector2i(32 * (index % 32), 960 + 32 * (int(presentation) + 5 * (index / 32)))
 			return [
 				tx, pivot, size
 			]
 	
 	return null
+
+
+## The food item to render.
+@export var food_type: FoodType = FoodType.VIENNA_SMALL:
+	set(value):
+		if food_type == value:
+			return
+		food_type = value
+		_update_sprite()
+
+
+## The presentation size/style to render.
+@export var food_presentation: FoodPresentation = FoodPresentation.SMALL:
+	set(value):
+		if food_presentation == value:
+			return
+		food_presentation = value
+		_update_sprite()
+
+
+func _init() -> void:
+	_update_sprite()
+
+
+func _ready() -> void:
+	_update_sprite()
+
+
+func _setup():
+	_update_sprite()
+
+
+func _teardown():
+	pass
+
+
+func _pause():
+	pass
+
+
+func _resume():
+	pass
+
+
+func _update(_delta: float):
+	_update_sprite()
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name in [
+		"texture",
+		"hframes",
+		"vframes",
+		"frame",
+		"frame_coords",
+		"region_enabled",
+		"region_rect",
+		"region_filter_clip_enabled",
+	]:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+
+
+func _update_sprite() -> void:
+	var data = _pick_data(food_type, food_presentation)
+	if data == null:
+		return
+	AlephVault__WindRose__LPC.Utils.Sprites.fix_static_sprite(
+		self,
+		data[0],
+		Rect2i(data[1], data[2])
+	)
