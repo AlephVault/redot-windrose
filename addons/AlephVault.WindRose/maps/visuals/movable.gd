@@ -98,13 +98,13 @@ func _make_full_setup() -> FullSetup:
 		{
 			AlephVault__WindRose.Maps.MapEntity.STATE_MOVING: StateSetup.new(
 				FramesetSetup.new(
-					texture, _region_rect_up, vframes if _vertically_distributed else hframes,
-					_vertically_distributed, centered, offset
-				) if __valid_region_rect(_region_rect_up) else null,
-				FramesetSetup.new(
 					texture, region_rect, vframes if _vertically_distributed else hframes,
 					_vertically_distributed, centered, offset
 				),
+				FramesetSetup.new(
+					texture, _region_rect_up, vframes if _vertically_distributed else hframes,
+					_vertically_distributed, centered, offset
+				) if __valid_region_rect(_region_rect_up) else null,
 				FramesetSetup.new(
 					texture, _region_rect_left, vframes if _vertically_distributed else hframes,
 					_vertically_distributed, centered, offset

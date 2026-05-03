@@ -91,10 +91,10 @@ class FramesetSetup:
 			)
 	
 	# The offset to apply to the sprite.
-	var _offset: Vector2i
+	var _offset: Vector2
 	
 	## The offset to apply to the sprite.
-	var offset: Vector2i:
+	var offset: Vector2:
 		get:
 			return _offset
 		set(value):
@@ -113,7 +113,7 @@ class FramesetSetup:
 	func _init(
 		image: Texture2D, region: Rect2i, n_frames: int,
 		vertically_distributed: bool, centered: bool = true,
-		offset: Vector2i = Vector2i(0, 0)
+		offset: Vector2 = Vector2.ZERO
 	):
 		if image == null:
 			region = Rect2i(0, 0, 0, 0)
@@ -131,7 +131,7 @@ class FramesetSetup:
 	## Applies this setup into a sprite for the chosen frame.
 	## Returns the effective index of the applied frame.
 	func apply(sprite: Sprite2D, frame: int) -> int:
-		if self._image == null:
+		if image == null:
 			sprite.texture = null
 		else:
 			if sprite.texture != image:
@@ -216,7 +216,7 @@ class StateSetup:
 				"invalid_frameset", "The first argument must be a valid frameset"
 			)
 		_down = down
-		if left != null and right != null and up == null:
+		if up != null and left != null and right != null:
 			_up = up
 			_left = left
 			_right = right
@@ -287,7 +287,7 @@ class FullSetup:
 				"invalid_state", "The first argument must be a valid state"
 			)
 		else:
-			_default_state = default_state
+			_default_state = default_setup
 		for key in custom_states.keys():
 			if key == _STATE_IDLE:
 				custom_states.erase(_STATE_IDLE)
@@ -349,7 +349,6 @@ func _on_orientation_changed(o: _Direction):
 func _apply():
 	if is_instance_valid(full_setup):
 		_frame = full_setup.apply(self, _state, _orientation, _frame)
-		_frame += 1
 	else:
 		texture = null
 		_frame = 0
@@ -361,7 +360,7 @@ func _make_full_setup() -> FullSetup:
 func _setup():
 	full_setup = _make_full_setup()
 	map_entity.on_state_changed.connect(_on_state_changed)
-	map_entity.on_orientation.connect(_on_orientation_changed)
+	map_entity.on_orientation_changed.connect(_on_orientation_changed)
 	_state = map_entity.state
 	_orientation = map_entity.orientation
 	_frame = 0
@@ -379,13 +378,13 @@ func _teardown():
 var _accumulated: float = 0
 
 func _update(delta: float):
-	_apply()
 	if fps > 0:
-		if _accumulated > (1 / fps):
+		_accumulated += delta
+		var frame_time := 1.0 / fps
+		while _accumulated >= frame_time:
 			_frame += 1
-			_accumulated = _accumulated - 1. * floor(_accumulated * fps) / fps
-		else:
-			_accumulated += delta
+			_accumulated -= frame_time
+			_apply()
 	else:
 		_accumulated = 0
 
