@@ -6,6 +6,8 @@ const _WATER_WHEEL_HALF_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC
 
 
 func _setup_sprite() -> void:
+    centered = false
+    offset = Vector2(-48, 0)
 	texture = _WATER_WHEEL_HALF_TEXTURE
 	region_enabled = true
 	region_filter_clip_enabled = true
