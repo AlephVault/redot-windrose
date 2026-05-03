@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://cvksi0rohtixx"]
+[gd_scene load_steps=17 format=4 uid="uid://cvksi0rohtixx"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_xc3iu"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_l3lgy"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://bk1vb2vqjk51q" path="res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-utils.png" id="6_tdnlj"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-silo.gd" id="7_np17o"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-waterer.gd" id="8_eap3b"]
+[ext_resource type="Texture2D" uid="uid://cnrlnum88seu4" path="res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-wind-blade.png" id="8_gxo2j"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/wind-blade.gd" id="9_e2j32"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/butter-churner.gd" id="9_vvv63"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/mixer.gd" id="10_m28nu"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/cheese-press.gd" id="11_i6qln"]
@@ -46,6 +48,17 @@ region_enabled = true
 region_rect = Rect2(0, 0, 64, 160)
 region_filter_clip_enabled = true
 script = ExtResource("7_np17o")
+
+[node name="BladesVisual" type="Sprite2D" parent="Map/EntitiesLayer/Silo"]
+texture = ExtResource("8_gxo2j")
+centered = false
+offset = Vector2(-32, -128)
+vframes = 8
+region_enabled = true
+region_rect = Rect2(0, 0, 128, 1024)
+region_filter_clip_enabled = true
+script = ExtResource("9_e2j32")
+fps = 8
 
 [node name="WatererH" type="Node2D" parent="Map/EntitiesLayer"]
 position = Vector2(64, 160)

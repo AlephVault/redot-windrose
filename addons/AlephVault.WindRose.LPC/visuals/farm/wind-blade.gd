@@ -16,8 +16,6 @@ func _ready() -> void:
 
 func _setup_sprite() -> void:
 	texture = _WIND_BLADE_TEXTURE
-	centered = true
-	offset = Vector2.ZERO
 	region_enabled = true
 	region_filter_clip_enabled = true
 	region_rect = Rect2(Vector2.ZERO, Vector2(128, 1024))
