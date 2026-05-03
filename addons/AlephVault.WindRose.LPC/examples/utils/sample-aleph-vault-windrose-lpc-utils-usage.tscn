@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cvksi0rohtixx"]
+[gd_scene load_steps=23 format=4 uid="uid://cvksi0rohtixx"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_xc3iu"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_l3lgy"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-water-wheel.gd" id="15_xv5wg"]
 [ext_resource type="Texture2D" uid="uid://dkvlsnraswnih" path="res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-water-wheel-ns.png" id="16_vyems"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-water-wheel-ns.gd" id="17_tuj1c"]
+[ext_resource type="Texture2D" uid="uid://boycaa4rl6xb" path="res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-water-wheel-half.png" id="18_tke0x"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-water-wheel-half.gd" id="19_jbikl"]
 
 [node name="Sample-aleph-vault-windrose-lpc-utils-usage" type="Node2D"]
 
@@ -127,6 +129,23 @@ region_enabled = true
 region_rect = Rect2(0, 0, 128, 64)
 region_filter_clip_enabled = true
 script = ExtResource("17_tuj1c")
+fps = 6
+
+[node name="WaterWheelHalf" type="Node2D" parent="Map/EntitiesLayer"]
+position = Vector2(352, 192)
+script = ExtResource("5_657mv")
+_size = Vector2i(2, 2)
+_initial_position = Vector2i(11, 6)
+
+[node name="WaterWheelHalfVisual" type="Sprite2D" parent="Map/EntitiesLayer/WaterWheelHalf"]
+texture = ExtResource("18_tke0x")
+centered = false
+offset = Vector2(0, -64)
+vframes = 4
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 256)
+region_filter_clip_enabled = true
+script = ExtResource("19_jbikl")
 fps = 6
 
 [node name="ButterChurner" type="Node2D" parent="Map/EntitiesLayer"]

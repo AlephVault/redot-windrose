@@ -72,6 +72,15 @@ This visual uses `images/farm/lpc-farm-water-wheel.png`, a 64x384 animated sprit
 - `spin`: Selects the wheel spin direction. Available values are `CLOCKWISE` for frames `0-1-2-3`, and `COUNTER_CLOCKWISE` for frames `3-2-1-0`.
 - `fps`: Controls the animation frames per second. The default is `6`.
 
+### Half Water Wheel
+
+The half water-wheel visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WaterWheelHalf`. It looks like a water wheel but intended to be understood as partially submerged.
+
+This visual uses `images/farm/lpc-farm-water-wheel-half.png`, a 64x256 animated sprite sheet with 4 vertically distributed frames. Each frame is 64x64. It is configured as a non-oriented static map entity visual.
+
+- `spin`: Selects the wheel spin direction. Available values are `CLOCKWISE` for frames `0-1-2-3`, and `COUNTER_CLOCKWISE` for frames `3-2-1-0`.
+- `fps`: Controls the animation frames per second. The default is `6`.
+
 ### North-South Water Wheel
 
 The north-south water-wheel visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WaterWheelNS`.
