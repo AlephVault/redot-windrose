@@ -98,9 +98,25 @@ This visual uses `images/farm/lpc-farm-water-wheel-ns.png`, a 128x64 animated sp
 - `flow`: Selects the represented water flow direction. Available values are `SOUTH_TO_NORTH` for frames `0-1-2-3`, and `NORTH_TO_SOUTH` for frames `3-2-1-0`.
 - `fps`: Controls the animation frames per second. The default is `6`.
 
+### Beehive
+
+The beehive visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Beehive`.
+
+This visual uses `images/farm/lpc-farm-utils.png` and keeps the usual bottom-left pivot used by farm utility sprites.
+
+- `model`: Selects the beehive model. Available values are `SMALL` for the 32x32 sprite at `(32, 320)`, `MEDIUM` for the 32x64 sprite at `(64, 288)`, and `BIG` for the 32x64 sprite at `(96, 288)`.
+
+### Tree, Nest, and Hive Rack Utilities
+
+The tree stump visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.TreeStump`. It uses the 32x32 sprite at `(32, 288)` in `images/farm/lpc-farm-utils.png`.
+
+The bird's nest visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BirdsNest`. It uses the 32x64 sprite at `(0, 288)` in `images/farm/lpc-farm-utils.png`.
+
+The beehive rack visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`. It uses the 128x96 sprite at `(128, 256)` in `images/farm/lpc-farm-utils.png`.
+
 ### Farm Utility Objects
 
-The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterChurner`, `AlephVault__WindRose__LPC.Visuals.Farm.CheesePress`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
+The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.TreeStump`, `AlephVault__WindRose__LPC.Visuals.Farm.BirdsNest`, `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterChurner`, `AlephVault__WindRose__LPC.Visuals.Farm.CheesePress`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
 
 Licenses
 --------
