@@ -112,6 +112,8 @@ The tree stump visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.
 
 The bird's nest visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BirdsNest`. It uses the 32x64 sprite at `(0, 288)` in `images/farm/lpc-farm-utils.png`.
 
+The bird house visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BirdsHouse`. It uses `images/farm/lpc-farm-utils.png` and exposes a `flavor` property. Available values are `TILES` for the 128x224 sprite at `(256, 0)`, and `THATCH` for the 128x224 sprite at `(384, 0)`.
+
 The beehive rack visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`. It uses the 128x96 sprite at `(128, 256)` in `images/farm/lpc-farm-utils.png`.
 
 ### Farm Utility Objects
