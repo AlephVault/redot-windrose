@@ -5,8 +5,8 @@ extends AlephVault__WindRose.Maps.Visuals.MapEntityVisual
 const _UTILS_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-utils.png")
 
 
-## The waterer orientation.
-enum Orientation {
+## The waterer layout.
+enum Layout {
 	VERTICAL,
 	HORIZONTAL,
 }
@@ -25,12 +25,12 @@ const _HORIZONTAL_EMPTY_REGION_RECT = Rect2i(128, 224, 64, 32)
 const _HORIZONTAL_FULL_REGION_RECT = Rect2i(192, 224, 64, 32)
 
 
-## The waterer orientation to render.
-@export var orientation: Orientation = Orientation.VERTICAL:
+## The waterer layout to render.
+@export var layout: Layout = Layout.VERTICAL:
 	set(value):
-		if orientation == value:
+		if layout == value:
 			return
-		orientation = value
+		layout = value
 		_update_sprite()
 
 
@@ -86,8 +86,8 @@ func _validate_property(property: Dictionary) -> void:
 
 
 func _get_region_rect() -> Rect2i:
-	match orientation:
-		Orientation.HORIZONTAL:
+	match layout:
+		Layout.HORIZONTAL:
 			if fill_status == FillStatus.FULL:
 				return _HORIZONTAL_FULL_REGION_RECT
 			return _HORIZONTAL_EMPTY_REGION_RECT
