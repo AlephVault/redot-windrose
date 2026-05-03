@@ -140,7 +140,7 @@ _initial_position = Vector2i(11, 6)
 [node name="WaterWheelHalfVisual" type="Sprite2D" parent="Map/EntitiesLayer/WaterWheelHalf"]
 texture = ExtResource("18_tke0x")
 centered = false
-offset = Vector2(0, -64)
+offset = Vector2(0, -48)
 vframes = 4
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 256)
