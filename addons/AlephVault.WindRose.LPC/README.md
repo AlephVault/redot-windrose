@@ -55,9 +55,15 @@ The waterer visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Wat
 - `orientation`: Selects the waterer direction. Available values are `VERTICAL` and `HORIZONTAL`.
 - `fill_status`: Selects whether the waterer is `EMPTY` or `FULL`.
 
+### Wind Blade
+
+The wind-blade visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WindBlade`.
+
+This visual uses `images/farm/wind-blade.png`, a 128x1024 animated sprite sheet with 8 vertically distributed frames. Each frame is 128x128. It is configured as a non-oriented static map entity visual, so the same default animation is used regardless of the owning entity's orientation.
+
 ### Farm Utility Objects
 
-The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterMixer`, `AlephVault__WindRose__LPC.Visuals.Farm.Press`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
+The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterChurner`, `AlephVault__WindRose__LPC.Visuals.Farm.CheesePress`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
 
 Licenses
 --------
@@ -71,7 +77,7 @@ The assets contained in this package come from the LPC authoring contest. Credit
 	   CC-BY-SA 3.0 / CC-BY 3.0 / GPL 3.0
 	   https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles
 
-2. For the Farm's Barn and House
+2. For the Farm's Barn, Utils and House
 
    House elements:
 
@@ -96,7 +102,7 @@ The assets contained in this package come from the LPC authoring contest. Credit
 		 LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
 		 DETAILS: Original doorway by Lanea Zimmerman. Recolors and adjustments by Eliza Wyatt.
 
-   Barn elements:
+   Barn and util elements:
 
 	   "[LPC] Farm" by bluecarrot16, Wolthera van Hövell tot Westerflier (TheraHedwig), and Ivan Voirol
 	   http://opengameart.org/content/lpc-farm
