@@ -4,9 +4,11 @@ extends AlephVault__WindRose.Maps.Visuals.StaticMapEntityVisual
 
 const _WIND_BLADE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/farm/lpc-farm-wind-blade.png")
 const _FRAME_COUNT := 8
+const _DEFAULT_FPS := 8
 
 
 func _init() -> void:
+	fps = _DEFAULT_FPS
 	_setup_sprite()
 
 
@@ -25,7 +27,6 @@ func _setup_sprite() -> void:
 	_region_rect_up = Rect2()
 	_region_rect_left = Rect2()
 	_region_rect_right = Rect2()
-	fps = _FRAME_COUNT
 
 
 func _validate_property(property: Dictionary) -> void:

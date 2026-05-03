@@ -59,7 +59,27 @@ The waterer visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Wat
 
 The wind-blade visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WindBlade`.
 
-This visual uses `images/farm/wind-blade.png`, a 128x1024 animated sprite sheet with 8 vertically distributed frames. Each frame is 128x128. It is configured as a non-oriented static map entity visual, so the same default animation is used regardless of the owning entity's orientation.
+This visual uses `images/farm/lpc-farm-wind-blade.png`, a 128x1024 animated sprite sheet with 8 vertically distributed frames. Each frame is 128x128. It is configured as a non-oriented static map entity visual, so the same default animation is used regardless of the owning entity's orientation.
+
+- `fps`: Controls the animation frames per second. The default is `8`.
+
+### Water Wheel
+
+The water-wheel visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WaterWheel`.
+
+This visual uses `images/farm/lpc-farm-water-wheel.png`, a 64x384 animated sprite sheet with 4 vertically distributed frames. Each frame is 64x96. It is configured as a non-oriented static map entity visual.
+
+- `spin`: Selects the wheel spin direction. Available values are `CLOCKWISE` for frames `0-1-2-3`, and `COUNTER_CLOCKWISE` for frames `3-2-1-0`.
+- `fps`: Controls the animation frames per second. The default is `6`.
+
+### North-South Water Wheel
+
+The north-south water-wheel visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WaterWheelNS`.
+
+This visual uses `images/farm/lpc-farm-water-wheel-ns.png`, a 128x64 animated sprite sheet with 4 horizontally distributed frames. Each frame is 32x64. It is configured as a non-oriented static map entity visual.
+
+- `flow`: Selects the represented water flow direction. Available values are `SOUTH_TO_NORTH` for frames `0-1-2-3`, and `NORTH_TO_SOUTH` for frames `3-2-1-0`.
+- `fps`: Controls the animation frames per second. The default is `6`.
 
 ### Farm Utility Objects
 
@@ -77,7 +97,7 @@ The assets contained in this package come from the LPC authoring contest. Credit
 	   CC-BY-SA 3.0 / CC-BY 3.0 / GPL 3.0
 	   https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles
 
-2. For the Farm's Barn, Utils and House
+2. For the Farm's Barn, Utils, Wind Blade, Water Wheels and House
 
    House elements:
 
