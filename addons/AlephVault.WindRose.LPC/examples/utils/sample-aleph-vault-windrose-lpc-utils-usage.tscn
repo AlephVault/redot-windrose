@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://cvksi0rohtixx"]
+[gd_scene load_steps=31 format=4 uid="uid://cvksi0rohtixx"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_xc3iu"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_l3lgy"]
@@ -29,6 +29,7 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-beehive.gd" id="24_c2msm"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/beehive-rack.gd" id="25_j24aa"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-birds-house.gd" id="26_wfv5n"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/utils/sample-aleph-vault-shed.gd" id="27_2bc2p"]
 
 [node name="Sample-aleph-vault-windrose-lpc-utils-usage" type="Node2D"]
 
@@ -162,6 +163,21 @@ region_enabled = true
 region_rect = Rect2(256, 0, 128, 224)
 region_filter_clip_enabled = true
 script = ExtResource("26_wfv5n")
+
+[node name="Shed" type="Node2D" parent="Map/EntitiesLayer"]
+position = Vector2(800, 160)
+script = ExtResource("5_657mv")
+_size = Vector2i(4, 4)
+_initial_position = Vector2i(25, 5)
+
+[node name="ShedVisual" type="Sprite2D" parent="Map/EntitiesLayer/Shed"]
+texture = ExtResource("6_tdnlj")
+centered = false
+offset = Vector2(0, -128)
+region_enabled = true
+region_rect = Rect2(256, 224, 128, 128)
+region_filter_clip_enabled = true
+script = ExtResource("27_2bc2p")
 
 [node name="Beehive" type="Node2D" parent="Map/EntitiesLayer"]
 position = Vector2(512, 160)

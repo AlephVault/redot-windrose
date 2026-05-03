@@ -114,6 +114,8 @@ The bird's nest visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm
 
 The bird house visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BirdsHouse`. It uses `images/farm/lpc-farm-utils.png` and exposes a `flavor` property. Available values are `TILES` for the 128x224 sprite at `(256, 0)`, and `THATCH` for the 128x224 sprite at `(384, 0)`.
 
+The shed visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Shed`. It uses `images/farm/lpc-farm-utils.png` and exposes a `flavor` property. Available values are `TILES` for the 128x128 sprite at `(256, 224)`, and `THATCH` for the 128x128 sprite at `(384, 224)`.
+
 The beehive rack visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`. It uses the 128x96 sprite at `(128, 256)` in `images/farm/lpc-farm-utils.png`.
 
 ### Farm Utility Objects
