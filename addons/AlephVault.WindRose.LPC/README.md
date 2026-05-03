@@ -42,6 +42,23 @@ The fruit-tree visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.
 - `tree_type`: Selects the rendered tree species and fruit variant. Available values are `RED_APPLES`, `GREEN_APPLES`, `YELLOW_APPLES`, `VARIEGATED_APPLES`, `GOLDEN_APPLES`, `LEMON`, `LIME`, `TANGERINE`, `ORANGE`, `PEACH`, `MANGO1`, `MANGO2`, `RED_CHERRY`, `YELLOW_PEAR`, `BROWN_PEAR`, `GREEN_PEAR`, `PURPLE_PLUM`, `BROWN_COCONUT`, and `YELLOW_BANANA`.
 - `tree_stage`: Selects the rendered growth stage. Available values are `BABY`, `SMALL`, `GROWING`, `ADULT`, `FRUITS_SMALL`, `FRUITS_GROWING`, and `FRUITS_READY`.
 
+### Silo
+
+The silo visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Silo`.
+
+- `mode`: Selects the material combination. Available values are `BRICK_AND_TILES`, `WOOD_AND_TILES`, `BRICK_AND_THATCH`, and `WOOD_AND_THATCH`.
+
+### Waterer
+
+The waterer visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Waterer`.
+
+- `orientation`: Selects the waterer direction. Available values are `VERTICAL` and `HORIZONTAL`.
+- `fill_status`: Selects whether the waterer is `EMPTY` or `FULL`.
+
+### Farm Utility Objects
+
+The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterMixer`, `AlephVault__WindRose__LPC.Visuals.Farm.Press`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
+
 Licenses
 --------
 
