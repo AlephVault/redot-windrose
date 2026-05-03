@@ -63,6 +63,14 @@ This visual uses `images/farm/lpc-farm-wind-blade.png`, a 128x1024 animated spri
 
 - `fps`: Controls the animation frames per second. The default is `8`.
 
+### Small Wind Blade
+
+The small wind-blade visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WindBladeSmall`.
+
+This visual uses `images/farm/lpc-farm-wind-blade-small.png`, a 64x256 animated sprite sheet with 4 vertically distributed frames. Each frame is 64x64. It is configured as a non-oriented static map entity visual, so the same default animation is used regardless of the owning entity's orientation.
+
+- `fps`: Controls the animation frames per second. The default is `4`.
+
 ### Water Wheel
 
 The water-wheel visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.WaterWheel`.
