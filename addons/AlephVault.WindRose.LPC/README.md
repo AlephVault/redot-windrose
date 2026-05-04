@@ -23,7 +23,8 @@ The barn visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.Barn`.
 
 The house visual is implemented by `AlephVault__WindRose__LPC.Visuals.Farm.House`.
 
-- `texture_cache_name`: LRU cache key used for the composed house texture.
+- `texture_cache_name`: Static LRU cache key used for composed house textures. Set it before the first house visual refresh.
+- `texture_cache_max_disposal_size`: Static maximum disposal queue size for composed house textures. Set it before the first house visual refresh.
 - `wall_color`: Selects the wall brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.
 - `ceiling_color`: Selects the ceiling brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.
 - `chimney_color`: Selects the chimney brick color. Available values are `LIGHT_BLUE`, `LIGHT_GRAY`, `GRAY`, `LIGHT_BROWN`, `BROWN`, and `RED`.

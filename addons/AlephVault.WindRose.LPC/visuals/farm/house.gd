@@ -9,6 +9,7 @@ const _Context := AlephVault__WindRose.Utils.Textures.Context
 const _TEXTURE_SIZE := Vector2i(288, 288)
 const _BLOCK_SIZE := Vector2i(288, 288)
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
+const _DEFAULT_CACHE_NAME := "farm_house"
 const _WINDOW_LIGHTS_ON_POSITION := Vector2i(160, 192)
 const _WINDOW_LIGHTS_ON_SIZE := Vector2i(32, 32)
 const _WINDOW_LIGHTS_ON_SOURCE_POSITION := Vector2i(1184, 1088)
@@ -113,18 +114,18 @@ const _CHIMNEY_INDICES := [
 ]
 
 
-## The LRU cache name used for composed house textures.
-@export var texture_cache_name: String = "farm_house":
-	set(value):
-		var next_value := value.strip_edges()
-		assert(next_value != "", "The texture cache name must not be empty")
-		if next_value == "":
-			return
-		if texture_cache_name == next_value:
-			return
-		_release_texture()
-		texture_cache_name = next_value
-		_update_sprite()
+## LRU cache key used for composed house textures. Set this
+## during application startup, before the first house visual
+## refreshes.
+static var texture_cache_name: String = _DEFAULT_CACHE_NAME
+
+## Maximum disposal queue size for composed house textures.
+## Set this during application startup, before the first house
+## visual refreshes.
+static var texture_cache_max_disposal_size: int = _DEFAULT_CACHE_MAX_DISPOSAL_SIZE
+static var _cache_ensured: bool = false
+static var _locked_texture_cache_name: String = ""
+static var _locked_texture_cache_max_disposal_size: int = 0
 
 
 ## The wall color variant.
@@ -272,10 +273,20 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
-func _ensure_cache(cache_name: String) -> void:
-	if not AlephVault__WindRose.Utils.LRU.Registry.has(cache_name):
+static func _ensure_cache() -> void:
+	var cache_name := texture_cache_name.strip_edges()
+	assert(cache_name != "", "The house texture cache name must not be empty")
+	assert(texture_cache_max_disposal_size >= 0, "The house texture cache disposal size must be non-negative")
+	if _cache_ensured:
+		assert(cache_name == _locked_texture_cache_name, "The house texture cache name cannot change after the cache is ensured")
+		assert(texture_cache_max_disposal_size == _locked_texture_cache_max_disposal_size, "The house texture cache disposal size cannot change after the cache is ensured")
+	else:
+		_locked_texture_cache_name = cache_name
+		_locked_texture_cache_max_disposal_size = texture_cache_max_disposal_size
+		_cache_ensured = true
+	if not AlephVault__WindRose.Utils.LRU.Registry.has(_locked_texture_cache_name):
 		AlephVault__WindRose.Utils.LRU.Registry.define(
-			cache_name, _DEFAULT_CACHE_MAX_DISPOSAL_SIZE
+			_locked_texture_cache_name, _locked_texture_cache_max_disposal_size
 		)
 
 
@@ -401,8 +412,8 @@ func _build_context():
 
 
 func _release_texture() -> void:
-	if _texture_context != null and texture_cache_name.strip_edges() != "":
-		_texture_context.dispose_texture(self, texture_cache_name)
+	if _texture_context != null and _cache_ensured:
+		_texture_context.dispose_texture(self, _locked_texture_cache_name)
 	_texture_context = null
 
 
@@ -411,16 +422,16 @@ func _update_sprite() -> void:
 	if cache_name == "":
 		return
 
-	_ensure_cache(cache_name)
+	_ensure_cache()
 	var next_context = _build_context()
 	if next_context.invalid:
 		return
 
 	if _texture_context != null and _texture_context.final_key != next_context.final_key:
-		_texture_context.dispose_texture(self, cache_name)
+		_texture_context.dispose_texture(self, _locked_texture_cache_name)
 
 	_texture_context = next_context
-	texture = _texture_context.get_texture(self, cache_name)
+	texture = _texture_context.get_texture(self, _locked_texture_cache_name)
 	hframes = 1
 	vframes = 1
 	frame = 0
