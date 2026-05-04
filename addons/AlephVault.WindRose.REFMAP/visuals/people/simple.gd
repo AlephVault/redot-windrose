@@ -1,5 +1,5 @@
 @tool
-extends "./base.gd"
+extends "res://addons/AlephVault.WindRose.REFMAP/visuals/people/base.gd"
 ## REFMAP people visual using the simple clothing model.
 ##
 ## It uses all shared base components plus one complete cloth
@@ -11,7 +11,7 @@ extends "./base.gd"
 ## resolver key String, or a direct pair [key: String, Texture2D].
 ## The bundled default resolver does not provide cloth assets.
 var _cloth: Variant = null
-@export var cloth: Variant:
+var cloth: Variant:
 	get:
 		return _cloth
 	set(value):

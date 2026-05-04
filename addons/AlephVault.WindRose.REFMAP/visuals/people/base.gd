@@ -28,8 +28,8 @@ enum Sex {
 	Female,
 }
 
-enum Color {
-	Default,
+enum ComponentColor {
+	Default = 0,
 	Black = 0,
 	Blue,
 	DarkBrown,
@@ -43,7 +43,7 @@ enum Color {
 }
 
 enum BodyColor {
-	Default,
+	Default = 0,
 	White = 0,
 	Black,
 	Yellow,
@@ -115,7 +115,7 @@ static var _locked_texture_cache_max_disposal_size: int = 0
 ## Body component. Accepted values are null, a BodyColor value,
 ## or a direct pair [key: String, texture: Texture2D].
 var _body: Variant = BodyColor.White
-@export var body: Variant:
+var body: Variant:
 	get:
 		return _body
 	set(value):
@@ -129,7 +129,7 @@ var _body: Variant = BodyColor.White
 ## Front hair component. Accepted values are null, a resolver
 ## key String, or a direct pair [key: String, texture: Texture2D].
 var _hair: Variant = null
-@export var hair: Variant:
+var hair: Variant:
 	get:
 		return _hair
 	set(value):
@@ -140,9 +140,9 @@ var _hair: Variant = null
 		_hair = value
 		_refresh_visual()
 
-## Color used when hair is resolved by key.
-var _hair_color: Color = Color.Black
-@export var hair_color: Color:
+## ComponentColor used when hair is resolved by key.
+var _hair_color: int = ComponentColor.Black
+@export var hair_color: int = ComponentColor.Black:
 	get:
 		return _hair_color
 	set(value):
@@ -156,7 +156,7 @@ var _hair_color: Color = Color.Black
 ## Back/tail hair component. Accepted values are null, a resolver
 ## key String, or a direct pair [key: String, texture: Texture2D].
 var _hair_tail: Variant = null
-@export var hair_tail: Variant:
+var hair_tail: Variant:
 	get:
 		return _hair_tail
 	set(value):
@@ -167,9 +167,9 @@ var _hair_tail: Variant = null
 		_hair_tail = value
 		_refresh_visual()
 
-## Color used when hair_tail is resolved by key.
-var _hair_tail_color: Color = Color.Black
-@export var hair_tail_color: Color:
+## ComponentColor used when hair_tail is resolved by key.
+var _hair_tail_color: int = ComponentColor.Black
+@export var hair_tail_color: int = ComponentColor.Black:
 	get:
 		return _hair_tail_color
 	set(value):
@@ -183,7 +183,7 @@ var _hair_tail_color: Color = Color.Black
 ## Necklace component. The bundled default resolver does not
 ## provide necklace assets, so use a custom resolver or direct pair.
 var _necklace: Variant = null
-@export var necklace: Variant:
+var necklace: Variant:
 	get:
 		return _necklace
 	set(value):
@@ -197,7 +197,7 @@ var _necklace: Variant = null
 ## Hat component. Accepted values are null, a resolver key String,
 ## or a direct pair [key: String, texture: Texture2D].
 var _hat: Variant = null
-@export var hat: Variant:
+var hat: Variant:
 	get:
 		return _hat
 	set(value):
@@ -208,9 +208,9 @@ var _hat: Variant = null
 		_hat = value
 		_refresh_visual()
 
-## Color used when hat is resolved by key.
-var _hat_color: Color = Color.Black
-@export var hat_color: Color:
+## ComponentColor used when hat is resolved by key.
+var _hat_color: int = ComponentColor.Black
+@export var hat_color: int = ComponentColor.Black:
 	get:
 		return _hat_color
 	set(value):
@@ -225,7 +225,7 @@ var _hat_color: Color = Color.Black
 ## not provide hand item assets, so use a custom resolver or
 ## direct pair.
 var _right_hand: Variant = null
-@export var right_hand: Variant:
+var right_hand: Variant:
 	get:
 		return _right_hand
 	set(value):
@@ -240,7 +240,7 @@ var _right_hand: Variant = null
 ## not provide hand item assets, so use a custom resolver or
 ## direct pair.
 var _left_hand: Variant = null
-@export var left_hand: Variant:
+var left_hand: Variant:
 	get:
 		return _left_hand
 	set(value):
@@ -343,16 +343,16 @@ func _resolve_body_layer(value) -> ResolvedLayer:
 		if texture != null:
 			resolver_obj.unresolve_body(sex, body_color)
 		return null
-	return ResolvedLayer.new("body:%d:%d" % [int(sex), body_color], texture, true, true, sex, "", 0, body_color)
+	return ResolvedLayer.new("body:%s:%d" % [str(sex), body_color], texture, true, true, sex, "", 0, body_color)
 
-func _resolve_component_layer(type: String, value, color: Color = Color.Default) -> ResolvedLayer:
+func _resolve_component_layer(type: String, value, color: int = ComponentColor.Default) -> ResolvedLayer:
 	if value == null:
 		return null
 	if _valid_pair(value):
-		return ResolvedLayer.new("%s:direct:%s" % [type, value[0]], value[1], false, false, sex, type, int(color), 0)
+		return ResolvedLayer.new("%s:direct:%s" % [type, value[0]], value[1], false, false, sex, type, color, 0)
 	if not (value is String):
 		return null
-	var key := value.strip_edges()
+	var key: String = value.strip_edges()
 	if not _Resolver.new().is_valid_key(key):
 		return null
 	var resolver_obj := _resolver()
@@ -363,9 +363,9 @@ func _resolve_component_layer(type: String, value, color: Color = Color.Default)
 		if texture != null:
 			resolver_obj.unresolve(sex, type, key, color)
 		return null
-	return ResolvedLayer.new("%s:%d:%s:%d" % [type, int(sex), key, int(color)], texture, true, false, sex, type, int(color), 0)
+	return ResolvedLayer.new("%s:%s:%s:%d" % [type, str(sex), key, color], texture, true, false, sex, type, color, 0)
 
-func _layer(value: Variant, type: String, color: Color = Color.Default) -> ResolvedLayer:
+func _layer(value: Variant, type: String, color: int = ComponentColor.Default) -> ResolvedLayer:
 	return _resolve_component_layer(type, value, color)
 
 func _body_layer() -> ResolvedLayer:

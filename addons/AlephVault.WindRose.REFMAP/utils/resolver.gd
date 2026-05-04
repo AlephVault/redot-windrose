@@ -8,8 +8,8 @@ enum Sex {
 
 ## Palette used by colored equipment and clothing pieces.
 ## Default maps to Black for bundled resolver implementations.
-enum Color {
-	Default,
+enum ComponentColor {
+	Default = 0,
 	Black = 0,
 	Blue,
 	DarkBrown,
@@ -25,7 +25,7 @@ enum Color {
 ## Palette used by base body sprites.
 ## Default maps to White for bundled resolver implementations.
 enum BodyColor {
-	Default,
+	Default = 0,
 	White = 0,
 	Black,
 	Yellow,
@@ -82,13 +82,13 @@ func is_valid_key(key: String) -> bool:
 ## Resolves a non-body component texture. Implementations should
 ## return Texture2D or null. Callers ignore non-Texture2D values
 ## and textures whose dimensions are not 128x192.
-func resolve(sex: Sex, type: String, key: String, color: Color = Color.Default):
+func resolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented("Resolver", "resolve")
 
 ## Releases a previous successful non-body resolve. This should
 ## eventually be called once for each resolve call that returned
 ## a non-null value.
-func unresolve(sex: Sex, type: String, key: String, color: Color = Color.Default):
+func unresolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
 	AlephVault__WindRose.Utils.AccessUtils.not_implemented("Resolver", "unresolve")
 
 ## Resolves a base body texture. Implementations should return

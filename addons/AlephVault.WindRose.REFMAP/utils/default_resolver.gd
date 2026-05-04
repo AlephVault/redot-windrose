@@ -1,4 +1,4 @@
-extends "./resolver.gd"
+extends "res://addons/AlephVault.WindRose.REFMAP/utils/resolver.gd"
 
 const _LRURegistry := AlephVault__WindRose.Utils.LRU.Registry
 const _TEXTURE_SIZE := Vector2i(128, 192)
@@ -41,25 +41,25 @@ static func _ensure_cache() -> void:
 static func _sex_string(sex: Sex) -> String:
 	return "Male" if sex == Sex.Male else "Female"
 
-static func _color_string(color: Color) -> String:
+static func _color_string(color: int) -> String:
 	match color:
-		Color.Blue:
+		ComponentColor.Blue:
 			return "blue"
-		Color.DarkBrown:
+		ComponentColor.DarkBrown:
 			return "dbrown"
-		Color.Green:
+		ComponentColor.Green:
 			return "green"
-		Color.LightBrown:
+		ComponentColor.LightBrown:
 			return "lbrown"
-		Color.Pink:
+		ComponentColor.Pink:
 			return "pink"
-		Color.Purple:
+		ComponentColor.Purple:
 			return "purple"
-		Color.Red:
+		ComponentColor.Red:
 			return "red"
-		Color.White:
+		ComponentColor.White:
 			return "white"
-		Color.Yellow:
+		ComponentColor.Yellow:
 			return "yellow"
 		_:
 			return "black"
@@ -147,7 +147,7 @@ func _resolve_path(path: String):
 ##
 ## Unsupported bundled types return null: right_hand, left_hand,
 ## cloth, necklace, and cloak.
-func resolve(sex: Sex, type: String, key: String, color: Color = Color.Default):
+func resolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
 	if not is_valid_key(key):
 		return null
 	var subcategory := _subcategory(type)
@@ -157,7 +157,7 @@ func resolve(sex: Sex, type: String, key: String, color: Color = Color.Default):
 	var resolved_key := "%s_%s_b" % [key, color_name] if type == HAIR_TAIL else "%s_%s" % [key, color_name]
 	return _resolve_path("%s/%s/%s/%s.png" % [_BASE_PATH, _sex_string(sex), subcategory, resolved_key])
 
-func unresolve(sex: Sex, type: String, key: String, color: Color = Color.Default):
+func unresolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
 	if not is_valid_key(key):
 		return
 	var subcategory := _subcategory(type)

@@ -70,7 +70,7 @@ Direct pairs do not call the resolver and are not unresolved later. String keys 
 - `Male`
 - `Female`
 
-`Color` for hair/equipment/clothing:
+`ComponentColor` for hair/equipment/clothing. This is named `ComponentColor` in code to avoid colliding with Redot's built-in `Color` type:
 
 - `Default` / `Black`
 - `Blue`

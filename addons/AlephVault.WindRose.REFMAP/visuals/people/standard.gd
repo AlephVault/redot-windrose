@@ -1,5 +1,5 @@
 @tool
-extends "./base.gd"
+extends "res://addons/AlephVault.WindRose.REFMAP/visuals/people/base.gd"
 ## REFMAP people visual using the standard layered outfit model.
 ##
 ## It uses all shared base components plus boots, pants, shirt,
@@ -9,7 +9,7 @@ extends "./base.gd"
 ## Boots component. Accepted values are null, a resolver key
 ## String, or a direct pair [key: String, Texture2D].
 var _boots: Variant = null
-@export var boots: Variant:
+var boots: Variant:
 	get:
 		return _boots
 	set(value):
@@ -20,9 +20,9 @@ var _boots: Variant = null
 		_boots = value
 		_refresh_visual()
 
-## Color used when boots are resolved by key.
-var _boots_color: Color = Color.Black
-@export var boots_color: Color:
+## ComponentColor used when boots are resolved by key.
+var _boots_color: int = ComponentColor.Black
+@export var boots_color: int = ComponentColor.Black:
 	get:
 		return _boots_color
 	set(value):
@@ -36,7 +36,7 @@ var _boots_color: Color = Color.Black
 ## Pants component. Accepted values are null, a resolver key
 ## String, or a direct pair [key: String, Texture2D].
 var _pants: Variant = null
-@export var pants: Variant:
+var pants: Variant:
 	get:
 		return _pants
 	set(value):
@@ -47,9 +47,9 @@ var _pants: Variant = null
 		_pants = value
 		_refresh_visual()
 
-## Color used when pants are resolved by key.
-var _pants_color: Color = Color.Black
-@export var pants_color: Color:
+## ComponentColor used when pants are resolved by key.
+var _pants_color: int = ComponentColor.Black
+@export var pants_color: int = ComponentColor.Black:
 	get:
 		return _pants_color
 	set(value):
@@ -63,7 +63,7 @@ var _pants_color: Color = Color.Black
 ## Shirt component. Accepted values are null, a resolver key
 ## String, or a direct pair [key: String, Texture2D].
 var _shirt: Variant = null
-@export var shirt: Variant:
+var shirt: Variant:
 	get:
 		return _shirt
 	set(value):
@@ -74,9 +74,9 @@ var _shirt: Variant = null
 		_shirt = value
 		_refresh_visual()
 
-## Color used when shirt is resolved by key.
-var _shirt_color: Color = Color.Black
-@export var shirt_color: Color:
+## ComponentColor used when shirt is resolved by key.
+var _shirt_color: int = ComponentColor.Black
+@export var shirt_color: int = ComponentColor.Black:
 	get:
 		return _shirt_color
 	set(value):
@@ -90,7 +90,7 @@ var _shirt_color: Color = Color.Black
 ## Chest overlay component. Accepted values are null, a resolver
 ## key String, or a direct pair [key: String, Texture2D].
 var _chest: Variant = null
-@export var chest: Variant:
+var chest: Variant:
 	get:
 		return _chest
 	set(value):
@@ -101,9 +101,9 @@ var _chest: Variant = null
 		_chest = value
 		_refresh_visual()
 
-## Color used when chest is resolved by key.
-var _chest_color: Color = Color.Black
-@export var chest_color: Color:
+## ComponentColor used when chest is resolved by key.
+var _chest_color: int = ComponentColor.Black
+@export var chest_color: int = ComponentColor.Black:
 	get:
 		return _chest_color
 	set(value):
@@ -117,7 +117,7 @@ var _chest_color: Color = Color.Black
 ## Waist overlay component. Accepted values are null, a resolver
 ## key String, or a direct pair [key: String, Texture2D].
 var _waist: Variant = null
-@export var waist: Variant:
+var waist: Variant:
 	get:
 		return _waist
 	set(value):
@@ -128,9 +128,9 @@ var _waist: Variant = null
 		_waist = value
 		_refresh_visual()
 
-## Color used when waist is resolved by key.
-var _waist_color: Color = Color.Black
-@export var waist_color: Color:
+## ComponentColor used when waist is resolved by key.
+var _waist_color: int = ComponentColor.Black
+@export var waist_color: int = ComponentColor.Black:
 	get:
 		return _waist_color
 	set(value):
@@ -144,7 +144,7 @@ var _waist_color: Color = Color.Black
 ## Arms overlay component. Accepted values are null, a resolver
 ## key String, or a direct pair [key: String, Texture2D].
 var _arms: Variant = null
-@export var arms: Variant:
+var arms: Variant:
 	get:
 		return _arms
 	set(value):
@@ -155,9 +155,9 @@ var _arms: Variant = null
 		_arms = value
 		_refresh_visual()
 
-## Color used when arms are resolved by key.
-var _arms_color: Color = Color.Black
-@export var arms_color: Color:
+## ComponentColor used when arms are resolved by key.
+var _arms_color: int = ComponentColor.Black
+@export var arms_color: int = ComponentColor.Black:
 	get:
 		return _arms_color
 	set(value):
@@ -171,7 +171,7 @@ var _arms_color: Color = Color.Black
 ## Long shirt / robe component. Accepted values are null, a
 ## resolver key String, or a direct pair [key: String, Texture2D].
 var _long_shirt: Variant = null
-@export var long_shirt: Variant:
+var long_shirt: Variant:
 	get:
 		return _long_shirt
 	set(value):
@@ -182,9 +182,9 @@ var _long_shirt: Variant = null
 		_long_shirt = value
 		_refresh_visual()
 
-## Color used when long_shirt is resolved by key.
-var _long_shirt_color: Color = Color.Black
-@export var long_shirt_color: Color:
+## ComponentColor used when long_shirt is resolved by key.
+var _long_shirt_color: int = ComponentColor.Black
+@export var long_shirt_color: int = ComponentColor.Black:
 	get:
 		return _long_shirt_color
 	set(value):
@@ -198,7 +198,7 @@ var _long_shirt_color: Color = Color.Black
 ## Shoulder overlay component. Accepted values are null, a
 ## resolver key String, or a direct pair [key: String, Texture2D].
 var _shoulders: Variant = null
-@export var shoulders: Variant:
+var shoulders: Variant:
 	get:
 		return _shoulders
 	set(value):
@@ -209,9 +209,9 @@ var _shoulders: Variant = null
 		_shoulders = value
 		_refresh_visual()
 
-## Color used when shoulders are resolved by key.
-var _shoulders_color: Color = Color.Black
-@export var shoulders_color: Color:
+## ComponentColor used when shoulders are resolved by key.
+var _shoulders_color: int = ComponentColor.Black
+@export var shoulders_color: int = ComponentColor.Black:
 	get:
 		return _shoulders_color
 	set(value):
@@ -225,7 +225,7 @@ var _shoulders_color: Color = Color.Black
 ## Cloak component. The bundled default resolver does not provide
 ## cloak assets, so use a custom resolver or direct pair.
 var _cloak: Variant = null
-@export var cloak: Variant:
+var cloak: Variant:
 	get:
 		return _cloak
 	set(value):
