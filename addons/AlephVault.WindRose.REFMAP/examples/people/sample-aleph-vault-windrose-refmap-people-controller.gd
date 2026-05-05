@@ -12,6 +12,7 @@ func _move(direction: _Direction):
 	if _person == null or direction == _Direction.NONE:
 		return
 
+	_person.orientation = direction
 	_person.start_movement(direction)
 
 func _process(_delta):

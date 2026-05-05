@@ -17,9 +17,13 @@ const _TEXTURE_SIZE := Vector2i(128, 192)
 const _FRAME_SIZE := Vector2i(32, 48)
 const _FULL_RECT := Rect2i(Vector2i.ZERO, _TEXTURE_SIZE)
 const _DOWN_RECT := Rect2i(0, 0, 128, 48)
+const _DOWN_FRAME_RECT := Rect2i(0, 0, 32, 48)
 const _LEFT_RIGHT_RECT := Rect2i(0, 48, 128, 96)
+const _LEFT_FRAME_RECT := Rect2i(0, 48, 32, 48)
+const _RIGHT_FRAME_RECT := Rect2i(0, 96, 32, 48)
 const _LEFT_RIGHT_UP_RECT := Rect2i(0, 48, 128, 144)
 const _UP_RECT := Rect2i(0, 144, 128, 48)
+const _UP_FRAME_RECT := Rect2i(0, 144, 32, 48)
 const _DEFAULT_CACHE_NAME := "refmap_people"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 256
 
@@ -424,10 +428,10 @@ func _configure_sprite() -> void:
 	offset = Vector2(0, -_FRAME_SIZE.y)
 
 func _make_full_setup() -> FullSetup:
-	var down := FramesetSetup.new(texture, _DOWN_RECT, 1, false, centered, offset)
-	var up := FramesetSetup.new(texture, _UP_RECT, 1, false, centered, offset)
-	var left := FramesetSetup.new(texture, Rect2i(0, 48, 128, 48), 1, false, centered, offset)
-	var right := FramesetSetup.new(texture, Rect2i(0, 96, 128, 48), 1, false, centered, offset)
+	var down := FramesetSetup.new(texture, _DOWN_FRAME_RECT, 1, false, centered, offset)
+	var up := FramesetSetup.new(texture, _UP_FRAME_RECT, 1, false, centered, offset)
+	var left := FramesetSetup.new(texture, _LEFT_FRAME_RECT, 1, false, centered, offset)
+	var right := FramesetSetup.new(texture, _RIGHT_FRAME_RECT, 1, false, centered, offset)
 	var moving_down := FramesetSetup.new(texture, _DOWN_RECT, 4, false, centered, offset)
 	var moving_up := FramesetSetup.new(texture, _UP_RECT, 4, false, centered, offset)
 	var moving_left := FramesetSetup.new(texture, Rect2i(0, 48, 128, 48), 4, false, centered, offset)
@@ -458,3 +462,5 @@ func _refresh_visual() -> void:
 		if moving_setup != full_setup.default_state:
 			moving_setup.set_image(next_texture)
 		_apply()
+	centered = false
+	offset = Vector2(0, -16)
