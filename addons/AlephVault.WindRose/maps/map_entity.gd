@@ -16,6 +16,7 @@ const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
 
 var _visuals_container: AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer
+var _visuals_container_tree_exited: Callable
 
 ## An entities manager aware of this layer.
 class Entity extends AlephVault__WindRose.Core.Entity:
@@ -237,12 +238,20 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 			var vc = AlephVault__WindRose.Maps.Layers.VisualsLayer.VisualsContainer.new()
 			_visuals_container = vc
 			_visuals_container.bind_entity(self)
-			var _tree_exited: Callable
-			_tree_exited = func():
-				_visuals_container.tree_exited.disconnect(_tree_exited)
-				if vc == _visuals_container:
-					_visuals_container = null
-			_visuals_container.tree_exited.connect(_tree_exited)
+			_visuals_container_tree_exited = Callable(self, "_on_visuals_container_tree_exited").bind(vc)
+			_visuals_container.tree_exited.connect(_visuals_container_tree_exited)
+
+func _on_visuals_container_tree_exited(vc):
+	call_deferred("_clear_visuals_container_if_detached", vc)
+
+func _clear_visuals_container_if_detached(vc):
+	if is_instance_valid(vc) and vc.is_inside_tree():
+		return
+	if is_instance_valid(vc) and vc.tree_exited.is_connected(_visuals_container_tree_exited):
+		vc.tree_exited.disconnect(_visuals_container_tree_exited)
+	if vc == _visuals_container:
+		_visuals_container = null
+	_visuals_container_tree_exited = Callable()
 
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()

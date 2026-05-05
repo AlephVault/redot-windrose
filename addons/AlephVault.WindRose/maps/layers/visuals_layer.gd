@@ -35,6 +35,9 @@ func _fix_level(v: VisualsContainer):
 class VisualsContainer extends Node2D:
 	var _map_entity: AlephVault__WindRose.Maps.MapEntity
 	var _paused: bool = false
+	var _on_bound_movement_finished: Callable
+	var _on_bound_teleported: Callable
+	var _bound_entity_tree_exiting: Callable
 	
 	func _process(delta):
 		if _map_entity != null:
@@ -64,6 +67,44 @@ class VisualsContainer extends Node2D:
 		for child in get_children():
 			if child is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
 				child.update(delta)
+
+	func _on_bound_entity_movement_finished(
+		from_position: Vector2i, to_position: Vector2i,
+		direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
+	):
+		var map: AlephVault__WindRose.Maps.Map = _map_entity.current_map if is_instance_valid(_map_entity) else null
+		if is_instance_valid(map) and is_instance_valid(map.visuals_layer):
+			map.visuals_layer._fix_level(self)
+
+	func _on_bound_entity_teleported(
+		from_position: Vector2i, to_position: Vector2i
+	):
+		var map: AlephVault__WindRose.Maps.Map = _map_entity.current_map if is_instance_valid(_map_entity) else null
+		if is_instance_valid(map) and is_instance_valid(map.visuals_layer):
+			map.visuals_layer._fix_level(self)
+
+	func _on_bound_entity_tree_exiting():
+		var e := _map_entity
+		if is_instance_valid(e):
+			for c in get_children():
+				if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
+					c.reparent(e)
+					c.visible = false
+			if e.tree_exiting.is_connected(_bound_entity_tree_exiting):
+				e.tree_exiting.disconnect(_bound_entity_tree_exiting)
+			if e.rule.signals.on_movement_finished.is_connected(_on_bound_movement_finished):
+				e.rule.signals.on_movement_finished.disconnect(_on_bound_movement_finished)
+			if e.rule.signals.on_teleported.is_connected(_on_bound_teleported):
+				e.rule.signals.on_teleported.disconnect(_on_bound_teleported)
+		else:
+			for c in get_children():
+				if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
+					c.queue_free()
+		_map_entity = null
+		_on_bound_movement_finished = Callable()
+		_on_bound_teleported = Callable()
+		_bound_entity_tree_exiting = Callable()
+		queue_free()
 	
 	## Binds this object to a new entity.
 	func bind_entity(e: AlephVault__WindRose.Maps.MapEntity):
@@ -76,40 +117,13 @@ class VisualsContainer extends Node2D:
 		if not is_instance_valid(layer):
 			return
 		
-		var s = self
-		var on_movement_finished: Callable = func(
-			from_position: Vector2i, to_position: Vector2i,
-			direction: AlephVault__WindRose.Utils.DirectionUtils.Direction
-		):
-			layer._fix_level(s)
-		var on_teleported: Callable = func(
-			from_position: Vector2i, to_position: Vector2i
-		):
-			layer._fix_level(s)
-		var on_exit_tree: Callable
-		on_exit_tree = func():
-			# Reparent the children of this object to the
-			# parent entity. Then, destroy this object.
-			# Also, disconnect this callback.
-			if is_instance_valid(e):
-				for c in get_children():
-					if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
-						c.reparent(e)
-						c.visible = false
-			else:
-				for c in get_children():
-					if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
-						c.queue_free()
-			e.tree_exiting.disconnect(on_exit_tree)
-			e.rule.signals.on_movement_finished.disconnect(on_movement_finished)
-			e.rule.signals.on_teleported.disconnect(on_teleported)
-			_map_entity = null
-			s.queue_free()
-
 		# Connect the tree_exiting, on_movement_finished and on_teleported callbacks.
-		e.tree_exiting.connect(on_exit_tree)
-		e.rule.signals.on_teleported.connect(on_teleported)
-		e.rule.signals.on_movement_finished.connect(on_movement_finished)
+		_on_bound_movement_finished = Callable(self, "_on_bound_entity_movement_finished")
+		_on_bound_teleported = Callable(self, "_on_bound_entity_teleported")
+		_bound_entity_tree_exiting = Callable(self, "_on_bound_entity_tree_exiting")
+		e.tree_exiting.connect(_bound_entity_tree_exiting)
+		e.rule.signals.on_teleported.connect(_on_bound_teleported)
+		e.rule.signals.on_movement_finished.connect(_on_bound_movement_finished)
 		# Assign the proper entity.
 		_map_entity = e
 		if e.paused:
@@ -120,7 +134,7 @@ class VisualsContainer extends Node2D:
 		# right here.
 		for c in e.get_children():
 			if c is AlephVault__WindRose.Maps.Visuals.MapEntityVisual:
-				c.reparent(s)
+				c.reparent(self)
 				c.visible = true
 				c.setup(e)
 		# Finally, set this object to the proper position.
