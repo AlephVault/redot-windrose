@@ -335,14 +335,16 @@ var _orientation: _Direction = _Direction.DOWN
 var _frame: int = 0
 
 func _on_state_changed(s: int):
-	_state = s
-	_frame = 0
-	_apply()
+	if _state != s:
+		_state = s
+		_frame = 0
+		_apply()
 
 func _on_orientation_changed(o: _Direction):
-	_orientation = o
-	_frame = 0
-	_apply()
+	if _orientation != o:
+		_orientation = o
+		_frame = 0
+		_apply()
 
 # Applies a current frame to this sprite, from current
 # direction and current state.
