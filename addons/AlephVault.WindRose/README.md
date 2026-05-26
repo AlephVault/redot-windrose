@@ -134,7 +134,7 @@ The next thing is to create an entity. In this case, the steps are:
   3. Drag/attach the **corresponding map_entity.gd script**. For already provided scripts, choose the proper path.
 	 For example, if planning to use the Simple rule (matching the example with the entities layer defined earlier),
 	 the path is: `addons/AlephVault.WindRose/contrib/simple/map_entity.gd`.
-  4. Configure a speed (the minimum speed will be 0.001), expressed in pixels / second, and a size (e.g. 1x1, which
+  4. Configure a speed (the minimum speed will be 0.0625), expressed in pixels / second, and a size (e.g. 1x1, which
 	 is a typical setup for a character). You are free to configure an orientation. Also, configure all the other
 	 properties that are useful (e.g. for navigability or simple map entity, the navigability attribute can be
 	 configured to choose another non-default navigability).
@@ -301,12 +301,13 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   rules can pay attention to this feature.
 - `speed: float`: Sets or returns the speed of this entity. The speed is expressed in pixels. The signal
   `on_speed_changed` is triggered with the new speed on assignment. It is always clamped to be greater than
-  or equal to `0.001`.
+  or equal to `0.0625` and less than or equal to `4095.9375`.
 - `signal on_speed_changed(float)`: A signal triggered when the speed changes in this entity.
 - `state: int`: Sets or returns the state of this entity. Like with the orientation, the state is an optional
   feature, highly used when in the need of animating the aesthetics of an entity. This is just a number, and
   the default value is `AlephVault__WindRose.Maps.MapEntity.STATE_IDLE` (0). It is up to the developer to
-  give meaning to any state number. When this state is changed, it triggers `on_state_changed(state)`.
+  give meaning to any state number between `0` and `255`. When this state is changed, it triggers
+  `on_state_changed(state)`.
 - `signal on_state_changed(int)`: A signal triggered when the state changes in this entity.
 - `signal updated()`: A signal emitted on every frame for this entity. With this in mind, elements like visual
   aesthetics manager can connect arbitrary parameterless callbacks so they know when an entity is being updated
@@ -352,6 +353,32 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
 - `func resume()`: Resumes this entity's visual (`AlephVault__WindRose.Maps.Visuals.MapEntityVisual`) objects. They
   get to be animated again.
 - `var paused: bool`: Tells whether this entity is paused or not (see the previous two methods).
+
+#### Map entity digest
+
+Map entities expose a compact integer digest for synchronization and snapshotting. The digest is a bit field,
+not a numeric counter:
+
+`[11 reserved][2 orientation][3 presence][16 speed][12 cell.x][12 cell.y][8 state]`
+
+- Reserved bits are emitted as `0` and ignored when applying a digest.
+- Orientation uses two bits with the same direction order used by movement encoding: `00` up, `01` down,
+  `10` left, `11` right.
+- Presence uses `000` for not in a map, `001` for in a map and not moving, and `1xx` for moving in direction
+  `xx`. Values `010` and `011` are invalid and are normalized by `set_digest()`.
+- Speed is encoded as `int(speed * 16)` and decoded as `encoded_speed / 16.0`.
+- Cell coordinates are the current logical top-left cell. During movement this is the source cell; it changes
+  on attachment, teleport, or movement completion.
+- State is an independent `0..255` visual/game state. It is correlated with movement by the default callbacks,
+  but it is not the same concept as presence.
+
+- `func get_digest() -> int`: Returns the current digest. It is updated when state, speed, orientation, presence,
+  or the current cell changes.
+- `func set_digest(d: int, force: bool = false) -> void`: Decodes and applies a digest. It first applies state,
+  speed, and orientation, skipping equal values unless `force` is `true`. Then it applies presence and cell data:
+  `000` detaches and clears the digest cell, `001` cancels movement or teleports to the decoded cell, and `1xx`
+  cancels movement or teleports before starting movement in direction `xx`. A digest cannot attach an out-of-map
+  entity to a map; if map membership is required but missing, the method warns and normalizes presence to `000`.
 
 Finally, interacting with the signals for movements and teleport is done through the `rule` property:
 

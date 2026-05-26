@@ -150,17 +150,19 @@ var initial_position: Vector2i:
 		if value == _Direction.NONE:
 			value = _Direction.DOWN
 		orientation = value
+		_set_digest_orientation(value)
 		on_orientation_changed.emit(value)
 
 ## A signal to tell the change of orientation.
 signal on_orientation_changed(orientation: _Direction)
 
 ## The current speed.
-@export var speed: float:
+@export var speed: float = 0.0625:
 	get:
 		return speed
 	set(value):
-		speed = max(0.001, value)
+		speed = clampf(value, MIN_SPEED, MAX_SPEED)
+		_set_digest_speed(speed)
 		on_speed_changed.emit(speed)
 
 ## A signal to tell the change of speed.
@@ -171,6 +173,181 @@ const STATE_IDLE: int = 0
 
 ## A state: MOVING.
 const STATE_MOVING: int = 1
+
+const MIN_SPEED: float = 0.0625
+const MAX_SPEED: float = 4095.9375
+
+const _DIGEST_PRESENCE_NOT_IN_MAP: int = 0
+const _DIGEST_PRESENCE_NOT_MOVING: int = 1
+const _DIGEST_PRESENCE_MOVING: int = 4
+
+const _DIGEST_ORIENTATION_SHIFT: int = 51
+const _DIGEST_PRESENCE_SHIFT: int = 48
+const _DIGEST_SPEED_SHIFT: int = 32
+const _DIGEST_CELL_X_SHIFT: int = 20
+const _DIGEST_CELL_Y_SHIFT: int = 8
+
+const _DIGEST_ORIENTATION_MASK: int = 0x3
+const _DIGEST_PRESENCE_MASK: int = 0x7
+const _DIGEST_SPEED_MASK: int = 0xffff
+const _DIGEST_CELL_MASK: int = 0xfff
+const _DIGEST_STATE_MASK: int = 0xff
+
+var _digest_orientation: int = 1
+var _digest_presence: int = _DIGEST_PRESENCE_NOT_IN_MAP
+var _digest_speed: int = 1
+var _digest_cell: Vector2i = Vector2i.ZERO
+var _digest_state: int = STATE_IDLE
+var _digest: int = (1 << _DIGEST_ORIENTATION_SHIFT) | (1 << _DIGEST_SPEED_SHIFT)
+
+## Returns the packed entity snapshot:
+## [11 reserved][2 orientation][3 presence][16 speed][12 x][12 y][8 state].
+##
+## The digest is updated by the public state, speed, orientation and
+## map lifecycle APIs. Reserved bits are always emitted as 0.
+func get_digest() -> int:
+	return _digest
+
+func _direction_to_digest_orientation(direction: _Direction) -> int:
+	match direction:
+		_Direction.UP:
+			return 0
+		_Direction.DOWN:
+			return 1
+		_Direction.LEFT:
+			return 2
+		_Direction.RIGHT:
+			return 3
+		_:
+			return 1
+
+func _digest_orientation_to_direction(value: int) -> _Direction:
+	match value & _DIGEST_ORIENTATION_MASK:
+		0:
+			return _Direction.UP
+		1:
+			return _Direction.DOWN
+		2:
+			return _Direction.LEFT
+		_:
+			return _Direction.RIGHT
+
+func _set_digest_orientation(value: _Direction) -> void:
+	_digest_orientation = _direction_to_digest_orientation(value)
+	_update_digest()
+
+func _set_digest_presence(value: int) -> void:
+	_digest_presence = value & _DIGEST_PRESENCE_MASK
+	_update_digest()
+
+func _set_digest_speed(value: float) -> void:
+	_digest_speed = int(value * 16) & _DIGEST_SPEED_MASK
+	_update_digest()
+
+func _set_digest_cell(value: Vector2i) -> void:
+	_digest_cell = Vector2i(
+		clampi(value.x, 0, _DIGEST_CELL_MASK),
+		clampi(value.y, 0, _DIGEST_CELL_MASK)
+	)
+	_update_digest()
+
+func _set_digest_state(value: int) -> void:
+	_digest_state = clampi(value, 0, _DIGEST_STATE_MASK)
+	_update_digest()
+
+func _update_digest() -> void:
+	_digest = \
+		((_digest_orientation & _DIGEST_ORIENTATION_MASK) << _DIGEST_ORIENTATION_SHIFT) | \
+		((_digest_presence & _DIGEST_PRESENCE_MASK) << _DIGEST_PRESENCE_SHIFT) | \
+		((_digest_speed & _DIGEST_SPEED_MASK) << _DIGEST_SPEED_SHIFT) | \
+		((_digest_cell.x & _DIGEST_CELL_MASK) << _DIGEST_CELL_X_SHIFT) | \
+		((_digest_cell.y & _DIGEST_CELL_MASK) << _DIGEST_CELL_Y_SHIFT) | \
+		(_digest_state & _DIGEST_STATE_MASK)
+
+## Applies a packed entity snapshot.
+##
+## This decodes and applies state, speed and orientation first. Then it
+## applies presence and cell data:
+## - 000 detaches from the current map and clears the digest cell.
+## - 001 cancels movement or teleports to the decoded cell.
+## - 1xx cancels movement or teleports, then starts movement in direction xx.
+##
+## Invalid presence values 010 and 011 are warned and normalized to 000 when
+## outside a map or 001 when inside a map. If force is false, unchanged fields
+## are skipped; if true, decoded state, speed, orientation and presence/cell
+## effects are applied even when they match the current digest.
+func set_digest(d: int, force: bool = false) -> void:
+	var next_orientation_bits: int = (d >> _DIGEST_ORIENTATION_SHIFT) & _DIGEST_ORIENTATION_MASK
+	var next_orientation: _Direction = _digest_orientation_to_direction(next_orientation_bits)
+	var next_presence: int = (d >> _DIGEST_PRESENCE_SHIFT) & _DIGEST_PRESENCE_MASK
+	var next_speed: float = float((d >> _DIGEST_SPEED_SHIFT) & _DIGEST_SPEED_MASK) / 16.0
+	var next_cell: Vector2i = Vector2i(
+		(d >> _DIGEST_CELL_X_SHIFT) & _DIGEST_CELL_MASK,
+		(d >> _DIGEST_CELL_Y_SHIFT) & _DIGEST_CELL_MASK
+	)
+	var next_state: int = d & _DIGEST_STATE_MASK
+	var previous_presence: int = _digest_presence
+	var previous_cell: Vector2i = _digest_cell
+
+	if force or state != next_state:
+		state = next_state
+	if force or speed != next_speed:
+		speed = next_speed
+	if force or orientation != next_orientation:
+		orientation = next_orientation
+
+	if next_presence == 2 or next_presence == 3:
+		push_warning("Invalid digest presence. Normalizing it to the current map membership.")
+		next_presence = _DIGEST_PRESENCE_NOT_MOVING if _current_map != null else _DIGEST_PRESENCE_NOT_IN_MAP
+
+	if next_presence == _DIGEST_PRESENCE_NOT_IN_MAP:
+		if force or previous_presence != _DIGEST_PRESENCE_NOT_IN_MAP:
+			if _current_map != null:
+				var detach_response: _Response = detach()
+				if not detach_response.is_successful():
+					push_warning("Digest detach failed.")
+			else:
+				_set_digest_presence(_DIGEST_PRESENCE_NOT_IN_MAP)
+		_set_digest_cell(Vector2i.ZERO)
+		return
+
+	var should_apply_presence: bool = force or \
+		previous_presence != next_presence or previous_cell != next_cell
+	if not should_apply_presence:
+		return
+
+	if _current_map == null:
+		push_warning("Digest presence requires a map, but this object is not in a map.")
+		_set_digest_presence(_DIGEST_PRESENCE_NOT_IN_MAP)
+		_set_digest_cell(Vector2i.ZERO)
+		return
+
+	if next_presence == _DIGEST_PRESENCE_NOT_MOVING:
+		if previous_cell != next_cell:
+			var teleport_response: _Response = teleport(next_cell)
+			if not teleport_response.is_successful():
+				push_warning("Digest teleport failed.")
+				return
+		else:
+			var cancel_response: _Response = cancel_movement()
+			if not cancel_response.is_successful():
+				push_warning("Digest movement cancellation failed.")
+		return
+
+	if previous_cell != next_cell:
+		var moving_teleport_response: _Response = teleport(next_cell)
+		if not moving_teleport_response.is_successful():
+			push_warning("Digest teleport failed.")
+			return
+	else:
+		var moving_cancel_response: _Response = cancel_movement()
+		if not moving_cancel_response.is_successful():
+			push_warning("Digest movement cancellation failed.")
+
+	var movement_direction: _Direction = _digest_orientation_to_direction(next_presence)
+	var movement_response: _Response = start_movement(movement_direction)
+	if not movement_response.is_successful():
+		push_warning("Digest movement start failed.")
 
 ## Tells which state to set as stopped when
 ## the object stops moving or is just attached.
@@ -187,7 +364,8 @@ var state: int = STATE_IDLE:
 	get:
 		return state
 	set(value):
-		state = value
+		state = clampi(value, 0, _DIGEST_STATE_MASK)
+		_set_digest_state(state)
 		on_state_changed.emit(state)
 
 ## A signal to tell the change of state.
@@ -218,6 +396,8 @@ func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 		# So we must, now, re-parent the object properly.
 		_current_map = manager.layer.map
 		state = _get_idle_state()
+		_set_digest_cell(cell)
+		_set_digest_presence(_DIGEST_PRESENCE_NOT_MOVING)
 		if self.get_parent() != null:
 			self.reparent(manager.layer)
 		else:
@@ -256,25 +436,35 @@ func _clear_visuals_container_if_detached(vc):
 func _on_teleported(from_position: Vector2i, to_position: Vector2i):
 	_snap()
 	state = _get_idle_state()
+	_set_digest_cell(to_position)
+	_set_digest_presence(_DIGEST_PRESENCE_NOT_MOVING)
 
 func _on_movement_started(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
 	state = _get_moving_state()
+	_set_digest_presence(
+		_DIGEST_PRESENCE_MOVING | _direction_to_digest_orientation(direction)
+	)
 
 func _on_movement_cancelled(
 	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
 ):
 	_snap()
 	state = _get_idle_state()
+	_set_digest_presence(_DIGEST_PRESENCE_NOT_MOVING)
 
 func _on_movement_finished(
 	from_position: Vector2i, to_position: Vector2i, direction: _Direction
 ):
 	state = _get_idle_state()
+	_set_digest_cell(to_position)
+	_set_digest_presence(_DIGEST_PRESENCE_NOT_MOVING)
 
 func _on_detached():
 	state = _get_idle_state()
+	_set_digest_cell(Vector2i.ZERO)
+	_set_digest_presence(_DIGEST_PRESENCE_NOT_IN_MAP)
 	if _destroyed:
 		return
 	var _parent = self.get_parent()
