@@ -202,8 +202,8 @@ Let a valid map instance be: `var map: AlephVault__WindRose.Maps.Map`:
 
 - `scope: AlephVault__WindRose.Maps.Scope`: Returns the current scope, if scopes are used, this map is added to.
   If it's not used / not under a valid scope, this value will be `null`.
-- `index: int`: Returns the current map index. Only meaningful if the map belongs to a scope. This property is
-  read-only at runtime (set at editor time).
+- `index: int`: Returns the current map index, between `0` and `255`. Only meaningful if the map belongs to a scope.
+  This property is read-only at runtime (set at editor time).
 - `size: Vector2i`: Returns the size of the map. Each coordinate is integer and positive, and lower than or equal
   to 4096 (this means: a map can be at most 4096x4096). This property is read-only at runtime (set at editor time).
   Entities in this map will have their positions constrained by these dimensions. The dimensions are constrained
@@ -1098,9 +1098,9 @@ editor-enabled fields to be set by the user. They come as follows:
    the teleport target must belong to a scope which in turn belongs to the same World this trigger's map's
    scope belongs to, and has the specified key. If this is not the case, the teleport will not work.
 3. Target Map Index: The index of the map the target belongs to. If this value is -1, then the same map the
-   trigger belongs to will be considered. Otherwise, the teleport target must belong to a map in the same
-   scope the map of this trigger belongs to, and must have the specified map index. If this is not the case,
-   the teleport will not work.
+   trigger belongs to will be considered. Otherwise, it must be between `0` and `255`, and the teleport target
+   must belong to a map in the same scope the map of this trigger belongs to, and must have the specified map
+   index. If this is not the case, the teleport will not work.
 4. Target Name: It is the name of the node (as in the scene editor's hierarchy) that will be the target. If
    no node satisfies this condition (given the proper Target Scope Key and Target Map Index), the teleport
    will not work. Otherwise, that node will be retrieved. Again: the node must be an in-map `MapEntity`

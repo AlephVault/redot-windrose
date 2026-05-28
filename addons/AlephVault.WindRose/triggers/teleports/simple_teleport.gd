@@ -34,11 +34,11 @@ var target_scope_key: String = ""
 ## target property is not set to a valid entity inside a map,
 ## this property tells the index of a map the target belongs
 ## to. If the index is -1, this means the map is not used and
-## the lookup will occur in the same map. If it is >= 0, the
-## map must belong to a scope and the index must be a valid
-## map index among the scope's maps. Otherwise, the lookup
-## will fail and the teleport will not work.
-@export
+## the lookup will occur in the same map. If it is between 0
+## and 255, the map must belong to a scope and the index must
+## be a valid map index among the scope's maps. Otherwise, the
+## lookup will fail and the teleport will not work.
+@export_range(-1, 255, 1)
 var target_map_index: int = -1
 
 ## The name of the node being the target entity. Used when the
@@ -65,6 +65,8 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 	var map_index: int = target_map_index
 	var node_name: String = target_name.strip_edges()
 	var node: Node2D
+	if map_index > 255:
+		return null
 	if scope_key == "":
 		if map_index < 0:
 			# Lookup on same map.

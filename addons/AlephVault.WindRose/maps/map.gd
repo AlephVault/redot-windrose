@@ -15,10 +15,10 @@ const _VisualsLayer = AlephVault__WindRose.Maps.Layers.VisualsLayer
 const _MapLayout = AlephVault__WindRose.Maps.Utils.MapLayout
 const _MapLayoutType = AlephVault__WindRose.Maps.Utils.MapLayoutType
 
-## Use an index >= 0 (unique!) to register this
-## map in its parent scope.
+## Use an index between 0 and 255 (unique!) to register
+## this map in its parent scope.
 @export_category("Identity")
-@export var _index: int = -1
+@export_range(-1, 255, 1) var _index: int = -1
 var _scope: _Scope
 
 ## Gets the current scope, if any.
@@ -165,7 +165,7 @@ func _identify_layers():
 func _enter_tree() -> void:
 	var parent = get_parent()
 	if not Engine.is_editor_hint() or EditorInterface.is_playing_scene():
-		if parent is _Scope and _index >= 0 and _scope == null:
+		if parent is _Scope and _index >= 0 and _index <= 255 and _scope == null:
 			var _result = parent._add_map(self, _index)
 			if _result.is_successful():
 				_scope = parent
