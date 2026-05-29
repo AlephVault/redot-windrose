@@ -364,6 +364,19 @@ var data: PackedByteArray:
 			"MapEntity", "data"
 		)
 
+## This is the data provider related to this object. By default, it is null.
+## Developers must override _get_data_provider() to return something here.
+##
+## Access this property to get the underlying data provider and perform their
+## updates accordingly.
+var data_provider: _MapEntityData:
+	get:
+	    return _get_data_provider()
+	set(value):
+		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+			"MapEntity", "data_provider"
+		)
+
 ## This signal tells when the data is updated. The argument is some
 ## partial data being updated. The final data, by this point, was
 ## already updated.
@@ -374,10 +387,8 @@ signal data_updated(data: PackedByteArray)
 func update_data(data: PackedByteArray, merge: bool = false) -> bool:
 	var provider: _MapEntityData = _get_data_provider()
 	if provider != null:
-		var result: bool = provider.update_data(data, merge)
-		if result:
-			data_updated.emit(data.duplicate())
-		return result
+	    # update_data(., .) will trigger the data_updated signal.
+		return provider.update_data(data, merge)
 	return false
 
 ## Gets the internal data provider for this object. If it's null, then
