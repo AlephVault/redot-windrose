@@ -1,6 +1,7 @@
 extends Object
 
 const Map = preload("./map.gd")
+const MapEntityData = preload("./map_entity_data.gd")
 const MapEntity = preload("./map_entity.gd")
 const Layers = preload("./layers/index.gd")
 const World = preload("./world.gd")
