@@ -90,7 +90,7 @@ func _on_movement_finished(
 	_movement = _Direction.NONE
 	_cell = to_position
 
-func _on_movement_cancelled(
+func _on_movement_canceled(
 	from_position: Vector2i, reverted_position: Vector2i,
 	direction: _Direction
 ):
@@ -110,7 +110,7 @@ func _init(entity_rule: _EntityRule):
 		_entity_rule.signals.on_detached.connect(_on_detached)
 		_entity_rule.signals.on_movement_started.connect(_on_movement_started)
 		_entity_rule.signals.on_movement_finished.connect(_on_movement_finished)
-		_entity_rule.signals.on_movement_cancelled.connect(_on_movement_cancelled)
+		_entity_rule.signals.on_movement_canceled.connect(_on_movement_canceled)
 		_entity_rule.signals._on_teleported_internal.connect(_on_teleported_internal)
 		_entity_rule.on_property_updated.connect(_on_property_updated)
 
@@ -121,7 +121,7 @@ func _notification(what):
 			_entity_rule.signals.on_detached.disconnect(_on_detached)
 			_entity_rule.signals.on_movement_started.disconnect(_on_movement_started)
 			_entity_rule.signals.on_movement_finished.disconnect(_on_movement_finished)
-			_entity_rule.signals.on_movement_cancelled.disconnect(_on_movement_cancelled)
+			_entity_rule.signals.on_movement_canceled.disconnect(_on_movement_canceled)
 			_entity_rule.signals._on_teleported_internal.disconnect(_on_teleported_internal)
 			_entity_rule.on_property_updated.disconnect(_on_property_updated)
 

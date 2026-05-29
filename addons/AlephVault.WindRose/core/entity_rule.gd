@@ -26,7 +26,7 @@ class Signals:
 		from_position: Vector2i, to_position: Vector2i, direction: _Direction
 	)
 	## Signal telling a movement was cancelled.
-	signal on_movement_cancelled(
+	signal on_movement_canceled(
 		from_position: Vector2i, reverted_position: Vector2i,
 		direction: _Direction
 	)
@@ -110,7 +110,7 @@ func trigger_on_movement_cleared(
 	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
 ):
 	if _signals != null:
-		_signals.on_movement_cancelled.emit(
+		_signals.on_movement_canceled.emit(
 			from_position, reverted_position, direction
 		)
 

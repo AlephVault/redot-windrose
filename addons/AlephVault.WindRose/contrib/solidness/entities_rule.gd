@@ -271,7 +271,7 @@ func on_movement_finished(
 				entity_rule.solidness
 			)
 
-func on_movement_cancelled(
+func on_movement_canceled(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
 	stage: MovementClearedStage

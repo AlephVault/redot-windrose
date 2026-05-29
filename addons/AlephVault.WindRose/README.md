@@ -393,7 +393,7 @@ Finally, interacting with the signals for movements and teleport is done through
 - `signal rule.signals.on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
   Triggered when the entity finished moving in a certain direction, from a specific source position to a specific
   target position (both just 1 step away).
-- `signal rule.signals.on_movement_cancelled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
+- `signal rule.signals.on_movement_canceled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`:
   Triggered when the entity canceled moving in a certain direction, from a specific source position to a specific
   target (reverted) position (both just 1 step away). If the entity was not currently moving, the direction will be
   `AlephVault__WindRose.Utils.DirectionUtils.Direction.NONE`.
@@ -866,7 +866,7 @@ In order to create this rule, there are several elements to account for:
    Then, there's a callback for when the movement is canceled:
    
    ```
-   func on_movement_cancelled(
+   func on_movement_canceled(
 	   entity_rule: AlephVault__WindRose.Core.EntityRule,
 	   start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
 	   stage: MovementClearedStage
@@ -884,7 +884,7 @@ In order to create this rule, there are several elements to account for:
 	   # 
 	   # Begin: The cancellation is just starting.
 	   # MovementCleared: The previous movement was just cleared from the entity.
-	   # End: The entity's signal `on_movement_cancelled` was just triggered.
+	   # End: The entity's signal `on_movement_canceled` was just triggered.
 	   pass
    ```
 

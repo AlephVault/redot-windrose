@@ -447,7 +447,7 @@ func _on_movement_started(
 		_DIGEST_PRESENCE_MOVING | _direction_to_digest_orientation(direction)
 	)
 
-func _on_movement_cancelled(
+func _on_movement_canceled(
 	from_position: Vector2i, reverted_position: Vector2i, direction: _Direction
 ):
 	_snap()
@@ -481,7 +481,7 @@ func _set_signals():
 		signals.on_attached.connect(_on_attached)
 		signals.on_teleported.connect(_on_teleported)
 		signals.on_movement_started.connect(_on_movement_started)
-		signals.on_movement_cancelled.connect(_on_movement_cancelled)
+		signals.on_movement_canceled.connect(_on_movement_canceled)
 		signals.on_movement_finished.connect(_on_movement_finished)
 		signals.on_detached.connect(_on_detached)
 
@@ -491,7 +491,7 @@ func _unset_signals():
 		signals.on_attached.disconnect(_on_attached)
 		signals.on_teleported.disconnect(_on_teleported)
 		signals.on_movement_started.disconnect(_on_movement_started)
-		signals.on_movement_cancelled.disconnect(_on_movement_cancelled)
+		signals.on_movement_canceled.disconnect(_on_movement_canceled)
 		signals.on_movement_finished.disconnect(_on_movement_finished)
 		signals.on_detached.disconnect(_on_detached)
 

@@ -79,7 +79,7 @@ func _init(entities_rule: _EntitiesRule, bypass) -> void:
 		self._on_movement_rejected_callback,
 		self._on_movement_started_callback,
 		self._on_movement_finished_callback,
-		self._on_movement_cancelled_callback,
+		self._on_movement_canceled_callback,
 		.25
 	)
 
@@ -277,24 +277,24 @@ func movement_cancel(entity: _Entity) -> _Response:
 		# It cannot clear.
 		return _Response.succeed(false)
 
-func _on_movement_cancelled_callback(
+func _on_movement_canceled_callback(
 	obj, direction, start_position, reverted_position
 ):
 	var entity_rule: _EntityRule = _get_entity_for_object(obj).entity_rule
 	var status: EntityStatus = _statuses[entity_rule]
-	entities_rule.on_movement_cancelled(
+	entities_rule.on_movement_canceled(
 		entity_rule, start_position, reverted_position, direction,
 		_EntitiesRule.MovementClearedStage.Begin
 	)
 	_statuses[entity_rule]._movement = _Direction.NONE
-	entities_rule.on_movement_cancelled(
+	entities_rule.on_movement_canceled(
 		entity_rule, start_position, reverted_position, direction,
 		_EntitiesRule.MovementClearedStage.MovementCleared
 	)
 	entity_rule.trigger_on_movement_cleared(
 		start_position, reverted_position, direction
 	)
-	entities_rule.on_movement_cancelled(
+	entities_rule.on_movement_canceled(
 		entity_rule, start_position, reverted_position, direction,
 		_EntitiesRule.MovementClearedStage.End
 	)

@@ -134,7 +134,7 @@ func _on_movement_started(obj: Node2D, direction: _Direction,
 		print("_movement_started is not assigned. The node started moving:", obj)
 
 # Notifies a movement cancellation on an object.
-func _on_movement_cancelled(obj: Node2D, direction: _Direction,
+func _on_movement_canceled(obj: Node2D, direction: _Direction,
 							from_position: Vector2i, to_position: Vector2i):
 	if _movement_cancelled != null:
 		_movement_cancelled.call(obj, direction, from_position, to_position)
@@ -341,7 +341,7 @@ func cancel_movement(obj: Node2D):
 		_current_movement.erase(obj)
 		if _queued_movement.has(obj):
 			_queued_movement.erase(obj)
-		_on_movement_cancelled(obj, movement.direction,
+		_on_movement_canceled(obj, movement.direction,
 							   movement.from_position,
 							   movement.to_position)
 

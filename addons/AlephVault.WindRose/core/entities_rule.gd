@@ -18,7 +18,7 @@ enum MovementStartedStage {
 }
 
 ## Stage of the movement-cancel operation.
-## Used to tell on_movement_cancelled which
+## Used to tell on_movement_canceled which
 ## stage of the movement cancellation is
 ## taking place.
 enum MovementClearedStage {
@@ -153,7 +153,7 @@ func can_cancel_movement(
 ## Handles when an entity cancelled a movement.
 ## reverted_position will be (-1, -1) if the
 ## direction is None.
-func on_movement_cancelled(
+func on_movement_canceled(
 	entity_rule: AlephVault__WindRose.Core.EntityRule,
 	start_position: Vector2i, reverted_position: Vector2i, direction: _Direction,
 	stage: MovementClearedStage
