@@ -328,12 +328,13 @@ Let a valid map entity instance be: `var map_entity: AlephVault__WindRose.Maps.M
   be detached from whichever was the current map, if any. The `current_map` property must be non-`null` when
   invoking this method (otherwise, the result will be a successful-yet-`false` one). It will become `null` after
   invoking it.
-- `func teleport(to_position: Vector2i) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: This method causes
+- `func teleport(to_position: Vector2i, silent: bool = false) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: This method causes
   the map entity to go to a different position in the map, as long as it's valid. If the object is not attached to
   a map, the result is successful but with a `false` value. Errors may be triggered (e.g. if the new position is
   out of bounds in the current map). Proper signals will be triggered on success, telling that the object was
-  moved from a position to the new one automatically. Any current movement will be indirectly canceled prior to
-  the teleport to take place.
+  moved from a position to the new one automatically, unless `silent` is `true`. Silent teleports still update
+  the map entity's internal cell, digest, state and scene position, but suppress public entity-side teleport
+  events. Any current movement will be indirectly canceled prior to the teleport to take place.
 - `func start_movement(direction: AlephVault__WindRose.Utils.DirectionUtils.Direction) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`:
   This method causes the map entity to start a movement. It will succeed with a `false` value if the map entity is
   not attached to a map or could not start moving because of reasons related to the underlying rules. If the entity
@@ -397,7 +398,7 @@ Finally, interacting with the signals for movements and teleport is done through
   target (reverted) position (both just 1 step away). If the entity was not currently moving, the direction will be
   `AlephVault__WindRose.Utils.DirectionUtils.Direction.NONE`.
 - `signal rule.signals.on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the entity
-  was teleported to a new cell in the same map.
+  was teleported to a new cell in the same map, unless the teleport was silent.
 - `signal rule.on_property_updated(prop: String, old_value, new_value)`: Triggered when a property notified being
   changed in the rule. If the current rule is composed from many children rules, each child rule will have a way
   of calling an emit of this signal in the parent rule. This is something that children rules must each do in their

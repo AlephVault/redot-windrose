@@ -554,10 +554,20 @@ func detach() -> _Response:
 	return _current_map.entities_layer.manager.detach(entity)
 
 ## Teleports the entity to a new position.
-func teleport(to_position: Vector2i) -> _Response:
+## It can be done silently, to not trigger public
+## entity-side teleport events.
+func teleport(to_position: Vector2i, silent: bool = false) -> _Response:
 	if _current_map == null:
 		return _Response.succeed(false)
-	return _current_map.entities_layer.manager.teleport(entity, to_position)
+	var result = _current_map.entities_layer.manager.teleport(entity, to_position, silent)
+	if result.is_successful() and silent:
+		# Only update the digest if the position that was updated was this one.
+		# It might happen that an entities rule also caused a teleport on its
+		# own (a separate teleport on its own) to a different position. THAT
+		# causes another, separate, update on the cells.
+		if to_position == cell:
+			_set_digest_cell(to_position)
+	return result
 
 ## Starts a movement to certain position.
 func start_movement(direction: _Direction) -> _Response:

@@ -202,7 +202,7 @@ The `signals` object (`AlephVault__WindRose.Rules.EntityRule.Signals`) has the f
 - `on_movement_rejected(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the movement attempt was rejected.
 - `on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the current movement was finished.
 - `on_movement_cancelled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when a current movement was cancelled.
-- `on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the object was teleported.
+- `on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the object was teleported, unless the teleport was silent.
 
 These signals are listened by the respective _entity_ to allow further end-user processing.
 
