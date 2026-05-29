@@ -10,7 +10,7 @@ extends AlephVault__WindRose.Core.EntitiesRule
 ## be allowed to move.
 ##
 ## An array of solidness is tracked, and each time an
-## object is moved, cancelled, finished moving, added,
+## object is moved, canceled, finished moving, added,
 ## removed or teleported, or has its solidness changed,
 ## this array is updated.
 

@@ -90,9 +90,9 @@ var _movement_rejected
 var _movement_started
 
 # A callback that notifies when a movement was
-# cancelled. This callback has a (object, direction,
+# canceled. This callback has a (object, direction,
 # Vector2i, Vector2i) signature, with no return value.
-var _movement_cancelled
+var _movement_canceled
 
 # A callback that notifies when a movement was
 # finished. This callback has a (object, direction,
@@ -136,10 +136,10 @@ func _on_movement_started(obj: Node2D, direction: _Direction,
 # Notifies a movement cancellation on an object.
 func _on_movement_canceled(obj: Node2D, direction: _Direction,
 							from_position: Vector2i, to_position: Vector2i):
-	if _movement_cancelled != null:
-		_movement_cancelled.call(obj, direction, from_position, to_position)
+	if _movement_canceled != null:
+		_movement_canceled.call(obj, direction, from_position, to_position)
 	else:
-		print("_movement_cancelled is not assigned. The node's movement was cancelled:", obj)
+		print("_movement_canceled is not assigned. The node's movement was canceled:", obj)
 
 # Notifies a movement finish on an object.
 func _on_movement_finished(obj: Node2D, direction: _Direction,
@@ -164,7 +164,7 @@ func _init(
 	movement_rejected = null,
 	movement_started = null,
 	movement_finished = null,
-	movement_cancelled = null,
+	movement_canceled = null,
 	queue_expiration = 5
 ) -> void:
 	_get_frame_signal = get_frame_signal
@@ -174,7 +174,7 @@ func _init(
 	_movement_rejected = movement_rejected
 	_movement_started = movement_started
 	_movement_finished = movement_finished
-	_movement_cancelled = movement_cancelled
+	_movement_canceled = movement_canceled
 	_queue_expiration = queue_expiration
 
 ## Starts a movement for an object.

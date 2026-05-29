@@ -2,7 +2,7 @@ extends Object
 ## An EntitiesRule has the responsibility
 ## to manage the entities: track data of
 ## the entities positions, tell whether
-## a movement can be installed or cancelled,
+## a movement can be installed or canceled,
 ## and tell whether an object can be attached
 ## to the related map.
 
@@ -150,7 +150,7 @@ func can_cancel_movement(
 ) -> bool:
 	return true
 
-## Handles when an entity cancelled a movement.
+## Handles when an entity canceled a movement.
 ## reverted_position will be (-1, -1) if the
 ## direction is None.
 func on_movement_canceled(

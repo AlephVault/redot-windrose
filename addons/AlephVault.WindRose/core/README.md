@@ -71,8 +71,8 @@ Once it's created, the entities rule will always remain the same for the given m
 	- `r.error.code == "not_attached"` if the entity is not attached.
 - `movement_cancel(entity_rule: AlephVault__WindRose.Rules.EntityRule) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: It tries to cancel the current movement.
   - It returns a successful response in the following scenarios:
-	- With a `true` value, the current movement (if any) was cancelled.
-	- With a `false` value, the current movement (if any) could not be cancelled.
+	- With a `true` value, the current movement (if any) was canceled.
+	- With a `false` value, the current movement (if any) could not be canceled.
   - It returns a failed response in the following scenarios:
 	- `r.error.code == "not_attached"` if the entity is not attached.
 - `movement_finish(entity_rule: AlephVault__WindRose.Rules.EntityRule) -> AlephVault__WindRose.Utils.ExceptionUtils.Response`: It tries to finish the current movement, if any.
@@ -91,7 +91,7 @@ Once it's created, the entities rule will always remain the same for the given m
 
 ### Entities-side rule
 
-This is where _the truth_ is held. The _entities rule_ keeps information regarding to the whole map to decide whether movements can be performed / cancelled or the entities can be attached.
+This is where _the truth_ is held. The _entities rule_ keeps information regarding the whole map to decide whether movements can be performed / canceled or the entities can be attached.
 
 One typically instantiates an EntitiesRule (or rather: a subclass) like this:
 
@@ -133,8 +133,8 @@ var my_entities_rule: SomeEntitiesRule = SomeEntitiesRule.new(Vector2i(8, 6))
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementConfirmedStage.PositionChanged`: The position was just updated on the entity.
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementConfirmedStage.MovementCleared`: The movement was just cleared from the entity.
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementConfirmedStage.End`: The proper callback was invoked on the entity.
-- `can_cancel_movement(entity_rule: AlephVault__WindRose.Rules.EntityRule, direction: _Direction) -> bool`: By default, this methos returns `true`. Implement it to return `true` if, and only if, the entity's movement can be cancelled (if any).
-- `on_movement_canceled(entity_rule: AlephVault__WindRose.Rules.EntityRule, start_position: Vector2i, reverted_position: Vector2i, direction: _Direction, stage: MovementClearedStage) -> void`: By default, empty. Implement it to rollback any update in the internal data (opposite to the updates made in the `on_movement_started` callback). This method is called 3 times, each with a different value for `stage`:
+- `can_cancel_movement(entity_rule: AlephVault__WindRose.Rules.EntityRule, direction: _Direction) -> bool`: By default, this methos returns `true`. Implement it to return `true` if, and only if, the entity's movement can be canceled (if any).
+- `on_movement_canceled(entity_rule: AlephVault__WindRose.Rules.EntityRule, start_position: Vector2i, reverted_position: Vector2i, direction: _Direction, stage: MovementClearedStage) -> void`: By default, empty. Implement it to roll back any update in the internal data (opposite to the updates made in the `on_movement_started` callback). This method is called 3 times, each with a different value for `stage`:
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementClearedStage.Begin`: Prior to the movement being cleared on the entity.
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementClearedStage.MovementCleared`: The movement was just cleared from the entity.
   - `AlephVault__WindRose.Rules.EntitiesRule.MovementClearedStage.End`: The proper callback was invoked on the entity.
@@ -201,7 +201,7 @@ The `signals` object (`AlephVault__WindRose.Rules.EntityRule.Signals`) has the f
 - `on_movement_started(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the entity started moving.
 - `on_movement_rejected(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the movement attempt was rejected.
 - `on_movement_finished(from_position: Vector2i, to_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when the current movement was finished.
-- `on_movement_canceled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when a current movement was cancelled.
+- `on_movement_canceled(from_position: Vector2i, reverted_position: Vector2i, direction: AlephVault__WindRose.Utils.DirectionUtils.Direction)`: Triggered when a current movement was canceled.
 - `on_teleported(from_position: Vector2i, to_position: Vector2i)`: Triggered when the object was teleported, unless the teleport was silent.
 
 These signals are listened by the respective _entity_ to allow further end-user processing.

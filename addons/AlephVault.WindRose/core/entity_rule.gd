@@ -25,7 +25,7 @@ class Signals:
 	signal on_movement_finished(
 		from_position: Vector2i, to_position: Vector2i, direction: _Direction
 	)
-	## Signal telling a movement was cancelled.
+	## Signal telling a movement was canceled.
 	signal on_movement_canceled(
 		from_position: Vector2i, reverted_position: Vector2i,
 		direction: _Direction
