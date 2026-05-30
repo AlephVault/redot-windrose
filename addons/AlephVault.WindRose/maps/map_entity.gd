@@ -383,7 +383,8 @@ var data_provider: _MapEntityData:
 signal data_updated(data: PackedByteArray)
 
 ## Updates the data. This method is forwarded to the underlying provider,
-## if one exists.
+## if one exists. The core idea here is that this method is invoked from
+## any external source that syncs visual data in the object.
 func update_data(data: PackedByteArray, merge: bool = false) -> bool:
 	var provider: _MapEntityData = _get_data_provider()
 	if provider != null:
