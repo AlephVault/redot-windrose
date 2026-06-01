@@ -3,6 +3,7 @@ extends RefCounted
 const _ExceptionUtils = AlephVault__WindRose.Utils.ExceptionUtils
 const _Exception = _ExceptionUtils.Exception
 const _Response = _ExceptionUtils.Response
+const _MapEntity = AlephVault__WindRose.Maps.MapEntity
 
 # Cached indices by property.
 var _property_indices: Dictionary = {}
@@ -119,3 +120,21 @@ func update_traits(current: Dictionary, updated: Dictionary) -> void:
 		current.erase(String(property))
 		current.erase(property)
 		current[property] = updated[trait]
+
+## Override this function to affect the entity by detecting
+## what fields were updated and working with the merged values.
+##
+## A non-existing key in the current_traits or merged_traits
+## MUST be treated as treating that trait by default.
+func _apply(
+	current_traits: Dictionary, new_traits: Dictionary, merged_traits: Dictionary,
+	e: _MapEntity
+):
+	pass
+
+## Applies the traits on the object. Returns the merged traits.
+func apply(new_traits: Dictionary, e: _MapEntity) -> Dictionary:
+	var current_traits: Dictionary = e.traits
+	var merged: Dictionary = update_traits(current_traits, new_traits)
+	_apply(current_traits, new_traits, merged_traits, e)
+	return merged
