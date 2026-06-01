@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## An EntitiesRule has the responsibility
 ## to manage the entities: track data of
 ## the entities positions, tell whether

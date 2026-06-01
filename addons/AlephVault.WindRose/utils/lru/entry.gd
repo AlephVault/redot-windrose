@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## A cache entry accounts for a specific value and
 ## all the references that track this entry. Also,
 ## whether this element is queued for disposal or

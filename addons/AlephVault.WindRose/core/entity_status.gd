@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## The status of an entity reveals the current
 ## movement taking place and the current position
 ## (anchored by top-left corner).

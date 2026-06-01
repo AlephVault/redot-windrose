@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## An LRU cache structure manages cached elements with the
 ## possibility to get + register new elements, or unget
 ## elements.

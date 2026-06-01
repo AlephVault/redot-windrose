@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## An EntityRule contains data and references
 ## the related entity. It is the counterpart
 ## of an EntitiesRule.

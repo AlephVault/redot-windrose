@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## A texture composition context defines the target size
 ## and the ordered steps that will be blended to build
 ## a final cached texture.

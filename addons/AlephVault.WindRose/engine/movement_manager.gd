@@ -1,11 +1,11 @@
-extends Object
+extends RefCounted
 
 const _DirectionUtils = AlephVault__WindRose.Utils.DirectionUtils
 const _Direction = _DirectionUtils.Direction
 
 ## A current queued movement. It holds the direction
 ## and the remaining timeout.
-class QueuedMovement extends Object:
+class QueuedMovement extends RefCounted:
 	"""
 	A pending movement intent. It only has direction
 	and timeout. The timeout is used to prune queued
@@ -23,7 +23,7 @@ class QueuedMovement extends Object:
 ## The current movement intent. It packs the details
 ## of a request related to a Node2D object in a 2D
 ## space (a RELATIVE movement).
-class Movement extends Object:
+class Movement extends RefCounted:
 	"""
 	The current movement intent. These values must
 	be understood as constant, except for the speed,

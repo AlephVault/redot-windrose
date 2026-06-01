@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## A texture composition step describes a source texture
 ## region and the target position where that region must
 ## be alpha-blended into a final image.

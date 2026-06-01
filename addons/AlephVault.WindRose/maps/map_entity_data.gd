@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## Stores byte data attached to a map entity. Each subclass has its own
 ## methods to store and manage that data.
 
@@ -31,7 +31,7 @@ func update_data(data: PackedByteArray, merge: bool = false) -> bool:
 
 ## Override this function to define how the data is merged to the source
 ## data from an object.
-func _merge_data(data: PackedByteArray):
+static func _merge_data(_data: PackedByteArray, data: PackedByteArray):
 	pass
 
 ## Override this function to define how the data is serialized into

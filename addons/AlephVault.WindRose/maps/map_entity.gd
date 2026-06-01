@@ -371,7 +371,7 @@ var data: PackedByteArray:
 ## updates accordingly.
 var data_provider: _MapEntityData:
 	get:
-	    return _get_data_provider()
+		return _get_data_provider()
 	set(value):
 		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
 			"MapEntity", "data_provider"
@@ -388,7 +388,7 @@ signal data_updated(data: PackedByteArray)
 func update_data(data: PackedByteArray, merge: bool = false) -> bool:
 	var provider: _MapEntityData = _get_data_provider()
 	if provider != null:
-	    # update_data(., .) will trigger the data_updated signal.
+		# update_data(., .) will trigger the data_updated signal.
 		return provider.update_data(data, merge)
 	return false
 

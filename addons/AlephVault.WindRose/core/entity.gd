@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 ## An entity can be considered the counterpart of
 ## an entities manager. Entities are created with
 ## an entity rule in mind, also receiving the
