@@ -349,6 +349,31 @@ func set_digest(d: int, force: bool = false) -> void:
 	if not movement_response.is_successful():
 		push_warning("Digest movement start failed.")
 
+## Gets or sets the traits of the entity. This only works if the
+## get_traits_schema is implemented. Otherwise, this is always
+## an empty dictionary / a noop.
+var _traits: Dictionary = {}
+
+## Gets and sets the traits of an object. This is ignored / empty / noop
+## if get_traits_schema() returns null. Otherwise, getting the traits
+## involves getting a dictionary of all the traits data, while setting
+## the traits can be a total or partial operation. In either case, the
+## old and new traits are merged and also the reaction provided by the
+## underlying schema will cause the object to be visually updated.
+var traits: Dictionary:
+	get:
+		if get_traits_schema():
+			return _traits.duplicate()
+		return {}
+	set(value):
+		var schema = get_traits_schema()
+		if schema:
+			_traits = schema.apply(value, self)
+			traits_updated.emit(_traits.duplicate())
+
+## This signal forwards that a set of traits was just updated.
+signal traits_updated(new_traits: Dictionary)
+
 ## Gets the schema to use for traits. By default, traits are not used.
 ## Return an instance of MapEntityTraits, and the traits will be enabled.
 func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
