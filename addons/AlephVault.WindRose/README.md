@@ -256,7 +256,7 @@ actually, **a descendant of that type**, and not that type directly):
 - `bypass: bool`: This flag allows the rule to always allow any movement from any entity in the layer. This only
   makes sense if the game is a client connected to a server which, in place, does not have this flag active. In
   the client case, however, everything is allowed since the true logic comes from the server. This property is
-  read-only and only set in the editor.
+  settable until the layer is initialized, and then read-only.
 - `initialized: bool`: Also a read-only property, this flag tells whether this layer is already initialized.
 - `initialize()`: This method is invoked by the parent map, but can be manually invoked if needed. This method
   creates the internal `manager` and then detect all the children objects which are map entities and then, one
