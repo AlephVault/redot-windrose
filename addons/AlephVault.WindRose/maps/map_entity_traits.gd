@@ -106,6 +106,21 @@ func deserialize(traits: Array[Array]) -> _Response:
 	
 	return _Response.succeed(deserialized)
 
+## Cleans the traits. Returns traits only where the keys are valid.
+func clean_traits(traits: Dictionary) -> Dictionary:
+	var cleaned: Dictionary = {}
+	for trait in traits:
+		if not (trait is String or trait is StringName):
+			continue
+
+		var property: StringName = StringName(trait)
+		if not _property_indices.has(property):
+			push_warning("Unknown trait property: " + str(trait))
+			continue
+
+		cleaned[property] = traits[trait]
+	return cleaned
+
 ## Updates the current traits dictionary in-place with valid schema properties.
 func update_traits(current: Dictionary, updated: Dictionary) -> void:
 	for trait in updated:
@@ -135,6 +150,8 @@ func _apply(
 ## Applies the traits on the object. Returns the merged traits.
 func apply(new_traits: Dictionary, e: _MapEntity) -> Dictionary:
 	var current_traits: Dictionary = e.traits
-	var merged: Dictionary = update_traits(current_traits, new_traits)
-	_apply(current_traits, new_traits, merged_traits, e)
-	return merged
+	var cleaned_traits: Dictionary = clean_traits(new_traits)
+	var merged_traits: Dictionary = current_traits.duplicate()
+	update_traits(merged_traits, cleaned_traits)
+	_apply(current_traits, cleaned_traits, merged_traits, e)
+	return merged_traits
