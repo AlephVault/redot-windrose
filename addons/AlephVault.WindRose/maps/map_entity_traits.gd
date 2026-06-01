@@ -136,6 +136,23 @@ func update_traits(current: Dictionary, updated: Dictionary) -> void:
 		current.erase(property)
 		current[property] = updated[trait]
 
+## Tells whether a traits dictionary contains any of the given properties.
+## Meant to be used by developers inside _apply to define custom logic that
+## updates based on one or more simultaneous traits, and one of them is
+## being uploaded right now. A precondition is that the given dictionary
+## is already cleaned / has actually StringName instances.
+func has_any(traits: Dictionary, properties: Array[StringName]) -> bool:
+	for prop in properties:
+		var property: StringName = StringName(prop)
+		if not _property_indices.has(property):
+			push_warning("Unknown trait property: " + str(prop))
+			continue
+		
+		if traits.has(property):
+			return true
+	
+	return false
+
 ## Override this function to affect the entity by detecting
 ## what fields were updated and working with the merged values.
 ##
