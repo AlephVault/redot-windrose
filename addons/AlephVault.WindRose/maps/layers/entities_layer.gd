@@ -118,9 +118,12 @@ var bypass: bool:
 	get:
 		return _bypass
 	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"EntitiesLayer", "bypass"
-		)
+		if _initialized:
+			AlephVault__WindRose.Utils.AccessUtils.cannot_set(
+				"EntitiesLayer", "bypass"
+			)
+			return
+		_bypass = value
 
 var _initialized: bool = false
 
