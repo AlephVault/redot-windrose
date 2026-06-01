@@ -50,7 +50,8 @@ func serialize(traits: Dictionary) -> _Response:
 					"Unknown trait property: " + str(trait)
 				)
 			)
-
+		
+		var idx: int = _property_indices[property]
 		values_by_index[idx] = traits[trait]
 	
 	var serialized: Array[Array] = []
@@ -103,3 +104,18 @@ func deserialize(traits: Array[Array]) -> _Response:
 		deserialized[_properties[idx]] = trait[1]
 	
 	return _Response.succeed(deserialized)
+
+## Updates the current traits dictionary in-place with valid schema properties.
+func update_traits(current: Dictionary, updated: Dictionary) -> void:
+	for trait in updated:
+		if not (trait is String or trait is StringName):
+			continue
+		
+		var property: StringName = StringName(trait)
+		if not _property_indices.has(property):
+			push_warning("Unknown trait property: " + str(trait))
+			continue
+		
+		current.erase(String(property))
+		current.erase(property)
+		current[property] = updated[trait]
