@@ -7,7 +7,6 @@ extends Node2D
 ## perhaps initialized from custom properties you define.
 
 const _Map = AlephVault__WindRose.Maps.Map
-const _MapEntityData = AlephVault__WindRose.Maps.MapEntityData
 const _EntityRule = AlephVault__WindRose.Core.EntityRule
 const _EntitiesManager = AlephVault__WindRose.Core.EntitiesManager
 const _MapEM = AlephVault__WindRose.Maps.Layers.EntitiesLayer.Manager
@@ -349,53 +348,6 @@ func set_digest(d: int, force: bool = false) -> void:
 	var movement_response: _Response = start_movement(movement_direction)
 	if not movement_response.is_successful():
 		push_warning("Digest movement start failed.")
-
-## Gets the digested visual data that characterizes the object, if any.
-## Gets an empty array if no data provider belongs to this object. The
-## provider is an AlephVault__WindRose.Maps.MapEntityData instance.
-var data: PackedByteArray:
-	get:
-		var provider: _MapEntityData = _get_data_provider()
-		if provider != null:
-			return provider.data
-		return PackedByteArray()
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"MapEntity", "data"
-		)
-
-## This is the data provider related to this object. By default, it is null.
-## Developers must override _get_data_provider() to return something here.
-##
-## Access this property to get the underlying data provider and perform their
-## updates accordingly.
-var data_provider: _MapEntityData:
-	get:
-		return _get_data_provider()
-	set(value):
-		AlephVault__WindRose.Utils.AccessUtils.cannot_set(
-			"MapEntity", "data_provider"
-		)
-
-## This signal tells when the data is updated. The argument is some
-## partial data being updated. The final data, by this point, was
-## already updated.
-signal data_updated(data: PackedByteArray)
-
-## Updates the data. This method is forwarded to the underlying provider,
-## if one exists. The core idea here is that this method is invoked from
-## any external source that syncs visual data in the object.
-func update_data(data: PackedByteArray, merge: bool = false) -> bool:
-	var provider: _MapEntityData = _get_data_provider()
-	if provider != null:
-		# update_data(., .) will trigger the data_updated signal.
-		return provider.update_data(data, merge)
-	return false
-
-## Gets the internal data provider for this object. If it's null, then
-## no data will be forwarded / obtained. This is defined in subclasses.
-func _get_data_provider() -> _MapEntityData:
-	return null
 
 ## Tells which state to set as stopped when
 ## the object stops moving or is just attached.
