@@ -368,10 +368,11 @@ var traits: Dictionary:
 	set(value):
 		var schema = get_traits_schema()
 		if schema:
-			_traits = schema.apply(value, self)
-			traits_updated.emit(_traits.duplicate())
+			var applied_traits: Array[Dictionary] = schema.apply(value, self)
+			_traits = applied_traits[0]
+			traits_updated.emit(applied_traits[1].duplicate())
 
-## This signal forwards that a set of traits was just updated.
+## This signal forwards the normalized set of traits that was just updated.
 signal traits_updated(new_traits: Dictionary)
 
 ## Gets the schema to use for traits. By default, traits are not used.

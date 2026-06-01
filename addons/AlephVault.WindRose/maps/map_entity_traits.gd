@@ -164,11 +164,12 @@ func _apply(
 ):
 	pass
 
-## Applies the traits on the object. Returns the merged traits.
-func apply(new_traits: Dictionary, e: _MapEntity) -> Dictionary:
+## Applies the traits on the object. Returns the merged traits and the
+## normalized traits that were applied.
+func apply(new_traits: Dictionary, e: _MapEntity) -> Array[Dictionary]:
 	var current_traits: Dictionary = e.traits
 	var cleaned_traits: Dictionary = clean_traits(new_traits)
 	var merged_traits: Dictionary = current_traits.duplicate()
 	update_traits(merged_traits, cleaned_traits)
 	_apply(current_traits, cleaned_traits, merged_traits, e)
-	return merged_traits
+	return [merged_traits, cleaned_traits]
