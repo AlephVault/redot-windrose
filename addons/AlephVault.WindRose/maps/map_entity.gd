@@ -349,6 +349,11 @@ func set_digest(d: int, force: bool = false) -> void:
 	if not movement_response.is_successful():
 		push_warning("Digest movement start failed.")
 
+## Gets the schema to use for traits. By default, traits are not used.
+## Return an instance of MapEntityTraits, and the traits will be enabled.
+func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
+	return null
+
 ## Tells which state to set as stopped when
 ## the object stops moving or is just attached.
 func _get_idle_state() -> int:
