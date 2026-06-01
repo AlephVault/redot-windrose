@@ -361,16 +361,16 @@ func _make_full_setup() -> FullSetup:
 
 func _setup():
 	full_setup = _make_full_setup()
-	map_entity.on_state_changed.connect(_on_state_changed)
-	map_entity.on_orientation_changed.connect(_on_orientation_changed)
+	map_entity.state_changed.connect(_on_state_changed)
+	map_entity.orientation_changed.connect(_on_orientation_changed)
 	_state = map_entity.state
 	_orientation = map_entity.orientation
 	_frame = 0
 	_apply()
 
 func _teardown():
-	map_entity.on_state_changed.disconnect(_on_state_changed)
-	map_entity.on_orientation_changed.disconnect(_on_orientation_changed)
+	map_entity.state_changed.disconnect(_on_state_changed)
+	map_entity.orientation_changed.disconnect(_on_orientation_changed)
 	texture = null
 
 ## The amount of frames per second to animate.

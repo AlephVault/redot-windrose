@@ -151,10 +151,10 @@ var initial_position: Vector2i:
 			value = _Direction.DOWN
 		orientation = value
 		_set_digest_orientation(value)
-		on_orientation_changed.emit(value)
+		orientation_changed.emit(value)
 
 ## A signal to tell the change of orientation.
-signal on_orientation_changed(orientation: _Direction)
+signal orientation_changed(orientation: _Direction)
 
 ## The current speed.
 @export var speed: float = 0.0625:
@@ -163,10 +163,10 @@ signal on_orientation_changed(orientation: _Direction)
 	set(value):
 		speed = clampf(value, MIN_SPEED, MAX_SPEED)
 		_set_digest_speed(speed)
-		on_speed_changed.emit(speed)
+		speed_changed.emit(speed)
 
 ## A signal to tell the change of speed.
-signal on_speed_changed(speed: float)
+signal speed_changed(speed: float)
 
 ## A state: IDLE.
 const STATE_IDLE: int = 0
@@ -397,10 +397,10 @@ var state: int = STATE_IDLE:
 	set(value):
 		state = clampi(value, 0, _DIGEST_STATE_MASK)
 		_set_digest_state(state)
-		on_state_changed.emit(state)
+		state_changed.emit(state)
 
 ## A signal to tell the change of state.
-signal on_state_changed(state: int)
+signal state_changed(state: int)
 
 ## A signal telling to update typically visual objects
 ## depending on this object. Connect a method to this
