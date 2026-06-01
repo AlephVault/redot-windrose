@@ -267,7 +267,6 @@ actually, **a descendant of that type**, and not that type directly):
   animated again.
 - `var paused: bool`: Tells whether this entities layer is paused or not (see the previous two methods).
 
-
 About entities layers, they have more properties and a custom rule instantiation according the sub-type of layer
 being used. They will be timely described in other sections.
 
@@ -408,6 +407,84 @@ Finally, interacting with the signals for movements and teleport is done through
   entity rule, at `addons/AlephVault.WindRose/contrib/simple/entity_rule.gd`, to have an example of forwarding
   from child to parent in the entity rule, and then take a loot at its `entities_rule.gd` to have an example of
   forwarding from parent to child).
+
+#### Map entity traits
+
+Map entity traits are optional named values attached to a `MapEntity`. They are useful when entity state must be
+updated as a dictionary, synchronized, serialized, or applied in batches, while still keeping the entity class in
+control of which fields are accepted and what side effects happen when they change.
+
+Traits are enabled by returning a schema from `get_traits_schema()`. Without a schema, `map_entity.traits` always
+returns `{}` and setting it does nothing.
+
+To define a schema, create a class that extends `AlephVault__WindRose.Maps.MapEntityTraits`. Override
+`_get_properties()` with the accepted property names, and optionally override `_apply()` to update the entity after
+the incoming traits were normalized and merged:
+
+```gdscript
+extends AlephVault__WindRose.Maps.MapEntityTraits
+
+func _get_properties() -> Array[StringName]:
+	return [&"name", &"hp", &"team"]
+
+func _apply(
+	current_traits: Dictionary, new_traits: Dictionary, merged_traits: Dictionary,
+	e: AlephVault__WindRose.Maps.MapEntity
+):
+	if has_any(new_traits, [&"hp"]):
+		e.modulate = Color.WHITE if merged_traits.get(&"hp", 0) > 0 else Color.DIM_GRAY
+```
+
+The dictionaries passed to `_apply()` have different meanings:
+
+- `current_traits`: The complete traits dictionary before this update.
+- `new_traits`: The normalized traits from the just-assigned value. Unknown properties and non-string keys were
+  removed, and accepted keys were converted to `StringName`.
+- `merged_traits`: The complete traits dictionary that will be stored after applying `new_traits` over
+  `current_traits`.
+
+A missing key in `current_traits` or `merged_traits` must be treated as the default value for that trait. This allows
+partial updates such as `map_entity.traits = {&"hp": 8}` without requiring every trait to be resent.
+
+To make a map entity class use that schema, override `get_traits_schema()`:
+
+```gdscript
+extends AlephVault__WindRose.Contrib.Simple.MapEntity
+
+const CharacterTraits = preload("./character_traits.gd")
+
+var _traits_schema := CharacterTraits.new()
+
+func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
+	return _traits_schema
+```
+
+Once a schema exists, the `traits` property becomes active:
+
+- `map_entity.traits`: Getting this property returns a duplicate of the complete stored traits dictionary.
+- `map_entity.traits = value`: Setting this property accepts a complete or partial dictionary. The schema normalizes
+  it, merges it into the current traits, calls `_apply()`, stores the merged complete traits, and emits
+  `traits_updated`.
+- `signal traits_updated(new_traits: Dictionary)`: Emitted after a successful traits assignment. The emitted
+  dictionary is the normalized update dictionary, not the complete merged traits dictionary. Use `map_entity.traits`
+  inside the signal callback if the full current state is needed.
+
+The schema also exposes helper methods:
+
+- `clean_traits(traits: Dictionary) -> Dictionary`: Returns only valid schema properties, converted to `StringName`.
+  Unknown properties are ignored with a warning.
+- `update_traits(current: Dictionary, updated: Dictionary) -> void`: Merges valid properties from `updated` into
+  `current`, replacing old `String` or `StringName` variants of the same property.
+- `has_any(traits: Dictionary, properties: Array[StringName]) -> bool`: Useful inside `_apply()` to detect whether
+  one or more properties were part of the current update.
+- `serialize(traits: Dictionary) -> Response` and `deserialize(traits: Array[Array]) -> Response`: Convert trait
+  dictionaries to and from compact indexed arrays based on `_get_properties()` order. These methods are strict and
+  return failed responses for unknown, duplicated, or invalid entries.
+- `apply(new_traits: Dictionary, e: MapEntity) -> Array[Dictionary]`: Normalizes, merges, calls `_apply()`, and
+  returns `[merged_traits, normalized_traits]`. Application code normally uses the `traits` property instead of
+  calling this directly.
+
+### Rule-related features
 
 With this description, development of rule-aware entities, and entities-aware game logic, can be implemented
 with no major problems. The next sections will cover specific topics like:
