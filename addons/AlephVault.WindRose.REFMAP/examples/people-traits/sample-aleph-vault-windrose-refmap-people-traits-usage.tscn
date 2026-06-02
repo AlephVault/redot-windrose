@@ -46,6 +46,7 @@ _right_linked = NodePath("../../Map12/EntitiesLayer12")
 [node name="Person" type="Node2D" parent="Map11/EntitiesLayer11"]
 unique_name_in_owner = true
 script = ExtResource("5_m5h8n")
+speed = 32.0
 
 [node name="Visual" type="Sprite2D" parent="Map11/EntitiesLayer11/Person"]
 texture = SubResource("ImageTexture_1c65c")
