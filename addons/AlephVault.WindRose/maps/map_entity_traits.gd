@@ -18,10 +18,6 @@ func _get_properties() -> Array[StringName]:
 func _init():
 	var props: Array[StringName] = _get_properties()
 	for prop in props:
-		if not (prop is String or prop is StringName):
-			push_warning("Property '" + str(prop) + "' is not a String or StringName")
-			continue
-		
 		var prop_: StringName = StringName(prop)
 		if _property_indices.has(prop_):
 			push_warning("Property '" + str(prop) + "' already defined")
@@ -34,8 +30,8 @@ func _init():
 func serialize(traits: Dictionary) -> _Response:
 	var values_by_index: Dictionary = {}
 	
-	for trait in traits:
-		if not (trait is String or trait is StringName):
+	for trait_ in traits:
+		if not (trait_ is String or trait_ is StringName):
 			return _Response.fail(
 				_Exception.raise(
 					"invalid_trait_property",
@@ -43,17 +39,17 @@ func serialize(traits: Dictionary) -> _Response:
 				)
 			)
 		
-		var property: StringName = StringName(trait)
+		var property: StringName = StringName(trait_)
 		if not _property_indices.has(property):
 			return _Response.fail(
 				_Exception.raise(
 					"unknown_trait_property",
-					"Unknown trait property: " + str(trait)
+					"Unknown trait property: " + str(trait_)
 				)
 			)
 		
 		var idx: int = _property_indices[property]
-		values_by_index[idx] = traits[trait]
+		values_by_index[idx] = traits[trait_]
 	
 	var serialized: Array[Array] = []
 	for idx in range(_properties.size()):
@@ -67,8 +63,8 @@ func deserialize(traits: Array[Array]) -> _Response:
 	var deserialized: Dictionary = {}
 	var used_indices: Dictionary = {}
 	
-	for trait in traits:
-		if trait.size() != 2:
+	for trait_ in traits:
+		if trait_.size() != 2:
 			return _Response.fail(
 				_Exception.raise(
 					"invalid_trait_entry",
@@ -76,7 +72,7 @@ func deserialize(traits: Array[Array]) -> _Response:
 				)
 			)
 		
-		var idx = trait[0]
+		var idx = trait_[0]
 		if not (idx is int):
 			return _Response.fail(
 				_Exception.raise(
@@ -102,39 +98,39 @@ func deserialize(traits: Array[Array]) -> _Response:
 			)
 		
 		used_indices[idx] = true
-		deserialized[_properties[idx]] = trait[1]
+		deserialized[_properties[idx]] = trait_[1]
 	
 	return _Response.succeed(deserialized)
 
 ## Cleans the traits. Returns traits only where the keys are valid.
 func clean_traits(traits: Dictionary) -> Dictionary:
 	var cleaned: Dictionary = {}
-	for trait in traits:
-		if not (trait is String or trait is StringName):
+	for trait_ in traits:
+		if not (trait_ is String or trait_ is StringName):
 			continue
 
-		var property: StringName = StringName(trait)
+		var property: StringName = StringName(trait_)
 		if not _property_indices.has(property):
-			push_warning("Unknown trait property: " + str(trait))
+			push_warning("Unknown trait property: " + str(trait_))
 			continue
 
-		cleaned[property] = traits[trait]
+		cleaned[property] = traits[trait_]
 	return cleaned
 
 ## Updates the current traits dictionary in-place with valid schema properties.
 func update_traits(current: Dictionary, updated: Dictionary) -> void:
-	for trait in updated:
-		if not (trait is String or trait is StringName):
+	for trait_ in updated:
+		if not (trait_ is String or trait_ is StringName):
 			continue
 		
-		var property: StringName = StringName(trait)
+		var property: StringName = StringName(trait_)
 		if not _property_indices.has(property):
-			push_warning("Unknown trait property: " + str(trait))
+			push_warning("Unknown trait property: " + str(trait_))
 			continue
 		
 		current.erase(String(property))
 		current.erase(property)
-		current[property] = updated[trait]
+		current[property] = updated[trait_]
 
 ## Tells whether a traits dictionary contains any of the given properties.
 ## Meant to be used by developers inside _apply to define custom logic that
