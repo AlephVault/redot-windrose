@@ -4,6 +4,8 @@ extends "res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd"
 const _PeopleVisual = AlephVault__WindRose__REFMAP.Visuals.People.Base
 const _StandardTraits = AlephVault__WindRose__REFMAP.Traits.People.Standard
 
+static var _traits_schema := _StandardTraits.new()
+
 const _COMPONENT_COLORS := [
 	_PeopleVisual.ComponentColor.Black,
 	_PeopleVisual.ComponentColor.Blue,
@@ -28,7 +30,6 @@ const _BODY_COLORS := [
 	_PeopleVisual.BodyColor.Purple,
 ]
 
-var _traits_schema := _StandardTraits.new()
 var _body_index: int = 0
 var _component_indices := {}
 var _color_indices := {}
