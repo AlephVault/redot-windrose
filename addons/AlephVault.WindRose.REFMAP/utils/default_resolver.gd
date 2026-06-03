@@ -114,6 +114,9 @@ static func _valid_texture(texture) -> bool:
 func _cache_get_or_load(path: String):
 	_ensure_cache()
 	var cache = _LRURegistry.fetch(_locked_texture_cache_name)
+	if cache == null:
+		return null
+
 	var response = cache.get_value(path, self)
 	if response.is_successful() and response.value != null:
 		return response.value
