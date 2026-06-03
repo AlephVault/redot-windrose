@@ -24,6 +24,9 @@ Each row has four 32x48 frames. Rows are, in order: down-facing, left-facing, ri
 - `AlephVault__WindRose__REFMAP.Visuals.People.Base`: Shared abstract parent for people visuals. Do not instantiate this directly.
 - `AlephVault__WindRose__REFMAP.Visuals.People.Simple`: People visual using one complete `cloth` layer.
 - `AlephVault__WindRose__REFMAP.Visuals.People.Standard`: People visual using separate outfit layers.
+- `AlephVault__WindRose__REFMAP.Traits.People.Base`: Shared `MapEntityTraits` schema for people visuals.
+- `AlephVault__WindRose__REFMAP.Traits.People.Simple`: Traits schema for simple people visuals.
+- `AlephVault__WindRose__REFMAP.Traits.People.Standard`: Traits schema for standard people visuals.
 
 ### Resolver Setup
 
@@ -169,6 +172,91 @@ Composition order:
 19. Hat, full texture.
 20. Left hand, down row only.
 21. Right hand, down row only.
+
+### People Traits
+
+REFMAP also provides `MapEntityTraits` schemas for people visuals. Use these when the visual data belongs to the
+`MapEntity` instead of being controlled directly by the visual node.
+
+The trait property names intentionally match the visual property names. Setting `entity.traits` with any of these
+properties updates the matching child REFMAP people visual.
+
+```gdscript
+extends AlephVault__WindRose.Contrib.Simple.MapEntity
+
+static var _traits_schema := AlephVault__WindRose__REFMAP.Traits.People.Standard.new()
+
+func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
+	return _traits_schema
+```
+
+Then update traits on the entity:
+
+```gdscript
+traits = {
+	&"sex": AlephVault__WindRose__REFMAP.Visuals.People.Base.Sex.Male,
+	&"body": AlephVault__WindRose__REFMAP.Visuals.People.Base.BodyColor.White,
+	&"hair": "1",
+	&"hair_color": AlephVault__WindRose__REFMAP.Visuals.People.Base.ComponentColor.Black,
+	&"shirt": "1",
+	&"shirt_color": AlephVault__WindRose__REFMAP.Visuals.People.Base.ComponentColor.Blue,
+}
+```
+
+Trait updates are partial. Assigning `{&"hair": "2"}` only changes `hair`; existing trait values are preserved.
+Unknown trait keys are ignored with a warning by the base WindRose traits logic.
+
+The schema instance should be cached, typically as a `static var`, because schemas are immutable after construction and
+only describe the available fields.
+
+#### Simple People Traits
+
+Use:
+
+```gdscript
+AlephVault__WindRose__REFMAP.Traits.People.Simple
+```
+
+Available traits:
+
+- `sex`
+- `body`
+- `hair`, `hair_color`
+- `hair_tail`, `hair_tail_color`
+- `necklace`
+- `hat`, `hat_color`
+- `right_hand`
+- `left_hand`
+- `cloth`
+
+#### Standard People Traits
+
+Use:
+
+```gdscript
+AlephVault__WindRose__REFMAP.Traits.People.Standard
+```
+
+Available traits:
+
+- `sex`
+- `body`
+- `hair`, `hair_color`
+- `hair_tail`, `hair_tail_color`
+- `necklace`
+- `hat`, `hat_color`
+- `right_hand`
+- `left_hand`
+- `boots`, `boots_color`
+- `pants`, `pants_color`
+- `shirt`, `shirt_color`
+- `chest`, `chest_color`
+- `waist`, `waist_color`
+- `arms`, `arms_color`
+- `long_shirt`, `long_shirt_color`
+- `shoulders`, `shoulders_color`
+- `cloak`
+- `boots_over_pants`
 
 ### Bundled Default Resolver
 

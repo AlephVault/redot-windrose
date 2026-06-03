@@ -1,4 +1,4 @@
-extends "res://addons/AlephVault.WindRose.REFMAP/traits/people/base.gd"
+extends AlephVault__WindRose__REFMAP.Traits.People.Base
 ## MapEntityTraits schema for REFMAP standard people visuals.
 
 const _STANDARD_PROPERTIES: Array[StringName] = [

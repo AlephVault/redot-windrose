@@ -1,4 +1,4 @@
-extends "res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd"
+extends AlephVault__WindRose.Contrib.Simple.MapEntity
 ## Sample simple-strategy MapEntity that drives a REFMAP people visual via traits.
 
 const _PeopleVisual = AlephVault__WindRose__REFMAP.Visuals.People.Base
