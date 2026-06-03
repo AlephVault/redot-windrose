@@ -1,5 +1,5 @@
 extends AlephVault__WindRose.Contrib.Simple.MapEntity
-## Sample simple-strategy MapEntity that drives a REFMAP people visual via traits.
+## Sample simple-strategy MapEntity exposing traits consumed by a REFMAP people visual.
 
 const _PeopleVisual = AlephVault__WindRose__REFMAP.Visuals.People.Base
 const _StandardTraits = AlephVault__WindRose__REFMAP.Traits.People.Standard

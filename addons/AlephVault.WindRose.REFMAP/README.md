@@ -178,8 +178,8 @@ Composition order:
 REFMAP also provides `MapEntityTraits` schemas for people visuals. Use these when the visual data belongs to the
 `MapEntity` instead of being controlled directly by the visual node.
 
-The trait property names intentionally match the visual property names. Setting `entity.traits` with any of these
-properties updates the matching child REFMAP people visual.
+The trait property names intentionally match the visual property names. REFMAP people visuals listen to their owning
+entity's `traits_updated` signal and copy matching properties into the visual.
 
 ```gdscript
 extends AlephVault__WindRose.Contrib.Simple.MapEntity
@@ -207,7 +207,8 @@ Trait updates are partial. Assigning `{&"hair": "2"}` only changes `hair`; exist
 Unknown trait keys are ignored with a warning by the base WindRose traits logic.
 
 The schema instance should be cached, typically as a `static var`, because schemas are immutable after construction and
-only describe the available fields.
+only describe the available fields. The schema does not update visuals directly; visual updates happen from
+`traits_updated` listeners.
 
 #### Simple People Traits
 

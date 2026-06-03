@@ -133,10 +133,9 @@ func update_traits(current: Dictionary, updated: Dictionary) -> void:
 		current[property] = updated[trait_]
 
 ## Tells whether a traits dictionary contains any of the given properties.
-## Meant to be used by developers inside _apply to define custom logic that
-## updates based on one or more simultaneous traits, and one of them is
-## being uploaded right now. A precondition is that the given dictionary
-## is already cleaned / has actually StringName instances.
+## Useful in traits_updated listeners to define custom logic that updates
+## based on one or more simultaneous traits. A precondition is that the
+## given dictionary is already cleaned / has actually StringName instances.
 func has_any(traits: Dictionary, properties: Array[StringName]) -> bool:
 	for prop in properties:
 		var property: StringName = StringName(prop)
@@ -149,23 +148,12 @@ func has_any(traits: Dictionary, properties: Array[StringName]) -> bool:
 	
 	return false
 
-## Override this function to affect the entity by detecting
-## what fields were updated and working with the merged values.
-##
-## A non-existing key in the current_traits or merged_traits
-## MUST be treated as treating that trait by default.
-func _apply(
-	current_traits: Dictionary, new_traits: Dictionary, merged_traits: Dictionary,
-	e: _MapEntity
-):
-	pass
-
 ## Applies the traits on the object. Returns the merged traits and the
-## normalized traits that were applied.
+## normalized traits that were applied. Visuals and other side effects
+## must react to MapEntity.traits_updated to be aware of these changes.
 func apply(new_traits: Dictionary, e: _MapEntity) -> Array[Dictionary]:
 	var current_traits: Dictionary = e.traits
 	var cleaned_traits: Dictionary = clean_traits(new_traits)
 	var merged_traits: Dictionary = current_traits.duplicate()
 	update_traits(merged_traits, cleaned_traits)
-	_apply(current_traits, cleaned_traits, merged_traits, e)
 	return [merged_traits, cleaned_traits]

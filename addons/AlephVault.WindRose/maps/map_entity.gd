@@ -358,8 +358,8 @@ var _traits: Dictionary = {}
 ## if get_traits_schema() returns null. Otherwise, getting the traits
 ## involves getting a dictionary of all the traits data, while setting
 ## the traits can be a total or partial operation. In either case, the
-## old and new traits are merged and also the reaction provided by the
-## underlying schema will cause the object to be visually updated.
+## old and new traits are merged and traits_updated is emitted after
+## the merged traits are stored.
 var traits: Dictionary:
 	get:
 		if get_traits_schema():

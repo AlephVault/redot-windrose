@@ -246,6 +246,30 @@ var cloak: Variant:
 		boots_over_pants = value
 		_refresh_visual()
 
+func _get_traits_properties() -> Array[StringName]:
+	var properties := super._get_traits_properties()
+	properties.append_array([
+		&"boots",
+		&"boots_color",
+		&"pants",
+		&"pants_color",
+		&"shirt",
+		&"shirt_color",
+		&"chest",
+		&"chest_color",
+		&"waist",
+		&"waist_color",
+		&"arms",
+		&"arms_color",
+		&"long_shirt",
+		&"long_shirt_color",
+		&"shoulders",
+		&"shoulders_color",
+		&"cloak",
+		&"boots_over_pants",
+	])
+	return properties
+
 func _make_composition_steps() -> Array:
 	_release_resolved_layers()
 	var steps := []

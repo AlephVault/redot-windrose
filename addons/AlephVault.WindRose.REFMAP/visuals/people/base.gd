@@ -26,6 +26,19 @@ const _UP_RECT := Rect2i(0, 144, 128, 48)
 const _UP_FRAME_RECT := Rect2i(0, 144, 32, 48)
 const _DEFAULT_CACHE_NAME := "refmap_people"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 256
+const _BASE_TRAIT_PROPERTIES: Array[StringName] = [
+	&"sex",
+	&"body",
+	&"hair",
+	&"hair_color",
+	&"hair_tail",
+	&"hair_tail_color",
+	&"necklace",
+	&"hat",
+	&"hat_color",
+	&"right_hand",
+	&"left_hand",
+]
 
 enum Sex {
 	Male,
@@ -257,6 +270,7 @@ var left_hand: Variant:
 
 var _texture_context = null
 var _resolved_layers: Array[ResolvedLayer] = []
+var _traits_entity: AlephVault__WindRose.Maps.MapEntity = null
 
 ## Ensures the composed-texture LRU cache exists and locks the
 ## static cache settings. After the first ensure, changing either
@@ -282,10 +296,14 @@ func _ready() -> void:
 	_refresh_visual()
 
 func _setup():
+	_connect_traits()
+	if is_instance_valid(map_entity):
+		_apply_traits(map_entity.traits)
 	_refresh_visual()
 	super._setup()
 
 func _teardown():
+	_disconnect_traits()
 	super._teardown()
 	_release_texture()
 	_release_resolved_layers()
@@ -318,6 +336,40 @@ func _same_layer_value(a, b) -> bool:
 				return false
 		return true
 	return a == b
+
+func _get_traits_properties() -> Array[StringName]:
+	return _BASE_TRAIT_PROPERTIES.duplicate()
+
+func _connect_traits() -> void:
+	if not is_instance_valid(map_entity):
+		return
+	_traits_entity = map_entity
+	if not _traits_entity.traits_updated.is_connected(_on_traits_updated):
+		_traits_entity.traits_updated.connect(_on_traits_updated)
+
+func _disconnect_traits() -> void:
+	if not is_instance_valid(_traits_entity):
+		_traits_entity = null
+		return
+	if _traits_entity.traits_updated.is_connected(_on_traits_updated):
+		_traits_entity.traits_updated.disconnect(_on_traits_updated)
+	_traits_entity = null
+
+func _on_traits_updated(new_traits: Dictionary) -> void:
+	_apply_traits(new_traits)
+
+func _apply_traits(new_traits: Dictionary) -> void:
+	if not is_instance_valid(_traits_entity):
+		return
+	var schema = _traits_entity.get_traits_schema()
+	if schema == null:
+		return
+	var properties := _get_traits_properties()
+	if not schema.has_any(new_traits, properties):
+		return
+	for property in properties:
+		if new_traits.has(property):
+			set(String(property), new_traits[property])
 
 func _valid_texture(value) -> bool:
 	return value is Texture2D and value.get_width() == _TEXTURE_SIZE.x and value.get_height() == _TEXTURE_SIZE.y

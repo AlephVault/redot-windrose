@@ -22,9 +22,6 @@ const _STANDARD_PROPERTIES: Array[StringName] = [
 	&"boots_over_pants",
 ]
 
-func _is_visual(node: Node) -> bool:
-	return node is AlephVault__WindRose__REFMAP.Visuals.People.Standard
-
 func _get_properties() -> Array[StringName]:
 	var properties := super._get_properties()
 	properties.append_array(_STANDARD_PROPERTIES)

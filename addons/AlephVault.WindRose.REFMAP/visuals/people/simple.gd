@@ -22,6 +22,11 @@ var cloth: Variant:
 		_cloth = value
 		_refresh_visual()
 
+func _get_traits_properties() -> Array[StringName]:
+	var properties := super._get_traits_properties()
+	properties.append(&"cloth")
+	return properties
+
 func _make_composition_steps() -> Array:
 	_release_resolved_layers()
 	var steps := []
