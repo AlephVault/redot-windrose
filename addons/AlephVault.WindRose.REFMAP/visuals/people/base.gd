@@ -477,7 +477,6 @@ func _configure_sprite() -> void:
 	_region_rect_right = Rect2i(0, 96, 128, 48)
 	_region_rect_up = _UP_RECT
 	centered = false
-	offset = Vector2(0, -_FRAME_SIZE.y)
 
 func _make_full_setup() -> FullSetup:
 	var down := FramesetSetup.new(texture, _DOWN_FRAME_RECT, 1, false, centered, offset)
@@ -515,4 +514,4 @@ func _refresh_visual() -> void:
 			moving_setup.set_image(next_texture)
 		_apply()
 	centered = false
-	offset = Vector2(0, -16)
+	offset = Vector2(0, -_FRAME_SIZE.y + _FRAME_SIZE.x)
