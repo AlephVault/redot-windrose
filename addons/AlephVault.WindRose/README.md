@@ -469,7 +469,7 @@ The schema also exposes helper methods:
   `current`, replacing old `String` or `StringName` variants of the same property.
 - `has_any(traits: Dictionary, properties: Array[StringName]) -> bool`: Useful inside `traits_updated` listeners to
   detect whether one or more properties were part of the current update.
-- `serialize(traits: Dictionary) -> Response` and `deserialize(traits: Array[Array]) -> Response`: Convert trait
+- `serialize(traits: Dictionary) -> Response` and `deserialize(traits: Array) -> Response`: Convert trait
   dictionaries to and from compact indexed arrays based on `_get_properties()` order. These methods are strict and
   return failed responses for unknown, duplicated, or invalid entries.
 - `apply(new_traits: Dictionary, e: MapEntity) -> Array[Dictionary]`: Normalizes, merges, and returns

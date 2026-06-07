@@ -116,7 +116,7 @@ func _init(entity_rule: _EntityRule):
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
-		if entity_rule != null and entity_rule.signals != null:
+		if is_instance_valid(self) and entity_rule != null and entity_rule.signals != null:
 			_entity_rule.signals.on_attached.disconnect(_on_attached)
 			_entity_rule.signals.on_detached.disconnect(_on_detached)
 			_entity_rule.signals.on_movement_started.disconnect(_on_movement_started)

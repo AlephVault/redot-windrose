@@ -51,7 +51,7 @@ func serialize(traits: Dictionary) -> _Response:
 		var idx: int = _property_indices[property]
 		values_by_index[idx] = traits[trait_]
 	
-	var serialized: Array[Array] = []
+	var serialized: Array = []
 	for idx in range(_properties.size()):
 		if values_by_index.has(idx):
 			serialized.append([idx, values_by_index[idx]])
@@ -59,7 +59,7 @@ func serialize(traits: Dictionary) -> _Response:
 	return _Response.succeed(serialized)
 
 ## De-serializes an array as a dictionary.
-func deserialize(traits: Array[Array]) -> _Response:
+func deserialize(traits: Array) -> _Response:
 	var deserialized: Dictionary = {}
 	var used_indices: Dictionary = {}
 	
