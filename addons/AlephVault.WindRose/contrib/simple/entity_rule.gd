@@ -86,5 +86,5 @@ func _init(
 		map_entity, false
 	)
 	_navigability_rule = AlephVault__WindRose.Contrib.Navigability.EntityRule.new(
-		map_entity.size, false
+		map_entity.size, _navigability, false
 	)

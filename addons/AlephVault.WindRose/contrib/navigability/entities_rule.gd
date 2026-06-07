@@ -83,7 +83,7 @@ func _get_type_from_layer(
 # the navigability change for the given
 # cell and combines it with the current
 # navigability inferred from previous
-# layers to return the final navegability.
+# layers to return the final navigability.
 func _get_next_navigability(
 	floor: TileMapLayer,
 	cell: Vector2i,
