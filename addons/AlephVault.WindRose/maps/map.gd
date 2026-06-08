@@ -134,7 +134,7 @@ func pause():
 
 ## Resumes this map and its entities layer.
 func resume():
-	_paused = true
+	_paused = false
 	if _entities_layer != null:
 		_entities_layer.resume()
 
