@@ -40,6 +40,11 @@ const _LINE_SIZE := 16
 			_message_color = value
 		_refresh_message_label()
 
+@export var _description_format: String = "%s":
+	set(value):
+		_description_format = str(value)
+		_refresh_description_label()
+
 var _name_label: Label
 var _description_label: Label
 var _message_label: Label
@@ -190,7 +195,14 @@ func _refresh_name_label() -> void:
 	_refresh_plain_label(_name_label, _name_text, _name_color, _NAME_POSITION)
 
 func _refresh_description_label() -> void:
-	_refresh_plain_label(_description_label, _description_text, _description_color, _DESCRIPTION_POSITION)
+	_refresh_plain_label(_description_label, _format_description(), _description_color, _DESCRIPTION_POSITION)
+
+func _format_description() -> String:
+	if _description_text.is_empty():
+		return ""
+	if _description_format.count("%") == 0:
+		return _description_format + _description_text
+	return _description_format % _description_text
 
 func _refresh_message_label() -> void:
 	if not is_instance_valid(_message_label):
