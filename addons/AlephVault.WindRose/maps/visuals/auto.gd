@@ -374,7 +374,7 @@ func _teardown():
 	texture = null
 
 ## The amount of frames per second to animate.
-@export var fps: int = 0
+@export var fps: int = 4
 
 # The accumulated frame time.
 var _accumulated: float = 0
