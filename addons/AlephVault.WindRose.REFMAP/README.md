@@ -298,6 +298,30 @@ For `hair_tail`, the file key is `{key}_{color}_b`. For the other supported comp
 
 The bundled resolver intentionally returns `null` for `right_hand`, `left_hand`, `cloth`, `necklace`, and `cloak`; provide these through a custom resolver or direct pairs.
 
+### Contrib package: Citizens
+
+The namespace `AlephVault__WindRose__REFMAP.Contrib.Citizens` contains presets to directly use in MMORPGs (similar to
+Argentum Online) that render:
+
+- A person's aesthetics.
+- Its name.
+- Optionally, its description.
+- Optionally, a message.
+
+## Usage
+
+It exposes the following namespaces:
+
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits`
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals`
+
+## Public Classes
+
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Simple`: Simple REFMAP people traits plus `name`, `description`, and `message`.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Standard`: Standard REFMAP people traits plus `name`, `description`, and `message`.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Simple`: Simple REFMAP people visual with name, description, and message labels.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Standard`: Standard REFMAP people visual with name, description, and message labels.
+
 Licenses
 --------
 
