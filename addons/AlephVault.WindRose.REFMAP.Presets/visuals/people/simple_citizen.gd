@@ -9,8 +9,10 @@ extends AlephVault__WindRose__REFMAP.Visuals.People.Simple
 ## - Message: The message. Rendered above the head.
 
 const _NAME_TRAIT := &"name"
+const _DESCRIPTION_TRAIT := &"name"
 const _MESSAGE_TRAIT := &"message"
 const _NAME_POSITION := Vector2(16, 40)
+const _DESCRIPTION_POSITION := Vector2(16, 40)
 const _MESSAGE_POSITION := Vector2(16, -24)
 const _MESSAGE_WIDTH := 160.0
 const _LINE_SIZE := 16
@@ -43,7 +45,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	_ensure_labels()
-	_ensure_resolver()
 	super._ready()
 
 func _get_traits_properties() -> Array[StringName]:
@@ -75,14 +76,6 @@ func _ensure_labels() -> void:
 		_configure_message_label()
 	_refresh_name_label()
 	_refresh_message_label()
-
-func _ensure_resolver() -> void:
-	var people = AlephVault__WindRose__REFMAP.Visuals.People
-	if people.Base.resolver == null or not is_instance_valid(people.Base.resolver):
-		AlephVault__WindRose__REFMAP.Utils.DefaultResolver.texture_cache_name = "refmap_source_textures"
-		AlephVault__WindRose__REFMAP.Utils.DefaultResolver.texture_cache_max_disposal_size = 256
-		people.Base.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
-	resolver = people.Base.resolver
 
 func _configure_common_label(label: Label, color: Color) -> void:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
