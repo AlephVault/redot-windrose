@@ -2,7 +2,7 @@
 
 This package contains preset definitions that depend on `AlephVault.WindRose.REFMAP`.
 
-Use this package for ready-to-use combinations, defaults, and helpers that should not live in the base REFMAP package. The base package remains focused on reusable REFMAP visuals, traits, and utilities; this package may compose those pieces into higher-level presets.
+Use this package for ready-to-use combinations, defaults, and helpers that should not live in the base REFMAP package. The base package remains focused on reusable REFMAP visuals, traits, and utilities; this package composes those pieces into higher-level presets.
 
 ## Usage
 
@@ -17,9 +17,21 @@ It exposes the following namespaces:
 - `AlephVault__WindRose__REFMAP__Presets.Utils`
 - `AlephVault__WindRose__REFMAP__Presets.Traits`
 - `AlephVault__WindRose__REFMAP__Presets.Visuals`
-
-The package also exposes `AlephVault__WindRose__REFMAP__Presets.REFMAP` as a direct alias to `AlephVault__WindRose__REFMAP` for preset code that needs to reference the base package explicitly.
+- `AlephVault__WindRose__REFMAP__Presets.Examples`
 
 ## Public Classes
 
-No concrete presets are defined yet. Add new preset modules under `utils/`, `traits/`, or `visuals/`, then export them from the matching `index.gd` file.
+- `AlephVault__WindRose__REFMAP__Presets.Traits.People.Simple`: Simple REFMAP people traits plus `name`, `description`, and `message`.
+- `AlephVault__WindRose__REFMAP__Presets.Traits.People.Standard`: Standard REFMAP people traits plus `name`, `description`, and `message`.
+- `AlephVault__WindRose__REFMAP__Presets.Visuals.People.Simple`: Simple REFMAP people visual with name, description, and message labels.
+- `AlephVault__WindRose__REFMAP__Presets.Visuals.People.Standard`: Standard REFMAP people visual with name, description, and message labels.
+
+## Examples
+
+The standard citizen example is available at:
+
+```text
+addons/AlephVault.WindRose.REFMAP.Presets/examples/standard-citizen/sample-aleph-vault-refmap-presets-standard-citizen-usage.tscn
+```
+
+It creates one `Simple.MapEntity` with `Standard` citizen traits and a `Standard` citizen visual. The example assigns REFMAP component traits plus `name`, `description`, and `message` values to demonstrate label rendering and text normalization.
