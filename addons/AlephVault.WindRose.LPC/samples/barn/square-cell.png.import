@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dntsdd4fccigf"
-path="res://.godot/imported/square-cell.png-31b07cbf037d5317eafaed8513c4e7d6.ctex"
+path="res://.godot/imported/square-cell.png-43fa25b5f3d6dd21f85d6a1cd58aecc2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AlephVault.WindRose.LPC/examples/barn/square-cell.png"
-dest_files=["res://.godot/imported/square-cell.png-31b07cbf037d5317eafaed8513c4e7d6.ctex"]
+source_file="res://addons/AlephVault.WindRose.LPC/samples/barn/square-cell.png"
+dest_files=["res://.godot/imported/square-cell.png-43fa25b5f3d6dd21f85d6a1cd58aecc2.ctex"]
 
 [params]
 

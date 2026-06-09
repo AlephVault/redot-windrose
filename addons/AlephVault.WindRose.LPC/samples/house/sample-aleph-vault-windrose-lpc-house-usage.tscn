@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_b8koc"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_he47t"]
-[ext_resource type="TileSet" uid="uid://dhrg8ep4wlmx8" path="res://addons/AlephVault.WindRose.LPC/examples/house/sample-aleph-vault-windrose-lpc-house-usage.tres" id="3_2hhg2"]
+[ext_resource type="TileSet" uid="uid://dhrg8ep4wlmx8" path="res://addons/AlephVault.WindRose.LPC/samples/house/sample-aleph-vault-windrose-lpc-house-usage.tres" id="3_2hhg2"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="4_nviyw"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_e7s31"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/visuals_layer.gd" id="5_qm0bd"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/house/sample-aleph-vault-house.gd" id="6_ydmu2"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/house/sample-aleph-vault-house.gd" id="6_ydmu2"]
 
 [node name="Sample-aleph-vault-windrose-lpc-house-usage" type="Node2D"]
 

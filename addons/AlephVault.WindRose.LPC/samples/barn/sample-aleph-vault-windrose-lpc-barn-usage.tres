@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://ctwjfkjkunv6v"]
 
-[ext_resource type="Texture2D" uid="uid://dntsdd4fccigf" path="res://addons/AlephVault.WindRose.LPC/examples/barn/square-cell.png" id="1_e541w"]
+[ext_resource type="Texture2D" uid="uid://dntsdd4fccigf" path="res://addons/AlephVault.WindRose.LPC/samples/barn/square-cell.png" id="1_e541w"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_00ljw"]
 texture = ExtResource("1_e541w")

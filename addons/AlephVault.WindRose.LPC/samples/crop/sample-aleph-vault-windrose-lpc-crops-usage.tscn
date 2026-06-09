@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_daobn"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_485i7"]
-[ext_resource type="TileSet" uid="uid://cg0vwhdwy2fky" path="res://addons/AlephVault.WindRose.LPC/examples/crop/sample-aleph-vault-windrose-lpc-crop-usage.tres" id="3_23oj3"]
+[ext_resource type="TileSet" uid="uid://cg0vwhdwy2fky" path="res://addons/AlephVault.WindRose.LPC/samples/crop/sample-aleph-vault-windrose-lpc-crop-usage.tres" id="3_23oj3"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="4_7gga7"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_m1f6i"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/crop/sample-aleph-vault-crop.gd" id="6_2soag"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/crop/sample-aleph-vault-crop.gd" id="6_2soag"]
 
 [node name="Sample-aleph-vault-windrose-lpc-crops-usage" type="Node2D"]
 

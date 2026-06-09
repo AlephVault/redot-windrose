@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=4 uid="uid://tdfsl1ra635c"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_c3v55"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/examples/people/sample-aleph-vault-windrose-refmap-people-controller.gd" id="1_cupxd"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/samples/people/sample-aleph-vault-windrose-refmap-people-controller.gd" id="1_cupxd"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_7k5ox"]
-[ext_resource type="TileSet" uid="uid://sqbkl3msitb2" path="res://addons/AlephVault.WindRose.REFMAP/examples/people/sample-aleph-vault-windrose-refmap-people-usage.tres" id="4_krx17"]
+[ext_resource type="TileSet" uid="uid://sqbkl3msitb2" path="res://addons/AlephVault.WindRose.REFMAP/samples/people/sample-aleph-vault-windrose-refmap-people-usage.tres" id="4_krx17"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/simple/entities_layer.gd" id="5_tmpik"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/visuals_layer.gd" id="6_mjgyh"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd" id="6_uttmi"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/examples/people/sample-aleph-vault-refmap-person-visual.gd" id="7_g3s4m"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/samples/people/sample-aleph-vault-refmap-person-visual.gd" id="7_g3s4m"]
 
 [sub_resource type="Image" id="Image_a64ek"]
 data = {

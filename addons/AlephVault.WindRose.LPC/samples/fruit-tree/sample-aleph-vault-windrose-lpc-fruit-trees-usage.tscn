@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="1_hkm0k"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_xqtrw"]
-[ext_resource type="TileSet" uid="uid://ce5fsusqmd34n" path="res://addons/AlephVault.WindRose.LPC/examples/fruit-tree/sample-aleph-vault-windrose-lpc-fruit-tree-usage.tres" id="2_osdys"]
+[ext_resource type="TileSet" uid="uid://ce5fsusqmd34n" path="res://addons/AlephVault.WindRose.LPC/samples/fruit-tree/sample-aleph-vault-windrose-lpc-fruit-tree-usage.tres" id="2_osdys"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/entities_layer.gd" id="3_a5mik"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/visuals_layer.gd" id="4_gk7er"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/solidness/map_entity.gd" id="5_n2sfu"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/examples/fruit-tree/sample-aleph-vault-fruit-tree.gd" id="6_n3eey"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/fruit-tree/sample-aleph-vault-fruit-tree.gd" id="6_n3eey"]
 
 [node name="Sample-aleph-vault-windrose-lpc-fruit-trees-usage" type="Node2D"]
 
