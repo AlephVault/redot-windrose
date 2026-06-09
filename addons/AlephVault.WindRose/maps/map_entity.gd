@@ -157,7 +157,7 @@ var initial_position: Vector2i:
 signal orientation_changed(orientation: _Direction)
 
 ## The current speed.
-@export var speed: float = 0.0625:
+@export var speed: float = 32:
 	get:
 		return speed
 	set(value):
