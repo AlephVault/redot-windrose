@@ -15,6 +15,7 @@ const _MESSAGE_TRAIT := &"message"
 const _NAME_POSITION := Vector2(16, 40)
 const _DESCRIPTION_POSITION := Vector2(16, 64)
 const _MESSAGE_POSITION := Vector2(16, -24)
+const _LABEL_WIDTH := 160.0
 const _MESSAGE_WIDTH := 160.0
 const _LINE_SIZE := 16
 
@@ -180,10 +181,10 @@ func _refresh_plain_label(label: Label, text: String, color: Color, base_positio
 		return
 	label.text = text
 	label.add_theme_color_override("font_color", color)
-	var label_size := label.get_combined_minimum_size()
-	label.size = label_size
-	label.position = base_position - Vector2(label_size.x * 0.5, 0)
-	label.pivot_offset = Vector2(label_size.x * 0.5, 0)
+	var height := label.get_combined_minimum_size().y
+	label.size = Vector2(_LABEL_WIDTH, height)
+	label.position = base_position - Vector2(_LABEL_WIDTH * 0.5, 0)
+	label.pivot_offset = Vector2(_LABEL_WIDTH * 0.5, 0)
 
 func _refresh_name_label() -> void:
 	_refresh_plain_label(_name_label, _name_text, _name_color, _NAME_POSITION)
