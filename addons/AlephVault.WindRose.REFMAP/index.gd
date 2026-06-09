@@ -4,3 +4,4 @@ extends Object
 const Utils = preload("./utils/index.gd")
 const Traits = preload("./traits/index.gd")
 const Visuals = preload("./visuals/index.gd")
+const Contrib = preload("./contrib/index.gd")
