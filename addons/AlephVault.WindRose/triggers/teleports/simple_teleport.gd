@@ -64,30 +64,36 @@ func _get_teleport_target() -> AlephVault__WindRose.Maps.MapEntity:
 	var scope_key: String = target_scope_key.strip_edges()
 	var map_index: int = target_map_index
 	var node_name: String = target_name.strip_edges()
+	if node_name == "":
+		return null
 	var node: Node2D
 	if map_index > 255:
 		return null
 	if scope_key == "":
 		if map_index < 0:
 			# Lookup on same map.
-			node = current_map.entities_layer.get_node(node_name)
+			node = current_map.entities_layer.get_node_or_null(node_name)
 		else:
 			# Look on the same scope, another map.
 			if current_map.scope == null:
 				return null
-			node = current_map.get_scope_map(map_index).entities_layer.get_node(node_name)
+			var target_map = current_map.get_scope_map(map_index)
+			if target_map == null:
+				return null
+			node = target_map.entities_layer.get_node_or_null(node_name)
 	else:
 		if map_index < 0:
 			# Specifying the scope and not a valid
-			# map index results in failed lookup.s
+			# map index results in failed lookup.
 			return null
 		else:
 			# Look on a given scope and map.
 			if current_map.scope == null or current_map.scope.world == null:
 				return null
-			node = current_map.get_world_map(scope_key, map_index).entities_layer.get_node(
-				node_name
-			)
+			var target_map = current_map.get_world_map(scope_key, map_index)
+			if target_map == null:
+				return null
+			node = target_map.entities_layer.get_node_or_null(node_name)
 	if is_instance_valid(node) and node is AlephVault__WindRose.Maps.MapEntity and node.current_map != null:
 		return node
 	return null
