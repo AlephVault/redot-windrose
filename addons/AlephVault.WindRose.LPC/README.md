@@ -1009,3 +1009,39 @@ The assets contained in this package come from the LPC authoring contest. Credit
    CC-BY 3.0
    https://opengameart.org/content/steampunk-level-tileset-mega-pack-level-tileset-16x16
    ```
+
+8. For the wooden furniture (wooden-furniture/):
+
+   ```
+   "LPC Wooden Furniture" by bluecarrot16, Baŝto, Lanea Zimmerman (Sharm), William Thompson, Tuomo Untinen (Reemax), Janna/Lilius/Jannax. Please link back to https://opengameart.org/content/lpc-wooden-furniture . see CREDITS-*.txt. All information in this file must be included.
+
+   Liberated Pixel Cup (LPC) Base Assets (sprites & map tiles)
+   Lanea Zimmerman (Sharm)
+   CC-BY-SA 3.0 / GPL 3.0
+   http://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles
+
+   LPC: Modified base tiles
+   Lanea Zimmerman (Sharm), William Thompson
+   CC-BY 3.0 / CC-BY-SA 3.0 / GPL 3.0 / OGA-BY 3.0
+   http://opengameart.org/content/lpc-modified-base-tiles
+
+   [LPC] House interior and decorations
+   Tuomo Untinen (Reemax)
+   CC-BY-SA 3.0 / GPL 3.0 / GPL 2.0
+   http://opengameart.org/content/lpc-house-interior-and-decorations
+
+   Flowers, buildings and boxes; Interior wooden tiles; some old castle stuff
+   CC-BY-SA 3.0 / GPL 3.0
+   Guido Bos
+   https://opengameart.org/content/flowers-buildings-and-boxes-interior-wooden-tiles-some-old-castle-stuff
+
+   Home Objects
+   Janna/Lilius/Jannax
+   CC0
+   https://opengameart.org/content/home-objects
+
+   [LPC] Clock Animation
+   Lanea Zimmerman (Sharm), William.Thompsonj
+   CC-BY 3.0 / GPL 3.0
+   https://opengameart.org/content/lpc-clock-animation
+   ```
