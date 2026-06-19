@@ -144,24 +144,24 @@ The assets contained in this package come from the LPC authoring contest. Credit
 
    12-Panel Door, 15-Panel Door
    -------------------
-     ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
-     SOURCE: https://opengameart.org/content/lpc-animated-doors
-     LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
-     DETAILS: Original design and animation by Lanea Zimmerman. Converted to 15 panel door by Eliza Wyatt. Recolors by Eliza Wyatt.
+   ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
+   SOURCE: https://opengameart.org/content/lpc-animated-doors
+   LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
+   DETAILS: Original design and animation by Lanea Zimmerman. Converted to 15 panel door by Eliza Wyatt. Recolors by Eliza Wyatt.
 
    Doorframe A
    -------------------
-     ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
-     SOURCE: https://opengameart.org/content/lpc-interior-castle-tiles
-     LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
-     DETAILS: Original doorframe by Lanea Zimmerman. Recolors and adjustments by Eliza Wyatt.
+   ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
+   SOURCE: https://opengameart.org/content/lpc-interior-castle-tiles
+   LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
+   DETAILS: Original doorframe by Lanea Zimmerman. Recolors and adjustments by Eliza Wyatt.
 
    Doorframe B
    -------------------
-     ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
-     SOURCE: https://opengameart.org/content/lpc-arabic-elements
-     LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
-     DETAILS: Original doorway by Lanea Zimmerman. Recolors and adjustments by Eliza Wyatt.
+   ARTIST(S): Lanea Zimmerman (Sharm), Eliza Wyatt
+   SOURCE: https://opengameart.org/content/lpc-arabic-elements
+   LICENSE: CC-by-SA 3, DRM waived by Lanea Zimmerman
+   DETAILS: Original doorway by Lanea Zimmerman. Recolors and adjustments by Eliza Wyatt.
 
    Barn and util elements:
 
@@ -206,10 +206,10 @@ The assets contained in this package come from the LPC authoring contest. Credit
    All items edited by bluecarrot16. Original authors listed, otherwise drawn from scratch by bluecarrot16.
 
    - If you use this entire set, the license is CC-BY-SA 3.0+ or GPL v3.0+.
-     - All individual items can be used under either of those licenses (CC-BY-SA 3.0+ or GPL 3.0+).
-     - Some items can also be used under other licenses, according to the table below.
-     - For items with a CC-BY, CC-BY-SA, OGA-BY, or GPL license, you must credit the original author(s) as well as bluecarrot16, link to the original submissions (above) and include a link back to <https://opengameart.org/content/lpc-crops>.
-     - For items licensed CC0, credit and link back to this page is appreciated, but not required.
+   - All individual items can be used under either of those licenses (CC-BY-SA 3.0+ or GPL 3.0+).
+   - Some items can also be used under other licenses, according to the table below.
+   - For items with a CC-BY, CC-BY-SA, OGA-BY, or GPL license, you must credit the original author(s) as well as bluecarrot16, link to the original submissions (above) and include a link back to <https://opengameart.org/content/lpc-crops>.
+   - For items licensed CC0, credit and link back to this page is appreciated, but not required.
 
    |                                    Item                                    | Other Authors |              Type             | Other Licenses |
    |----------------------------------------------------------------------------|---------------|-------------------------------|----------------|

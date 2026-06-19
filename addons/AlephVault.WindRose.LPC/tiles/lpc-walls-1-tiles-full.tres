@@ -1,0 +1,10 @@
+[gd_resource type="TileSet" format=3 uid="uid://cvmxa37fx1q42"]
+
+[resource]
+tile_size = Vector2i(32, 32)
+custom_data_layer_0/name = "blocking"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "navigability_type"
+custom_data_layer_1/type = 2
+custom_data_layer_2/name = "navigability_increments"
+custom_data_layer_2/type = 1
