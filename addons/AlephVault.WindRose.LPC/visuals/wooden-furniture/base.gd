@@ -151,6 +151,10 @@ func _is_vertically_distributed() -> bool:
 	return true
 
 
+func _get_offset() -> Vector2:
+	return Vector2(0, -_get_region_rect().size.y)
+
+
 func _release_texture() -> void:
 	if _texture_context != null and _cache_ensured:
 		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
@@ -192,7 +196,7 @@ func _setup_sprite() -> void:
 	frame = 0
 	frame_coords = Vector2i.ZERO
 	centered = false
-	offset = Vector2i(0, -region_rect.size.y)
+	offset = _get_offset()
 
 	if is_instance_valid(full_setup):
 		full_setup.default_state.set_image(texture)
