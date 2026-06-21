@@ -7,7 +7,7 @@ const _REGION_RECT := Rect2i(128, 304, 64, 48)
 const _OFFSET := Vector2(0, -32)
 
 
-## Whether this desktop uses the worn visual variant.
+## Whether this desk uses the worn visual variant.
 @export var worn: bool = false:
 	set(value):
 		if worn == value:
