@@ -17,6 +17,9 @@ Open `res://addons/AlephVault.WindRose.LPC/samples/wooden-furniture/sample-aleph
 Controls:
 
 - `Tab`: select the next object.
+- Arrow keys: move the camera.
+- `1`: zoom in.
+- `2`: zoom out.
 - `Q`: cycle the selected object's primary property.
 - `W`: cycle the selected object's secondary property.
 - `E`: cycle wood tone.

@@ -9,6 +9,10 @@ const _CELL_SIZE := Vector2(32, 32)
 const _ITEM_SPACING := Vector2(128, 132)
 const _GRID_ORIGIN := Vector2(48, 140)
 const _GRID_COLUMNS := 6
+const _CAMERA_MOVE_SPEED := 320.0
+const _MIN_ZOOM := 0.5
+const _MAX_ZOOM := 4.0
+const _ZOOM_STEP := 0.25
 
 
 var _items := []
@@ -16,9 +20,11 @@ var _selected_index := 0
 var _pressed := {}
 var _help_label: Label
 var _status_label: Label
+var _camera: Camera2D
 
 
 func _ready() -> void:
+	_camera = $Camera2D
 	_build_ui()
 	_build_items()
 	_update_selection()
@@ -29,8 +35,14 @@ func _process(delta: float) -> void:
 	for item in _items:
 		item.visual.update(delta)
 
+	_update_camera(delta)
+
 	if _just_pressed(KEY_TAB):
 		_select((_selected_index + 1) % _items.size())
+	if _just_pressed(KEY_1):
+		_change_zoom(_ZOOM_STEP)
+	if _just_pressed(KEY_2):
+		_change_zoom(-_ZOOM_STEP)
 	if _just_pressed(KEY_Q):
 		_cycle_property("primary")
 	if _just_pressed(KEY_W):
@@ -43,6 +55,8 @@ func _process(delta: float) -> void:
 		_cycle_fps()
 
 	_remember_key(KEY_TAB)
+	_remember_key(KEY_1)
+	_remember_key(KEY_2)
 	_remember_key(KEY_Q)
 	_remember_key(KEY_W)
 	_remember_key(KEY_E)
@@ -53,7 +67,7 @@ func _process(delta: float) -> void:
 func _build_ui() -> void:
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Tab: select  Q: primary property  W: secondary property  E: tone  R: orientation  F: clock FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: primary  W: secondary  E: tone  R: orientation  F: clock FPS"
 	add_child(_help_label)
 
 	_status_label = Label.new()
@@ -266,6 +280,26 @@ func _cycle_fps() -> void:
 		return
 	item.visual.fps = 1 + (int(item.visual.fps) % 8)
 	_update_selection()
+
+
+func _update_camera(delta: float) -> void:
+	var movement := Vector2.ZERO
+	if Input.is_physical_key_pressed(KEY_LEFT):
+		movement.x -= 1
+	if Input.is_physical_key_pressed(KEY_RIGHT):
+		movement.x += 1
+	if Input.is_physical_key_pressed(KEY_UP):
+		movement.y -= 1
+	if Input.is_physical_key_pressed(KEY_DOWN):
+		movement.y += 1
+
+	if movement != Vector2.ZERO:
+		_camera.position += movement.normalized() * _CAMERA_MOVE_SPEED * delta / _camera.zoom.x
+
+
+func _change_zoom(delta: float) -> void:
+	var next_zoom := clampf(_camera.zoom.x + delta, _MIN_ZOOM, _MAX_ZOOM)
+	_camera.zoom = Vector2(next_zoom, next_zoom)
 
 
 func _apply_orientation(item: Dictionary) -> void:

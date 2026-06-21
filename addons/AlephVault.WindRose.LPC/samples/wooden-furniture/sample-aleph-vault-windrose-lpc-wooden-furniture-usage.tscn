@@ -4,3 +4,6 @@
 
 [node name="Sample-aleph-vault-windrose-lpc-wooden-furniture-usage" type="Node2D"]
 script = ExtResource("1_furniture")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)

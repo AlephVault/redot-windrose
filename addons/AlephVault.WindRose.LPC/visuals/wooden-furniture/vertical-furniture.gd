@@ -78,7 +78,7 @@ func _get_texture_context():
 		))
 		steps.push_back(_make_step(
 			"vertical-furniture-small-legs-front-" + key_suffix,
-			Rect2i(xz.x, 187, 32, 5),
+			Rect2i(480, 187, 32, 5),
 			Vector2i(0, 91)
 		))
 	else:
