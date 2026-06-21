@@ -236,5 +236,5 @@ func _setup_sprite() -> void:
 	offset = _get_offset()
 
 	if is_instance_valid(full_setup):
-		full_setup.default_state.set_image(texture)
+		full_setup = _make_full_setup()
 		_apply()
