@@ -5,7 +5,7 @@ extends AlephVault__WindRose.Maps.Visuals.StaticMapEntityVisual
 const _Step := AlephVault__WindRose.Utils.Textures.Step
 const _Context := AlephVault__WindRose.Utils.Textures.Context
 
-const TEXTURE_CACHE_KEY := "AlephVault.WindRose.LPC.wooden-furniture"
+const TEXTURE_CACHE_KEY := "AlephVault.WindRose.LPC:wooden-furniture"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
 
 const _DARK_WOOD_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/wooden-furniture/dark-wood.png")
