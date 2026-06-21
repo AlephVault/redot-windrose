@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfoxliwvp37kv"]
+
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/wooden-furniture/sample-aleph-vault-windrose-lpc-wooden-furniture-usage.gd" id="1_furniture"]
+
+[node name="Sample-aleph-vault-windrose-lpc-wooden-furniture-usage" type="Node2D"]
+script = ExtResource("1_furniture")
