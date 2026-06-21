@@ -88,6 +88,43 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
 
 
+func _is_valid_region_rect(rect: Rect2i) -> bool:
+	return rect.position.x >= 0 and rect.position.y >= 0 and \
+		   rect.size.x > 0 and rect.size.y > 0
+
+
+func _make_frameset_setup(rect: Rect2i) -> FramesetSetup:
+	return FramesetSetup.new(
+		texture,
+		rect,
+		_get_frame_count(),
+		_is_vertically_distributed(),
+		centered,
+		offset
+	)
+
+
+func _make_full_setup() -> FullSetup:
+	var down_rect := _get_region_rect()
+	var up_rect := _get_region_rect_up()
+	var left_rect := _get_region_rect_left()
+	var right_rect := _get_region_rect_right()
+	var has_directional_regions := _is_valid_region_rect(up_rect) or \
+			_is_valid_region_rect(left_rect) or _is_valid_region_rect(right_rect)
+
+	if has_directional_regions:
+		return FullSetup.new(
+			StateSetup.new(
+				_make_frameset_setup(down_rect),
+				_make_frameset_setup(up_rect if _is_valid_region_rect(up_rect) else down_rect),
+				_make_frameset_setup(left_rect if _is_valid_region_rect(left_rect) else down_rect),
+				_make_frameset_setup(right_rect if _is_valid_region_rect(right_rect) else down_rect)
+			)
+		)
+
+	return FullSetup.new(StateSetup.new(_make_frameset_setup(down_rect)))
+
+
 static func _ensure_cache() -> void:
 	assert(texture_cache_max_disposal_size >= 0, "The wooden furniture texture cache disposal size must be non-negative")
 	if _cache_ensured:
