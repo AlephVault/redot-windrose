@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=67 format=3 uid="uid://4o0wge18nllg"]
+[gd_resource type="TileSet" load_steps=65 format=3 uid="uid://4o0wge18nllg"]
 
 [ext_resource type="Texture2D" uid="uid://c77kp4twu516s" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Alt-Fluids.png" id="1_4q333"]
 [ext_resource type="Texture2D" uid="uid://dadky7wwpbwdi" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Alt-Grounds.png" id="2_i8jmd"]
@@ -26,7 +26,6 @@
 [ext_resource type="Texture2D" uid="uid://x6lhjqnni2dd" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Alt-Soils.png" id="24_uvq75"]
 [ext_resource type="Texture2D" uid="uid://bbdlhjdbii2nd" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Spots-02.png" id="25_347e5"]
 [ext_resource type="Texture2D" uid="uid://bahdsy6g2fm6" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Spots-03.png" id="26_wjlf3"]
-[ext_resource type="Texture2D" uid="uid://n31sea8ly63c" path="res://addons/AlephVault.WindRose.LPC/images/tiles/fences/LPC-Fence-Rural.png" id="27_v8df3"]
 [ext_resource type="Texture2D" uid="uid://ciokrsv0i3tkp" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Beach.png" id="27_xsamk"]
 [ext_resource type="Texture2D" uid="uid://fodqfn2qprug" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Crop-Green.png" id="28_l6drk"]
 [ext_resource type="Texture2D" uid="uid://cpgpbqsicme2p" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Crop-Small.png" id="29_xv4yh"]
@@ -727,42 +726,6 @@ texture_region_size = Vector2i(32, 32)
 3:3/0 = 0
 3:3/0/custom_data_0 = true
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qcpsd"]
-texture = ExtResource("27_v8df3")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/custom_data_0 = true
-1:0/0 = 0
-1:0/0/custom_data_0 = true
-2:0/0 = 0
-2:0/0/custom_data_0 = true
-0:1/0 = 0
-0:1/0/custom_data_0 = true
-1:1/0 = 0
-1:1/0/custom_data_0 = true
-2:1/0 = 0
-2:1/0/custom_data_0 = true
-3:1/0 = 0
-3:1/0/custom_data_0 = true
-0:2/0 = 0
-0:2/0/custom_data_0 = true
-1:2/0 = 0
-1:2/0/custom_data_0 = true
-2:2/0 = 0
-2:2/0/custom_data_0 = true
-3:2/0 = 0
-3:2/0/custom_data_0 = true
-0:3/0 = 0
-0:3/0/custom_data_0 = true
-1:3/0 = 0
-1:3/0/custom_data_0 = true
-2:3/0 = 0
-2:3/0/custom_data_0 = true
-3:3/0 = 0
-3:3/0/custom_data_0 = true
-3:0/0 = 0
-3:0/0/custom_data_0 = true
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q8oin"]
 texture = ExtResource("27_xsamk")
 texture_region_size = Vector2i(32, 32)
@@ -971,4 +934,3 @@ sources/28 = SubResource("TileSetAtlasSource_0hpoo")
 sources/29 = SubResource("TileSetAtlasSource_xid3e")
 sources/30 = SubResource("TileSetAtlasSource_v7umd")
 sources/31 = SubResource("TileSetAtlasSource_y0gio")
-sources/32 = SubResource("TileSetAtlasSource_qcpsd")
