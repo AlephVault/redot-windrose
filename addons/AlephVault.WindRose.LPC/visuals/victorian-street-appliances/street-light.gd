@@ -7,7 +7,13 @@ const STATE_ON := AlephVault__WindRose.Maps.MapEntity.STATE_MOVING
 
 enum LampType {
 	LAMP_TYPE_1,
-	LAMP_TYPE_2
+	LAMP_TYPE_2,
+	LAMP_TYPE_3,
+	LAMP_TYPE_4,
+	LAMP_TYPE_5,
+	LAMP_TYPE_6,
+	LAMP_TYPE_7,
+	LAMP_TYPE_8
 }
 
 const _SPRITE_SIZE := Vector2i(32, 96)
@@ -36,22 +42,22 @@ func _init() -> void:
 
 
 func _get_texture_contexts() -> Array:
-	var style_x := 64 + 32 * int(lamp_type)
+	var style_x := 128 + 32 * int(lamp_type)
 	var off_steps := [
-		_make_step("fancy-off-post", Rect2i(64, 0, 32, 64), Vector2i(0, 32)),
-		_make_step("fancy-off-lamp-" + str(lamp_type), Rect2i(style_x, 64, 32, 32), Vector2i.ZERO),
+		_make_step("off-post", Rect2i(128, 0, 32, 64), Vector2i(0, 32)),
+		_make_step("off-lamp-" + str(lamp_type), Rect2i(style_x, 64, 32, 32), Vector2i.ZERO),
 	]
 	var on_steps := []
 	for index in _ON_FRAME_COUNT:
 		var frame_y := _SPRITE_SIZE.y * index
 		var flame_frame: int = _ON_FRAME_SEQUENCE[index]
 		on_steps.push_back(_make_step(
-			"fancy-on-post-" + str(index),
-			Rect2i(64, 0, 32, 64),
+			"on-post-" + str(index),
+			Rect2i(128, 0, 32, 64),
 			Vector2i(0, frame_y + 32)
 		))
 		on_steps.push_back(_make_step(
-			"fancy-on-light-" + str(lamp_type) + "-" + str(index) + "-" + str(flame_frame),
+			"on-light-" + str(lamp_type) + "-" + str(index) + "-" + str(flame_frame),
 			Rect2i(style_x, 96 + 32 * flame_frame, 32, 32),
 			Vector2i(0, frame_y)
 		))

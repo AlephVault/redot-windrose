@@ -100,6 +100,14 @@ func _build_items() -> void:
 		],
 		"has_fps": true,
 	})
+	_add_item("StreetLight", _VictorianStreetAppliances.StreetLight, {
+		"primary": _enum_property("lamp_type", _VictorianStreetAppliances.StreetLight.LampType.size()),
+		"states": [
+			_VictorianStreetAppliances.StreetLight.STATE_OFF,
+			_VictorianStreetAppliances.StreetLight.STATE_ON,
+		],
+		"has_fps": true,
+	})
 	_add_item("StreetClock", _VictorianStreetAppliances.StreetClock, {
 		"primary": _enum_property("clock_type", _VictorianStreetAppliances.StreetClock.StreetClockType.size()),
 	})

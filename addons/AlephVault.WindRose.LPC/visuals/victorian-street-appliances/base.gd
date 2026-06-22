@@ -178,7 +178,7 @@ func _release_textures() -> void:
 
 
 func _setup_sprite() -> void:
-	var next_contexts = _get_texture_contexts()
+	var next_contexts =	 _get_texture_contexts()
 	var next_texture: Texture2D = _SOURCE_TEXTURE
 
 	if not next_contexts.is_empty():
