@@ -2,13 +2,13 @@ extends Node2D
 
 
 const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
-const _MapEntity = AlephVault__WindRose.Maps.MapEntity
+const _SimpleMapEntity = preload("res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd")
 const _WoodenFurniture = AlephVault__WindRose__LPC.Visuals.WoodenFurniture
 
-const _CELL_SIZE := Vector2(32, 32)
-const _ITEM_SPACING := Vector2(128, 132)
-const _GRID_ORIGIN := Vector2(48, 140)
-const _GRID_COLUMNS := 6
+const _MAP_SIZE := Vector2i(78, 64)
+const _ENTITY_SIZE := Vector2i(6, 6)
+const _ENTITY_STRIDE := Vector2i(9, 9)
+const _GRID_COLUMNS := 8
 const _CAMERA_MOVE_SPEED := 320.0
 const _MIN_ZOOM := 0.5
 const _MAX_ZOOM := 4.0
@@ -18,13 +18,21 @@ const _ZOOM_STEP := 0.25
 var _items := []
 var _selected_index := 0
 var _pressed := {}
+var _map: AlephVault__WindRose.Maps.Map
+var _entities_layer: AlephVault__WindRose.Contrib.Simple.EntitiesLayer
+var _occupancy_layer: TileMapLayer
+var _camera: Camera2D
+var _ui_layer: CanvasLayer
 var _help_label: Label
 var _status_label: Label
-var _camera: Camera2D
 
 
 func _ready() -> void:
+	_map = $Map
+	_entities_layer = $Map/EntitiesLayer
+	_occupancy_layer = $Map/FloorLayer/Occupancy
 	_camera = $Camera2D
+	_fill_floor()
 	_build_ui()
 	_build_items()
 	_update_selection()
@@ -32,9 +40,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	for item in _items:
-		item.visual.update(delta)
-
 	_update_camera(delta)
 
 	if _just_pressed(KEY_TAB):
@@ -64,98 +69,108 @@ func _process(delta: float) -> void:
 	_remember_key(KEY_F)
 
 
+func _fill_floor() -> void:
+	var floor: TileMapLayer = $Map/FloorLayer/Floor
+	for x in _MAP_SIZE.x:
+		for y in _MAP_SIZE.y:
+			floor.set_cell(Vector2i(x, y), 0, Vector2i.ZERO)
+
+
 func _build_ui() -> void:
+	_ui_layer = CanvasLayer.new()
+	add_child(_ui_layer)
+
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
 	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: primary  W: secondary  E: tone  R: orientation  F: clock FPS"
-	add_child(_help_label)
+	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
 	_status_label.position = Vector2(20, 40)
-	add_child(_status_label)
+	_ui_layer.add_child(_status_label)
 
 
 func _build_items() -> void:
-	_add_item("KitchenWideDesk", _WoodenFurniture.KitchenWideDesk, Vector2i(2, 2))
-	_add_item("KitchenDesk", _WoodenFurniture.KitchenDesk, Vector2i(1, 2))
-	_add_item("KitchenSink", _WoodenFurniture.KitchenSink, Vector2i(1, 2))
-	_add_item("KitchenStove", _WoodenFurniture.KitchenStove, Vector2i(1, 2))
-	_add_item("KitchenShelvedDesk", _WoodenFurniture.KitchenShelvedDesk, Vector2i(1, 2))
-	_add_item("KitchenSidedWideDesk", _WoodenFurniture.KitchenSidedWideDesk, Vector2i(1, 3), {
+	_add_item("KitchenWideDesk", _WoodenFurniture.KitchenWideDesk)
+	_add_item("KitchenDesk", _WoodenFurniture.KitchenDesk)
+	_add_item("KitchenSink", _WoodenFurniture.KitchenSink)
+	_add_item("KitchenStove", _WoodenFurniture.KitchenStove)
+	_add_item("KitchenShelvedDesk", _WoodenFurniture.KitchenShelvedDesk)
+	_add_item("KitchenSidedWideDesk", _WoodenFurniture.KitchenSidedWideDesk, {
 		"orientations": [_Direction.LEFT, _Direction.RIGHT],
 	})
-	_add_item("BigDesk", _WoodenFurniture.BigDesk, Vector2i(2, 2), {
+	_add_item("BigDesk", _WoodenFurniture.BigDesk, {
 		"primary": _enum_property("desk_type", _WoodenFurniture.BigDesk.BigDeskType.size()),
 	})
-	_add_item("SidedBigDesk", _WoodenFurniture.SidedBigDesk, Vector2i(1, 3), {
+	_add_item("SidedBigDesk", _WoodenFurniture.SidedBigDesk, {
 		"orientations": [_Direction.RIGHT, _Direction.LEFT],
 	})
-	_add_item("Clock", _WoodenFurniture.Clock, Vector2i(1, 3), {"has_fps": true})
-	_add_item("Fireplace", _WoodenFurniture.Fireplace, Vector2i(3, 3), {
+	_add_item("Clock", _WoodenFurniture.Clock, {"has_fps": true})
+	_add_item("Fireplace", _WoodenFurniture.Fireplace, {
 		"primary": _enum_property("fireplace_type", _WoodenFurniture.Fireplace.FireplaceType.size()),
 	})
-	_add_item("ChurchSeat", _WoodenFurniture.ChurchSeat, Vector2i(3, 1), {
+	_add_item("ChurchSeat", _WoodenFurniture.ChurchSeat, {
 		"orientations": [_Direction.DOWN, _Direction.UP],
 	})
-	_add_item("GrandPiano", _WoodenFurniture.GrandPiano, Vector2i(2, 3))
-	_add_item("UprightPiano", _WoodenFurniture.UprightPiano, Vector2i(2, 3))
-	_add_item("OrganPiano", _WoodenFurniture.OrganPiano, Vector2i(3, 3))
-	_add_item("HorizontalPlankTable", _WoodenFurniture.HorizontalPlankTable, Vector2i(3, 2), {
+	_add_item("GrandPiano", _WoodenFurniture.GrandPiano)
+	_add_item("UprightPiano", _WoodenFurniture.UprightPiano)
+	_add_item("OrganPiano", _WoodenFurniture.OrganPiano)
+	_add_item("HorizontalPlankTable", _WoodenFurniture.HorizontalPlankTable, {
 		"orientations": [_Direction.DOWN, _Direction.UP],
 	})
-	_add_item("VerticalPlankTable", _WoodenFurniture.VerticalPlankTable, Vector2i(1, 3), {
+	_add_item("VerticalPlankTable", _WoodenFurniture.VerticalPlankTable, {
 		"orientations": [_Direction.RIGHT, _Direction.LEFT],
 	})
-	_add_item("HorizontalPlankBank", _WoodenFurniture.HorizontalPlankBank, Vector2i(2, 1), {
+	_add_item("HorizontalPlankBank", _WoodenFurniture.HorizontalPlankBank, {
 		"orientations": [_Direction.DOWN, _Direction.UP],
 	})
-	_add_item("VerticalPlankBank", _WoodenFurniture.VerticalPlankBank, Vector2i(1, 3), {
+	_add_item("VerticalPlankBank", _WoodenFurniture.VerticalPlankBank, {
 		"orientations": [_Direction.RIGHT, _Direction.LEFT],
 	})
-	_add_item("BigPlankTable", _WoodenFurniture.BigPlankTable, Vector2i(3, 3))
-	_add_item("VerticalFurniture", _WoodenFurniture.VerticalFurniture, Vector2i(1, 3), {
+	_add_item("BigPlankTable", _WoodenFurniture.BigPlankTable)
+	_add_item("VerticalFurniture", _WoodenFurniture.VerticalFurniture, {
 		"primary": _enum_property("furniture_type", _WoodenFurniture.VerticalFurniture.VerticalFurnitureType.size()),
 		"secondary": _enum_property("furniture_legs_type", _WoodenFurniture.VerticalFurniture.VerticalFurnitureLegsType.size()),
 	})
-	_add_item("RoundTable", _WoodenFurniture.RoundTable, Vector2i(2, 2))
-	_add_item("Stool1", _WoodenFurniture.Stool1, Vector2i(1, 1), {"primary": _bool_property("worn")})
-	_add_item("Stool2", _WoodenFurniture.Stool2, Vector2i(1, 1), {"primary": _bool_property("worn")})
-	_add_item("TwinBed", _WoodenFurniture.TwinBed, Vector2i(1, 2), {
+	_add_item("RoundTable", _WoodenFurniture.RoundTable)
+	_add_item("Stool1", _WoodenFurniture.Stool1, {"primary": _bool_property("worn")})
+	_add_item("Stool2", _WoodenFurniture.Stool2, {"primary": _bool_property("worn")})
+	_add_item("TwinBed", _WoodenFurniture.TwinBed, {
 		"primary": _enum_property("bed_type", _WoodenFurniture.TwinBed.BedType.size()),
 	})
-	_add_item("Chair", _WoodenFurniture.Chair, Vector2i(1, 1), {
+	_add_item("Chair", _WoodenFurniture.Chair, {
 		"primary": _enum_property("chair_type", _WoodenFurniture.Chair.ChairType.size()),
 		"secondary": _bool_property("worn"),
 		"orientations": [_Direction.DOWN, _Direction.UP, _Direction.LEFT, _Direction.RIGHT],
 	})
-	_add_item("WideShelving", _WoodenFurniture.WideShelving, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("WideGondola", _WoodenFurniture.WideGondola, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("WideMidDrawers", _WoodenFurniture.WideMidDrawers, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("WideSmallShelving", _WoodenFurniture.WideSmallShelving, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("WideSmallDesk", _WoodenFurniture.WideSmallDesk, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("WideWardrobe", _WoodenFurniture.WideWardrobe, Vector2i(2, 2), {"primary": _bool_property("worn")})
-	_add_item("SmallShelving", _WoodenFurniture.SmallShelving, Vector2i(1, 2), {"primary": _bool_property("worn")})
-	_add_item("SmallWardrobe", _WoodenFurniture.SmallWardrobe, Vector2i(1, 2), {"primary": _bool_property("worn")})
-	_add_item("SmallDrawer", _WoodenFurniture.SmallDrawer, Vector2i(1, 1), {"primary": _bool_property("worn")})
-	_add_item("NightStand", _WoodenFurniture.NightStand, Vector2i(1, 1), {"primary": _bool_property("worn")})
-	_add_item("WideSmallDrawer", _WoodenFurniture.WideSmallDrawer, Vector2i(2, 1), {"primary": _bool_property("worn")})
-	_add_item("Shelving", _WoodenFurniture.Shelving, Vector2i(1, 2))
-	_add_item("Drawers", _WoodenFurniture.Drawers, Vector2i(1, 2))
-	_add_item("MidDrawers", _WoodenFurniture.MidDrawers, Vector2i(1, 2))
-	_add_item("ChessTable", _WoodenFurniture.ChessTable, Vector2i(1, 1))
-	_add_item("BigWardrobe", _WoodenFurniture.BigWardrobe, Vector2i(2, 3))
-	_add_item("BigTable", _WoodenFurniture.BigTable, Vector2i(3, 3))
-	_add_item("VerticalMidBank", _WoodenFurniture.VerticalMidBank, Vector2i(1, 2))
-	_add_item("HorizontalMidBank", _WoodenFurniture.HorizontalMidBank, Vector2i(2, 1))
-	_add_item("Column", _WoodenFurniture.Column, Vector2i(1, 3))
-	_add_item("TinyDrawer", _WoodenFurniture.TinyDrawer, Vector2i(1, 1), {
+	_add_item("WideShelving", _WoodenFurniture.WideShelving, {"primary": _bool_property("worn")})
+	_add_item("WideGondola", _WoodenFurniture.WideGondola, {"primary": _bool_property("worn")})
+	_add_item("WideMidDrawers", _WoodenFurniture.WideMidDrawers, {"primary": _bool_property("worn")})
+	_add_item("WideSmallShelving", _WoodenFurniture.WideSmallShelving, {"primary": _bool_property("worn")})
+	_add_item("WideSmallDesk", _WoodenFurniture.WideSmallDesk, {"primary": _bool_property("worn")})
+	_add_item("WideWardrobe", _WoodenFurniture.WideWardrobe, {"primary": _bool_property("worn")})
+	_add_item("SmallShelving", _WoodenFurniture.SmallShelving, {"primary": _bool_property("worn")})
+	_add_item("SmallWardrobe", _WoodenFurniture.SmallWardrobe, {"primary": _bool_property("worn")})
+	_add_item("SmallDrawer", _WoodenFurniture.SmallDrawer, {"primary": _bool_property("worn")})
+	_add_item("NightStand", _WoodenFurniture.NightStand, {"primary": _bool_property("worn")})
+	_add_item("WideSmallDrawer", _WoodenFurniture.WideSmallDrawer, {"primary": _bool_property("worn")})
+	_add_item("Shelving", _WoodenFurniture.Shelving)
+	_add_item("Drawers", _WoodenFurniture.Drawers)
+	_add_item("MidDrawers", _WoodenFurniture.MidDrawers)
+	_add_item("ChessTable", _WoodenFurniture.ChessTable)
+	_add_item("BigWardrobe", _WoodenFurniture.BigWardrobe)
+	_add_item("BigTable", _WoodenFurniture.BigTable)
+	_add_item("VerticalMidBank", _WoodenFurniture.VerticalMidBank)
+	_add_item("HorizontalMidBank", _WoodenFurniture.HorizontalMidBank)
+	_add_item("Column", _WoodenFurniture.Column)
+	_add_item("TinyDrawer", _WoodenFurniture.TinyDrawer, {
 		"primary": _enum_property("drawer_type", _WoodenFurniture.TinyDrawer.TinyDrawerType.size()),
 	})
-	_add_item("DoubleTinyDrawer", _WoodenFurniture.DoubleTinyDrawer, Vector2i(1, 1), {
+	_add_item("DoubleTinyDrawer", _WoodenFurniture.DoubleTinyDrawer, {
 		"primary": _enum_property("drawer_type", _WoodenFurniture.DoubleTinyDrawer.TinyDrawerType.size()),
 	})
-	_add_item("VerticalDoubleBunkBed", _WoodenFurniture.VerticalDoubleBunkBed, Vector2i(2, 3))
-	_add_item("HorizontalBunkBed", _WoodenFurniture.HorizontalBunkBed, Vector2i(3, 3))
+	_add_item("VerticalDoubleBunkBed", _WoodenFurniture.VerticalDoubleBunkBed)
+	_add_item("HorizontalBunkBed", _WoodenFurniture.HorizontalBunkBed)
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
@@ -166,31 +181,29 @@ func _bool_property(name: String) -> Dictionary:
 	return {"name": name, "kind": "bool"}
 
 
-func _add_item(name: String, visual_script, size: Vector2i, options := {}) -> void:
+func _add_item(name: String, visual_script, options := {}) -> void:
 	var index := _items.size()
-	var container := Node2D.new()
-	container.name = name
-	container.position = _GRID_ORIGIN + Vector2(index % _GRID_COLUMNS, index / _GRID_COLUMNS) * _ITEM_SPACING
-	add_child(container)
+	var cell := Vector2i(index % _GRID_COLUMNS, index / _GRID_COLUMNS) * _ENTITY_STRIDE + Vector2i.ONE
+	_paint_entity_footprint(cell, _ENTITY_SIZE)
 
-	var base := _make_floor(size)
-	base.position = Vector2.ZERO
-	container.add_child(base)
+	var entity = _SimpleMapEntity.new()
+	entity.name = name
+	entity._size = _ENTITY_SIZE
+	entity._initial_position = cell
+	_entities_layer.add_child(entity)
+	entity.initialize()
 
-	var entity := _MapEntity.new()
 	var visual = visual_script.new()
-	container.add_child(visual)
-	visual.setup(entity)
-	visual.visible = true
+	entity.add_visual(visual)
 
 	var label := Label.new()
-	label.position = Vector2(0, 34)
+	label.name = "Label"
+	label.position = Vector2(0, 20)
 	label.text = name
-	container.add_child(label)
+	entity.add_child(label)
 
 	var item := {
 		"name": name,
-		"container": container,
 		"entity": entity,
 		"visual": visual,
 		"label": label,
@@ -203,16 +216,10 @@ func _add_item(name: String, visual_script, size: Vector2i, options := {}) -> vo
 	_apply_orientation(item)
 
 
-func _make_floor(size: Vector2i) -> Node2D:
-	var floor := Node2D.new()
+func _paint_entity_footprint(cell: Vector2i, size: Vector2i) -> void:
 	for x in size.x:
 		for y in size.y:
-			var rect := ColorRect.new()
-			rect.position = Vector2(x, y) * _CELL_SIZE
-			rect.size = _CELL_SIZE
-			rect.color = Color(0.18, 0.17, 0.15, 1.0)
-			floor.add_child(rect)
-	return floor
+			_occupancy_layer.set_cell(cell + Vector2i(x, y), 2, Vector2i.ZERO)
 
 
 func _select(index: int) -> void:
@@ -223,13 +230,18 @@ func _select(index: int) -> void:
 func _update_selection() -> void:
 	for index in _items.size():
 		var item = _items[index]
-		item.container.modulate = Color(1.25, 1.25, 1.25) if index == _selected_index else Color(0.72, 0.72, 0.72)
+		item.visual.modulate = Color(1.35, 1.35, 1.35) if index == _selected_index else Color(0.72, 0.72, 0.72)
 		item.label.text = ("> " if index == _selected_index else "") + item.name
 	_status_label.text = _describe_item(_items[_selected_index])
 
 
 func _describe_item(item: Dictionary) -> String:
-	var parts := [item.name, "tone=" + str(item.visual.tone)]
+	var parts := [
+		item.name,
+		"cell=" + str(item.entity.cell),
+		"size=" + str(item.entity.size),
+		"tone=" + str(item.visual.tone),
+	]
 	if item.has("primary"):
 		parts.push_back(_property_text(item, item["primary"]))
 	if item.has("secondary"):

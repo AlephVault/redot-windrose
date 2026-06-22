@@ -12,7 +12,7 @@ The composed texture cache key is `AlephVault.WindRose.LPC:wooden-furniture`.
 Sample
 ------
 
-Open `res://addons/AlephVault.WindRose.LPC/samples/wooden-furniture/sample-aleph-vault-windrose-lpc-wooden-furniture-usage.tscn` to see every wooden furniture visual in this module.
+Open `res://addons/AlephVault.WindRose.LPC/samples/wooden-furniture/sample-aleph-vault-windrose-lpc-wooden-furniture-usage.tscn` to see every wooden furniture visual in this module. The sample builds a WindRose map using the simple squared map/entity stack, then creates one 6x6-tile map entity per furniture visual at sparse, non-overlapping positions. Each furniture visual is attached to its own entity through the normal map visual lifecycle.
 
 Controls:
 
@@ -54,7 +54,7 @@ Inventory
 | `RoundTable` | Down only | `(244, 244, 64, 64)` | Base default | None |
 | `Stool1` | Down only | Normal `(448, 256, 32, 32)`, worn `(448, 224, 32, 32)` | Base default | `worn` |
 | `Stool2` | Down only | Normal `(480, 256, 32, 32)`, worn `(480, 224, 32, 32)` | Base default | `worn` |
-| `TwinBed` | Down only | Type 1 `(416, 416, 32, 64)`, type 2 `(448, 418, 32, 64)`, type 3 `(480, 416, 32, 64)` | `Vector2.ZERO` | `bed_type` |
+| `TwinBed` | Down only | Type 1 `(416, 416, 32, 64)`, type 2 `(448, 418, 32, 64)`, type 3 `(480, 416, 32, 64)` | `Vector2(0, -64)` | `bed_type` |
 | `Chair` | Up/down/left/right | 32x32 directional group selected by `chair_type` and `worn` | Base default | `chair_type`, `worn` |
 | `WideShelving` | Down only | Normal `(256, 352, 64, 64)`, worn `(256, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
 | `WideGondola` | Down only | Normal `(320, 352, 64, 64)`, worn `(320, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
