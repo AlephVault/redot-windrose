@@ -217,6 +217,8 @@ func _setup_sprite() -> void:
 		return
 
 	texture = next_texture
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_DISABLED
 	region_enabled = true
 	region_filter_clip_enabled = true
 	region_rect = _get_region_rect()

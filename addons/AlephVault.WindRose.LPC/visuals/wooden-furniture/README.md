@@ -9,6 +9,8 @@ All concrete visuals inherit `AlephVault__WindRose__LPC.Visuals.WoodenFurniture.
 
 The composed texture cache key is `AlephVault.WindRose.LPC:wooden-furniture`.
 
+The base visual forces nearest texture filtering, disabled texture repeat, and clipped sprite regions. This keeps atlas-backed furniture from sampling neighbouring sprites when the camera zoom changes.
+
 Sample
 ------
 
@@ -73,9 +75,9 @@ Inventory
 | `ChessTable` | Down only | `(64, 408, 32, 32)` | Base default | None |
 | `BigWardrobe` | Down only | `(0, 608, 64, 96)` | `Vector2(0, -80)` | None |
 | `BigTable` | Down only | `(128, 160, 96, 96)` | `Vector2(0, -16)` | None |
-| `VerticalMidBank` | Down only | `(96, 224, 32, 64)` | Base default | None |
-| `HorizontalMidBank` | Down only | `(128, 256, 64, 32)` | Base default | None |
-| `Column` | Down only | `(480, 736, 32, 96)` | Base default | None |
+| `VerticalMidBank` | Down only | `(96, 224, 32, 64)` | `Vector2.ZERO` | None |
+| `HorizontalMidBank` | Down only | `(128, 256, 64, 32)` | `Vector2.ZERO` | None |
+| `Column` | Down only | `(480, 736, 32, 80)` | `Vector2(0, -48)` | None |
 | `TinyDrawer` | Down only | Type 1 `(192, 768, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
 | `DoubleTinyDrawer` | Down only | Type 1 `(192, 736, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
 | `VerticalDoubleBunkBed` | Down only | `(192, 608, 64, 96)` | `Vector2(0, -32)` | None |
