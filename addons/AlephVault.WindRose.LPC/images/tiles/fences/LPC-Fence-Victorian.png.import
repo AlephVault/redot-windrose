@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n31sea8ly63c"
-path="res://.godot/imported/LPC-Artifact-Fence1.png-7d2d677685112552b483e1a25b7260b0.ctex"
+uid="uid://ipv83qj05ilh"
+path="res://.godot/imported/LPC-Fence-Victorian.png-eef96d127c0f0d82b2827c85f10aa158.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AlephVault.WindRose.LPC/images/tiles/fences/LPC-Artifact-Fence1.png"
-dest_files=["res://.godot/imported/LPC-Artifact-Fence1.png-7d2d677685112552b483e1a25b7260b0.ctex"]
+source_file="res://addons/AlephVault.WindRose.LPC/images/tiles/fences/LPC-Fence-Victorian.png"
+dest_files=["res://.godot/imported/LPC-Fence-Victorian.png-eef96d127c0f0d82b2827c85f10aa158.ctex"]
 
 [params]
 

@@ -26,7 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://x6lhjqnni2dd" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Alt-Soils.png" id="24_uvq75"]
 [ext_resource type="Texture2D" uid="uid://bbdlhjdbii2nd" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Spots-02.png" id="25_347e5"]
 [ext_resource type="Texture2D" uid="uid://bahdsy6g2fm6" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Spots-03.png" id="26_wjlf3"]
-[ext_resource type="Texture2D" uid="uid://n31sea8ly63c" path="res://addons/AlephVault.WindRose.LPC/images/tiles/fences/LPC-Artifact-Fence1.png" id="27_v8df3"]
+[ext_resource type="Texture2D" uid="uid://n31sea8ly63c" path="res://addons/AlephVault.WindRose.LPC/images/tiles/fences/LPC-Fence-Rural.png" id="27_v8df3"]
 [ext_resource type="Texture2D" uid="uid://ciokrsv0i3tkp" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Beach.png" id="27_xsamk"]
 [ext_resource type="Texture2D" uid="uid://fodqfn2qprug" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Crop-Green.png" id="28_l6drk"]
 [ext_resource type="Texture2D" uid="uid://cpgpbqsicme2p" path="res://addons/AlephVault.WindRose.LPC/images/tiles/biomes/LPC-Biome-Crop-Small.png" id="29_xv4yh"]
