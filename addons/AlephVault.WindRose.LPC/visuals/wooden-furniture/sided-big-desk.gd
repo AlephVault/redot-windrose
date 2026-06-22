@@ -1,5 +1,5 @@
 @tool
-extends "./base.gd"
+extends AlephVault__WindRose__LPC.Visuals.WoodenFurniture.Base
 
 
 const _RIGHT_REGION_RECT := Rect2i(0, 704, 32, 96)

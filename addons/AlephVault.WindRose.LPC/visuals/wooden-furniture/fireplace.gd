@@ -1,5 +1,5 @@
 @tool
-extends "./base.gd"
+extends AlephVault__WindRose__LPC.Visuals.WoodenFurniture.Base
 
 
 enum FireplaceType {
