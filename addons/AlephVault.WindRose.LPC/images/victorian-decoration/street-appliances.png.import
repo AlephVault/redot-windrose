@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbdqqiec6bper"
-path="res://.godot/imported/victorian-streets.png-288705cd61ba9264fa55983b588ce6a6.ctex"
+uid="uid://bwgrhrbd0mftb"
+path="res://.godot/imported/street-appliances.png-a0a1dd50c022990fc263123af28c0612.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AlephVault.WindRose.LPC/images/victorian-decoration/victorian-streets.png"
-dest_files=["res://.godot/imported/victorian-streets.png-288705cd61ba9264fa55983b588ce6a6.ctex"]
+source_file="res://addons/AlephVault.WindRose.LPC/images/victorian-decoration/street-appliances.png"
+dest_files=["res://.godot/imported/street-appliances.png-a0a1dd50c022990fc263123af28c0612.ctex"]
 
 [params]
 
