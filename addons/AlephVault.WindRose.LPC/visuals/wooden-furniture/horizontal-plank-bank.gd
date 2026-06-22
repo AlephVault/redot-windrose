@@ -3,7 +3,7 @@ extends "./base.gd"
 
 
 const _REGION_RECT := Rect2i(256, 896, 64, 32)
-const _OFFSET := Vector2(0, -32)
+const _OFFSET := Vector2.ZERO
 
 
 func _get_region_rect() -> Rect2i:

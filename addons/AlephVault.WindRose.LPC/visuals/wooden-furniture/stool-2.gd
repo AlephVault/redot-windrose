@@ -4,6 +4,7 @@ extends "./base.gd"
 
 const _WORN_REGION_RECT := Rect2i(480, 224, 32, 32)
 const _REGION_RECT := Rect2i(480, 256, 32, 32)
+const _OFFSET := Vector2.ZERO
 
 
 ## Whether this stool uses the worn visual variant.
@@ -17,3 +18,7 @@ const _REGION_RECT := Rect2i(480, 256, 32, 32)
 
 func _get_region_rect() -> Rect2i:
 	return _WORN_REGION_RECT if worn else _REGION_RECT
+
+
+func _get_offset() -> Vector2:
+	return _OFFSET

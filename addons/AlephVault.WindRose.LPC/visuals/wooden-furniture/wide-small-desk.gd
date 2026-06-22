@@ -3,7 +3,7 @@ extends "./base.gd"
 
 
 const _WORN_REGION_RECT := Rect2i(128, 304, 64, 48)
-const _REGION_RECT := Rect2i(128, 304, 64, 48)
+const _REGION_RECT := Rect2i(128, 368, 64, 48)
 const _OFFSET := Vector2(0, -32)
 
 
