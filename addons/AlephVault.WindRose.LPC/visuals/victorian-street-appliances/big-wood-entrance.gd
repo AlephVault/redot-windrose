@@ -2,8 +2,8 @@
 extends AlephVault__WindRose__LPC.Visuals.VictorianStreetAppliances.Base
 
 
-const _REGION_RECT := Rect2i(0, 192, 96, 96)
-const _OFFSET := Vector2(0, -64)
+const _REGION_RECT := Rect2i(96, 192, 96, 128)
+const _OFFSET := Vector2(0, -96)
 
 
 func _get_region_rect() -> Rect2i:

@@ -5,7 +5,7 @@ const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 const _SimpleMapEntity = preload("res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd")
 const _VictorianStreetAppliances = AlephVault__WindRose__LPC.Visuals.VictorianStreetAppliances
 
-const _MAP_SIZE := Vector2i(32, 24)
+const _MAP_SIZE := Vector2i(32, 36)
 const _ENTITY_SIZE := Vector2i(6, 6)
 const _ENTITY_STRIDE := Vector2i(9, 9)
 const _GRID_COLUMNS := 3
@@ -115,6 +115,10 @@ func _build_items() -> void:
 		"primary": _enum_property("banner_color", _VictorianStreetAppliances.BannerPost.BannerColor.size()),
 	})
 	_add_item("WhiteFenceEntrance", _VictorianStreetAppliances.WhiteFenceEntrance)
+	_add_item("BigWoodEntrance", _VictorianStreetAppliances.BigWoodEntrance)
+	_add_item("WoodEntrance", _VictorianStreetAppliances.WoodEntrance)
+	_add_item("GrassEntrance", _VictorianStreetAppliances.GrassEntrance)
+	_add_item("GrassRing", _VictorianStreetAppliances.GrassRing)
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
