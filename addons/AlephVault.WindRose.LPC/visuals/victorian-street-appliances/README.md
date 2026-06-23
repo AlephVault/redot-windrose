@@ -42,6 +42,8 @@ Inventory
 | `FancyStreetLight` | Down only | `32x96` | `Vector2(0, -64)` | OFF static, ON 4-frame animation at default `fps = 4` | `lamp_type` with 2 variants |
 | `StreetLight` | Down only | `32x96` | `Vector2(0, -64)` | OFF static, ON 4-frame animation at default `fps = 4` | `lamp_type` with 8 variants |
 | `StreetClock` | Down only | `32x96` | `Vector2(0, -64)` | Static | `clock_type` with 2 variants |
+| `BannerPost` | Down only | `64x128` | `Vector2(-16, -96)` | Static | `banner_color` with `NONE`, `WHITE`, `YELLOW`, `BLUE`, `RED`, `GREEN` |
+| `WhiteFenceEntrance` | Down only | Region `(0, 192, 96, 96)` | `Vector2(-32, -64)` | Static | None |
 
 Composition Notes
 -----------------
@@ -65,3 +67,9 @@ Composition Notes
 
 - `CLOCK_TYPE_1`: paste `(128, 0, 32, 64)` at `(0, 32)`, then `(160, 0, 32, 32)` at `(0, 0)`.
 - `CLOCK_TYPE_2`: paste `(160, 32, 32, 32)` at `(0, 64)`, then `(192, 0, 32, 64)` at `(0, 0)`.
+
+`BannerPost` builds one cached texture per `banner_color`:
+
+- Paste `(96, 32, 32, 32)` at `(16, 0)`.
+- Paste the banner rect at `(0, 32)`: `NONE` uses `(224, 0, 64, 32)`, `WHITE` uses `(288, 0, 64, 32)`, `YELLOW` uses `(224, 32, 64, 32)`, `BLUE` uses `(352, 0, 64, 32)`, `RED` uses `(352, 32, 64, 32)`, and `GREEN` uses `(288, 32, 64, 32)`.
+- Paste `(128, 0, 32, 64)` at `(16, 64)`.

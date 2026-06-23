@@ -111,6 +111,10 @@ func _build_items() -> void:
 	_add_item("StreetClock", _VictorianStreetAppliances.StreetClock, {
 		"primary": _enum_property("clock_type", _VictorianStreetAppliances.StreetClock.StreetClockType.size()),
 	})
+	_add_item("BannerPost", _VictorianStreetAppliances.BannerPost, {
+		"primary": _enum_property("banner_color", _VictorianStreetAppliances.BannerPost.BannerColor.size()),
+	})
+	_add_item("WhiteFenceEntrance", _VictorianStreetAppliances.WhiteFenceEntrance)
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
