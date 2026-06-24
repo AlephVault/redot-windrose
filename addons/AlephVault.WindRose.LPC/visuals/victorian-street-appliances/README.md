@@ -22,8 +22,8 @@ Controls:
 - `1`: zoom in.
 - `2`: zoom out.
 - `Q`: cycle the selected object's primary property when supported.
-- `W`: cycle the selected object's secondary property when supported.
 - `S`: toggle OFF/ON for streetlights.
+- `R`: cycle orientation when supported.
 - `F`: cycle FPS for animated streetlights.
 - For `BigSquareFountainPool`, `Q` toggles `include_fountain`.
 
@@ -54,7 +54,7 @@ Inventory
 | `BigSquareFountainPool` | Down only | Four composed frames from `(192, 320, 96, 96)`, `(288, 320, 96, 96)`, `(384, 320, 96, 96)`, `(288, 320, 96, 96)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `include_fountain` |
 | `StandaloneFountain` | Down only | Four composed `64x96` frames | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `fountain_type` with 2 variants |
 | `WallFountain` | Down only | Three composed frames from `(448, 128, 64, 64)`, `(448, 192, 64, 64)`, `(448, 256, 64, 64)` | `Vector2(0, -64)` | 3-frame animation at default `fps = 4` | `fps` |
-| `SmallFlowerBed` | Down only | Horizontal type 1 `(320, 480, 32, 32)`, horizontal type 2 `(320, 512, 32, 32)`, vertical type 1 `(384, 480, 32, 64)`, vertical type 2 `(352, 480, 32, 64)` | Horizontal `Vector2.ZERO`, vertical `Vector2(0, -32)` | Static | `layout`, `flower_type` |
+| `SmallFlowerBed` | Up/down horizontal, left/right vertical | Horizontal type 1 `(320, 480, 32, 32)`, horizontal type 2 `(320, 512, 32, 32)`, vertical type 1 `(384, 480, 32, 64)`, vertical type 2 `(352, 480, 32, 64)` | Horizontal `Vector2.ZERO`, vertical `Vector2(0, -32)` | Static | `flower_type` |
 
 Composition Notes
 -----------------

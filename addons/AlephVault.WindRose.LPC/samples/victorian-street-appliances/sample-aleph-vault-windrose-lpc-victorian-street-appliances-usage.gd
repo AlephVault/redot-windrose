@@ -50,10 +50,10 @@ func _process(delta: float) -> void:
 		_change_zoom(-_ZOOM_STEP)
 	if _just_pressed(KEY_Q):
 		_cycle_property("primary")
-	if _just_pressed(KEY_W):
-		_cycle_property("secondary")
 	if _just_pressed(KEY_S):
 		_cycle_state()
+	if _just_pressed(KEY_R):
+		_cycle_orientation()
 	if _just_pressed(KEY_F):
 		_cycle_fps()
 
@@ -61,8 +61,8 @@ func _process(delta: float) -> void:
 	_remember_key(KEY_1)
 	_remember_key(KEY_2)
 	_remember_key(KEY_Q)
-	_remember_key(KEY_W)
 	_remember_key(KEY_S)
+	_remember_key(KEY_R)
 	_remember_key(KEY_F)
 
 
@@ -79,7 +79,7 @@ func _build_ui() -> void:
 
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q/W: properties  S: off/on  F: FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: property  R: orientation  S: off/on  F: FPS"
 	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
@@ -134,7 +134,7 @@ func _build_items() -> void:
 	_add_item("WallFountain", _VictorianStreetAppliances.WallFountain, {"has_fps": true})
 	_add_item("SmallFlowerBed", _VictorianStreetAppliances.SmallFlowerBed, {
 		"primary": _enum_property("flower_type", _VictorianStreetAppliances.SmallFlowerBed.FlowerBedType.size()),
-		"secondary": _enum_property("layout", _VictorianStreetAppliances.SmallFlowerBed.FlowerBedLayout.size()),
+		"orientations": [_Direction.DOWN, _Direction.UP, _Direction.LEFT, _Direction.RIGHT],
 	})
 
 
@@ -173,12 +173,13 @@ func _add_item(name: String, visual_script, options := {}) -> void:
 		"visual": visual,
 		"label": label,
 		"state_index": 0,
+		"orientation_index": 0,
 	}
 	for key in options:
 		item[key] = options[key]
 
 	_items.push_back(item)
-	entity.orientation = _Direction.DOWN
+	_apply_orientation(item)
 	_apply_state(item)
 
 
@@ -212,6 +213,8 @@ func _describe_item(item: Dictionary) -> String:
 		parts.push_back(_property_text(item, item["primary"]))
 	if item.has("secondary"):
 		parts.push_back(_property_text(item, item["secondary"]))
+	if item.has("orientations"):
+		parts.push_back("orientation=" + _direction_name(item.entity.orientation))
 	if item.has("has_fps"):
 		parts.push_back("fps=" + str(item.visual.fps))
 	return " | ".join(parts)
@@ -252,11 +255,40 @@ func _cycle_fps() -> void:
 	_update_selection()
 
 
+func _cycle_orientation() -> void:
+	var item = _items[_selected_index]
+	if not item.has("orientations"):
+		return
+	item.orientation_index = (int(item.orientation_index) + 1) % item.orientations.size()
+	_apply_orientation(item)
+	_update_selection()
+
+
 func _apply_state(item: Dictionary) -> void:
 	if item.has("states"):
 		item.entity.state = item.states[item.state_index]
 	else:
 		item.entity.state = AlephVault__WindRose.Maps.MapEntity.STATE_IDLE
+
+
+func _apply_orientation(item: Dictionary) -> void:
+	if item.has("orientations"):
+		item.entity.orientation = item.orientations[item.orientation_index]
+	else:
+		item.entity.orientation = _Direction.DOWN
+
+
+func _direction_name(direction: _Direction) -> String:
+	match direction:
+		_Direction.UP:
+			return "UP"
+		_Direction.DOWN:
+			return "DOWN"
+		_Direction.LEFT:
+			return "LEFT"
+		_Direction.RIGHT:
+			return "RIGHT"
+	return "NONE"
 
 
 func _state_name(state: int) -> String:
