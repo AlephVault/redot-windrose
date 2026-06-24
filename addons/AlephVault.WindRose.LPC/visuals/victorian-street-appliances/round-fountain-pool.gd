@@ -12,7 +12,7 @@ const _FRAME_RECTS := [
 	Rect2i(128, 320, 64, 64),
 	Rect2i(64, 320, 64, 64),
 ]
-const _OFFSET := Vector2(0, -32)
+const _OFFSET := Vector2(0, 0)
 
 
 func _init() -> void:

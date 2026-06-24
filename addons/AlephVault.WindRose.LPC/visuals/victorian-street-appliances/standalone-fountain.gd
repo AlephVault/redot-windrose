@@ -23,7 +23,7 @@ const _TOP_FRAME_RECTS := [
 	Rect2i(400, 416, 64, 64),
 	Rect2i(304, 416, 64, 64),
 ]
-const _OFFSET := Vector2(0, -64)
+const _OFFSET := Vector2(0, -32)
 
 
 ## The standalone fountain visual variant.

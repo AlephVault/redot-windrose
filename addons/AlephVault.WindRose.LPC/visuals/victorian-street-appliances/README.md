@@ -55,6 +55,7 @@ Inventory
 | `StandaloneFountain` | Down only | Four composed `64x96` frames | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `fountain_type` with 2 variants |
 | `WallFountain` | Down only | Three composed frames from `(448, 128, 64, 64)`, `(448, 192, 64, 64)`, `(448, 256, 64, 64)` | `Vector2(0, -64)` | 3-frame animation at default `fps = 4` | `fps` |
 | `SmallFlowerBed` | Up/down horizontal, left/right vertical | Horizontal type 1 `(320, 480, 32, 32)`, horizontal type 2 `(320, 512, 32, 32)`, vertical type 1 `(384, 480, 32, 64)`, vertical type 2 `(352, 480, 32, 64)` | Horizontal `Vector2.ZERO`, vertical `Vector2(0, -32)` | Static | `flower_type` |
+| `SmallWoodenPlantPot` | Down only | None `(288, 480, 32, 32)`, dirt `(288, 512, 32, 32)`, pine `(192, 480, 32, 64)`, bush `(224, 480, 32, 64)`, tree `(256, 480, 32, 64)` | None/dirt `Vector2.ZERO`, pine/bush/tree `Vector2(0, -32)` | Static | `content` with `CONTENT_NONE`, `CONTENT_DIRT`, `CONTENT_PINE`, `CONTENT_BUSH`, `CONTENT_TREE` |
 
 Composition Notes
 -----------------
