@@ -5,7 +5,7 @@ const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 const _SimpleMapEntity = preload("res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd")
 const _VictorianStreetAppliances = AlephVault__WindRose__LPC.Visuals.VictorianStreetAppliances
 
-const _MAP_SIZE := Vector2i(32, 36)
+const _MAP_SIZE := Vector2i(32, 48)
 const _ENTITY_SIZE := Vector2i(6, 6)
 const _ENTITY_STRIDE := Vector2i(9, 9)
 const _GRID_COLUMNS := 3
@@ -122,6 +122,10 @@ func _build_items() -> void:
 	_add_item("RoundFountainPool", _VictorianStreetAppliances.RoundFountainPool, {"has_fps": true})
 	_add_item("BigSquareFountainPool", _VictorianStreetAppliances.BigSquareFountainPool, {
 		"primary": _bool_property("include_fountain"),
+		"has_fps": true,
+	})
+	_add_item("StandaloneFountain", _VictorianStreetAppliances.StandaloneFountain, {
+		"primary": _enum_property("fountain_type", _VictorianStreetAppliances.StandaloneFountain.FountainType.size()),
 		"has_fps": true,
 	})
 

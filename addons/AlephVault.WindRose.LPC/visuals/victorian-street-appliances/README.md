@@ -51,6 +51,7 @@ Inventory
 | `GrassRing` | Down only | Region `(352, 256, 64, 64)` | `Vector2(0, -32)` | Static | None |
 | `RoundFountainPool` | Down only | Four composed frames from `(0, 320, 64, 64)`, `(64, 320, 64, 64)`, `(128, 320, 64, 64)`, `(64, 320, 64, 64)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps` |
 | `BigSquareFountainPool` | Down only | Four composed frames from `(192, 320, 96, 96)`, `(288, 320, 96, 96)`, `(384, 320, 96, 96)`, `(288, 320, 96, 96)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `include_fountain` |
+| `StandaloneFountain` | Down only | Four composed `64x96` frames | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `fountain_type` with 2 variants |
 
 Composition Notes
 -----------------
@@ -82,3 +83,5 @@ Composition Notes
 - Paste `(128, 0, 32, 64)` at `(16, 64)`.
 
 `BigSquareFountainPool` builds four cached animation frames. When `include_fountain` is `false`, each frame pastes its 96x96 source rect directly. When `include_fountain` is `true`, each frame also pastes `(X, Y + 69, 96, 64)` over the frame at `(0, 0)`.
+
+`StandaloneFountain` builds four cached animation frames. For `FOUNTAIN_TYPE_1`, it pastes bottom rects from y `400`; for `FOUNTAIN_TYPE_2`, it uses y `464`. Bottom frame rects are `(0, Y, 64, 48)`, `(64, Y, 64, 48)`, `(128, Y, 64, 48)`, `(64, Y, 64, 48)` at `(0, 48)`. It then overlays top rects `(208, 416, 64, 64)`, `(304, 416, 64, 64)`, `(400, 416, 64, 64)`, `(304, 416, 64, 64)` at `(0, 0)`.
