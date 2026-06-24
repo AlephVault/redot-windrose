@@ -12,7 +12,7 @@ const _FRAME_RECTS := [
 	Rect2i(384, 320, 96, 96),
 	Rect2i(288, 320, 96, 96),
 ]
-const _OFFSET := Vector2(0, -32)
+const _OFFSET := Vector2(0, -64)
 
 
 ## Whether the fountain overlay details should be composed on top of each frame.

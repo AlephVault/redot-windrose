@@ -50,6 +50,8 @@ func _process(delta: float) -> void:
 		_change_zoom(-_ZOOM_STEP)
 	if _just_pressed(KEY_Q):
 		_cycle_property("primary")
+	if _just_pressed(KEY_W):
+		_cycle_property("secondary")
 	if _just_pressed(KEY_S):
 		_cycle_state()
 	if _just_pressed(KEY_F):
@@ -59,6 +61,7 @@ func _process(delta: float) -> void:
 	_remember_key(KEY_1)
 	_remember_key(KEY_2)
 	_remember_key(KEY_Q)
+	_remember_key(KEY_W)
 	_remember_key(KEY_S)
 	_remember_key(KEY_F)
 
@@ -76,7 +79,7 @@ func _build_ui() -> void:
 
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: property  S: off/on  F: FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q/W: properties  S: off/on  F: FPS"
 	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
@@ -129,6 +132,10 @@ func _build_items() -> void:
 		"has_fps": true,
 	})
 	_add_item("WallFountain", _VictorianStreetAppliances.WallFountain, {"has_fps": true})
+	_add_item("SmallFlowerBed", _VictorianStreetAppliances.SmallFlowerBed, {
+		"primary": _enum_property("flower_type", _VictorianStreetAppliances.SmallFlowerBed.FlowerBedType.size()),
+		"secondary": _enum_property("layout", _VictorianStreetAppliances.SmallFlowerBed.FlowerBedLayout.size()),
+	})
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
@@ -203,6 +210,8 @@ func _describe_item(item: Dictionary) -> String:
 	]
 	if item.has("primary"):
 		parts.push_back(_property_text(item, item["primary"]))
+	if item.has("secondary"):
+		parts.push_back(_property_text(item, item["secondary"]))
 	if item.has("has_fps"):
 		parts.push_back("fps=" + str(item.visual.fps))
 	return " | ".join(parts)
