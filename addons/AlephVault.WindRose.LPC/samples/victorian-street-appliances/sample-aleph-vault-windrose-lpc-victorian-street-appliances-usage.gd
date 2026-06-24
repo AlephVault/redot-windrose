@@ -119,6 +119,7 @@ func _build_items() -> void:
 	_add_item("WoodEntrance", _VictorianStreetAppliances.WoodEntrance)
 	_add_item("GrassEntrance", _VictorianStreetAppliances.GrassEntrance)
 	_add_item("GrassRing", _VictorianStreetAppliances.GrassRing)
+	_add_item("RoundFountainPool", _VictorianStreetAppliances.RoundFountainPool, {"has_fps": true})
 
 
 func _enum_property(name: String, count: int) -> Dictionary:

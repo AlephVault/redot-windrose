@@ -48,6 +48,7 @@ Inventory
 | `WoodEntrance` | Down only | Region `(192, 192, 96, 128)` | `Vector2(0, -96)` | Static | None |
 | `GrassEntrance` | Down only | Region `(288, 224, 64, 96)` | `Vector2(16, -64)` | Static | None |
 | `GrassRing` | Down only | Region `(352, 256, 64, 64)` | `Vector2(0, -32)` | Static | None |
+| `RoundFountainPool` | Down only | Four composed frames from `(0, 320, 64, 64)`, `(64, 320, 64, 64)`, `(128, 320, 64, 64)`, `(64, 320, 64, 64)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps` |
 
 Composition Notes
 -----------------
