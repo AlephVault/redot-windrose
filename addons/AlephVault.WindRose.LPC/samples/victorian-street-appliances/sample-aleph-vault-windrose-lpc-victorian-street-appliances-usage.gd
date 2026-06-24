@@ -5,7 +5,7 @@ const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 const _SimpleMapEntity = preload("res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd")
 const _VictorianStreetAppliances = AlephVault__WindRose__LPC.Visuals.VictorianStreetAppliances
 
-const _MAP_SIZE := Vector2i(48, 72)
+const _MAP_SIZE := Vector2i(64, 112)
 const _ENTITY_SIZE := Vector2i(6, 6)
 const _ENTITY_STRIDE := Vector2i(9, 9)
 const _GRID_COLUMNS := 3
@@ -158,6 +158,12 @@ func _build_items() -> void:
 	})
 	_add_item("WoodenPlantBed", _VictorianStreetAppliances.WoodenPlantBed, {
 		"primary": _enum_property("content", _VictorianStreetAppliances.WoodenPlantBed.WoodenPlantBedContent.size()),
+	})
+	_add_item("VerticalWoodenPlantBed", _VictorianStreetAppliances.VerticalWoodenPlantBed, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.VerticalWoodenPlantBed.VerticalWoodenPlantBedContent.size()),
+	})
+	_add_item("CeramicPlantPot", _VictorianStreetAppliances.CeramicPlantPot, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.CeramicPlantPot.CeramicPlantPotContent.size()),
 	})
 
 
