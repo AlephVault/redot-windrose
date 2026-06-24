@@ -3,6 +3,7 @@ extends AlephVault__WindRose__LPC.Visuals.WoodenFurniture.Base
 
 
 const _SPRITE_SIZE := Vector2i(32, 32)
+const _OFFSET := Vector2.ZERO
 
 
 enum ChairType {
@@ -69,3 +70,7 @@ func _get_region_rect_left() -> Rect2i:
 
 func _get_region_rect_right() -> Rect2i:
 	return Rect2i(_get_group_coordinates() + Vector2i(0, 32), _SPRITE_SIZE)
+
+
+func _get_offset() -> Vector2:
+	return _OFFSET
