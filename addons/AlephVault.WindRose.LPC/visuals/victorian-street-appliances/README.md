@@ -56,6 +56,10 @@ Inventory
 | `WallFountain` | Down only | Three composed frames from `(448, 128, 64, 64)`, `(448, 192, 64, 64)`, `(448, 256, 64, 64)` | `Vector2(0, -64)` | 3-frame animation at default `fps = 4` | `fps` |
 | `SmallFlowerBed` | Up/down horizontal, left/right vertical | Horizontal type 1 `(320, 480, 32, 32)`, horizontal type 2 `(320, 512, 32, 32)`, vertical type 1 `(384, 480, 32, 64)`, vertical type 2 `(352, 480, 32, 64)` | Horizontal `Vector2.ZERO`, vertical `Vector2(0, -32)` | Static | `flower_type` |
 | `SmallWoodenPlantPot` | Down only | None `(288, 480, 32, 32)`, dirt `(288, 512, 32, 32)`, pine `(192, 480, 32, 64)`, bush `(224, 480, 32, 64)`, tree `(256, 480, 32, 64)` | None/dirt `Vector2.ZERO`, pine/bush/tree `Vector2(0, -32)` | Static | `content` with `CONTENT_NONE`, `CONTENT_DIRT`, `CONTENT_PINE`, `CONTENT_BUSH`, `CONTENT_TREE` |
+| `TinyClayBushPot` | Down only | Region `(128, 512, 32, 64)` | `Vector2(0, -32)` | Static | None |
+| `SmallHorizontalClayFlowerBed` | Down only | Dirt `(0, 512, 64, 64)`, bush `(128, 512, 64, 64)` | `Vector2(0, -32)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH` |
+| `VerticalClayFlowerBed` | Down only | Dirt `(0, 576, 64, 96)`, bush purple flowers `(64, 576, 64, 96)`, bush yellow flowers `(128, 576, 64, 96)`, purple flowers `(0, 672, 64, 96)`, liteblue flowers `(64, 672, 64, 96)`, red flowers `(128, 672, 64, 96)` | `Vector2(-16, -16)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH_PURPLE_FLOWERS`, `CONTENT_BUSH_YELLOW_FLOWERS`, `CONTENT_PURPLE_FLOWERS`, `CONTENT_LITEBLUE_FLOWERS`, `CONTENT_RED_FLOWERS` |
+| `RoundedBushPot` | Down only | Dirt `(0, 768, 64, 64)`, daisies bush `(0, 832, 64, 64)`, spiky bush `(0, 896, 64, 64)` | `Vector2.ZERO` | Static | `content` with `CONTENT_DIRT`, `CONTENT_DAISIES_BUSH`, `CONTENT_SPIKY_BUSH` |
 
 Composition Notes
 -----------------

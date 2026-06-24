@@ -5,7 +5,7 @@ const _Direction = AlephVault__WindRose.Utils.DirectionUtils.Direction
 const _SimpleMapEntity = preload("res://addons/AlephVault.WindRose/contrib/simple/map_entity.gd")
 const _VictorianStreetAppliances = AlephVault__WindRose__LPC.Visuals.VictorianStreetAppliances
 
-const _MAP_SIZE := Vector2i(32, 48)
+const _MAP_SIZE := Vector2i(48, 72)
 const _ENTITY_SIZE := Vector2i(6, 6)
 const _ENTITY_STRIDE := Vector2i(9, 9)
 const _GRID_COLUMNS := 3
@@ -135,6 +135,19 @@ func _build_items() -> void:
 	_add_item("SmallFlowerBed", _VictorianStreetAppliances.SmallFlowerBed, {
 		"primary": _enum_property("flower_type", _VictorianStreetAppliances.SmallFlowerBed.FlowerBedType.size()),
 		"orientations": [_Direction.DOWN, _Direction.UP, _Direction.LEFT, _Direction.RIGHT],
+	})
+	_add_item("SmallWoodenPlantPot", _VictorianStreetAppliances.SmallWoodenPlantPot, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.SmallWoodenPlantPot.SmallWoodenPlantPotContent.size()),
+	})
+	_add_item("TinyClayBushPot", _VictorianStreetAppliances.TinyClayBushPot)
+	_add_item("SmallHorizontalClayFlowerBed", _VictorianStreetAppliances.SmallHorizontalClayFlowerBed, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.SmallHorizontalClayFlowerBed.SmallHorizontalClayFlowerBedContent.size()),
+	})
+	_add_item("VerticalClayFlowerBed", _VictorianStreetAppliances.VerticalClayFlowerBed, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.VerticalClayFlowerBed.VerticalClayFlowerBedContent.size()),
+	})
+	_add_item("RoundedBushPot", _VictorianStreetAppliances.RoundedBushPot, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.RoundedBushPot.RoundedBushPotContent.size()),
 	})
 
 
