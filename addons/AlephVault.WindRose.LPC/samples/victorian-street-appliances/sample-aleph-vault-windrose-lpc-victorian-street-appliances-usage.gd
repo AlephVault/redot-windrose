@@ -149,6 +149,10 @@ func _build_items() -> void:
 	_add_item("RoundedBushPot", _VictorianStreetAppliances.RoundedBushPot, {
 		"primary": _enum_property("content", _VictorianStreetAppliances.RoundedBushPot.RoundedBushPotContent.size()),
 	})
+	_add_item("BigTreeBed", _VictorianStreetAppliances.BigTreeBed)
+	_add_item("HorizontalClayFlowerBed", _VictorianStreetAppliances.HorizontalClayFlowerBed, {
+		"primary": _enum_property("content", _VictorianStreetAppliances.HorizontalClayFlowerBed.HorizontalClayFlowerBedContent.size()),
+	})
 
 
 func _enum_property(name: String, count: int) -> Dictionary:

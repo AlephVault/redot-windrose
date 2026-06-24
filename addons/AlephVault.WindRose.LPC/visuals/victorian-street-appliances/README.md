@@ -60,6 +60,8 @@ Inventory
 | `SmallHorizontalClayFlowerBed` | Down only | Dirt `(0, 512, 64, 64)`, bush `(128, 512, 64, 64)` | `Vector2(0, -32)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH` |
 | `VerticalClayFlowerBed` | Down only | Dirt `(0, 576, 64, 96)`, bush purple flowers `(64, 576, 64, 96)`, bush yellow flowers `(128, 576, 64, 96)`, purple flowers `(0, 672, 64, 96)`, liteblue flowers `(64, 672, 64, 96)`, red flowers `(128, 672, 64, 96)` | `Vector2(-16, -16)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH_PURPLE_FLOWERS`, `CONTENT_BUSH_YELLOW_FLOWERS`, `CONTENT_PURPLE_FLOWERS`, `CONTENT_LITEBLUE_FLOWERS`, `CONTENT_RED_FLOWERS` |
 | `RoundedBushPot` | Down only | Dirt `(0, 768, 64, 64)`, daisies bush `(0, 832, 64, 64)`, spiky bush `(0, 896, 64, 64)` | `Vector2.ZERO` | Static | `content` with `CONTENT_DIRT`, `CONTENT_DAISIES_BUSH`, `CONTENT_SPIKY_BUSH` |
+| `BigTreeBed` | Down only | Region `(192, 672, 96, 96)` | `Vector2.ZERO` | Static | None |
+| `HorizontalClayFlowerBed` | Down only | Computed `(X, Y, 96, 64)`, where `X = 64 + (index / 3) * 96` and `Y = 768 + (index % 3) * 64` | `Vector2(0, -16)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH`, `CONTENT_BUSHES`, `CONTENT_FLOWER_PURPLE`, `CONTENT_FLOWER_WHITE`, `CONTENT_FLOWER_YELLOW`, `CONTENT_FLOWER_ROSES_AND_YELLOW`, `CONTENT_FLOWER_RED`, `CONTENT_FLOWER_ORANGE`, `CONTENT_FLOWER_LITEBLUE`, `CONTENT_FLOWER_ROSES_AND_PURPLE`, `CONTENT_FLOWERS_PURPLE2` |
 
 Composition Notes
 -----------------
