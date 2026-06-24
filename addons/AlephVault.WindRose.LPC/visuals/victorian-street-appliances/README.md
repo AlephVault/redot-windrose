@@ -24,6 +24,7 @@ Controls:
 - `Q`: cycle the selected object's style or type when supported.
 - `S`: toggle OFF/ON for streetlights.
 - `F`: cycle FPS for animated streetlights.
+- For `BigSquareFountainPool`, `Q` toggles `include_fountain`.
 
 States
 ------
@@ -49,6 +50,7 @@ Inventory
 | `GrassEntrance` | Down only | Region `(288, 224, 64, 96)` | `Vector2(16, -64)` | Static | None |
 | `GrassRing` | Down only | Region `(352, 256, 64, 64)` | `Vector2(0, -32)` | Static | None |
 | `RoundFountainPool` | Down only | Four composed frames from `(0, 320, 64, 64)`, `(64, 320, 64, 64)`, `(128, 320, 64, 64)`, `(64, 320, 64, 64)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps` |
+| `BigSquareFountainPool` | Down only | Four composed frames from `(192, 320, 96, 96)`, `(288, 320, 96, 96)`, `(384, 320, 96, 96)`, `(288, 320, 96, 96)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `include_fountain` |
 
 Composition Notes
 -----------------
@@ -78,3 +80,5 @@ Composition Notes
 - Paste `(96, 32, 32, 32)` at `(16, 0)`.
 - Paste the banner rect at `(0, 32)`: `NONE` uses `(224, 0, 64, 32)`, `WHITE` uses `(288, 0, 64, 32)`, `YELLOW` uses `(224, 32, 64, 32)`, `BLUE` uses `(352, 0, 64, 32)`, `RED` uses `(352, 32, 64, 32)`, and `GREEN` uses `(288, 32, 64, 32)`.
 - Paste `(128, 0, 32, 64)` at `(16, 64)`.
+
+`BigSquareFountainPool` builds four cached animation frames. When `include_fountain` is `false`, each frame pastes its 96x96 source rect directly. When `include_fountain` is `true`, each frame also pastes `(X, Y + 69, 96, 64)` over the frame at `(0, 0)`.

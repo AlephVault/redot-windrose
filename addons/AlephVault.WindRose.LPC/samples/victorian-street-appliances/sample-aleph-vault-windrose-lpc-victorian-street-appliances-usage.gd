@@ -76,7 +76,7 @@ func _build_ui() -> void:
 
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: style/type  S: off/on  F: FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: property  S: off/on  F: FPS"
 	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
@@ -120,10 +120,18 @@ func _build_items() -> void:
 	_add_item("GrassEntrance", _VictorianStreetAppliances.GrassEntrance)
 	_add_item("GrassRing", _VictorianStreetAppliances.GrassRing)
 	_add_item("RoundFountainPool", _VictorianStreetAppliances.RoundFountainPool, {"has_fps": true})
+	_add_item("BigSquareFountainPool", _VictorianStreetAppliances.BigSquareFountainPool, {
+		"primary": _bool_property("include_fountain"),
+		"has_fps": true,
+	})
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
 	return {"name": name, "kind": "enum", "count": count}
+
+
+func _bool_property(name: String) -> Dictionary:
+	return {"name": name, "kind": "bool"}
 
 
 func _add_item(name: String, visual_script, options := {}) -> void:
@@ -205,8 +213,11 @@ func _cycle_property(slot: String) -> void:
 		return
 	var config = item[slot]
 	var property_name: String = config["name"]
-	var value := (int(item.visual.get(property_name)) + 1) % int(config["count"])
-	item.visual.set(property_name, value)
+	if config["kind"] == "bool":
+		item.visual.set(property_name, not bool(item.visual.get(property_name)))
+	else:
+		var value := (int(item.visual.get(property_name)) + 1) % int(config["count"])
+		item.visual.set(property_name, value)
 	_update_selection()
 
 
