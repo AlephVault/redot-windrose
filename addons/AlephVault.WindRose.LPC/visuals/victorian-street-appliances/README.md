@@ -62,6 +62,8 @@ Inventory
 | `RoundedBushPot` | Down only | Dirt `(0, 768, 64, 64)`, daisies bush `(0, 832, 64, 64)`, spiky bush `(0, 896, 64, 64)` | `Vector2.ZERO` | Static | `content` with `CONTENT_DIRT`, `CONTENT_DAISIES_BUSH`, `CONTENT_SPIKY_BUSH` |
 | `BigTreeBed` | Down only | Region `(192, 672, 96, 96)` | `Vector2.ZERO` | Static | None |
 | `HorizontalClayFlowerBed` | Down only | Computed `(X, Y, 96, 64)`, where `X = 64 + (index / 3) * 96` and `Y = 768 + (index % 3) * 64` | `Vector2(0, -16)` | Static | `content` with `CONTENT_DIRT`, `CONTENT_BUSH`, `CONTENT_BUSHES`, `CONTENT_FLOWER_PURPLE`, `CONTENT_FLOWER_WHITE`, `CONTENT_FLOWER_YELLOW`, `CONTENT_FLOWER_ROSES_AND_YELLOW`, `CONTENT_FLOWER_RED`, `CONTENT_FLOWER_ORANGE`, `CONTENT_FLOWER_LITEBLUE`, `CONTENT_FLOWER_ROSES_AND_PURPLE`, `CONTENT_FLOWERS_PURPLE2` |
+| `TinyWoodenPlantBed` | Down only | None `(480, 608, 32, 32)`, dirt `(480, 640, 32, 32)`, bush `(480, 672, 32, 64)` | None/dirt `Vector2.ZERO`, bush `Vector2(0, -32)` | Static | `content` with `CONTENT_NONE`, `CONTENT_DIRT`, `CONTENT_BUSH` |
+| `WoodenPlantBed` | Down only | None `(416, 608, 64, 32)`, flowers `(416, 640, 64, 32)`, bush `(416, 672, 64, 64)` | None/flowers `Vector2.ZERO`, bush `Vector2(0, -32)` | Static | `content` with `CONTENT_NONE`, `CONTENT_FLOWERS`, `CONTENT_BUSH` |
 
 Composition Notes
 -----------------
