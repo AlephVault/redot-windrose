@@ -52,6 +52,7 @@ Inventory
 | `RoundFountainPool` | Down only | Four composed frames from `(0, 320, 64, 64)`, `(64, 320, 64, 64)`, `(128, 320, 64, 64)`, `(64, 320, 64, 64)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps` |
 | `BigSquareFountainPool` | Down only | Four composed frames from `(192, 320, 96, 96)`, `(288, 320, 96, 96)`, `(384, 320, 96, 96)`, `(288, 320, 96, 96)` | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `include_fountain` |
 | `StandaloneFountain` | Down only | Four composed `64x96` frames | `Vector2(0, -32)` | 4-frame animation at default `fps = 4` | `fps`, `fountain_type` with 2 variants |
+| `WallFountain` | Down only | Three composed frames from `(448, 128, 64, 64)`, `(448, 192, 64, 64)`, `(448, 256, 64, 64)` | `Vector2(0, -64)` | 3-frame animation at default `fps = 4` | `fps` |
 
 Composition Notes
 -----------------

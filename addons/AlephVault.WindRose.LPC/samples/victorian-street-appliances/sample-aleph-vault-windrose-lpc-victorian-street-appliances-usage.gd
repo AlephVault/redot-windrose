@@ -128,6 +128,7 @@ func _build_items() -> void:
 		"primary": _enum_property("fountain_type", _VictorianStreetAppliances.StandaloneFountain.FountainType.size()),
 		"has_fps": true,
 	})
+	_add_item("WallFountain", _VictorianStreetAppliances.WallFountain, {"has_fps": true})
 
 
 func _enum_property(name: String, count: int) -> Dictionary:
