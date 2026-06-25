@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://cvksi0rohtixx"]
+[gd_scene load_steps=33 format=4 uid="uid://cvksi0rohtixx"]
 
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/map.gd" id="1_xc3iu"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/floor_layer.gd" id="2_l3lgy"]
@@ -30,6 +30,8 @@
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/beehive-rack.gd" id="25_j24aa"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/utils/sample-aleph-vault-birds-house.gd" id="26_wfv5n"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/samples/utils/sample-aleph-vault-shed.gd" id="27_2bc2p"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/straw-soil.gd" id="28_otbk3"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.LPC/visuals/farm/big-straw-soil.gd" id="29_mhnq4"]
 
 [node name="Sample-aleph-vault-windrose-lpc-utils-usage" type="Node2D"]
 
@@ -329,6 +331,36 @@ region_enabled = true
 region_rect = Rect2(32, 160, 64, 96)
 region_filter_clip_enabled = true
 script = ExtResource("13_mi0tm")
+
+[node name="StrawSoil" type="Node2D" parent="Map/EntitiesLayer"]
+position = Vector2(320, 96)
+script = ExtResource("5_657mv")
+_size = Vector2i(2, 2)
+_initial_position = Vector2i(10, 3)
+
+[node name="StrawSoilVisual" type="Sprite2D" parent="Map/EntitiesLayer/StrawSoil"]
+texture = ExtResource("6_tdnlj")
+centered = false
+offset = Vector2(0, 0)
+region_enabled = true
+region_rect = Rect2(64, 352, 64, 64)
+region_filter_clip_enabled = true
+script = ExtResource("28_otbk3")
+
+[node name="BigStrawSoil" type="Node2D" parent="Map/EntitiesLayer"]
+position = Vector2(384, 96)
+script = ExtResource("5_657mv")
+_size = Vector2i(2, 3)
+_initial_position = Vector2i(12, 3)
+
+[node name="BigStrawSoilVisual" type="Sprite2D" parent="Map/EntitiesLayer/BigStrawSoil"]
+texture = ExtResource("6_tdnlj")
+centered = false
+offset = Vector2(0, 0)
+region_enabled = true
+region_rect = Rect2(0, 352, 64, 96)
+region_filter_clip_enabled = true
+script = ExtResource("29_mhnq4")
 
 [node name="VisualsLayer" type="Node2D" parent="Map"]
 script = ExtResource("4_xwe76")

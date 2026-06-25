@@ -124,7 +124,7 @@ The beehive rack visual is implemented by `AlephVault__WindRose__LPC.Visuals.Far
 
 ### Farm Utility Objects
 
-The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.TreeStump`, `AlephVault__WindRose__LPC.Visuals.Farm.BirdsNest`, `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterChurner`, `AlephVault__WindRose__LPC.Visuals.Farm.CheesePress`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
+The following farm utility visuals are static and do not expose variant properties: `AlephVault__WindRose__LPC.Visuals.Farm.TreeStump`, `AlephVault__WindRose__LPC.Visuals.Farm.BirdsNest`, `AlephVault__WindRose__LPC.Visuals.Farm.BeehiveRack`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawHeap`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawBundle`, `AlephVault__WindRose__LPC.Visuals.Farm.StrawSoil`, `AlephVault__WindRose__LPC.Visuals.Farm.BigStrawSoil`, `AlephVault__WindRose__LPC.Visuals.Farm.ButterChurner`, `AlephVault__WindRose__LPC.Visuals.Farm.CheesePress`, and `AlephVault__WindRose__LPC.Visuals.Farm.Mixer`.
 
 Licenses
 --------
