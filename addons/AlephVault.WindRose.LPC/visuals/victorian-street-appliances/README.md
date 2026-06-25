@@ -46,6 +46,7 @@ Inventory
 | `StreetClock` | Down only | `32x96` | `Vector2(0, -64)` | Static | `clock_type` with 2 variants |
 | `BannerPost` | Down only | `64x128` | `Vector2(-16, -96)` | Static | `banner_color` with `NONE`, `WHITE`, `YELLOW`, `BLUE`, `RED`, `GREEN` |
 | `SimpleStreetAppliance` | Down only | Computed `(736 + 32 * index, 0, 32, 64)` | `Vector2(0, -32)` | Static | `appliance` with `GRAY_MAILBOX`, `SQUARED_TRASHBIN`, `ROUNDED_TRASHBIN`, `HYDRANT`, `GREEN_MAILBOX`, `ORANGE_MAILBOX` |
+| `Chair` | Up/down/left/right | Wooden: up `(992, 0, 32, 32)`, down `(928, 0, 32, 32)`, left `(992, 32, 32, 32)`, right `(928, 32, 32, 32)`; metal: up `(992, 224, 32, 32)`, down `(960, 192, 32, 64)`, left `(992, 256, 32, 32)`, right `(960, 256, 32, 32)` | Wooden all directions and metal up/left/right `Vector2.ZERO`, metal down `Vector2(0, -32)` | Static | `chair_type` with `CHAIR_WOODEN`, `CHAIR_METAL` |
 | `SunBlind` | Down only | White `(512, 224, 96, 96)`, yellow `(640, 224, 96, 96)`, liteblue `(512, 320, 96, 96)`, red `(640, 320, 96, 96)`, green `(512, 416, 96, 96)`, brown `(640, 416, 96, 96)` | `Vector2(0, (3 + level) * -32)` | Static | `color` with `COLOR_WHITE`, `COLOR_YELLOW`, `COLOR_LITEBLUE`, `COLOR_RED`, `COLOR_GREEN`, `COLOR_BROWN`; `level >= 0` |
 | `BigDome` | Down only | Region `(512, 0, 224, 224)` | `Vector2(0, -96)` | Static | None |
 | `WhiteFenceEntrance` | Down only | Region `(0, 192, 96, 96)` | `Vector2(-32, -64)` | Static | None |
