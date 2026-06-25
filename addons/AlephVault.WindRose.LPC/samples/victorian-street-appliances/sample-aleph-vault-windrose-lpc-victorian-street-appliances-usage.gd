@@ -124,6 +124,7 @@ func _build_items() -> void:
 		"primary": _enum_property("color", _VictorianStreetAppliances.SunBlind.SunBlindColor.size()),
 		"secondary": _int_property("level", 4),
 	})
+	_add_item("BigDome", _VictorianStreetAppliances.BigDome)
 	_add_item("WhiteFenceEntrance", _VictorianStreetAppliances.WhiteFenceEntrance)
 	_add_item("BigWoodEntrance", _VictorianStreetAppliances.BigWoodEntrance)
 	_add_item("WoodEntrance", _VictorianStreetAppliances.WoodEntrance)

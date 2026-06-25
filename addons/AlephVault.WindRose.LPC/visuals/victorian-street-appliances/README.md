@@ -46,6 +46,7 @@ Inventory
 | `StreetClock` | Down only | `32x96` | `Vector2(0, -64)` | Static | `clock_type` with 2 variants |
 | `BannerPost` | Down only | `64x128` | `Vector2(-16, -96)` | Static | `banner_color` with `NONE`, `WHITE`, `YELLOW`, `BLUE`, `RED`, `GREEN` |
 | `SunBlind` | Down only | White `(512, 224, 96, 96)`, yellow `(640, 224, 96, 96)`, liteblue `(512, 320, 96, 96)`, red `(640, 320, 96, 96)`, green `(512, 416, 96, 96)`, brown `(640, 416, 96, 96)` | `Vector2(0, (3 + level) * -32)` | Static | `color` with `COLOR_WHITE`, `COLOR_YELLOW`, `COLOR_LITEBLUE`, `COLOR_RED`, `COLOR_GREEN`, `COLOR_BROWN`; `level >= 0` |
+| `BigDome` | Down only | Region `(512, 0, 224, 224)` | `Vector2(0, -96)` | Static | None |
 | `WhiteFenceEntrance` | Down only | Region `(0, 192, 96, 96)` | `Vector2(-32, -64)` | Static | None |
 | `BigWoodEntrance` | Down only | Region `(96, 192, 96, 128)` | `Vector2(0, -96)` | Static | None |
 | `WoodEntrance` | Down only | Region `(192, 192, 96, 128)` | `Vector2(0, -96)` | Static | None |
