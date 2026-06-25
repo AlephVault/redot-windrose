@@ -31,57 +31,57 @@ Controls:
 Inventory
 ---------
 
-| Visual | Orientation | Rects / composition | Offset | Properties |
-| ------ | ----------- | ------------------- | ------ | ---------- |
-| `KitchenWideDesk` | Down only | `(96, 0, 64, 64)` | `Vector2(0, -32)` | None |
-| `KitchenDesk` | Down only | `(160, 0, 32, 64)` | `Vector2(0, -32)` | None |
-| `KitchenSink` | Down only | `(192, 0, 32, 64)` | `Vector2(0, -32)` | None |
-| `KitchenStove` | Down only | `(224, 0, 32, 64)` | `Vector2(0, -32)` | None |
-| `KitchenShelvedDesk` | Down only | `(256, 0, 32, 64)` | `Vector2(0, -32)` | None |
-| `KitchenSidedWideDesk` | Left/right | Left `(96, 64, 32, 96)`, right `(128, 64, 32, 96)` | `Vector2(0, -32)` | None |
-| `BigDesk` | Down only | Type 1 `(64, 704, 64, 64)`, type 2 `(128, 704, 64, 64)` | `Vector2(0, -32)` | `desk_type` |
-| `SidedBigDesk` | Left/right | Right `(0, 704, 32, 96)`, left `(32, 704, 32, 96)` | `Vector2(0, -32)` | None |
-| `Clock` | Down only | Four composed frames from `(256, 736, 32, 96)`, `(288, 736, 32, 96)`, `(320, 736, 32, 96)`, `(288, 736, 32, 96)` | `Vector2(0, -64)` | `fps` |
-| `Fireplace` | Down only | Type 1 `(384, 736, 96, 96)`, type 2 `(416, 928, 96, 96)` | `Vector2(0, -64)` | `fireplace_type` |
-| `ChurchSeat` | Up/down | Down `(0, 800, 96, 32)`, up `(96, 800, 96, 32)` | `Vector2.ZERO` | None |
-| `GrandPiano` | Down only | `(0, 832, 64, 96)` | `Vector2(0, -32)` | None |
-| `UprightPiano` | Down only | `(64, 832, 64, 96)` | `Vector2(0, -32)` | None |
-| `OrganPiano` | Down only | `(160, 832, 96, 96)` | `Vector2(0, -64)` | None |
-| `HorizontalPlankTable` | Up/down | `(256, 832, 96, 64)` for both | `Vector2(0, -32)` | None |
-| `VerticalPlankTable` | Left/right | `(352, 832, 32, 96)` for both | `Vector2(0, -32)` | None |
-| `HorizontalPlankBank` | Up/down | `(256, 896, 64, 32)` for both | `Vector2.ZERO` | None |
-| `VerticalPlankBank` | Left/right | `(384, 832, 32, 96)` for both | `Vector2(0, -32)` | None |
-| `BigPlankTable` | Down only | `(416, 832, 96, 96)` | `Vector2(0, -32)` | None |
-| `VerticalFurniture` | Down only | Composed `32x93` region from atlas parts | `Vector2(0, -80)` | `furniture_type`, `furniture_legs_type` |
-| `RoundTable` | Down only | `(224, 224, 64, 64)` | `Vector2.ZERO` | None |
-| `Stool1` | Down only | Normal `(448, 256, 32, 32)`, worn `(448, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
-| `Stool2` | Down only | Normal `(480, 256, 32, 32)`, worn `(480, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
-| `TwinBed` | Down only | Type 1 `(416, 416, 32, 64)`, type 2 `(448, 418, 32, 64)`, type 3 `(480, 416, 32, 64)` | `Vector2(0, -64)` | `bed_type` |
-| `Chair` | Up/down/left/right | 32x32 directional group selected by `chair_type` and `worn` | `Vector2.ZERO` | `chair_type`, `worn` |
-| `WideShelving` | Down only | Normal `(256, 352, 64, 64)`, worn `(256, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
-| `WideGondola` | Down only | Normal `(320, 352, 64, 64)`, worn `(320, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
-| `WideMidDrawers` | Down only | Normal `(64, 368, 64, 48)`, worn `(64, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
-| `WideSmallShelving` | Down only | Normal `(0, 368, 64, 48)`, worn `(0, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
-| `WideSmallDesk` | Down only | Normal `(128, 368, 64, 48)`, worn `(128, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
-| `WideWardrobe` | Down only | Normal `(192, 352, 64, 64)`, worn `(192, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
-| `SmallShelving` | Down only | Normal `(384, 352, 32, 64)`, worn `(384, 288, 32, 64)` | `Vector2(0, -48)` | `worn` |
-| `SmallWardrobe` | Down only | Normal `(416, 352, 32, 64)`, worn `(416, 288, 32, 64)` | `Vector2(0, -48)` | `worn` |
-| `SmallDrawer` | Down only | Normal `(448, 352, 32, 32)`, worn `(448, 288, 32, 32)` | `Vector2(0, -16)` | `worn` |
-| `NightStand` | Down only | Normal `(480, 352, 32, 32)`, worn `(480, 288, 32, 32)` | `Vector2(0, -16)` | `worn` |
-| `WideSmallDrawer` | Down only | Normal `(480, 320, 64, 32)`, worn `(448, 320, 64, 32)` | `Vector2(0, -16)` | `worn` |
-| `Shelving` | Down only | `(320, 416, 32, 64)` | `Vector2(0, -48)` | None |
-| `Drawers` | Down only | `(352, 416, 32, 64)` | `Vector2(0, -48)` | None |
-| `MidDrawers` | Down only | `(384, 416, 32, 64)` | `Vector2(0, -48)` | None |
-| `ChessTable` | Down only | `(64, 408, 32, 32)` | Base default | None |
-| `BigWardrobe` | Down only | `(0, 608, 64, 96)` | `Vector2(0, -80)` | None |
-| `BigTable` | Down only | `(128, 160, 96, 96)` | `Vector2(0, -16)` | None |
-| `VerticalMidBank` | Down only | `(96, 224, 32, 64)` | `Vector2.ZERO` | None |
-| `HorizontalMidBank` | Down only | `(128, 256, 64, 32)` | `Vector2.ZERO` | None |
-| `Column` | Down only | `(480, 736, 32, 80)` | `Vector2(0, -48)` | None |
-| `TinyDrawer` | Down only | Type 1 `(192, 768, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
-| `DoubleTinyDrawer` | Down only | Type 1 `(192, 736, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
+| Visual                  | Orientation | Rects / composition | Offset | Properties |
+|-------------------------| ----------- | ------------------- | ------ | ---------- |
+| `KitchenWideDesk`       | Down only | `(96, 0, 64, 64)` | `Vector2(0, -32)` | None |
+| `KitchenDesk`           | Down only | `(160, 0, 32, 64)` | `Vector2(0, -32)` | None |
+| `KitchenSink`           | Down only | `(192, 0, 32, 64)` | `Vector2(0, -32)` | None |
+| `KitchenStove`          | Down only | `(224, 0, 32, 64)` | `Vector2(0, -32)` | None |
+| `KitchenShelvedDesk`    | Down only | `(256, 0, 32, 64)` | `Vector2(0, -32)` | None |
+| `KitchenSidedWideDesk`  | Left/right | Left `(96, 64, 32, 96)`, right `(128, 64, 32, 96)` | `Vector2(0, -32)` | None |
+| `BigDesk`               | Down only | Type 1 `(64, 704, 64, 64)`, type 2 `(128, 704, 64, 64)` | `Vector2(0, -32)` | `desk_type` |
+| `SidedBigDesk`          | Left/right | Right `(0, 704, 32, 96)`, left `(32, 704, 32, 96)` | `Vector2(0, -32)` | None |
+| `Clock`                 | Down only | Four composed frames from `(256, 736, 32, 96)`, `(288, 736, 32, 96)`, `(320, 736, 32, 96)`, `(288, 736, 32, 96)` | `Vector2(0, -64)` | `fps` |
+| `Fireplace`             | Down only | Type 1 `(384, 736, 96, 96)`, type 2 `(416, 928, 96, 96)` | `Vector2(0, -64)` | `fireplace_type` |
+| `ChurchSeat`            | Up/down | Down `(0, 800, 96, 32)`, up `(96, 800, 96, 32)` | `Vector2.ZERO` | None |
+| `GrandPiano`            | Down only | `(0, 832, 64, 96)` | `Vector2(0, -32)` | None |
+| `UprightPiano`          | Down only | `(64, 832, 64, 96)` | `Vector2(0, -32)` | None |
+| `OrganPiano`            | Down only | `(160, 832, 96, 96)` | `Vector2(0, -64)` | None |
+| `HorizontalPlankTable`  | Up/down | `(256, 832, 96, 64)` for both | `Vector2(0, -32)` | None |
+| `VerticalPlankTable`    | Left/right | `(352, 832, 32, 96)` for both | `Vector2(0, -32)` | None |
+| `HorizontalPlankBench`  | Up/down | `(256, 896, 64, 32)` for both | `Vector2.ZERO` | None |
+| `VerticalPlankBench`    | Left/right | `(384, 832, 32, 96)` for both | `Vector2(0, -32)` | None |
+| `BigPlankTable`         | Down only | `(416, 832, 96, 96)` | `Vector2(0, -32)` | None |
+| `VerticalFurniture`     | Down only | Composed `32x93` region from atlas parts | `Vector2(0, -80)` | `furniture_type`, `furniture_legs_type` |
+| `RoundTable`            | Down only | `(224, 224, 64, 64)` | `Vector2.ZERO` | None |
+| `Stool1`                | Down only | Normal `(448, 256, 32, 32)`, worn `(448, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
+| `Stool2`                | Down only | Normal `(480, 256, 32, 32)`, worn `(480, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
+| `TwinBed`               | Down only | Type 1 `(416, 416, 32, 64)`, type 2 `(448, 418, 32, 64)`, type 3 `(480, 416, 32, 64)` | `Vector2(0, -64)` | `bed_type` |
+| `Chair`                 | Up/down/left/right | 32x32 directional group selected by `chair_type` and `worn` | `Vector2.ZERO` | `chair_type`, `worn` |
+| `WideShelving`          | Down only | Normal `(256, 352, 64, 64)`, worn `(256, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
+| `WideGondola`           | Down only | Normal `(320, 352, 64, 64)`, worn `(320, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
+| `WideMidDrawers`        | Down only | Normal `(64, 368, 64, 48)`, worn `(64, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
+| `WideSmallShelving`     | Down only | Normal `(0, 368, 64, 48)`, worn `(0, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
+| `WideSmallDesk`         | Down only | Normal `(128, 368, 64, 48)`, worn `(128, 304, 64, 48)` | `Vector2(0, -32)` | `worn` |
+| `WideWardrobe`          | Down only | Normal `(192, 352, 64, 64)`, worn `(192, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
+| `SmallShelving`         | Down only | Normal `(384, 352, 32, 64)`, worn `(384, 288, 32, 64)` | `Vector2(0, -48)` | `worn` |
+| `SmallWardrobe`         | Down only | Normal `(416, 352, 32, 64)`, worn `(416, 288, 32, 64)` | `Vector2(0, -48)` | `worn` |
+| `SmallDrawer`           | Down only | Normal `(448, 352, 32, 32)`, worn `(448, 288, 32, 32)` | `Vector2(0, -16)` | `worn` |
+| `NightStand`            | Down only | Normal `(480, 352, 32, 32)`, worn `(480, 288, 32, 32)` | `Vector2(0, -16)` | `worn` |
+| `WideSmallDrawer`       | Down only | Normal `(480, 320, 64, 32)`, worn `(448, 320, 64, 32)` | `Vector2(0, -16)` | `worn` |
+| `Shelving`              | Down only | `(320, 416, 32, 64)` | `Vector2(0, -48)` | None |
+| `Drawers`               | Down only | `(352, 416, 32, 64)` | `Vector2(0, -48)` | None |
+| `MidDrawers`            | Down only | `(384, 416, 32, 64)` | `Vector2(0, -48)` | None |
+| `ChessTable`            | Down only | `(64, 408, 32, 32)` | Base default | None |
+| `BigWardrobe`           | Down only | `(0, 608, 64, 96)` | `Vector2(0, -80)` | None |
+| `BigTable`              | Down only | `(128, 160, 96, 96)` | `Vector2(0, -16)` | None |
+| `VerticalMidBench`      | Down only | `(96, 224, 32, 64)` | `Vector2.ZERO` | None |
+| `HorizontalMidBench`    | Down only | `(128, 256, 64, 32)` | `Vector2.ZERO` | None |
+| `Column`                | Down only | `(480, 736, 32, 80)` | `Vector2(0, -48)` | None |
+| `TinyDrawer`            | Down only | Type 1 `(192, 768, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
+| `DoubleTinyDrawer`      | Down only | Type 1 `(192, 736, 32, 32)`, type 2 `(224, 768, 32, 32)` | `Vector2(0, -16)` | `drawer_type` |
 | `VerticalDoubleBunkBed` | Down only | `(192, 608, 64, 96)` | `Vector2(0, -32)` | None |
-| `HorizontalBunkBed` | Down only | `(288, 608, 96, 96)` | `Vector2(0, -48)` | None |
+| `HorizontalBunkBed`     | Down only | `(288, 608, 96, 96)` | `Vector2(0, -48)` | None |
 
 Configurable Objects
 --------------------

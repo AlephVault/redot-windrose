@@ -121,10 +121,10 @@ func _build_items() -> void:
 	_add_item("VerticalPlankTable", _WoodenFurniture.VerticalPlankTable, {
 		"orientations": [_Direction.RIGHT, _Direction.LEFT],
 	})
-	_add_item("HorizontalPlankBank", _WoodenFurniture.HorizontalPlankBank, {
+	_add_item("HorizontalPlankBench", _WoodenFurniture.HorizontalPlankBench, {
 		"orientations": [_Direction.DOWN, _Direction.UP],
 	})
-	_add_item("VerticalPlankBank", _WoodenFurniture.VerticalPlankBank, {
+	_add_item("VerticalPlankBench", _WoodenFurniture.VerticalPlankBench, {
 		"orientations": [_Direction.RIGHT, _Direction.LEFT],
 	})
 	_add_item("BigPlankTable", _WoodenFurniture.BigPlankTable)
@@ -160,8 +160,8 @@ func _build_items() -> void:
 	_add_item("ChessTable", _WoodenFurniture.ChessTable)
 	_add_item("BigWardrobe", _WoodenFurniture.BigWardrobe)
 	_add_item("BigTable", _WoodenFurniture.BigTable)
-	_add_item("VerticalMidBank", _WoodenFurniture.VerticalMidBank)
-	_add_item("HorizontalMidBank", _WoodenFurniture.HorizontalMidBank)
+	_add_item("VerticalMidBench", _WoodenFurniture.VerticalMidBench)
+	_add_item("HorizontalMidBench", _WoodenFurniture.HorizontalMidBench)
 	_add_item("Column", _WoodenFurniture.Column)
 	_add_item("TinyDrawer", _WoodenFurniture.TinyDrawer, {
 		"primary": _enum_property("drawer_type", _WoodenFurniture.TinyDrawer.TinyDrawerType.size()),
