@@ -120,6 +120,9 @@ func _build_items() -> void:
 	_add_item("BannerPost", _VictorianStreetAppliances.BannerPost, {
 		"primary": _enum_property("banner_color", _VictorianStreetAppliances.BannerPost.BannerColor.size()),
 	})
+	_add_item("SimpleStreetAppliance", _VictorianStreetAppliances.SimpleStreetAppliance, {
+		"primary": _enum_property("appliance", _VictorianStreetAppliances.SimpleStreetAppliance.SimpleStreetApplianceType.size()),
+	})
 	_add_item("SunBlind", _VictorianStreetAppliances.SunBlind, {
 		"primary": _enum_property("color", _VictorianStreetAppliances.SunBlind.SunBlindColor.size()),
 		"secondary": _int_property("level", 4),

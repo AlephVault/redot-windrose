@@ -45,6 +45,7 @@ Inventory
 | `StreetLight` | Down only | `32x96` | `Vector2(0, -64)` | OFF static, ON 4-frame animation at default `fps = 4` | `lamp_type` with 8 variants |
 | `StreetClock` | Down only | `32x96` | `Vector2(0, -64)` | Static | `clock_type` with 2 variants |
 | `BannerPost` | Down only | `64x128` | `Vector2(-16, -96)` | Static | `banner_color` with `NONE`, `WHITE`, `YELLOW`, `BLUE`, `RED`, `GREEN` |
+| `SimpleStreetAppliance` | Down only | Computed `(736 + 32 * index, 0, 32, 64)` | `Vector2(0, -32)` | Static | `appliance` with `GRAY_MAILBOX`, `SQUARED_TRASHBIN`, `ROUNDED_TRASHBIN`, `HYDRANT`, `GREEN_MAILBOX`, `ORANGE_MAILBOX` |
 | `SunBlind` | Down only | White `(512, 224, 96, 96)`, yellow `(640, 224, 96, 96)`, liteblue `(512, 320, 96, 96)`, red `(640, 320, 96, 96)`, green `(512, 416, 96, 96)`, brown `(640, 416, 96, 96)` | `Vector2(0, (3 + level) * -32)` | Static | `color` with `COLOR_WHITE`, `COLOR_YELLOW`, `COLOR_LITEBLUE`, `COLOR_RED`, `COLOR_GREEN`, `COLOR_BROWN`; `level >= 0` |
 | `BigDome` | Down only | Region `(512, 0, 224, 224)` | `Vector2(0, -96)` | Static | None |
 | `WhiteFenceEntrance` | Down only | Region `(0, 192, 96, 96)` | `Vector2(-32, -64)` | Static | None |
