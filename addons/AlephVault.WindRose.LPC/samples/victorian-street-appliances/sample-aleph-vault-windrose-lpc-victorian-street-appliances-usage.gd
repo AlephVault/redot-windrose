@@ -50,6 +50,8 @@ func _process(delta: float) -> void:
 		_change_zoom(-_ZOOM_STEP)
 	if _just_pressed(KEY_Q):
 		_cycle_property("primary")
+	if _just_pressed(KEY_W):
+		_cycle_property("secondary")
 	if _just_pressed(KEY_S):
 		_cycle_state()
 	if _just_pressed(KEY_R):
@@ -61,6 +63,7 @@ func _process(delta: float) -> void:
 	_remember_key(KEY_1)
 	_remember_key(KEY_2)
 	_remember_key(KEY_Q)
+	_remember_key(KEY_W)
 	_remember_key(KEY_S)
 	_remember_key(KEY_R)
 	_remember_key(KEY_F)
@@ -79,7 +82,7 @@ func _build_ui() -> void:
 
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q: property  R: orientation  S: off/on  F: FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q/W: properties  R: orientation  S: off/on  F: FPS"
 	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
@@ -116,6 +119,10 @@ func _build_items() -> void:
 	})
 	_add_item("BannerPost", _VictorianStreetAppliances.BannerPost, {
 		"primary": _enum_property("banner_color", _VictorianStreetAppliances.BannerPost.BannerColor.size()),
+	})
+	_add_item("SunBlind", _VictorianStreetAppliances.SunBlind, {
+		"primary": _enum_property("color", _VictorianStreetAppliances.SunBlind.SunBlindColor.size()),
+		"secondary": _int_property("level", 4),
 	})
 	_add_item("WhiteFenceEntrance", _VictorianStreetAppliances.WhiteFenceEntrance)
 	_add_item("BigWoodEntrance", _VictorianStreetAppliances.BigWoodEntrance)
@@ -173,6 +180,10 @@ func _enum_property(name: String, count: int) -> Dictionary:
 
 func _bool_property(name: String) -> Dictionary:
 	return {"name": name, "kind": "bool"}
+
+
+func _int_property(name: String, count: int) -> Dictionary:
+	return {"name": name, "kind": "int", "count": count}
 
 
 func _add_item(name: String, visual_script, options := {}) -> void:
