@@ -57,6 +57,7 @@ Inventory
 | `Stool1`                | Down only | Normal `(448, 256, 32, 32)`, worn `(448, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
 | `Stool2`                | Down only | Normal `(480, 256, 32, 32)`, worn `(480, 224, 32, 32)` | `Vector2.ZERO` | `worn` |
 | `TwinBed`               | Down only | Type 1 `(416, 416, 32, 64)`, type 2 `(448, 418, 32, 64)`, type 3 `(480, 416, 32, 64)` | `Vector2(0, -64)` | `bed_type` |
+| `KingBed`               | Down only | `(96, 928, 64, 96)` | `Vector2(0, -32)` | None |
 | `Chair`                 | Up/down/left/right | 32x32 directional group selected by `chair_type` and `worn` | `Vector2.ZERO` | `chair_type`, `worn` |
 | `WideShelving`          | Down only | Normal `(256, 352, 64, 64)`, worn `(256, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |
 | `WideGondola`           | Down only | Normal `(320, 352, 64, 64)`, worn `(320, 288, 64, 64)` | `Vector2(0, -48)` | `worn` |

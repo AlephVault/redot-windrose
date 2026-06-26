@@ -138,6 +138,7 @@ func _build_items() -> void:
 	_add_item("TwinBed", _WoodenFurniture.TwinBed, {
 		"primary": _enum_property("bed_type", _WoodenFurniture.TwinBed.BedType.size()),
 	})
+	_add_item("KingBed", _WoodenFurniture.KingBed)
 	_add_item("Chair", _WoodenFurniture.Chair, {
 		"primary": _enum_property("chair_type", _WoodenFurniture.Chair.ChairType.size()),
 		"secondary": _bool_property("worn"),
