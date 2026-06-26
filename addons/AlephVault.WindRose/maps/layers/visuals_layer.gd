@@ -171,27 +171,23 @@ func initialize():
 			_map._MapLayoutType.ORTHOGONAL:
 				L = _map.size.y
 				l = func(e):
-					return e.cell.y
-				# L_ = func(for_l):
-				# 	return _map.size.x
+					return e.cellf.y
 				l_ = func(for_l, e):
-					return e.cell.x
+					return e.cellf.x
 			_map._MapLayoutType.ISOMETRIC_TOPDOWN:
 				L = _map.size.x + _map.size.y - 1
 				l = func(e):
-					return e.cell.x + e.cell.y
-				# L_ = func(for_l):
-				# 	return min(for_l, L - 1 - for_l, _map.size.x, _map.size.y)
+					var cellf: Vector2i = e.cellf
+					return cell.x + cellf.y
 				l_ = func(for_l, e):
-					return min(e.cell.x, _map.size.y - 1 - e.cell.y)
+					var cellf: Vector2i = e.cellf
+					return min(cellf.x, _map.size.y - 1 - cellf.y)
 			_map._MapLayoutType.ISOMETRIC_LEFTRIGHT:
 				L = _map.size.x + _map.size.y - 1
 				l = func(e):
-					return e.cell.y - e.cell.x + _map.size.x
-				# L_ = func(for_l):
-				# 	return min(for_l, L - 1 - for_l, _map.size.x, _map.size.y)
+					return e.cellf.y - e.cell.x + _map.size.x
 				l_ = func(for_l, e):
-					return min(e.cell.x, e.cell.y)
+					return min(e.cell.x, e.cellf.y)
 		_get_level = l
 		_get_sub_level = l_
 		_sub_layers.clear()
