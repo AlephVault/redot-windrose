@@ -178,7 +178,7 @@ func initialize():
 				L = _map.size.x + _map.size.y - 1
 				l = func(e):
 					var cellf: Vector2i = e.cellf
-					return cell.x + cellf.y
+					return cellf.x + cellf.y
 				l_ = func(for_l, e):
 					var cellf: Vector2i = e.cellf
 					return min(cellf.x, _map.size.y - 1 - cellf.y)
