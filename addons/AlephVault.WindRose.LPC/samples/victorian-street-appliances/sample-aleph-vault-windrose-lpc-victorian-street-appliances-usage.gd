@@ -52,6 +52,8 @@ func _process(delta: float) -> void:
 		_cycle_property("primary")
 	if _just_pressed(KEY_W):
 		_cycle_property("secondary")
+	if _just_pressed(KEY_E):
+		_cycle_property("tertiary")
 	if _just_pressed(KEY_S):
 		_cycle_state()
 	if _just_pressed(KEY_R):
@@ -64,6 +66,7 @@ func _process(delta: float) -> void:
 	_remember_key(KEY_2)
 	_remember_key(KEY_Q)
 	_remember_key(KEY_W)
+	_remember_key(KEY_E)
 	_remember_key(KEY_S)
 	_remember_key(KEY_R)
 	_remember_key(KEY_F)
@@ -82,7 +85,7 @@ func _build_ui() -> void:
 
 	_help_label = Label.new()
 	_help_label.position = Vector2(20, 14)
-	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q/W: properties  R: orientation  S: off/on  F: FPS"
+	_help_label.text = "Arrows: move camera  1/2: zoom  Tab: select  Q/W/E: properties  R: orientation  S: off/on  F: FPS"
 	_ui_layer.add_child(_help_label)
 
 	_status_label = Label.new()
@@ -139,6 +142,11 @@ func _build_items() -> void:
 	})
 	_add_item("SmallMarketBox", _VictorianStreetAppliances.SmallMarketBox, {
 		"primary": _enum_property("box_type", _VictorianStreetAppliances.SmallMarketBox.SmallMarketBoxType.size()),
+	})
+	_add_item("MarketPost", _VictorianStreetAppliances.MarketPost, {
+		"primary": _enum_property("roof_type", _VictorianStreetAppliances.MarketPost.MarketPostRoofType.size()),
+		"secondary": _enum_property("sign_type", _VictorianStreetAppliances.MarketPost.MarketPostSignType.size()),
+		"tertiary": _enum_property("box_type", _VictorianStreetAppliances.MarketPost.MarketPostBoxType.size()),
 	})
 	_add_item("SunBlind", _VictorianStreetAppliances.SunBlind, {
 		"primary": _enum_property("color", _VictorianStreetAppliances.SunBlind.SunBlindColor.size()),
@@ -274,6 +282,8 @@ func _describe_item(item: Dictionary) -> String:
 		parts.push_back(_property_text(item, item["primary"]))
 	if item.has("secondary"):
 		parts.push_back(_property_text(item, item["secondary"]))
+	if item.has("tertiary"):
+		parts.push_back(_property_text(item, item["tertiary"]))
 	if item.has("orientations"):
 		parts.push_back("orientation=" + _direction_name(item.entity.orientation))
 	if item.has("has_fps"):

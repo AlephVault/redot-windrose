@@ -22,6 +22,8 @@ Controls:
 - `1`: zoom in.
 - `2`: zoom out.
 - `Q`: cycle the selected object's primary property when supported.
+- `W`: cycle the selected object's secondary property when supported.
+- `E`: cycle the selected object's tertiary property when supported.
 - `S`: toggle OFF/ON for streetlights.
 - `R`: cycle orientation when supported.
 - `F`: cycle FPS for animated streetlights.
@@ -51,6 +53,7 @@ Inventory
 | `Table` | Down only | Wooden 1 `(960, 0, 32, 32)`, wooden 2 `(960, 32, 32, 32)`, metal 1 `(992, 96, 32, 32)`, metal 2 `(992, 128, 32, 32)`, metal 3 `(992, 160, 32, 32)` | `Vector2.ZERO` | Static | `table_type` with `TABLE_WOODEN1`, `TABLE_WOODEN2`, `TABLE_METAL1`, `TABLE_METAL2`, `TABLE_METAL3` |
 | `Cart` | Down only | Wooden 1 `(736, 64, 64, 64)`, wooden 2 `(800, 64, 64, 64)`, wooden 3 `(864, 64, 64, 64)`, wooden 4 `(928, 64, 64, 64)` | `Vector2(0, -32)` | Static | `cart_type` with `CART_WOODEN1`, `CART_WOODEN2`, `CART_WOODEN3`, `CART_WOODEN4` |
 | `SmallMarketBox` | Down only | Dark `(800, 192, 32, 32)`, light `(800, 224, 32, 32)`, mid `(800, 256, 32, 32)` | `Vector2.ZERO` | Static | `box_type` with `BOX_DARK`, `BOX_LIGHT`, `BOX_MID` |
+| `MarketPost` | Down only | Composed `64x128` from post `(832, 384, 64, 64)`, sign base, sign, roof, and box parts | `Vector2(0, -64)` | Static | `roof_type` with `ROOF_GRAY`, `ROOF_GREEN`; `sign_type` with `SIGN_METAL1`, `SIGN_METAL2`, `SIGN_METAL3`, `SIGN_WOOD1`, `SIGN_WOOD2`, `SIGN_WOOD3`; `box_type` with `BOX_DARK`, `BOX_LIGHT`, `BOX_MID` |
 | `SunBlind` | Down only | White `(512, 224, 96, 96)`, yellow `(640, 224, 96, 96)`, liteblue `(512, 320, 96, 96)`, red `(640, 320, 96, 96)`, green `(512, 416, 96, 96)`, brown `(640, 416, 96, 96)` | `Vector2(0, (3 + level) * -32)` | Static | `color` with `COLOR_WHITE`, `COLOR_YELLOW`, `COLOR_LITEBLUE`, `COLOR_RED`, `COLOR_GREEN`, `COLOR_BROWN`; `level >= 0` |
 | `BigDome` | Down only | Region `(512, 0, 224, 224)` | `Vector2(0, -96)` | Static | None |
 | `WhiteFenceEntrance` | Down only | Region `(0, 192, 96, 96)` | `Vector2(-32, -64)` | Static | None |
@@ -103,6 +106,8 @@ Composition Notes
 - Paste `(96, 32, 32, 32)` at `(16, 0)`.
 - Paste the banner rect at `(0, 32)`: `NONE` uses `(224, 0, 64, 32)`, `WHITE` uses `(288, 0, 64, 32)`, `YELLOW` uses `(224, 32, 64, 32)`, `BLUE` uses `(352, 0, 64, 32)`, `RED` uses `(352, 32, 64, 32)`, and `GREEN` uses `(288, 32, 64, 32)`.
 - Paste `(128, 0, 32, 64)` at `(16, 64)`.
+
+`MarketPost` builds one cached texture per `roof_type`, `sign_type`, and `box_type` combination. It pastes the post `(832, 384, 64, 64)` at `(0, 48)`, the sign base at `(0, 80)`, the sign at `(0, 64)`, the roof at `(0, 0)`, and the box at `(0, 96)`.
 
 `BigSquareFountainPool` builds four cached animation frames. When `include_fountain` is `false`, each frame pastes its 96x96 source rect directly. When `include_fountain` is `true`, each frame also pastes `(X, Y + 69, 96, 64)` over the frame at `(0, 0)`.
 
