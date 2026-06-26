@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://5n1b4hmsoj68"]
+
+[ext_resource type="Texture2D" uid="uid://omakfc0k5wcq" path="res://addons/AlephVault.WindRose.LPC/images/tiles/floors/LPC-Docks-1.png" id="1_2jtsw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i2tvt"]
+texture = ExtResource("1_2jtsw")
+texture_region_size = Vector2i(32, 32)
+0:2/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+1:2/0 = 0
+3:1/0 = 0
+1:0/0 = 0
+0:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+custom_data_layer_0/name = "blocking"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_i2tvt")
