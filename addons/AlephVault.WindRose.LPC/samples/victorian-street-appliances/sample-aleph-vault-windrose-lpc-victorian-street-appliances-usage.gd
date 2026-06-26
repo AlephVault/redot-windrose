@@ -127,6 +127,10 @@ func _build_items() -> void:
 		"primary": _enum_property("chair_type", _VictorianStreetAppliances.Chair.ChairType.size()),
 		"orientations": [_Direction.DOWN, _Direction.UP, _Direction.LEFT, _Direction.RIGHT],
 	})
+	_add_item("WoodenBench", _VictorianStreetAppliances.WoodenBench, {
+		"primary": _enum_property("bench_type", _VictorianStreetAppliances.WoodenBench.WoodenBenchType.size()),
+		"orientations": [_Direction.DOWN, _Direction.UP, _Direction.LEFT, _Direction.RIGHT],
+	})
 	_add_item("Table", _VictorianStreetAppliances.Table, {
 		"primary": _enum_property("table_type", _VictorianStreetAppliances.Table.TableType.size()),
 	})
