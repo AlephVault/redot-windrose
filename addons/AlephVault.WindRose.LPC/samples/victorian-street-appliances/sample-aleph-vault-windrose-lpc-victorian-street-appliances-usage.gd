@@ -137,6 +137,9 @@ func _build_items() -> void:
 	_add_item("Cart", _VictorianStreetAppliances.Cart, {
 		"primary": _enum_property("cart_type", _VictorianStreetAppliances.Cart.CartType.size()),
 	})
+	_add_item("SmallMarketBox", _VictorianStreetAppliances.SmallMarketBox, {
+		"primary": _enum_property("box_type", _VictorianStreetAppliances.SmallMarketBox.SmallMarketBoxType.size()),
+	})
 	_add_item("SunBlind", _VictorianStreetAppliances.SunBlind, {
 		"primary": _enum_property("color", _VictorianStreetAppliances.SunBlind.SunBlindColor.size()),
 		"secondary": _int_property("level", 4),
