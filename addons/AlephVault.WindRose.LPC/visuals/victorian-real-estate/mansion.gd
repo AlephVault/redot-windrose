@@ -1,0 +1,2 @@
+@tool
+extends AlephVault__WindRose__LPC.Visuals.VictorianRealEstate.Base
