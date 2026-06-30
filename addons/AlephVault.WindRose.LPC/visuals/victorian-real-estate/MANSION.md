@@ -318,4 +318,5 @@ will be described next, and in tandem with more properties.
        If a wall is pasted at (WXT, WYT), the box window is pasted at (WXT, WYT).
      - Let _CD = design index, clamped to [0, 15].
      - Let _CDR = _CD // 8 and _CDC = _CD % 8. This, where // stands for integer truncated division.
-     - The flat window has a source rect of ()
+     - The flat window has a source rect of (864 + 256 * int(light_type) + 32 * _CDC, 192 * _C + 96 * _CDR, 32, 96).
+       If a wall is pasted at (WXT, WYT), the flat window is pasted at (WXT + 32, WYT).
