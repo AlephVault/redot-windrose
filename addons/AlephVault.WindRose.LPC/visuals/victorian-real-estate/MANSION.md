@@ -271,6 +271,17 @@ will be described next, and in tandem with more properties.
    - Columns: (WXS + 192, WYS)
    - Bevel: (WXS + 288, WYS)
      - The bevel can only be painted on top of a Plain (already described) wall.
+   
+   When painting a wall at some target coordinates (WXT, WYT), the following rules apply:
+
+   - On first floor, this can be pasted:
+     - 1st Floor's bricked.
+     - Plain.
+     - Plain, and then Bevel.
+     - Under certain allowed cases, columns.
+   - On second floor, this can be pasted:
+     - 2nd Floor's bricked.
+     - Plain.
 
 3. Finding the Windows.
 
@@ -320,3 +331,5 @@ will be described next, and in tandem with more properties.
      - Let _CDR = _CD // 8 and _CDC = _CD % 8. This, where // stands for integer truncated division.
      - The flat window has a source rect of (864 + 256 * int(light_type) + 32 * _CDC, 192 * _C + 96 * _CDR, 32, 96).
        If a wall is pasted at (WXT, WYT), the flat window is pasted at (WXT + 32, WYT).
+
+   Just a little note: a window will never be put on top of a wall with columns.
