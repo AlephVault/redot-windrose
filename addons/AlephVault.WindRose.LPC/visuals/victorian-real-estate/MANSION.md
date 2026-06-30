@@ -235,3 +235,38 @@ The offset is, always, -96px * N, where N is the number of stories.
 Now, it's time to understand how the 1, 2, D and R blocks are filled, since those
 blocks are not regular (e.g. not all the R blocks use the exact same pattern). This
 will be described next, and in tandem with more properties.
+
+1. Finding the roofs.
+
+   This starts by understanding where the roofs are in the texture:
+
+   Start with coordinates (0, 1408). Roof parts are stored in blocks of 96x96. However,
+   for each color, 9 different blocks of textures exist to assemble the roof. This means
+   that, in practice, each roof color occupies a square of 288x288 pixels.
+
+   The roof colors are: PURPLE, GRAY, BLUE, GREEN, RED, BROWN, WHITE, BLACK, WORN_RED and
+   WORN_GREEN, and each square starts at (RXS, RYS) = (0 + 288*A, 1408 + 288*B), where the
+   respective (A, B) values are:
+
+   (0, 0) (1, 0) (2, 0) (3, 0) (4, 0) (0, 1) (1, 1) (2, 1) (3, 1) (4, 1)
+
+   With this in mind, (RXS, RYS) will be used as pivots for the roofs.
+
+2. Finding the walls.
+
+   This starts by understanding where the walls are in the texture:
+
+   Start with coordinates (0, 0). Walls are also stored in blocks of 96x96. However, for
+   each color, different blocks exist. I'll detail them later. For now, bear in mind that
+   you will get the starting point like this: (WXS, WYS) = (0, 192*A) where the respective
+   A values are (for colors: YELLOW, RED, GREEN, GRAYBLUE, BLUE, PURPLE):
+
+   0 1 2 3 4 5
+
+   Then, inside each macro-block, the following blocks are used:
+
+   - 1st Floor's bricked: (WXS + 96, WYS + 96)
+   - 2nd Floor's bricked: (WXS + 0, WYS + 0)
+   - Plain: (WXS + 0, WYS + 96)
+   - Columns: (WXS + 192, WYS)
+   - Bevel: (WXS + 288, WYS)
