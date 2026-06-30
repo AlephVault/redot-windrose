@@ -245,8 +245,8 @@ will be described next, and in tandem with more properties.
    that, in practice, each roof color occupies a square of 288x288 pixels.
 
    The roof colors are: PURPLE, GRAY, BLUE, GREEN, RED, BROWN, WHITE, BLACK, WORN_RED and
-   WORN_GREEN, and each square starts at (RXS, RYS) = (0 + 288*A, 1408 + 288*B), where the
-   respective (A, B) values are:
+   WORN_GREEN, and each square starts at (RXS, RYS) = (0 + 288*RCA, 1408 + 288*RCB), where
+   the respective (RCA, RCB) values are:
 
    (0, 0) (1, 0) (2, 0) (3, 0) (4, 0) (0, 1) (1, 1) (2, 1) (3, 1) (4, 1)
 
@@ -258,8 +258,8 @@ will be described next, and in tandem with more properties.
 
    Start with coordinates (0, 0). Walls are also stored in blocks of 96x96. However, for
    each color, different blocks exist. I'll detail them later. For now, bear in mind that
-   you will get the starting point like this: (WXS, WYS) = (0, 192*A) where the respective
-   A values are (for colors: YELLOW, RED, GREEN, GRAYBLUE, BLUE, PURPLE):
+   you will get the starting point like this: (WXS, WYS) = (0, 192*WCA) where the respective
+   WCA values are (for colors: YELLOW, RED, GREEN, GRAYBLUE, BLUE, PURPLE):
 
    0 1 2 3 4 5
 
@@ -270,3 +270,52 @@ will be described next, and in tandem with more properties.
    - Plain: (WXS + 0, WYS + 96)
    - Columns: (WXS + 192, WYS)
    - Bevel: (WXS + 288, WYS)
+     - The bevel can only be painted on top of a Plain (already described) wall.
+
+3. Finding the Windows.
+
+   This starts by understanding where the windows are in the texture, but there
+   are two types of windows, and several flavors:
+
+   - Box Windows (they're only placed on top of Bevels).
+   - Flat Windows.
+
+   Also, they're affected by:
+
+   - Color: CLASSIC, BLACK, WHITE, YELLOW, RED, GREEN, BROWN.
+   - Light type: DAY, NIGHT_OFF, NIGHT_ON.
+   - Design: {0, 1} when the color is CLASSIC, and 0 to 15 for other colors.
+     - Invalid colors will be clamped to the respective valid values for the
+       involved color. For example, if CLASSIC is chosen, all the indices
+       greater than 1 become 1, while all the indices below 0 become 0. For
+       the other colors, all the indices greater than 15 become 15, and all
+       the indices below 0 become 0. Designs relate to flat windows, not to
+       box windows (box windows only vary per color).
+     - We'll discuss this later, but a mansion defines TWO designs: one for
+       "primary" windows and one for "secondary" windows.
+
+   The CLASSIC color is not just a different color, but a different style. Windows
+   in classic color have actually white frames and their curtains match the color
+   chosen as wall color.
+
+   The BLACK ... BROWN colors are actual colors and a relatively "modern" design.
+   A set of variations of design can be chosen.
+
+   The coordinates are different for each design, design type and color. Also, the
+   canvas dimensions are different.
+
+   The coordinates can be found as follows:
+
+   - If Color == CLASSIC:
+     - The box window has a source rect of (384 + int(light_type) * 96, WCA * 192, 96, 96).
+       If a wall is pasted at (WXT, WYT), the box window is pasted at (WXT, WYT).
+     - Let _CD = design index, clamped to {0, 1}.
+     - The flat window has a source rect of (672 + int(light_type) * 64 + 32 * _CD, WCA * 192, 32, 96).
+       If a wall is pasted at (WXT, WYT), the flat window is pasted at (WXT + 32, WYT).
+   - Otherwise:
+     - Let _C = int(color) - 1.
+     - The box window has a source rect of (1632 + int(light_type) * 96, _C * 192, 96, 96).
+       If a wall is pasted at (WXT, WYT), the box window is pasted at (WXT, WYT).
+     - Let _CD = design index, clamped to [0, 15].
+     - Let _CDR = _CD // 8 and _CDC = _CD % 8. This, where // stands for integer truncated division.
+     - The flat window has a source rect of ()
