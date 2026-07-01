@@ -97,30 +97,42 @@ static func _get_roof_base_position(roof_color: RoofColor) -> Vector2i:
 	var pos: Vector2i
 	match roof_color:
 		RoofColor.PURPLE:
-		    pos = Vector2i(0, 0)
+			pos = Vector2i(0, 0)
 		RoofColor.GRAY:
-		    pos = Vector2i(0, 1)
+			pos = Vector2i(0, 1)
 		RoofColor.BLUE:
-		    pos = Vector2i(0, 2)
+			pos = Vector2i(0, 2)
 		RoofColor.GREEN:
-		    pos = Vector2i(0, 3)
+			pos = Vector2i(0, 3)
 		RoofColor.RED:
-		    pos = Vector2i(0, 4)
+			pos = Vector2i(0, 4)
 		RoofColor.BROWN:
-		    pos = Vector2i(1, 0)
+			pos = Vector2i(1, 0)
 		RoofColor.WHITE:
-		    pos = Vector2i(1, 1)
+			pos = Vector2i(1, 1)
 		RoofColor.BLACK:
-		    pos = Vector2i(1, 2)
+			pos = Vector2i(1, 2)
 		RoofColor.WORN_RED:
-		    pos = Vector2i(1, 3)
+			pos = Vector2i(1, 3)
 		RoofColor.WORN_GREEN:
-		    pos = Vector2i(1, 4)
+			pos = Vector2i(1, 4)
 	return Vector2i(pos.x * ROOF_PALETTE_SIZE.x, pos.y * ROOF_PALETTE_SIZE.y) + ROOF_PIVOT
 
-# Makes a step, configured from the current texture.
-static func make_step(part: String, source_rect: Rect2i, target_position: Vector2i = Vector2i.ZERO) -> Object:
+## Makes a step, configured from the current texture.
+static func make_step(part: String, source_rect: Rect2i, target_position: Vector2i = Vector2i.ZERO) -> _Step:
 	return _Step.new(part, SOURCE_TEXTURE, source_rect, target_position)
+
+## Makes a block-aligned position.
+static func block_position(pos: Vector2i) -> Vector2i:
+	return Vector2i(pos.x * BLOCK_SIZE, pos.y * BLOCK_SIZE)
+
+## Makes a rect for a block.
+static func block_rect(pos: Vector2i) -> Rect2i:
+	return Rect2i(pos.x * BLOCK_SIZE, pos.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+
+## Makes a step, configured from the current texture.
+static func make_block_step(part: String, source_position: Vector2i, target_position: Vector2i = Vector2i.ZERO) -> _Step:
+	return make_step(part, block_rect(source_position), block_position(target_position))
 
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
@@ -134,7 +146,35 @@ static func make_roof_steps(
 				Stories.SINGLE:
 					match depth:
 						Depth.SINGLE:
+							# Design of roof:
+							#
+							# RRR
+							# RRR
 							return [
+								make_block_step(
+									"roof-00-" + str(roof_color),
+									Vector2i(0, 0), Vector2i(0, 0)
+								),
+								make_block_step(
+									"roof-10-" + str(roof_color),
+									Vector2i(1, 0), Vector2i(1, 0)
+								),
+								make_block_step(
+									"roof-20-" + str(roof_color),
+									Vector2i(2, 0), Vector2i(2, 0)
+								),
+								make_block_step(
+									"roof-01-" + str(roof_color),
+									Vector2i(0, 2), Vector2i(0, 1)
+								),
+								make_block_step(
+									"roof-11-" + str(roof_color),
+									Vector2i(1, 2), Vector2i(1, 1)
+								),
+								make_block_step(
+									"roof-21-" + str(roof_color),
+									Vector2i(2, 2), Vector2i(2, 1)
+								),
 							]
 						Depth.DOUBLE:
 							return [
