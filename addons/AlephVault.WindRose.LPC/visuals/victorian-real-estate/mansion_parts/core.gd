@@ -1,5 +1,9 @@
 extends Object
 
+const _Step := AlephVault__WindRose.Utils.Textures.Step
+const _Context := AlephVault__WindRose.Utils.Textures.Context
+
+## The source texture.
 const SOURCE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/victorian-decoration/mansion.png")
 
 ## The size of the blocks to render.
@@ -10,6 +14,18 @@ const EXTRA_SIZE: int = 16
 
 ## The offset, expressed in blocks, to apply. The minimum is 2 blocks.
 const BASE_OFFSET_IN_BLOCKS: int = 2
+
+## The pivot point for the roof.
+const ROOF_PIVOT = Vector2i(0, 1408)
+
+## The amount of blocks in the x axis for a single roof's palette.
+const ROOF_PALETTE_X_BLOCKS = 3
+
+## The amount of blocks in the y axis for a single roof's palette.
+const ROOF_PALETTE_Y_BLOCKS = 5
+
+## The size, in pixels, for a single roof's palette.
+const ROOF_PALETTE_SIZE = Vector2i(ROOF_PALETTE_X_BLOCKS * BLOCK_SIZE, ROOF_PALETTE_Y_BLOCKS * BLOCK_SIZE)
 
 ## The color for the roof.
 enum RoofColor {
@@ -75,3 +91,38 @@ static func compute_size(stories: Stories, depth: Depth, design: Design) -> Vect
 
 	# Return the size.
 	return Vector2i(x, y)
+
+# Computes the base position of the roof to apply.
+static func _get_roof_base_position(roof_color: RoofColor) -> Vector2i:
+	var pos: Vector2i
+	match roof_color:
+		RoofColor.PURPLE:
+		    pos = Vector2i(0, 0)
+		RoofColor.GRAY:
+		    pos = Vector2i(0, 1)
+		RoofColor.BLUE:
+		    pos = Vector2i(0, 2)
+		RoofColor.GREEN:
+		    pos = Vector2i(0, 3)
+		RoofColor.RED:
+		    pos = Vector2i(0, 4)
+		RoofColor.BROWN:
+		    pos = Vector2i(1, 0)
+		RoofColor.WHITE:
+		    pos = Vector2i(1, 1)
+		RoofColor.BLACK:
+		    pos = Vector2i(1, 2)
+		RoofColor.WORN_RED:
+		    pos = Vector2i(1, 3)
+		RoofColor.WORN_GREEN:
+		    pos = Vector2i(1, 4)
+	return Vector2i(pos.x * ROOF_PALETTE_SIZE.x, pos.y * ROOF_PALETTE_SIZE.y) + ROOF_PIVOT
+
+## Creates the steps to install the roof in the final texture
+## that will, in the end, make the mansion.
+static func make_roof_steps(
+	roof_color: RoofColor, design: Design, stories: Stories, depth: Depth
+) -> Array[_Step]:
+	var base_position: Vector2i = _get_roof_base_position(roof_color)
+	# TODO.
+	return []
