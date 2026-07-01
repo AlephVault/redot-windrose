@@ -215,7 +215,48 @@ static func make_roof_steps(
 				Stories.DOUBLE:
 					match depth:
 						Depth.SINGLE:
+							# Design of roof:
+							#
+							# RRR
+							# RRR
+							# RRR
 							return [
+								make_block_step(
+									"roof-00-" + str(roof_color),
+									Vector2i(0, 0), Vector2i(0, 0)
+								),
+								make_block_step(
+									"roof-10-" + str(roof_color),
+									Vector2i(1, 0), Vector2i(1, 0)
+								),
+								make_block_step(
+									"roof-20-" + str(roof_color),
+									Vector2i(2, 0), Vector2i(2, 0)
+								),
+								make_block_step(
+									"roof-01-" + str(roof_color),
+									Vector2i(0, 1), Vector2i(0, 1)
+								),
+								make_block_step(
+									"roof-11-" + str(roof_color),
+									Vector2i(1, 1), Vector2i(1, 1)
+								),
+								make_block_step(
+									"roof-21-" + str(roof_color),
+									Vector2i(2, 1), Vector2i(2, 1)
+								),
+								make_block_step(
+									"roof-02-" + str(roof_color),
+									Vector2i(0, 2), Vector2i(0, 2)
+								),
+								make_block_step(
+									"roof-12-" + str(roof_color),
+									Vector2i(1, 2), Vector2i(1, 2)
+								),
+								make_block_step(
+									"roof-22-" + str(roof_color),
+									Vector2i(2, 2), Vector2i(2, 2)
+								),
 							]
 						Depth.DOUBLE:
 							return [
