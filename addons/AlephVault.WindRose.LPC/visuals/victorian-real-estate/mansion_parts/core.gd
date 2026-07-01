@@ -118,11 +118,106 @@ static func _get_roof_base_position(roof_color: RoofColor) -> Vector2i:
 		    pos = Vector2i(1, 4)
 	return Vector2i(pos.x * ROOF_PALETTE_SIZE.x, pos.y * ROOF_PALETTE_SIZE.y) + ROOF_PIVOT
 
+# Makes a step, configured from the current texture.
+static func make_step(part: String, source_rect: Rect2i, target_position: Vector2i = Vector2i.ZERO) -> Object:
+	return _Step.new(part, SOURCE_TEXTURE, source_rect, target_position)
+
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
 static func make_roof_steps(
 	roof_color: RoofColor, design: Design, stories: Stories, depth: Depth
 ) -> Array[_Step]:
 	var base_position: Vector2i = _get_roof_base_position(roof_color)
-	# TODO.
+	match design:
+		Depth.LINE_SHAPE:
+			match stories:
+				Stories.SINGLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+				Stories.DOUBLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+		Depth.T_SHAPE:
+			match stories:
+				Stories.SINGLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+				Stories.DOUBLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+		Depth.LITTLE_C_SHAPE:
+			match stories:
+				Stories.SINGLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+				Stories.DOUBLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+		Depth.BIG_C_SHAPE:
+			match stories:
+				Stories.SINGLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+				Stories.DOUBLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+		Depth.E_SHAPE:
+			match stories:
+				Stories.SINGLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+				Stories.DOUBLE:
+					match depth:
+						Depth.SINGLE:
+							return [
+							]
+						Depth.DOUBLE:
+							return [
+							]
+
 	return []
