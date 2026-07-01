@@ -137,201 +137,197 @@ static func make_block_step(part: String, source_position: Vector2i, target_posi
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
 static func make_roof_steps(
-	roof_color: RoofColor, design: Design, stories: Stories, depth: Depth
+	roof_color: RoofColor, design: Design, depth: Depth
 ) -> Array[_Step]:
 	var base_position: Vector2i = _get_roof_base_position(roof_color)
 	match design:
 		Depth.LINE_SHAPE:
-			match stories:
-				Stories.SINGLE:
-					match depth:
-						Depth.SINGLE:
-							# Design of roof:
-							#
-							# RRR
-							# RRR
-							return [
-								make_block_step(
-									"roof-00-" + str(roof_color),
-									Vector2i(0, 0), Vector2i(0, 0)
-								),
-								make_block_step(
-									"roof-10-" + str(roof_color),
-									Vector2i(1, 0), Vector2i(1, 0)
-								),
-								make_block_step(
-									"roof-20-" + str(roof_color),
-									Vector2i(2, 0), Vector2i(2, 0)
-								),
-								make_block_step(
-									"roof-01-" + str(roof_color),
-									Vector2i(0, 2), Vector2i(0, 1)
-								),
-								make_block_step(
-									"roof-11-" + str(roof_color),
-									Vector2i(1, 2), Vector2i(1, 1)
-								),
-								make_block_step(
-									"roof-21-" + str(roof_color),
-									Vector2i(2, 2), Vector2i(2, 1)
-								),
-							]
-						Depth.DOUBLE:
-							# Design of roof:
-							#
-							# RRR
-							# RRR
-							#  R
-							return [
-								make_block_step(
-									"roof-00-" + str(roof_color),
-									Vector2i(0, 0), Vector2i(0, 0)
-								),
-								make_block_step(
-									"roof-10-" + str(roof_color),
-									Vector2i(1, 0), Vector2i(1, 0)
-								),
-								make_block_step(
-									"roof-20-" + str(roof_color),
-									Vector2i(2, 0), Vector2i(2, 0)
-								),
-								make_block_step(
-									"roof-01-" + str(roof_color),
-									Vector2i(0, 2), Vector2i(0, 1)
-								),
-								make_block_step(
-									"roof-11-" + str(roof_color),
-									Vector2i(1, 3), Vector2i(1, 1)
-								),
-								make_block_step(
-									"roof-21-" + str(roof_color),
-									Vector2i(2, 2), Vector2i(2, 1)
-								),
-								make_block_step(
-									"roof-12-" + str(roof_color),
-									Vector2i(1, 4), Vector2i(1, 2)
-								),
-							]
-				Stories.DOUBLE:
-					match depth:
-						Depth.SINGLE:
-							# Design of roof:
-							#
-							# RRR
-							# RRR
-							# RRR
-							return [
-								make_block_step(
-									"roof-00-" + str(roof_color),
-									Vector2i(0, 0), Vector2i(0, 0)
-								),
-								make_block_step(
-									"roof-10-" + str(roof_color),
-									Vector2i(1, 0), Vector2i(1, 0)
-								),
-								make_block_step(
-									"roof-20-" + str(roof_color),
-									Vector2i(2, 0), Vector2i(2, 0)
-								),
-								make_block_step(
-									"roof-01-" + str(roof_color),
-									Vector2i(0, 1), Vector2i(0, 1)
-								),
-								make_block_step(
-									"roof-11-" + str(roof_color),
-									Vector2i(1, 1), Vector2i(1, 1)
-								),
-								make_block_step(
-									"roof-21-" + str(roof_color),
-									Vector2i(2, 1), Vector2i(2, 1)
-								),
-								make_block_step(
-									"roof-02-" + str(roof_color),
-									Vector2i(0, 2), Vector2i(0, 2)
-								),
-								make_block_step(
-									"roof-12-" + str(roof_color),
-									Vector2i(1, 2), Vector2i(1, 2)
-								),
-								make_block_step(
-									"roof-22-" + str(roof_color),
-									Vector2i(2, 2), Vector2i(2, 2)
-								),
-							]
-						Depth.DOUBLE:
-							return [
-							]
+			match depth:
+				Depth.SINGLE:
+					# Design of roof:
+					#
+					# RRR
+					# RRR
+					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 2), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(2, 2), Vector2i(2, 1)
+						),
+					]
+				Depth.DOUBLE:
+					# Design of roof:
+					#
+					# RRR
+					# RRR
+					# RRR
+					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 1), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 1), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(2, 1), Vector2i(2, 1)
+						),
+						make_block_step(
+							"roof-02-" + str(roof_color),
+							Vector2i(0, 2), Vector2i(0, 2)
+						),
+						make_block_step(
+							"roof-12-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(1, 2)
+						),
+						make_block_step(
+							"roof-22-" + str(roof_color),
+							Vector2i(2, 2), Vector2i(2, 2)
+						),
+					]
 		Depth.T_SHAPE:
-			match stories:
-				Stories.SINGLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
-				Stories.DOUBLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
+			match depth:
+				Depth.SINGLE:
+					# Design of roof:
+					#
+					# RRR
+					# RRR
+					#  R
+					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 2), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 3), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(2, 2), Vector2i(2, 1)
+						),
+						make_block_step(
+							"roof-12-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(1, 2)
+						),
+					]
+				Depth.DOUBLE:
+					# Design of roof:
+					#
+					# RRR
+					# RRR
+					# RRR
+					#  R
+					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 1), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 1), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(2, 1), Vector2i(2, 1)
+						),
+						make_block_step(
+							"roof-02-" + str(roof_color),
+							Vector2i(0, 2), Vector2i(0, 2)
+						),
+						make_block_step(
+							"roof-12-" + str(roof_color),
+							Vector2i(1, 3), Vector2i(1, 2)
+						),
+						make_block_step(
+							"roof-22-" + str(roof_color),
+							Vector2i(2, 2), Vector2i(2, 2)
+						),
+						make_block_step(
+							"roof-13-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(1, 3)
+						),
+					]
 		Depth.LITTLE_C_SHAPE:
-			match stories:
-				Stories.SINGLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
-				Stories.DOUBLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
+			match depth:
+				Depth.SINGLE:
+					return [
+					]
+				Depth.DOUBLE:
+					return [
+					]
 		Depth.BIG_C_SHAPE:
-			match stories:
-				Stories.SINGLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
-				Stories.DOUBLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
+			match depth:
+				Depth.SINGLE:
+					return [
+					]
+				Depth.DOUBLE:
+					return [
+					]
 		Depth.E_SHAPE:
-			match stories:
-				Stories.SINGLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
-				Stories.DOUBLE:
-					match depth:
-						Depth.SINGLE:
-							return [
-							]
-						Depth.DOUBLE:
-							return [
-							]
+			match depth:
+				Depth.SINGLE:
+					return [
+					]
+				Depth.DOUBLE:
+					return [
+					]
 
 	return []
