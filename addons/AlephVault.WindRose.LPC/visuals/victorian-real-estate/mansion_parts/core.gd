@@ -438,11 +438,11 @@ static func make_roof_steps(
 							Vector2i(1, 2), Vector2i(1, 1)
 						),
 						make_block_step(
-							"roof-11-" + str(roof_color),
+							"roof-21-" + str(roof_color),
 							Vector2i(1, 2), Vector2i(2, 1)
 						),
 						make_block_step(
-							"roof-11-" + str(roof_color),
+							"roof-31-" + str(roof_color),
 							Vector2i(1, 2), Vector2i(3, 1)
 						),
 						make_block_step(
@@ -538,10 +538,145 @@ static func make_roof_steps(
 		Depth.E_SHAPE:
 			match depth:
 				Depth.SINGLE:
+					# Design of roof:
+					#
+					# RRRRR
+					# RRRRR
+					# R R R
 					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-30-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(3, 0)
+						),
+						make_block_step(
+							"roof-40-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(4, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 3), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(1, 3), Vector2i(2, 1)
+						),
+						make_block_step(
+							"roof-31-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(3, 1)
+						),
+						make_block_step(
+							"roof-41-" + str(roof_color),
+							Vector2i(2, 3), Vector2i(4, 1)
+						),
+						make_block_step(
+							"roof-02-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(0, 2)
+						),
+						make_block_step(
+							"roof-22-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(2, 2)
+						),
+						make_block_step(
+							"roof-42-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(4, 2)
+						),
 					]
 				Depth.DOUBLE:
+					# Design of roof:
+					#
+					# RRRRR
+					# RRRRR
+					# RRRRR
+					# R   R
 					return [
+						make_block_step(
+							"roof-00-" + str(roof_color),
+							Vector2i(0, 0), Vector2i(0, 0)
+						),
+						make_block_step(
+							"roof-10-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(1, 0)
+						),
+						make_block_step(
+							"roof-20-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(2, 0)
+						),
+						make_block_step(
+							"roof-30-" + str(roof_color),
+							Vector2i(1, 0), Vector2i(3, 0)
+						),
+						make_block_step(
+							"roof-40-" + str(roof_color),
+							Vector2i(2, 0), Vector2i(4, 0)
+						),
+						make_block_step(
+							"roof-01-" + str(roof_color),
+							Vector2i(0, 1), Vector2i(0, 1)
+						),
+						make_block_step(
+							"roof-11-" + str(roof_color),
+							Vector2i(1, 1), Vector2i(1, 1)
+						),
+						make_block_step(
+							"roof-21-" + str(roof_color),
+							Vector2i(1, 1), Vector2i(2, 1)
+						),
+						make_block_step(
+							"roof-31-" + str(roof_color),
+							Vector2i(1, 1), Vector2i(3, 1)
+						),
+						make_block_step(
+							"roof-41-" + str(roof_color),
+							Vector2i(2, 1), Vector2i(4, 1)
+						),
+						make_block_step(
+							"roof-02-" + str(roof_color),
+							Vector2i(0, 3), Vector2i(0, 2)
+						),
+						make_block_step(
+							"roof-12-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(1, 2)
+						),
+						make_block_step(
+							"roof-22-" + str(roof_color),
+							Vector2i(1, 3), Vector2i(2, 2)
+						),
+						make_block_step(
+							"roof-32-" + str(roof_color),
+							Vector2i(1, 2), Vector2i(3, 2)
+						),
+						make_block_step(
+							"roof-42-" + str(roof_color),
+							Vector2i(2, 3), Vector2i(4, 2)
+						),
+						make_block_step(
+							"roof-03-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(0, 3)
+						),
+						make_block_step(
+							"roof-23-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(2, 3)
+						),
+						make_block_step(
+							"roof-43-" + str(roof_color),
+							Vector2i(1, 4), Vector2i(4, 3)
+						),
 					]
 
 	return []
