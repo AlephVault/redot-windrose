@@ -54,20 +54,20 @@ static func compute_offset(stories: Stories) -> Vector2i:
 
 ## Tells whether a design uses extra space or not.
 static func design_uses_extra_space(design: Design) -> bool:
-	return design != Depth.LITTLE_C_SHAPE and Depth.BIG_C_SHAPE 
+	return design != Design.LITTLE_C_SHAPE and Design.BIG_C_SHAPE 
 
 ## Computes the size of a design, expressed in blocks.
 static func compute_block_size(design: Design) -> Vector2i:
 	match design:
-		Depth.LINE_SHAPE:
+		Design.LINE_SHAPE:
 			return Vector2i(3, 3)
-		Depth.T_SHAPE:
+		Design.T_SHAPE:
 			return Vector2i(3, 4)
-		Depth.LITTLE_C_SHAPE:
+		Design.LITTLE_C_SHAPE:
 			return Vector2i(3, 4)
-		Depth.BIG_C_SHAPE:
+		Design.BIG_C_SHAPE:
 			return Vector2i(5, 4)
-		Depth.E_SHAPE:
+		Design.E_SHAPE:
 			return Vector2i(5, 4)
 	return Vector2i(0, 0)
 
@@ -137,7 +137,7 @@ static func make_roof_steps(
 ) -> Array[_Step]:
 	var base_position: Vector2i = _get_roof_base_position(roof_color)
 	match design:
-		Depth.LINE_SHAPE:
+		Design.LINE_SHAPE:
 			match depth:
 				Depth.SINGLE:
 					# Design of roof:
@@ -214,7 +214,7 @@ static func make_roof_steps(
 							Vector2i(2, 2), Vector2i(2, 2)
 						),
 					]
-		Depth.T_SHAPE:
+		Design.T_SHAPE:
 			match depth:
 				Depth.SINGLE:
 					# Design of roof:
@@ -301,7 +301,7 @@ static func make_roof_steps(
 							Vector2i(1, 4), Vector2i(1, 3)
 						),
 					]
-		Depth.LITTLE_C_SHAPE:
+		Design.LITTLE_C_SHAPE:
 			match depth:
 				Depth.SINGLE:
 					# Design of roof:
@@ -396,7 +396,7 @@ static func make_roof_steps(
 							Vector2i(1, 4), Vector2i(2, 3)
 						),
 					]
-		Depth.BIG_C_SHAPE:
+		Design.BIG_C_SHAPE:
 			match depth:
 				Depth.SINGLE:
 					# Design of roof:
@@ -531,7 +531,7 @@ static func make_roof_steps(
 							Vector2i(1, 4), Vector2i(4, 3)
 						),
 					]
-		Depth.E_SHAPE:
+		Design.E_SHAPE:
 			match depth:
 				Depth.SINGLE:
 					# Design of roof:
@@ -693,25 +693,25 @@ static func compute_wall_coordinates(
 	# Then, compute the base Y coordinate (in blocks).
 	var y: int = 2 + int(depth) + index
 	match design:
-		Depth.LINE_SHAPE:
+		Design.LINE_SHAPE:
 			if x > 2:
 				x = 2
-		Depth.T_SHAPE:
+		Design.T_SHAPE:
 			if x > 2:
 				x = 2
 			if x == 1:
 				y += 1
-		Depth.LITTLE_C_SHAPE:
+		Design.LITTLE_C_SHAPE:
 			if x > 2:
 				x = 2
 			if x == 0 or x == 2:
 				y += 1
-		Depth.BIG_C_SHAPE:
+		Design.BIG_C_SHAPE:
 			if x > 4:
 				x = 4
 			if x == 0 or x == 4:
 				y += 1
-		Depth.E_SHAPE:
+		Design.E_SHAPE:
 			if x > 4:
 				x = 4
 			if x == 0 or x == 2 or x == 4:
