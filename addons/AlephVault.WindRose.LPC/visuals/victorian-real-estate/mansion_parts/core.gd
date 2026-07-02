@@ -52,40 +52,36 @@ static func compute_offset(stories: Stories) -> Vector2i:
 	var offset: int = (int(stories) + BASE_OFFSET_IN_BLOCKS) * BLOCK_SIZE
 	return Vector2i(0, -offset)
 
-## Computes the dimensions to use for the texture. It's based on its depth, stories and design.
-static func compute_size(stories: Stories, depth: Depth, design: Design) -> Vector2i:
-	var x_blocks: int = 0
-	var y_blocks: int = 0
-	var uses_extra: bool = false
+## Tells whether a design uses extra space or not.
+static func design_uses_extra_space(design: Design) -> bool:
+	return design != Depth.LITTLE_C_SHAPE and Depth.BIG_C_SHAPE 
 
-	# Compute the base size of the mansion, in terms of blocks used by the
-	# design in the smallest configuration.
+## Computes the size of a design, expressed in blocks.
+static func compute_block_size(design: Design) -> Vector2i:
 	match design:
 		Depth.LINE_SHAPE:
-			x_blocks = 3
-			y_blocks = 3
-			uses_extra = true
+			return Vector2i(3, 3)
 		Depth.T_SHAPE:
-			x_blocks = 3
-			y_blocks = 4
-			uses_extra = true
+			return Vector2i(3, 4)
 		Depth.LITTLE_C_SHAPE:
-			x_blocks = 3
-			y_blocks = 4
+			return Vector2i(3, 4)
 		Depth.BIG_C_SHAPE:
-			x_blocks = 5
-			y_blocks = 4
+			return Vector2i(5, 4)
 		Depth.E_SHAPE:
-			x_blocks = 5
-			y_blocks = 3
-			uses_extra = true
+			return Vector2i(5, 4)
+	return Vector2i(0, 0)
+
+## Computes the dimensions to use for the texture. It's based on its depth, stories and design.
+static func compute_size(stories: Stories, depth: Depth, design: Design) -> Vector2i:
+	var uses_extra: bool = design_uses_extra_space(design)
+	var blocks: Vector2i = compute_block_size(design)
 
 	# Add Y size based on depth and stories.
-	y_blocks += int(depth) + int(stories)
+	blocks.y += int(depth) + int(stories)
 
 	# Compute the final size, in pixels.
-	var x: int = x_blocks * BLOCK_SIZE
-	var y: int = y_blocks * BLOCK_SIZE
+	var x: int = blocks.x * BLOCK_SIZE
+	var y: int = blocks.y * BLOCK_SIZE
 	if uses_extra:
 		y += EXTRA_SIZE
 
@@ -137,7 +133,7 @@ static func make_block_step(part: String, source_position: Vector2i, target_posi
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
 static func make_roof_steps(
-	roof_color: RoofColor, design: Design, depth: Depth
+	roof_color: RoofColor, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var base_position: Vector2i = _get_roof_base_position(roof_color)
 	match design:
@@ -680,3 +676,45 @@ static func make_roof_steps(
 					]
 
 	return []
+
+## Computes the coordinates for a wall. All the data is used, except
+## for the stories, for the comparison. Instead, a reverse index is
+## used for the floor, computed as (n_stories - 1 - floor).
+static func compute_wall_coordinates(
+	roof_color: RoofColor, depth: Depth, design: Design,
+	x: int, index: int
+) -> Vector2i:
+	# First, fix index. It can be only 0 or 1.
+	if index < 1:
+		index = 0
+	if index > 1:
+		index = 1
+	
+	# Then, compute the base Y coordinate (in blocks).
+	var y: int = 2 + int(depth) + index
+	match design:
+		Depth.LINE_SHAPE:
+			if x > 2:
+				x = 2
+		Depth.T_SHAPE:
+			if x > 2:
+				x = 2
+			if x == 1:
+				y += 1
+		Depth.LITTLE_C_SHAPE:
+			if x > 2:
+				x = 2
+			if x == 0 or x == 2:
+				y += 1
+		Depth.BIG_C_SHAPE:
+			if x > 4:
+				x = 4
+			if x == 0 or x == 4:
+				y += 1
+		Depth.E_SHAPE:
+			if x > 4:
+				x = 4
+			if x == 0 or x == 2 or x == 4:
+				y += 1
+
+	return block_position(Vector2i(x, y))
