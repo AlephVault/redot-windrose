@@ -32,6 +32,11 @@ enum RoofColor {
 	PURPLE, GRAY, BLUE, GREEN, RED, BROWN, WHITE, BLACK, WORN_RED, WORN_GREEN
 }
 
+## The color for the wall.
+enum WallColor {
+	YELLOW, RED, GREEN, GRAYBLUE, BLUE, PURPLE
+}
+
 ## The design of the house.
 enum Design {
 	LINE_SHAPE, T_SHAPE, LITTLE_C_SHAPE, BIG_C_SHAPE, E_SHAPE
@@ -680,7 +685,7 @@ static func make_roof_steps(
 ## Computes the coordinates for a wall. All the data is used, except
 ## for the stories, for the comparison. Instead, a reverse index is
 ## used for the floor, computed as (n_stories - 1 - floor).
-static func compute_wall_coordinates(
+static func compute_target_wall_coordinates(
 	roof_color: RoofColor, depth: Depth, design: Design,
 	x: int, index: int
 ) -> Vector2i:
