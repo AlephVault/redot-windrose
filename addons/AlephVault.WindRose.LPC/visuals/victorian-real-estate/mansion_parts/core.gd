@@ -164,19 +164,19 @@ static func make_base_wall_steps(
 					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + BLOCK_SIZE, wall_color_pivot.y + BLOCK_SIZE,
 						32, BLOCK_SIZE
-					), (0, y_)),
-					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+					), Vector2i(0, y_)),
+					make_step("wall-%d-floor-%d-part-2" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
 						BLOCK_SIZE, BLOCK_SIZE
-					), (32, y_)),
-					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+					), Vector2i(32, y_)),
+					make_step("wall-%d-floor-%d-part-3" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
 						BLOCK_SIZE, BLOCK_SIZE
-					), (32 + BLOCK_SIZE, y_)),
-					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+					), Vector2i(32 + BLOCK_SIZE, y_)),
+					make_step("wall-%d-floor-%d-part-4" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + 2 * BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
 						64, BLOCK_SIZE
-					), (32 + 2 * BLOCK_SIZE, y_)),
+					), Vector2i(32 + 2 * BLOCK_SIZE, y_)),
 				])
 		Design.LITTLE_C_SHAPE:
 			for floor_ in range(stories):
@@ -188,15 +188,15 @@ static func make_base_wall_steps(
 					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + BLOCK_SIZE, wall_color_pivot.y + BLOCK_SIZE,
 						32, BLOCK_SIZE
-					), (64, y_)),
-					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+					), Vector2i(64, y_)),
+					make_step("wall-%d-floor-%d-part-2" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
 						BLOCK_SIZE, BLOCK_SIZE
-					), (BLOCK_SIZE, y_)),
-					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+					), Vector2i(BLOCK_SIZE, y_)),
+					make_step("wall-%d-floor-%d-part-3" % [int(wall_color), stories - 1 - floor_], Rect2i(
 						wall_color_pivot.x + 2 * BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
 						64, BLOCK_SIZE
-					), (2 * BLOCK_SIZE, y_)),
+					), Vector2i(2 * BLOCK_SIZE, y_)),
 				])
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
 			for floor_ in range(stories):
@@ -207,6 +207,26 @@ static func make_base_wall_steps(
 				# Step 4: Second chunk (+128, +96, 96, 96) -> (288, y_)
 				# Step 5: Third chunk (+224, +96, 64, 96) -> (384, y_)
 				result.append_array([
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE, wall_color_pivot.y + BLOCK_SIZE,
+						32, BLOCK_SIZE
+					), Vector2i(64, y_)),
+					make_step("wall-%d-floor-%d-part-2" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), Vector2i(BLOCK_SIZE, y_)),
+					make_step("wall-%d-floor-%d-part-3" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), Vector2i(BLOCK_SIZE * 2, y_)),
+					make_step("wall-%d-floor-%d-part-4" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), Vector2i(BLOCK_SIZE * 3, y_)),
+					make_step("wall-%d-floor-%d-part-5" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + 2 * BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						64, BLOCK_SIZE
+					), Vector2i(BLOCK_SIZE * 4, y_)),
 				])
 
 	return result
