@@ -185,6 +185,18 @@ static func make_base_wall_steps(
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
 				# Step 3: Third chunk (+224, +96, 64, 96) -> (192, y_)
 				result.append_array([
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE, wall_color_pivot.y + BLOCK_SIZE,
+						32, BLOCK_SIZE
+					), (64, y_)),
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), (BLOCK_SIZE, y_)),
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + 2 * BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						64, BLOCK_SIZE
+					), (2 * BLOCK_SIZE, y_)),
 				])
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
 			for floor_ in range(stories):
