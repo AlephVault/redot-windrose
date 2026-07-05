@@ -57,6 +57,51 @@ enum Depth {
 	SINGLE, DOUBLE
 }
 
+## The light mode (daylight, night with lights off, night with light on).
+enum LightMode {
+	DAY, NIGHT_OFF, NIGHT_ON
+}
+
+## The style/color for windows (classic vs. colored).
+enum WindowColor {
+	CLASSIC, BLACK, WHITE, YELLOW, RED, GREEN, BROWN
+}
+
+## The doorframe color.
+enum DoorframeColor {
+	ORANGE_LIGHT,
+	ORANGE_MID,
+	ORANGE_DARK,
+	BROWN_LIGHT,
+	BROWN_MID,
+	BROWN_DARK,
+	GRAY_LIGHT,
+	GRAY_MID,
+	GRAY_DARK
+}
+
+## The color of the door stairs
+enum DoorstepsColor {
+	GRAY_LIGHT,
+	GRAY_DARK,
+	BLUE_LIGHT,
+	BLUE_MID_LIGHT,
+	BLUE_MID,
+	BLUE_MID_DARK,
+	BLUE_DARK
+}
+
+## The shape of the door (rectangular, rounded, large-rounded)
+enum DoorShape {
+	RECTANGULAR,
+	ROUNDED,
+	ROUNDED_LARGE
+}
+
+# Door style index, Window style index, and Doorframe Index
+# are all integer values and the logic will be determined
+# later in this code.
+
 ## Computes the offset to use for the texture. It's based on its stories.
 static func compute_offset(stories: Stories) -> Vector2i:
 	var offset: int = (int(stories) + BASE_OFFSET_IN_BLOCKS) * BLOCK_SIZE
