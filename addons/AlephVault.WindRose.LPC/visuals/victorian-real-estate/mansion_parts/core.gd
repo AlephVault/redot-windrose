@@ -888,6 +888,16 @@ static func compute_target_wall_coordinates(
 # 12. Stairs color must be set.
 # 13. Light mode must be set. This also tells whether shadows will be cast or not.
 
-static func make_mansion_steps() -> Array[_Step]:
+static func make_mansion_steps(
+	roof_color, wall_color: WallColor,
+	stories: Stories, depth: Depth, design: Design
+) -> Array[_Step]:
 	var steps: Array[_Ste] = []
+
+	# 1. Steps to build the walls.
+	steps.append_array(make_base_wall_steps(wall_color, stories, depth, design))
+
+	# 2. Steps to build the roof.
+	steps.append_array(make_roof_steps(roof_color, depth, design))
+
 	return steps
