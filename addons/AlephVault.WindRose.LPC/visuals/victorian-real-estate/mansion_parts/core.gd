@@ -881,9 +881,9 @@ static func compute_target_wall_coordinates(
 #    - Columns.
 # 6. In other floors, only regular windows.
 # 7. Prongs can have a bricked theme (and this will apply to all floors).
-# 8. Prongs will have a window color + window index.
-# 9. Non-prongs will have a window color + window index.
-# 10. Door frame can be set (color + style).
-# 11. Door must be set.
+# 8. Prongs will have a window (color + style; where style only is considered for regular windows).
+# 9. Non-prongs will have a window (color + style).
+# 10. Door frame can be set (shape + color).
+# 11. Door must be set (shape + style).
 # 12. Stairs color must be set.
 # 13. Light mode must be set. This also tells whether shadows will be cast or not.
