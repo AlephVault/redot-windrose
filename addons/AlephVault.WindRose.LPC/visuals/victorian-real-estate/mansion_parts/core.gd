@@ -896,17 +896,43 @@ static func compute_target_wall_coordinates(
 # 12. Stairs color must be set.
 # 13. Light mode must be set. This also tells whether shadows will be cast or not.
 
+static func _make_mansion_floor_steps(
+	first_floor_prongs: FirstFloorProngs,
+	roof_color, wall_color: WallColor,
+	floor: int, floor_index: int, depth: Depth, design: Design
+) -> Array[_Step]:
+	var steps: Array[_Step] = []
+
+	if floor == 0:
+		# The first floor has its own rules.
+		pass
+	else:
+		# Further stories have general rules.
+		pass
+
+	return steps
+
+## Given the mansion settings, assembles all the required steps to draw it.
 static func make_mansion_steps(
 	first_floor_prongs: FirstFloorProngs,
 	roof_color, wall_color: WallColor,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
-	var steps: Array[_Ste] = []
+	var steps: Array[_Step] = []
 
 	# 1. Steps to build the walls.
 	steps.append_array(make_base_wall_steps(wall_color, stories, depth, design))
 
 	# 2. Steps to build the roof.
 	steps.append_array(make_roof_steps(roof_color, depth, design))
+
+	# 3. Paint each floor (downward).
+	var stories_: Array[int] = range(stories - 1, 0, -1)
+	for floor_index in stories_.size():
+		var floor: int = stories_[floor_index]
+		steps.append_array(_make_mansion_floor_steps(
+			first_floor_prongs, roof_color, wall_color,
+			floor, floor_index, depth, design
+		))
 
 	return steps
