@@ -151,28 +151,53 @@ static func make_base_wall_steps(
 	# Then, depending on the design, the x coordinates will
 	# span: 3 blocks (Line, T), 1 block and parts (Little C),
 	# or 3 blocks and parts (Big C, E).
+	var result: Array[_Step] = []
 	match Design:
 		Design.LINE_SHAPE, Design.T_SHAPE:
-			for floor_ in range(Stories.keys().size()):
+			for floor_ in range(stories):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (0, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (32, y_)
 				# Step 3: Third chunk (+128, +96, 96, 96) -> (128, y_)
 				# Step 4: Fourth chunk (+224, +96, 64, 96) -> (224, y_)
+				result.append_array([
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE, wall_color_pivot.y + BLOCK_SIZE,
+						32, BLOCK_SIZE
+					), (0, y_)),
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), (32, y_)),
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						BLOCK_SIZE, BLOCK_SIZE
+					), (32 + BLOCK_SIZE, y_)),
+					make_step("wall-%d-floor-%d-part-1" % [int(wall_color), stories - 1 - floor_], Rect2i(
+						wall_color_pivot.x + 2 * BLOCK_SIZE + 32, wall_color_pivot.y + BLOCK_SIZE,
+						64, BLOCK_SIZE
+					), (32 + 2 * BLOCK_SIZE, y_)),
+				])
 		Design.LITTLE_C_SHAPE:
-			for floor_ in range(Stories.keys().size()):
+			for floor_ in range(stories):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
 				# Step 3: Third chunk (+224, +96, 64, 96) -> (192, y_)
+				result.append_array([
+				])
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
-			for floor_ in range(Stories.keys().size()):
+			for floor_ in range(stories):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
 				# Step 3: Second chunk (+128, +96, 96, 96) -> (192, y_)
 				# Step 4: Second chunk (+128, +96, 96, 96) -> (288, y_)
 				# Step 5: Third chunk (+224, +96, 64, 96) -> (384, y_)
+				result.append_array([
+				])
+
+	return result
 
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
