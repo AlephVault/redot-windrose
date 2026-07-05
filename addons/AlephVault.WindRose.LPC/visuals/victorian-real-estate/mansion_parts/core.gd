@@ -156,18 +156,23 @@ static func make_base_wall_steps(
 			for floor_ in range(Stories.keys().size()):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (0, y_)
-				# Step 2: Second chunk (+96, +128, 96, 96) -> (32, y_)
-				# Step 3: Third chunk (+96, +128, 96, 96) -> (128, y_)
-				# Step 4: Fourth chunk (+96, +224, 64, 96) -> (224, y_)
+				# Step 2: Second chunk (+128, +96, 96, 96) -> (32, y_)
+				# Step 3: Third chunk (+128, +96, 96, 96) -> (128, y_)
+				# Step 4: Fourth chunk (+224, +96, 64, 96) -> (224, y_)
 		Design.LITTLE_C_SHAPE:
 			for floor_ in range(Stories.keys().size()):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
-				# Continue later
+				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
+				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
+				# Step 3: Third chunk (+224, +96, 64, 96) -> (192, y_)
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
 			for floor_ in range(Stories.keys().size()):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
-
-
+				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
+				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
+				# Step 3: Second chunk (+128, +96, 96, 96) -> (192, y_)
+				# Step 4: Second chunk (+128, +96, 96, 96) -> (288, y_)
+				# Step 5: Third chunk (+224, +96, 64, 96) -> (384, y_)
 
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
