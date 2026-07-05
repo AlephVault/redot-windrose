@@ -9,6 +9,9 @@ const SOURCE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/vic
 ## The size of the blocks to render.
 const BLOCK_SIZE: int = 96
 
+## The size of the shadow, when used.
+const SHADOW_SIZE: int = 96
+
 ## The extra, vertical, size to use for extra assets like door frames or stairs.
 const EXTRA_SIZE: int = 16
 
@@ -87,8 +90,10 @@ static func compute_size(stories: Stories, depth: Depth, design: Design) -> Vect
 	blocks.y += int(depth) + int(stories)
 
 	# Compute the final size, in pixels.
+	# This also involves adding the shadow and the extra height.
 	var x: int = blocks.x * BLOCK_SIZE
 	var y: int = blocks.y * BLOCK_SIZE
+	x += SHADOW_SIZE
 	if uses_extra:
 		y += EXTRA_SIZE
 
@@ -819,3 +824,21 @@ static func compute_target_wall_coordinates(
 				y += 1
 
 	return block_position(Vector2i(x, y))
+
+# Next, it's time to paint the extra elements of the walls:
+# 1. Design.T_SHAPE adds a middle prong.
+# 2. Design.LITTLE_C_SHAPE adds two side prongs.
+# 3. Design.BIG_C_SHAPE adds two far prongs.
+# 4. Design.E_SHAPE adds a middle prong and two far prongs.
+# 5. A prong can have, in the 1st floor:
+#    - Box windows.
+#    - Regular windows.
+#    - Columns.
+# 6. In other floors, only regular windows.
+# 7. Prongs can have a bricked theme (and this will apply to all floors).
+# 8. Prongs will have a window color + window index.
+# 9. Non-prongs will have a window color + window index.
+# 10. Door frame can be set (color + style).
+# 11. Door must be set.
+# 12. Stairs color must be set.
+# 13. Light mode must be set. This also tells whether shadows will be cast or not.
