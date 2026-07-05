@@ -13,6 +13,8 @@ const BLOCK_SIZE: int = 96
 const EXTRA_SIZE: int = 16
 
 ## The offset, expressed in blocks, to apply. The minimum is 2 blocks.
+## This is, actually, the size of the roof rendering when the depth is
+## 1 block.
 const BASE_OFFSET_IN_BLOCKS: int = 2
 
 ## The pivot point for the roof.
@@ -134,6 +136,38 @@ static func block_rect(pos: Vector2i) -> Rect2i:
 ## Makes a step, configured from the current texture.
 static func make_block_step(part: String, source_position: Vector2i, target_position: Vector2i = Vector2i.ZERO) -> _Step:
 	return make_step(part, block_rect(source_position), block_position(target_position))
+
+## Creates the steps related to base / background walls.
+static func make_base_wall_steps(
+	wall_color: WallColor, stories: Stories, depth: Depth, design: Design
+) -> Array[_Step]:
+	# First, depending on the depth, the y coordinate will
+	# relate to 2 or 3 blocks.
+	var y: int = BLOCK_SIZE * (BASE_OFFSET_IN_BLOCKS + int(depth))
+
+	# Then, get the coordinates for the wall color.
+	var wall_color_pivot: Vector2i = Vector2i(0, 192 * int(wall_color))
+
+	# Then, depending on the design, the x coordinates will
+	# span: 3 blocks (Line, T), 1 block and parts (Little C),
+	# or 3 blocks and parts (Big C, E).
+	match Design:
+		Design.LINE_SHAPE, Design.T_SHAPE:
+			for floor_ in range(Stories.keys().size()):
+				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+				# Step 1: First chunk (+96, +96, 32, 96) -> (0, y_)
+				# Step 2: Second chunk (+96, +128, 96, 96) -> (32, y_)
+				# Step 3: Third chunk (+96, +128, 96, 96) -> (128, y_)
+				# Step 4: Fourth chunk (+96, +224, 64, 96) -> (224, y_)
+		Design.LITTLE_C_SHAPE:
+			for floor_ in range(Stories.keys().size()):
+				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+				# Continue later
+		Design.BIG_C_SHAPE, Design.E_SHAPE:
+			for floor_ in range(Stories.keys().size()):
+				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+
+
 
 ## Creates the steps to install the roof in the final texture
 ## that will, in the end, make the mansion.
@@ -696,7 +730,7 @@ static func compute_target_wall_coordinates(
 		index = 1
 	
 	# Then, compute the base Y coordinate (in blocks).
-	var y: int = 2 + int(depth) + index
+	var y: int = BASE_OFFSET_IN_BLOCKS + int(depth) + index
 	match design:
 		Design.LINE_SHAPE:
 			if x > 2:
