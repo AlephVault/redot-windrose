@@ -57,6 +57,14 @@ enum Depth {
 	SINGLE, DOUBLE
 }
 
+## What's the contents of the first floor? Options are:
+## - Regular windows according to configured settings.
+## - Box windows according to configured settings.
+## - Columns.
+enum FirstFloorProngs {
+	REGULAR_WINDOWS, BOX_WINDOWS, COLUMNS
+}
+
 ## The light mode (daylight, night with lights off, night with light on).
 enum LightMode {
 	DAY, NIGHT_OFF, NIGHT_ON
@@ -889,6 +897,7 @@ static func compute_target_wall_coordinates(
 # 13. Light mode must be set. This also tells whether shadows will be cast or not.
 
 static func make_mansion_steps(
+	first_floor_prongs: FirstFloorProngs,
 	roof_color, wall_color: WallColor,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
