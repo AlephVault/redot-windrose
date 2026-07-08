@@ -204,7 +204,7 @@ static func make_base_wall_steps(
 	var y: int = BLOCK_SIZE * (BASE_OFFSET_IN_BLOCKS + int(depth))
 
 	# Then, get the coordinates for the wall color.
-	var wall_color_pivot: Vector2i = Vector2i(0, 192 * int(wall_color))
+	var wall_color_pivot: Vector2i = Vector2i(0, 2 * BLOCK_SIZE * int(wall_color))
 
 	# Then, depending on the design, the x coordinates will
 	# span: 3 blocks (Line, T), 1 block and parts (Little C),
@@ -919,10 +919,44 @@ static func _make_mansion_floor_steps(
 	var steps: Array[_Step] = []
 	var size: Vector2i = compute_block_size(design)
 	var door_index: int = (size.x - 1) / 2
+	var wall_color_pivot: Vector2i = Vector2i(0, 2 * BLOCK_SIZE * int(wall_color))
+	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
 
 	for x_ in range(size.x):
+		# First, tell whether the block is prong, door or regular.
+		# A block can be a prong without being a door / a door
+		# without being a prong (C models), or being a prong and a
+		# door (T and E models). So they are separate concepts.
 		var is_prong: bool = _is_prong(x_, design)
-		# Continue this, later.
+		var is_door: bool = x_ == door_index and floor == 0
+
+		# Determining the actual current blockwise Y coordinate.
+		# The X coordinate does not change.
+		var current_y: int = base_y + int(is_prong)
+		var current_target_block: Vector2i = Vector2i(x_, current_y)
+
+		# The cases for what prong to pick are now the following ones:
+		# 1. It is the first floor, and first_floor_prongs is FirstFloorProngs.COLUMNS.
+		# 2. It is the first floor, and use_bricked_prongs is true.
+		# 3. It is the second floor, and use_bricked_prongs is true.
+		# 4. By default, the regular one.
+		if is_prong:
+			var wall_pivot: Vector2i = wall_color_pivot
+			if floor == 0 and first_floor_prongs == FirstFloorProngs.COLUMNS:
+				wall_pivot += Vector2i(2, 0)
+			elif use_bricked_prongs:
+				if floor == 0:
+					wall_pivot += Vector2i(0, 1)
+				# else: # floor == 1
+				# 	wall_pivot += Vector2i(0, 0)
+			else:
+				wall_pivot += Vector2i(1, 0)
+
+			# Then, add the prong step:
+			steps.append(make_block_step(
+				"prong-%d%d-%s" % [floor, x_, str(wall_color)],
+				wall_pivot, current_target_block
+			))
 
 	return steps
 
@@ -942,7 +976,7 @@ static func make_mansion_steps(
 	steps.append_array(make_roof_steps(roof_color, depth, design))
 
 	# 3. Paint each floor (downward).
-	var stories_: Array[int] = range(stories - 1, 0, -1)
+	var stories_: Array[int] = range(int(stories), -1, -1)
 	for floor_index in stories_.size():
 		var floor: int = stories_[floor_index]
 		steps.append_array(_make_mansion_floor_steps(
