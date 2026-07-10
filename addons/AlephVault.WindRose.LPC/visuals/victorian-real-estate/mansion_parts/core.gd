@@ -836,48 +836,6 @@ static func make_roof_steps(
 
 	return []
 
-## Computes the coordinates for a wall. All the data is used, except
-## for the stories, for the comparison. Instead, a reverse index is
-## used for the floor, computed as (n_stories - 1 - floor).
-static func compute_target_wall_coordinates(
-	roof_color: RoofColor, depth: Depth, design: Design,
-	x: int, index: int
-) -> Vector2i:
-	# First, fix index. It can be only 0 or 1.
-	if index < 1:
-		index = 0
-	if index > 1:
-		index = 1
-	
-	# Then, compute the base Y coordinate (in blocks).
-	var y: int = BASE_OFFSET_IN_BLOCKS + int(depth) + index
-	match design:
-		Design.LINE_SHAPE:
-			if x > 2:
-				x = 2
-		Design.T_SHAPE:
-			if x > 2:
-				x = 2
-			if x == 1:
-				y += 1
-		Design.LITTLE_C_SHAPE:
-			if x > 2:
-				x = 2
-			if x == 0 or x == 2:
-				y += 1
-		Design.BIG_C_SHAPE:
-			if x > 4:
-				x = 4
-			if x == 0 or x == 4:
-				y += 1
-		Design.E_SHAPE:
-			if x > 4:
-				x = 4
-			if x == 0 or x == 2 or x == 4:
-				y += 1
-
-	return block_position(Vector2i(x, y))
-
 # Next, it's time to paint the extra elements of the walls:
 # 1. Design.T_SHAPE adds a middle prong.
 # 2. Design.LITTLE_C_SHAPE adds two side prongs.
@@ -919,7 +877,7 @@ static func _make_mansion_floor_steps(
 	var steps: Array[_Step] = []
 	var size: Vector2i = compute_block_size(design)
 	var door_index: int = (size.x - 1) / 2
-	var wall_color_pivot: Vector2i = Vector2i(0, 2 * BLOCK_SIZE * int(wall_color))
+	var wall_color_pivot: Vector2i = Vector2i(0, 2 * int(wall_color))
 	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
 
 	for x_ in range(size.x):
@@ -941,22 +899,30 @@ static func _make_mansion_floor_steps(
 		# 3. It is the second floor, and use_bricked_prongs is true.
 		# 4. By default, the regular one.
 		if is_prong:
-			var wall_pivot: Vector2i = wall_color_pivot
+			var wall: Vector2i = wall_color_pivot
+			var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.COLUMNS:
-				wall_pivot += Vector2i(2, 0)
+				wall += Vector2i(2, 0)
 			elif use_bricked_prongs:
 				if floor == 0:
-					wall_pivot += Vector2i(0, 1)
+					wall += Vector2i(0, 1)
 				# else: # floor == 1
-				# 	wall_pivot += Vector2i(0, 0)
+				# 	wall += Vector2i(0, 0)
 			else:
-				wall_pivot += Vector2i(1, 0)
+				wall += Vector2i(1, 0)
 
 			# Then, add the prong step:
 			steps.append(make_block_step(
 				"prong-%d%d-%s" % [floor, x_, str(wall_color)],
-				wall_pivot, current_target_block
+				wall, current_target_block
 			))
+
+			# Then, if box windows are picked and this is the first level, add the bevel:
+			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
+				steps.append(make_block_step(
+					"prong-%d%d-%s-bevel" % [floor, x_, str(wall_color)],
+					bevel, current_target_block
+				))
 
 	return steps
 
