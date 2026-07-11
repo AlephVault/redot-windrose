@@ -59,6 +59,15 @@ const MODERN_REGULAR_WINDOWS: int = 16
 ## In the image, the amount of regular windows per row.
 const MODERN_REGULAR_WINDOWS_PER_ROW: int = 8
 
+## The width of a door.
+const DOOR_WIDTH: int = 32
+
+## The height of a door.
+const DOOR_HEIGHT: int = 48
+
+## The height of a tall door.
+const TALL_DOOR_HEIGHT: int = 48
+
 ## The color for the roof.
 enum RoofColor {
 	PURPLE, GRAY, BLUE, GREEN, RED, BROWN, WHITE, BLACK, WORN_RED, WORN_GREEN
@@ -901,6 +910,7 @@ static func _make_mansion_floor_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
+	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -1041,7 +1051,10 @@ static func _make_mansion_floor_steps(
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
 		elif is_door:
-			pass
+			steps.append(make_step(
+				"door", Rect2i(),
+				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+			))
 			# - Print the door here.
 
 	steps.append_array(shadow_steps)
@@ -1054,6 +1067,7 @@ static func make_mansion_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
+	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -1073,6 +1087,7 @@ static func make_mansion_steps(
 			prong_window_color, prong_window_index,
 			non_prong_window_color, non_prong_window_index,
 			roof_color, wall_color, light_mode,
+			door_shape, has_doorframe, doorframe_color,
 			floor, floor_index, depth, design
 		))
 
