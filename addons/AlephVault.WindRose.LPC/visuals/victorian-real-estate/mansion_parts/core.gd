@@ -883,6 +883,8 @@ static func _is_prong(x: int, design: Design) -> bool:
 static func _make_mansion_floor_steps(
 	use_bricked_prongs: bool,
 	first_floor_prongs: FirstFloorProngs,
+	prong_window_color: WindowColor, prong_window_index: int,
+	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
@@ -957,23 +959,26 @@ static func _make_mansion_floor_steps(
 		# Then, the window must be painted. There are many cases here:
 		if is_prong and not is_door:
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
-				pass
-				# - The window color is classic.
-				#   - Base on the prongs' window style (0 and 1).
-				# - The window color is modern / picked.
-				#   - Base on the prongs' window style (0 to 15).
+				if prong_window_color == WindowColor.CLASSIC:
+					pass
+					# - Pick the classic Box Window.
+				else:
+					pass
+					# - Pick the modern Box Window.
 			else:
-			    pass
-				# - The window color is classic.
-				#   - Ignore window style.
-				# - The window color is modern / picked.
-				#   - Ignore window style.
+				if non_prong_window_color == WindowColor.CLASSIC:
+					pass
+					# - Base on the prongs' window style (0 and 1).
+				else:
+					pass
+					# - Base on the prongs' window style (0 to 15).
 		elif not is_prong:
-			pass
-			# - The non-prongs window color is classic.
-			#   - Base on the non-prongs' window style (0 and 1).
-			# - The non-prongs window color is modern / picked.
-			#   - Base on the non-prongs' window style (0 to 15).
+			if non_prong_window_color == WindowColor.CLASSIC:
+				pass
+				# - Base on the non-prongs' window style (0 and 1).
+			else:
+				pass
+				# - Base on the non-prongs' window style (0 to 15).
 		elif is_door:
 			pass
 			# - Print the door here.
@@ -985,8 +990,9 @@ static func _make_mansion_floor_steps(
 static func make_mansion_steps(
 	use_bricked_prongs: bool,
 	first_floor_prongs: FirstFloorProngs,
-	roof_color, wall_color: WallColor,
-	light_mode: LightMode,
+	prong_window_color: WindowColor, prong_window_index: int,
+	non_prong_window_color: WindowColor, non_prong_window_index: int,
+	roof_color, wall_color: WallColor, light_mode: LightMode,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -1003,6 +1009,8 @@ static func make_mansion_steps(
 		var floor: int = stories_[floor_index]
 		steps.append_array(_make_mansion_floor_steps(
 			use_bricked_prongs, first_floor_prongs,
+			prong_window_color, prong_window_index,
+			non_prong_window_color, non_prong_window_index,
 			roof_color, wall_color, light_mode,
 			floor, floor_index, depth, design
 		))
