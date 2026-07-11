@@ -1026,7 +1026,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-box-window-%s" % [floor, x_, str(WindowColor(int(prong_window_color) - 1))],
+						"prong-%d%d-box-window-%s" % [floor, x_, str(prong_window_color)],
 						Rect2i(modern_box_window.x, modern_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
 						block_position(current_target_block)
 					))
@@ -1084,7 +1084,7 @@ static func _make_mansion_floor_steps(
 				DoorShape.ROUNDED_LARGE:
 					door_hole = Rect2i(1824, 1760, DOOR_WIDTH, DOOR_HEIGHT)
 			if light_mode == LightMode.NIGHT_ON:
-				door_hole.y += DOOR_HEIGHT
+				door_hole.position.y += DOOR_HEIGHT
 
 			steps.append(make_step(
 				"door-hole", door_hole,
@@ -1124,7 +1124,7 @@ static func _make_mansion_floor_steps(
 						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4 * DOORFRAME_STYLES, 0)
 						doorframe += Vector2i(
 							DOORFRAME_SOURCE_SIZE.x * (doorframe_index % 4),
-							DOORFRAME_SOURCE_SIZE.y * int((doorframe_index % DOORFRAME_STYLES) // 4)
+							DOORFRAME_SOURCE_SIZE.y * int((doorframe_index % DOORFRAME_STYLES) / 4)
 						)
 					DoorframeColor.GRAY_LIGHT:
 						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
