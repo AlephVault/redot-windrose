@@ -1164,7 +1164,7 @@ static func make_mansion_steps(
 	steps.append_array(make_roof_steps(roof_color, depth, design))
 
 	# 3. Paint each floor (downward).
-	var stories_: Array[int] = range(int(stories), -1, -1)
+	var stories_: Array = range(int(stories), -1, -1)
 	for floor_index in stories_.size():
 		var floor: int = stories_[floor_index]
 		steps.append_array(_make_mansion_floor_steps(

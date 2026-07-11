@@ -1,142 +1,235 @@
 @tool
 extends AlephVault__WindRose__LPC.Visuals.VictorianRealEstate.Base
-## This asset assembles and represents a victorian-themed mansion
-## to be used in games, for a decent diversity of styles.
 
-## The color to paint the walls of.
-enum WallColor {
-	YELLOW, RED, GREEN, GRAYBLUE, BLUE, PURPLE
-}
 
-## The color for the windows. This includes the possibility for a
-## window to reflect a CLASSIC type (the color is white and the
-## curtains match the color of the walls).
-enum WindowColor {
-	CLASSIC, BLACK, WHITE, YELLOW, RED, GREEN, BROWN
-}
+const _Core := preload("./mansion_parts/core.gd")
 
-## The color for the roof.
-enum RoofColor {
-	PURPLE, GRAY, BLUE, GREEN, RED, BROWN, WHITE, BLACK, WORN_RED, WORN_GREEN
-}
 
-## The size type for the doors.
-enum DoorSizeType {
-	NORMAL, LARGE
-}
+static var _cache_ensured: bool = false
 
-## The color for the door stairs. Please note that it
-## is different to the color for the bricks and roof.
-enum DoorstepsColor {
-	GRAY_LIGHT,
-	GRAY_DARK,
-	BLUE_LIGHT,
-	BLUE_MID_LIGHT,
-	BLUE_MID,
-	BLUE_MID_DARK,
-	BLUE_DARK
-}
 
-## The color for the doorframe.
-enum DoorframeColor {
-	ORANGE_LIGHT,
-	ORANGE_MID,
-	ORANGE_DARK,
-	BROWN_LIGHT,
-	BROWN_MID,
-	BROWN_DARK,
-	GRAY_LIGHT,
-	GRAY_MID,
-	GRAY_DARK
-}
+var _texture_context = null
 
-## The color to paint the walls of.
-@export var wall_color: WallColor = WallColor.YELLOW:
+
+@export var use_bricked_prongs: bool = false:
 	set(value):
-		wall_color = value
+		_release_texture()
+		use_bricked_prongs = value
 		_refresh_texture()
 
-## The color for the windows.
-@export var window_color: WindowColor = WindowColor.CLASSIC:
+
+@export var first_floor_prongs: _Core.FirstFloorProngs = _Core.FirstFloorProngs.REGULAR_WINDOWS:
 	set(value):
-		window_color = value
+		_release_texture()
+		first_floor_prongs = value
 		_refresh_texture()
 
-## The color for the roof.
-@export var roof_color: RoofColor = RoofColor.PURPLE:
+
+@export var prong_window_color: _Core.WindowColor = _Core.WindowColor.CLASSIC:
 	set(value):
+		_release_texture()
+		prong_window_color = value
+		_refresh_texture()
+
+
+@export var prong_window_index: int = 0:
+	set(value):
+		_release_texture()
+		prong_window_index = value
+		_refresh_texture()
+
+
+@export var non_prong_window_color: _Core.WindowColor = _Core.WindowColor.CLASSIC:
+	set(value):
+		_release_texture()
+		non_prong_window_color = value
+		_refresh_texture()
+
+
+@export var non_prong_window_index: int = 0:
+	set(value):
+		_release_texture()
+		non_prong_window_index = value
+		_refresh_texture()
+
+
+@export var roof_color: _Core.RoofColor = _Core.RoofColor.PURPLE:
+	set(value):
+		_release_texture()
 		roof_color = value
 		_refresh_texture()
 
-## The size type for the doors.
-@export var door_size_type: DoorSizeType = DoorSizeType.NORMAL:
+
+@export var wall_color: _Core.WallColor = _Core.WallColor.YELLOW:
 	set(value):
-		door_size_type = value
-		if door_size_type == DoorSizeType.NORMAL:
-			if door_type >= _N_NORMAL_DOORS:
-				door_type = 0
-		else:
-			if door_type >= _N_LARGE_DOORS:
-				door_type = 0
+		_release_texture()
+		wall_color = value
 		_refresh_texture()
 
-const _N_NORMAL_DOORS = 50
-const _N_LARGE_DOORS = 21
-const _N_DOORFRAMES = 7
 
-## The door index. There are 50 normal doors, and
-## 21 large doors (3 doors, 7 colors).
-@export var door_type: int = 0:
+@export var light_mode: _Core.LightMode = _Core.LightMode.DAY:
 	set(value):
-		if value < 0:
-			value = 0
-		if door_size_type == DoorSizeType.NORMAL:
-			if value >= _N_NORMAL_DOORS:
-				value = 0
-		else:
-			if value >= _N_LARGE_DOORS:
-				value = 0
+		_release_texture()
+		light_mode = value
 		_refresh_texture()
 
-## The color for the door steps.
-@export var doorsteps_color: DoorstepsColor = DoorstepsColor.GRAY_LIGHT:
+
+@export var door_shape: _Core.DoorShape = _Core.DoorShape.RECTANGULAR:
 	set(value):
-		doorsteps_color = value
+		_release_texture()
+		door_shape = value
 		_refresh_texture()
 
-## Whether it has a doorframe or not. This is not used for
-## large door styles.
+
 @export var has_doorframe: bool = false:
 	set(value):
+		_release_texture()
 		has_doorframe = value
 		_refresh_texture()
 
-## The color for the doorframe.
-@export var doorframe_color: DoorframeColor = DoorframeColor.GRAY_LIGHT:
+
+@export var doorframe_color: _Core.DoorframeColor = _Core.DoorframeColor.ORANGE_LIGHT:
 	set(value):
+		_release_texture()
 		doorframe_color = value
 		_refresh_texture()
 
-## The type for the doorframe.
-@export var doorframe_type: int = 0:
+
+@export var doorframe_index: int = 0:
 	set(value):
-		doorframe_type = value
-		if doorframe_type < 0:
-			doorframe_type = 0
-		if doorframe_type >= _N_DOORFRAMES:
-			doorframe_type = _N_DOORFRAMES
+		_release_texture()
+		doorframe_index = value
 		_refresh_texture()
 
-# TODO add:
-# - Window index for even blocks (0-15 if color or 0-1 if classic).
-# - Window index for odd blocks (0-15 if color or 0-1 if classic).
-# - Whether using bricked design or not.
-# - Whether it has 1 or 2 floors/levels/stories.
-# - Layout (_, T, c, C or E).
-# - Whether the first level in modes c, C or E use box windows or not.
-#   Classic color will use only one style. Regular colors have also one style.
-# - Whether to use columns in the first-level, odd blocks (non-middle) or not.
-# - Light mode: Daylight, Night (lights turned off), Night (lights turned on).
-## Applies all the texture's update.
-func _refresh_texture():
+
+@export var doorsteps_color: _Core.DoorstepsColor = _Core.DoorstepsColor.GRAY_LIGHT:
+	set(value):
+		_release_texture()
+		doorsteps_color = value
+		_refresh_texture()
+
+
+@export var stories: _Core.Stories = _Core.Stories.SINGLE:
+	set(value):
+		_release_texture()
+		stories = value
+		_refresh_texture()
+
+
+@export var depth: _Core.Depth = _Core.Depth.SINGLE:
+	set(value):
+		_release_texture()
+		depth = value
+		_refresh_texture()
+
+
+@export var design: _Core.Design = _Core.Design.LINE_SHAPE:
+	set(value):
+		_release_texture()
+		design = value
+		_refresh_texture()
+
+
+func _init() -> void:
+	_refresh_texture()
+
+
+func _ready() -> void:
+	_refresh_texture()
+
+
+func _setup():
+	_refresh_texture()
+
+
+func _teardown():
+	_release_texture()
+
+
+func _pause():
 	pass
+
+
+func _resume():
+	pass
+
+
+func _update(_delta: float):
+	_refresh_texture()
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name in [
+		"texture",
+		"hframes",
+		"vframes",
+		"frame",
+		"frame_coords",
+		"region_enabled",
+		"region_rect",
+		"region_filter_clip_enabled",
+	]:
+		property.usage = PROPERTY_USAGE_NO_EDITOR
+
+
+static func _ensure_cache() -> void:
+	if _cache_ensured:
+		return
+	if not AlephVault__WindRose.Utils.LRU.Registry.has(TEXTURE_CACHE_KEY):
+		AlephVault__WindRose.Utils.LRU.Registry.define(
+			TEXTURE_CACHE_KEY, _DEFAULT_CACHE_MAX_DISPOSAL_SIZE
+		)
+	_cache_ensured = true
+
+
+func _build_context():
+	var size: Vector2i = _Core.compute_size(stories, depth, design)
+	var steps: Array[_Step] = _Core.make_mansion_steps(
+		use_bricked_prongs,
+		first_floor_prongs,
+		prong_window_color,
+		prong_window_index,
+		non_prong_window_color,
+		non_prong_window_index,
+		roof_color,
+		wall_color,
+		light_mode,
+		door_shape,
+		has_doorframe,
+		doorframe_color,
+		doorframe_index,
+		doorsteps_color,
+		stories,
+		depth,
+		design
+	)
+	return _Context.new(size.x, size.y, steps)
+
+
+func _release_texture() -> void:
+	if _texture_context != null and _cache_ensured:
+		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
+	_texture_context = null
+
+
+func _refresh_texture() -> void:
+	_ensure_cache()
+	var next_context = _build_context()
+	if next_context.invalid:
+		return
+
+	if _texture_context != null and _texture_context.final_key != next_context.final_key:
+		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
+
+	var size: Vector2i = Vector2i(next_context.width, next_context.height)
+	_texture_context = next_context
+	texture = _texture_context.get_texture(self, TEXTURE_CACHE_KEY)
+	hframes = 1
+	vframes = 1
+	frame = 0
+	frame_coords = Vector2i.ZERO
+	region_enabled = false
+	region_rect = Rect2i(Vector2i.ZERO, size)
+	region_filter_clip_enabled = false
+	offset = _Core.compute_offset(stories)
+	centered = false
