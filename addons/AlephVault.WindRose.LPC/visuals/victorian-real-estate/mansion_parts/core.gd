@@ -935,7 +935,8 @@ static func _make_mansion_floor_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
-	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorsteps_color: DoorstepsColor,
+	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
+	doorsteps_color: DoorstepsColor,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -1102,26 +1103,43 @@ static func _make_mansion_floor_steps(
 			))
 
 			if has_doorframe:
-				var doorframe_color_pivot: Vector2i = DOORFRAME_PIVOT
+				var doorframe: Vector2i = DOORFRAME_PIVOT
 				match doorframe_color:
 					DoorframeColor.ORANGE_LIGHT:
-						doorframe_color_pivot += Vector2i(0, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(0, DOORFRAME_SOURCE_SIZE.y * DOORFRAME_STYLES)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.ORANGE_MID:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.ORANGE_DARK:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.BROWN_LIGHT:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.BROWN_MID:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3, 1)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, 1)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.BROWN_DARK:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(
+							DOORFRAME_SOURCE_SIZE.x * (doorframe_index % 4),
+							DOORFRAME_SOURCE_SIZE.y * int((doorframe_index % DOORFRAME_STYLES) // 4)
+						)
 					DoorframeColor.GRAY_LIGHT:
-						doorframe_color_pivot += Vector2i(0, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.GRAY_MID:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
 					DoorframeColor.GRAY_DARK:
-						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+
+				steps.append(make_step(
+					"doorframe-%s%d" % [str(doorframe_color), doorframe_index],
+					Rect2i(doorframe.x, doorframe.y, DOORFRAME_SIZE.x, DOORFRAME_SIZE.y),
+					Vector2i(int((BLOCK_SIZE - DOORFRAME_SIZE.x) / 2), 0)
+				))
 
 	steps.append_array(shadow_steps)
 	return steps
@@ -1133,7 +1151,8 @@ static func make_mansion_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
-	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorsteps_color: DoorstepsColor,
+	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
+	doorsteps_color: DoorstepsColor,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -1153,7 +1172,8 @@ static func make_mansion_steps(
 			prong_window_color, prong_window_index,
 			non_prong_window_color, non_prong_window_index,
 			roof_color, wall_color, light_mode,
-			door_shape, has_doorframe, doorframe_color, doorsteps_color,
+			door_shape, has_doorframe, doorframe_color, doorframe_index,
+			doorsteps_color,
 			floor, floor_index, depth, design
 		))
 
