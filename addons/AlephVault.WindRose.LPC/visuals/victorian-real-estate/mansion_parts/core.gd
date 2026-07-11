@@ -72,13 +72,25 @@ const DOORSTEPS_WIDTH: int = 32
 const DOORSTEPS_HEIGHT: int = 32
 
 ## The offset to paint a doorstep.
-const DOORSTEPS_OFFSET: Vector2i(DOORSTEPS_WIDTH, BLOCK_SIZE - 16)
+const DOORSTEPS_OFFSET: Vector2i = Vector2i(DOORSTEPS_WIDTH, BLOCK_SIZE - 16)
 
 ## The number of doorstep colors per row.
 const DOORSTEPS_COLORS_PER_ROW: int = 4
 
 ## The pivot of doorstep colors.
-const DOORSTEPS_COLOR_PIVOT: Vector2i(1856, 1472)
+const DOORSTEPS_COLOR_PIVOT: Vector2i = Vector2i(1856, 1472)
+
+## The pivot for doorframes.
+const DOORFRAME_PIVOT: Vector2i = Vector2i(0, 2 * BLOCK_SIZE * 6)
+
+## The source size of a doorframe.
+const DOORFRAME_SOURCE_SIZE: Vector2i = Vector2i(112, 64)
+
+## The size of a doorframe.
+const DOORFRAME_SIZE: Vector2i = Vector2i(112, 64)
+
+## The amount of styles per doorframe color.
+const DOORFRAME_STYLES: int = 7
 
 ## The color for the roof.
 enum RoofColor {
@@ -1088,6 +1100,28 @@ static func _make_mansion_floor_steps(
 				"doorsteps", doorsteps,
 				block_position(current_target_block) + DOORSTEPS_OFFSET
 			))
+
+			if has_doorframe:
+				var doorframe_color_pivot: Vector2i = DOORFRAME_PIVOT
+				match doorframe_color:
+					DoorframeColor.ORANGE_LIGHT:
+						doorframe_color_pivot += Vector2i(0, DOORFRAME_SOURCE_SIZE.y)
+					DoorframeColor.ORANGE_MID:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x, DOORFRAME_SOURCE_SIZE.y)
+					DoorframeColor.ORANGE_DARK:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2, DOORFRAME_SOURCE_SIZE.y)
+					DoorframeColor.BROWN_LIGHT:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3, 0)
+					DoorframeColor.BROWN_MID:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3, 1)
+					DoorframeColor.BROWN_DARK:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4, 0)
+					DoorframeColor.GRAY_LIGHT:
+						doorframe_color_pivot += Vector2i(0, 0)
+					DoorframeColor.GRAY_MID:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x, 0)
+					DoorframeColor.GRAY_DARK:
+						doorframe_color_pivot += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2, 0)
 
 	steps.append_array(shadow_steps)
 	return steps
