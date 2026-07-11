@@ -221,23 +221,23 @@ static func _get_roof_base_position(roof_color: RoofColor) -> Vector2i:
 		RoofColor.PURPLE:
 			pos = Vector2i(0, 0)
 		RoofColor.GRAY:
-			pos = Vector2i(0, 1)
-		RoofColor.BLUE:
-			pos = Vector2i(0, 2)
-		RoofColor.GREEN:
-			pos = Vector2i(0, 3)
-		RoofColor.RED:
-			pos = Vector2i(0, 4)
-		RoofColor.BROWN:
 			pos = Vector2i(1, 0)
+		RoofColor.BLUE:
+			pos = Vector2i(2, 0)
+		RoofColor.GREEN:
+			pos = Vector2i(3, 0)
+		RoofColor.RED:
+			pos = Vector2i(4, 0)
+		RoofColor.BROWN:
+			pos = Vector2i(0, 1)
 		RoofColor.WHITE:
 			pos = Vector2i(1, 1)
 		RoofColor.BLACK:
-			pos = Vector2i(1, 2)
+			pos = Vector2i(2, 1)
 		RoofColor.WORN_RED:
-			pos = Vector2i(1, 3)
+			pos = Vector2i(3, 1)
 		RoofColor.WORN_GREEN:
-			pos = Vector2i(1, 4)
+			pos = Vector2i(4, 1)
 	return Vector2i(pos.x * ROOF_PALETTE_SIZE.x, pos.y * ROOF_PALETTE_SIZE.y) + ROOF_PIVOT
 
 ## Makes a step, configured from the current texture.
