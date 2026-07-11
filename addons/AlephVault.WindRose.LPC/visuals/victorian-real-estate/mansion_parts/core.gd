@@ -63,10 +63,7 @@ const MODERN_REGULAR_WINDOWS_PER_ROW: int = 8
 const DOOR_WIDTH: int = 32
 
 ## The height of a door.
-const DOOR_HEIGHT: int = 48
-
-## The height of a tall door.
-const TALL_DOOR_HEIGHT: int = 48
+const DOOR_HEIGHT: int = 64
 
 ## The color for the roof.
 enum RoofColor {
@@ -139,6 +136,7 @@ enum DoorstepsColor {
 enum DoorShape {
 	RECTANGULAR,
 	ROUNDED,
+	ROUNDED2,
 	ROUNDED_LARGE
 }
 
@@ -1051,11 +1049,19 @@ static func _make_mansion_floor_steps(
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
 		elif is_door:
+			var door_hole: Rect2i
+			match door_shape:
+				DoorShape.RECTANGULAR, DoorShape.ROUNDED, DoorShape.ROUNDED2:
+					door_hole = Rect2i(1760 + DOOR_HEIGHT * int(door_shape), 1440, DOOR_WIDTH, DOOR_HEIGHT)
+				DoorShape.ROUNDED_LARGE:
+					door_hole = Rect2i(1824, 1760, DOOR_WIDTH, DOOR_HEIGHT)
+			if light_mode == LightMode.NIGHT_ON:
+				door_hole.y += DOOR_HEIGHT
+
 			steps.append(make_step(
-				"door", Rect2i(),
-				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+				"door-hole", door_hole,
+				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT)
 			))
-			# - Print the door here.
 
 	steps.append_array(shadow_steps)
 	return steps
