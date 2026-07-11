@@ -911,11 +911,6 @@ static func _make_mansion_floor_steps(
 	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
 	var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
 
-
-
-	var base_classic_window: Vector2i = wall_color_pivot + Vector2i(7, 0)
-	var base_modern_window: Vector2i = Vector2i(9 +, 0)
-
 	for x_ in range(size.x):
 		# First, tell whether the block is prong, door or regular.
 		# A block can be a prong without being a door / a door
