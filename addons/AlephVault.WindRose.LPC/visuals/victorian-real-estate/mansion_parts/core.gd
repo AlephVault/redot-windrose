@@ -947,6 +947,7 @@ static func _make_mansion_floor_steps(
 						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, 0))
 					))
+				# Add the rect / regular shadow.
 				shadow_steps.append(make_step(
 					"prong-%d%d-shadow",
 					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
