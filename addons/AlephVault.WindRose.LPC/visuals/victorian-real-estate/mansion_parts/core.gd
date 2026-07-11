@@ -22,7 +22,7 @@ const SHADOW_BASE_Y: int = 1664
 const SHADOW_X: int = SHADOW_BASE_X
 
 ## The y position of the non-base part of the shadow.
-const SHADOW_Y: int = SHADOW_BASE_Y + SHADOW_SIZE
+const SHADOW_Y: int = SHADOW_BASE_Y - SHADOW_SIZE
 
 ## The extra, vertical, size to use for extra assets like door frames or stairs.
 const EXTRA_SIZE: int = 16
@@ -1088,7 +1088,7 @@ static func _make_mansion_floor_steps(
 
 			steps.append(make_step(
 				"door-hole", door_hole,
-				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT)
+				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT - 16)
 			))
 
 			var doorsteps: Rect2i = Rect2i(
