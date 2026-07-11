@@ -931,7 +931,7 @@ static func _make_mansion_floor_steps(
 			))
 
 			# Then, if box windows are picked and this is the first level, add the bevel:
-			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
+			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS and not is_door:
 				steps.append(make_block_step(
 					"prong-%d%d-%s-bevel" % [floor, x_, str(wall_color)],
 					bevel, current_target_block
@@ -953,6 +953,30 @@ static func _make_mansion_floor_steps(
 					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 					block_position(current_target_block + Vector2i(1, -1))
 				))
+
+		# Then, the window must be painted. There are many cases here:
+		if is_prong and not is_door:
+			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
+				pass
+				# - The window color is classic.
+				#   - Base on the prongs' window style (0 and 1).
+				# - The window color is modern / picked.
+				#   - Base on the prongs' window style (0 to 15).
+			else:
+			    pass
+				# - The window color is classic.
+				#   - Ignore window style.
+				# - The window color is modern / picked.
+				#   - Ignore window style.
+		elif not is_prong:
+			pass
+			# - The non-prongs window color is classic.
+			#   - Base on the non-prongs' window style (0 and 1).
+			# - The non-prongs window color is modern / picked.
+			#   - Base on the non-prongs' window style (0 to 15).
+		elif is_door:
+			pass
+			# - Print the door here.
 
 	steps.append_array(shadow_steps)
 	return steps
