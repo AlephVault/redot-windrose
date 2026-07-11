@@ -1024,11 +1024,27 @@ static func _make_mansion_floor_steps(
 					))
 		elif not is_prong:
 			if non_prong_window_color == WindowColor.CLASSIC:
-				pass
-				# - Base on the non-prongs' window style (0 and 1).
+				var classic_window: Vector2i = block_position(Vector2i(7, 0)) + Vector2i(
+					WINDOW_REGULAR_WIDTH * (int(light_mode) * CLASSIC_REGULAR_WINDOWS + non_prong_window_index % CLASSIC_REGULAR_WINDOWS),
+					0
+				)
+
+				steps.append(make_step(
+					"non-prong-%d%d-window-classic-%s" % [floor, x_, str(wall_color)],
+					Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+				))
 			else:
-				pass
-				# - Base on the non-prongs' window style (0 to 15).
+				var modern_window: Vector2i = block_position(Vector2i(7 + CLASSIC_REGULAR_WINDOWS, 0)) + Vector2i(
+					WINDOW_REGULAR_WIDTH * (int(light_mode) * MODERN_REGULAR_WINDOWS_PER_ROW + non_prong_window_index % MODERN_REGULAR_WINDOWS_PER_ROW),
+					2 * BLOCK_SIZE * (int(non_prong_window_color) - 1) + int((non_prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
+				)
+
+				steps.append(make_step(
+					"non-prong-%d%d-window-classic-%s" % [floor, x_, str(non_prong_window_color)],
+					Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+				))
 		elif is_door:
 			pass
 			# - Print the door here.
