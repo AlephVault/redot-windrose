@@ -990,26 +990,38 @@ static func _make_mansion_floor_steps(
 					))
 				else:
 					var modern_box_window: Vector2i = Vector2i(
-						9 + MODERN_REGULAR_WINDOWS_PER_ROW + int(light_mode),
+						7 + CLASSIC_REGULAR_WINDOWS + MODERN_REGULAR_WINDOWS_PER_ROW + int(light_mode),
 						2 * BLOCK_SIZE * (int(prong_window_color) - 1)
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-box-window-%s" % [floor, x_, str(LightMode(int(prong_window_color) - 1))],
+						"prong-%d%d-box-window-%s" % [floor, x_, str(WindowColor(int(prong_window_color) - 1))],
 						Rect2i(modern_box_window.x, modern_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
 						block_position(current_target_block)
 					))
 			else:
-				if non_prong_window_color == WindowColor.CLASSIC:
+				if prong_window_color == WindowColor.CLASSIC:
+					var classic_window: Vector2i = block_position(Vector2i(7, 0)) + Vector2i(
+						WINDOW_REGULAR_WIDTH * (int(light_mode) * CLASSIC_REGULAR_WINDOWS + prong_window_index % CLASSIC_REGULAR_WINDOWS),
+						0
+					)
+
 					steps.append(make_step(
-						"prong-%d%d-window-classic-%d" % [floor, x_, int(wall_color)],
-						Rect2i(classic_box_window.x, classic_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
-						block_position(current_target_block)
+						"prong-%d%d-window-classic-%s" % [floor, x_, str(wall_color)],
+						Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
-					# - Base on the prongs' window style (0 and 1).
 				else:
-					pass
-					# - Base on the prongs' window style (0 to 15).
+					var modern_window: Vector2i = block_position(Vector2i(7 + CLASSIC_REGULAR_WINDOWS, 0)) + Vector2i(
+						WINDOW_REGULAR_WIDTH * (int(light_mode) * MODERN_REGULAR_WINDOWS_PER_ROW + prong_window_index % MODERN_REGULAR_WINDOWS_PER_ROW),
+						2 * BLOCK_SIZE * (int(prong_window_color) - 1) + int((prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
+					)
+
+					steps.append(make_step(
+						"prong-%d%d-window-classic-%s" % [floor, x_, str(prong_window_color)],
+						Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+					))
 		elif not is_prong:
 			if non_prong_window_color == WindowColor.CLASSIC:
 				pass
