@@ -189,7 +189,7 @@ func _resume():
 
 
 func _update(_delta: float):
-	_refresh_texture()
+	pass
 
 
 func _validate_property(property: Dictionary) -> void:
