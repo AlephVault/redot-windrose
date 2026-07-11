@@ -33,16 +33,31 @@ const EXTRA_SIZE: int = 16
 const BASE_OFFSET_IN_BLOCKS: int = 2
 
 ## The pivot point for the roof.
-const ROOF_PIVOT = Vector2i(0, 1408)
+const ROOF_PIVOT: Vector2i = Vector2i(0, 1408)
 
 ## The amount of blocks in the x axis for a single roof's palette.
-const ROOF_PALETTE_X_BLOCKS = 3
+const ROOF_PALETTE_X_BLOCKS: int = 3
 
 ## The amount of blocks in the y axis for a single roof's palette.
-const ROOF_PALETTE_Y_BLOCKS = 5
+const ROOF_PALETTE_Y_BLOCKS: int = 5
 
 ## The size, in pixels, for a single roof's palette.
-const ROOF_PALETTE_SIZE = Vector2i(ROOF_PALETTE_X_BLOCKS * BLOCK_SIZE, ROOF_PALETTE_Y_BLOCKS * BLOCK_SIZE)
+const ROOF_PALETTE_SIZE: Vector2i = Vector2i(ROOF_PALETTE_X_BLOCKS * BLOCK_SIZE, ROOF_PALETTE_Y_BLOCKS * BLOCK_SIZE)
+
+## The width of a regular window.
+const WINDOW_REGULAR_WIDTH: int = 32
+
+## The height of a regular window.
+const WINDOW_REGULAR_HEIGHT: int = BLOCK_SIZE
+
+## The amount of classic windows.
+const CLASSIC_REGULAR_WINDOWS: int = 2
+
+## The amount of modern windows.
+const MODERN_REGULAR_WINDOWS: int = 16
+
+## In the image, the amount of regular windows per row.
+const MODERN_REGULAR_WINDOWS_PER_ROW: int = 8
 
 ## The color for the roof.
 enum RoofColor {
@@ -894,6 +909,12 @@ static func _make_mansion_floor_steps(
 	var door_index: int = (size.x - 1) / 2
 	var wall_color_pivot: Vector2i = Vector2i(0, 2 * int(wall_color))
 	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
+	var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
+
+
+
+	var base_classic_window: Vector2i = wall_color_pivot + Vector2i(7, 0)
+	var base_modern_window: Vector2i = Vector2i(9 +, 0)
 
 	for x_ in range(size.x):
 		# First, tell whether the block is prong, door or regular.
@@ -915,7 +936,7 @@ static func _make_mansion_floor_steps(
 		# 4. By default, the regular one.
 		if is_prong:
 			var wall: Vector2i = wall_color_pivot
-			var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
+
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.COLUMNS:
 				wall += Vector2i(2, 0)
 			elif use_bricked_prongs:
@@ -945,13 +966,13 @@ static func _make_mansion_floor_steps(
 				if floor == 0:
 					# First, add the triangle shadow. One to the right.
 					shadow_steps.append(make_step(
-						"prong-%d%d-shadow-base",
+						"prong-%d%d-shadow-base" % [floor, x_],
 						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, 0))
 					))
 				# Add the rect / regular shadow.
 				shadow_steps.append(make_step(
-					"prong-%d%d-shadow",
+					"prong-%d%d-shadow" % [floor, x_],
 					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 					block_position(current_target_block + Vector2i(1, -1))
 				))
@@ -960,14 +981,31 @@ static func _make_mansion_floor_steps(
 		if is_prong and not is_door:
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
 				if prong_window_color == WindowColor.CLASSIC:
-					pass
-					# - Pick the classic Box Window.
+					var classic_box_window: Vector2i = wall_color_pivot + Vector2i(4 + int(light_mode), 0)
+
+					steps.append(make_step(
+						"prong-%d%d-box-window-classic-%s" % [floor, x_, str(wall_color)],
+						Rect2i(classic_box_window.x, classic_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
+						block_position(current_target_block)
+					))
 				else:
-					pass
-					# - Pick the modern Box Window.
+					var modern_box_window: Vector2i = Vector2i(
+						9 + MODERN_REGULAR_WINDOWS_PER_ROW + int(light_mode),
+						2 * BLOCK_SIZE * (int(prong_window_color) - 1)
+					)
+
+					steps.append(make_step(
+						"prong-%d%d-box-window-%s" % [floor, x_, str(LightMode(int(prong_window_color) - 1))],
+						Rect2i(modern_box_window.x, modern_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
+						block_position(current_target_block)
+					))
 			else:
 				if non_prong_window_color == WindowColor.CLASSIC:
-					pass
+					steps.append(make_step(
+						"prong-%d%d-window-classic-%d" % [floor, x_, int(wall_color)],
+						Rect2i(classic_box_window.x, classic_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
+						block_position(current_target_block)
+					))
 					# - Base on the prongs' window style (0 and 1).
 				else:
 					pass
