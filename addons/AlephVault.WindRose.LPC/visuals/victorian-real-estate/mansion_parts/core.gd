@@ -248,9 +248,12 @@ static func make_step(part: String, source_rect: Rect2i, target_position: Vector
 static func block_position(pos: Vector2i) -> Vector2i:
 	return Vector2i(pos.x * BLOCK_SIZE, pos.y * BLOCK_SIZE)
 
+static func _block_rect(pos: Vector2i) -> Rect2i:
+	return Rect2i(pos.x, pos.y, BLOCK_SIZE, BLOCK_SIZE)
+
 ## Makes a rect for a block.
 static func block_rect(pos: Vector2i) -> Rect2i:
-	return Rect2i(pos.x * BLOCK_SIZE, pos.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+	return _block_rect(Vector2i(pos.x * BLOCK_SIZE, pos.y * BLOCK_SIZE))
 
 ## Makes a step, configured from the current texture.
 static func make_block_step(part: String, source_position: Vector2i, target_position: Vector2i = Vector2i.ZERO) -> _Step:
@@ -365,29 +368,29 @@ static func make_roof_steps(
 					# RRR
 					# RRR
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 2), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 2))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 2), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 2))), block_position(Vector2i(2, 1))
 						),
 					]
 				Depth.DOUBLE:
@@ -397,41 +400,41 @@ static func make_roof_steps(
 					# RRR
 					# RRR
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 1), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 1))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 1), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 1))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(0, 2), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(0, 2))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(2, 2), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(2, 2))), block_position(Vector2i(2, 2))
 						),
 					]
 		Design.T_SHAPE:
@@ -443,33 +446,33 @@ static func make_roof_steps(
 					# RRR
 					#  R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 2), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 2))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 3), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 3))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 2), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 2))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(1, 2))
 						),
 					]
 				Depth.DOUBLE:
@@ -480,45 +483,45 @@ static func make_roof_steps(
 					# RRR
 					#  R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 1), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 1))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 1), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 1))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(0, 2), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(0, 2))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 3), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 3))), block_position(Vector2i(1, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(2, 2), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(2, 2))), block_position(Vector2i(2, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-13-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(1, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(1, 3))
 						),
 					]
 		Design.LITTLE_C_SHAPE:
@@ -530,37 +533,37 @@ static func make_roof_steps(
 					# RRR
 					# R R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(2, 2))
 						),
 					]
 				Depth.DOUBLE:
@@ -571,49 +574,49 @@ static func make_roof_steps(
 					# RRR
 					# R R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 1), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 1))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(2, 1), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 1))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(2, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-03-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 3))
 						),
-						make_block_step(
+						make_step(
 							"roof-23-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(2, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(2, 3))
 						),
 					]
 		Design.BIG_C_SHAPE:
@@ -625,53 +628,53 @@ static func make_roof_steps(
 					# RRRRR
 					# R   R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-30-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(3, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(3, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-40-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(4, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(4, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-31-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(3, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(3, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-41-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(4, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(4, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-42-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(4, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(4, 2))
 						),
 					]
 				Depth.DOUBLE:
@@ -682,73 +685,73 @@ static func make_roof_steps(
 					# RRRRR
 					# R   R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-30-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(3, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(3, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-40-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(4, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(4, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 1), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 1))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-31-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(3, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(3, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-41-" + str(roof_color),
-							Vector2i(2, 1), Vector2i(4, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 1))), block_position(Vector2i(4, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(2, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-32-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(3, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(3, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-42-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(4, 2)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(4, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-03-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 3))
 						),
-						make_block_step(
+						make_step(
 							"roof-43-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(4, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(4, 3))
 						),
 					]
 		Design.E_SHAPE:
@@ -760,57 +763,57 @@ static func make_roof_steps(
 					# RRRRR
 					# R R R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-30-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(3, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(3, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-40-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(4, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(4, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(1, 3), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 3))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-31-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(3, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(3, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-41-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(4, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(4, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(2, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-42-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(4, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(4, 2))
 						),
 					]
 				Depth.DOUBLE:
@@ -821,77 +824,77 @@ static func make_roof_steps(
 					# RRRRR
 					# R   R
 					return [
-						make_block_step(
+						make_step(
 							"roof-00-" + str(roof_color),
-							Vector2i(0, 0), Vector2i(0, 0)
+							_block_rect(base_position + block_position(Vector2i(0, 0))), block_position(Vector2i(0, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-10-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(1, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(1, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-20-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(2, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(2, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-30-" + str(roof_color),
-							Vector2i(1, 0), Vector2i(3, 0)
+							_block_rect(base_position + block_position(Vector2i(1, 0))), block_position(Vector2i(3, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-40-" + str(roof_color),
-							Vector2i(2, 0), Vector2i(4, 0)
+							_block_rect(base_position + block_position(Vector2i(2, 0))), block_position(Vector2i(4, 0))
 						),
-						make_block_step(
+						make_step(
 							"roof-01-" + str(roof_color),
-							Vector2i(0, 1), Vector2i(0, 1)
+							_block_rect(base_position + block_position(Vector2i(0, 1))), block_position(Vector2i(0, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-11-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(1, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(1, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-21-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(2, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(2, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-31-" + str(roof_color),
-							Vector2i(1, 1), Vector2i(3, 1)
+							_block_rect(base_position + block_position(Vector2i(1, 1))), block_position(Vector2i(3, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-41-" + str(roof_color),
-							Vector2i(2, 1), Vector2i(4, 1)
+							_block_rect(base_position + block_position(Vector2i(2, 1))), block_position(Vector2i(4, 1))
 						),
-						make_block_step(
+						make_step(
 							"roof-02-" + str(roof_color),
-							Vector2i(0, 3), Vector2i(0, 2)
+							_block_rect(base_position + block_position(Vector2i(0, 3))), block_position(Vector2i(0, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-12-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(1, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(1, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-22-" + str(roof_color),
-							Vector2i(1, 3), Vector2i(2, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 3))), block_position(Vector2i(2, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-32-" + str(roof_color),
-							Vector2i(1, 2), Vector2i(3, 2)
+							_block_rect(base_position + block_position(Vector2i(1, 2))), block_position(Vector2i(3, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-42-" + str(roof_color),
-							Vector2i(2, 3), Vector2i(4, 2)
+							_block_rect(base_position + block_position(Vector2i(2, 3))), block_position(Vector2i(4, 2))
 						),
-						make_block_step(
+						make_step(
 							"roof-03-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(0, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(0, 3))
 						),
-						make_block_step(
+						make_step(
 							"roof-23-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(2, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(2, 3))
 						),
-						make_block_step(
+						make_step(
 							"roof-43-" + str(roof_color),
-							Vector2i(1, 4), Vector2i(4, 3)
+							_block_rect(base_position + block_position(Vector2i(1, 4))), block_position(Vector2i(4, 3))
 						),
 					]
 

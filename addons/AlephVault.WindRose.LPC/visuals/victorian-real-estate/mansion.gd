@@ -13,121 +13,155 @@ var _texture_context = null
 
 @export var use_bricked_prongs: bool = false:
 	set(value):
+		_log_property_update_started("use_bricked_prongs", use_bricked_prongs, value)
 		_release_texture()
 		use_bricked_prongs = value
 		_refresh_texture()
+		_log_property_update_finished("use_bricked_prongs", use_bricked_prongs)
 
 
 @export var first_floor_prongs: _Core.FirstFloorProngs = _Core.FirstFloorProngs.REGULAR_WINDOWS:
 	set(value):
+		_log_property_update_started("first_floor_prongs", first_floor_prongs, value)
 		_release_texture()
 		first_floor_prongs = value
 		_refresh_texture()
+		_log_property_update_finished("first_floor_prongs", first_floor_prongs)
 
 
 @export var prong_window_color: _Core.WindowColor = _Core.WindowColor.CLASSIC:
 	set(value):
+		_log_property_update_started("prong_window_color", prong_window_color, value)
 		_release_texture()
 		prong_window_color = value
 		_refresh_texture()
+		_log_property_update_finished("prong_window_color", prong_window_color)
 
 
 @export var prong_window_index: int = 0:
 	set(value):
+		_log_property_update_started("prong_window_index", prong_window_index, value)
 		_release_texture()
 		prong_window_index = value
 		_refresh_texture()
+		_log_property_update_finished("prong_window_index", prong_window_index)
 
 
 @export var non_prong_window_color: _Core.WindowColor = _Core.WindowColor.CLASSIC:
 	set(value):
+		_log_property_update_started("non_prong_window_color", non_prong_window_color, value)
 		_release_texture()
 		non_prong_window_color = value
 		_refresh_texture()
+		_log_property_update_finished("non_prong_window_color", non_prong_window_color)
 
 
 @export var non_prong_window_index: int = 0:
 	set(value):
+		_log_property_update_started("non_prong_window_index", non_prong_window_index, value)
 		_release_texture()
 		non_prong_window_index = value
 		_refresh_texture()
+		_log_property_update_finished("non_prong_window_index", non_prong_window_index)
 
 
 @export var roof_color: _Core.RoofColor = _Core.RoofColor.PURPLE:
 	set(value):
+		_log_property_update_started("roof_color", roof_color, value)
 		_release_texture()
 		roof_color = value
 		_refresh_texture()
+		_log_property_update_finished("roof_color", roof_color)
 
 
 @export var wall_color: _Core.WallColor = _Core.WallColor.YELLOW:
 	set(value):
+		_log_property_update_started("wall_color", wall_color, value)
 		_release_texture()
 		wall_color = value
 		_refresh_texture()
+		_log_property_update_finished("wall_color", wall_color)
 
 
 @export var light_mode: _Core.LightMode = _Core.LightMode.DAY:
 	set(value):
+		_log_property_update_started("light_mode", light_mode, value)
 		_release_texture()
 		light_mode = value
 		_refresh_texture()
+		_log_property_update_finished("light_mode", light_mode)
 
 
 @export var door_shape: _Core.DoorShape = _Core.DoorShape.RECTANGULAR:
 	set(value):
+		_log_property_update_started("door_shape", door_shape, value)
 		_release_texture()
 		door_shape = value
 		_refresh_texture()
+		_log_property_update_finished("door_shape", door_shape)
 
 
 @export var has_doorframe: bool = false:
 	set(value):
+		_log_property_update_started("has_doorframe", has_doorframe, value)
 		_release_texture()
 		has_doorframe = value
 		_refresh_texture()
+		_log_property_update_finished("has_doorframe", has_doorframe)
 
 
 @export var doorframe_color: _Core.DoorframeColor = _Core.DoorframeColor.ORANGE_LIGHT:
 	set(value):
+		_log_property_update_started("doorframe_color", doorframe_color, value)
 		_release_texture()
 		doorframe_color = value
 		_refresh_texture()
+		_log_property_update_finished("doorframe_color", doorframe_color)
 
 
 @export var doorframe_index: int = 0:
 	set(value):
+		_log_property_update_started("doorframe_index", doorframe_index, value)
 		_release_texture()
 		doorframe_index = value
 		_refresh_texture()
+		_log_property_update_finished("doorframe_index", doorframe_index)
 
 
 @export var doorsteps_color: _Core.DoorstepsColor = _Core.DoorstepsColor.GRAY_LIGHT:
 	set(value):
+		_log_property_update_started("doorsteps_color", doorsteps_color, value)
 		_release_texture()
 		doorsteps_color = value
 		_refresh_texture()
+		_log_property_update_finished("doorsteps_color", doorsteps_color)
 
 
 @export var stories: _Core.Stories = _Core.Stories.SINGLE:
 	set(value):
+		_log_property_update_started("stories", stories, value)
 		_release_texture()
 		stories = value
 		_refresh_texture()
+		_log_property_update_finished("stories", stories)
 
 
 @export var depth: _Core.Depth = _Core.Depth.SINGLE:
 	set(value):
+		_log_property_update_started("depth", depth, value)
 		_release_texture()
 		depth = value
 		_refresh_texture()
+		_log_property_update_finished("depth", depth)
 
 
 @export var design: _Core.Design = _Core.Design.LINE_SHAPE:
 	set(value):
+		_log_property_update_started("design", design, value)
 		_release_texture()
 		design = value
 		_refresh_texture()
+		_log_property_update_finished("design", design)
 
 
 func _init() -> void:
@@ -170,6 +204,28 @@ func _validate_property(property: Dictionary) -> void:
 		"region_filter_clip_enabled",
 	]:
 		property.usage = PROPERTY_USAGE_NO_EDITOR
+
+
+func _log_property_update_started(property_name: String, old_value, new_value) -> void:
+	print(
+		"Mansion: updating %s from %s to %s; regenerating image" %
+		[property_name, str(old_value), str(new_value)]
+	)
+
+
+func _log_property_update_finished(property_name: String, value) -> void:
+	print(
+		"Mansion: updated %s to %s; image regenerated (%s)" %
+		[property_name, str(value), _texture_status()]
+	)
+
+
+func _texture_status() -> String:
+	if _texture_context == null:
+		return "no texture context"
+	if texture == null:
+		return "no texture"
+	return "%dx%d" % [_texture_context.width, _texture_context.height]
 
 
 static func _ensure_cache() -> void:
