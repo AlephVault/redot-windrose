@@ -10,7 +10,19 @@ const SOURCE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/vic
 const BLOCK_SIZE: int = 96
 
 ## The size of the shadow, when used.
-const SHADOW_SIZE: int = 96
+const SHADOW_SIZE: int = BLOCK_SIZE
+
+## The x position of the base part of the shadow.
+const SHADOW_BASE_X: int = 1760
+
+## The y position of the base part of the shadow.
+const SHADOW_BASE_Y: int = 1664
+
+## The x position of the non-base part of the shadow.
+const SHADOW_X: int = SHADOW_BASE_X
+
+## The y position of the non-base part of the shadow.
+const SHADOW_Y: int = SHADOW_BASE_Y + SHADOW_SIZE
 
 ## The extra, vertical, size to use for extra assets like door frames or stairs.
 const EXTRA_SIZE: int = 16
@@ -871,10 +883,11 @@ static func _is_prong(x: int, design: Design) -> bool:
 static func _make_mansion_floor_steps(
 	use_bricked_prongs: bool,
 	first_floor_prongs: FirstFloorProngs,
-	roof_color, wall_color: WallColor,
+	roof_color, wall_color: WallColor, light_mode: LightMode,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
+	var shadow_steps: Array[_Step] = []
 	var size: Vector2i = compute_block_size(design)
 	var door_index: int = (size.x - 1) / 2
 	var wall_color_pivot: Vector2i = Vector2i(0, 2 * int(wall_color))
@@ -924,6 +937,23 @@ static func _make_mansion_floor_steps(
 					bevel, current_target_block
 				))
 
+			# Then, cast the shadow. We have a shadow for the first floor, and another
+			# shadow for the other floors. This only applies if it's daylight mode.
+			if light_mode == LightMode.DAY:
+				if floor == 0:
+					# First, add the triangle shadow. One to the right.
+					shadow_steps.append(make_step(
+						"prong-%d%d-shadow-base",
+						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(1, 0))
+					))
+				shadow_steps.append(make_step(
+					"prong-%d%d-shadow",
+					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+					block_position(current_target_block + Vector2i(1, -1))
+				))
+
+	steps.append_array(shadow_steps)
 	return steps
 
 ## Given the mansion settings, assembles all the required steps to draw it.
@@ -931,6 +961,7 @@ static func make_mansion_steps(
 	use_bricked_prongs: bool,
 	first_floor_prongs: FirstFloorProngs,
 	roof_color, wall_color: WallColor,
+	light_mode: LightMode,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
 	var steps: Array[_Step] = []
@@ -947,7 +978,7 @@ static func make_mansion_steps(
 		var floor: int = stories_[floor_index]
 		steps.append_array(_make_mansion_floor_steps(
 			use_bricked_prongs, first_floor_prongs,
-			roof_color, wall_color,
+			roof_color, wall_color, light_mode,
 			floor, floor_index, depth, design
 		))
 
