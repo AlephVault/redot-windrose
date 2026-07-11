@@ -84,10 +84,10 @@ const DOORSTEPS_COLOR_PIVOT: Vector2i = Vector2i(1856, 1472)
 const DOORFRAME_PIVOT: Vector2i = Vector2i(0, 2 * BLOCK_SIZE * 6)
 
 ## The source size of a doorframe.
-const DOORFRAME_SOURCE_SIZE: Vector2i = Vector2i(112, 64)
+const DOORFRAME_SOURCE_SIZE: Vector2i = Vector2i(64, 128)
 
 ## The size of a doorframe.
-const DOORFRAME_SIZE: Vector2i = Vector2i(112, 64)
+const DOORFRAME_SIZE: Vector2i = Vector2i(64, 112)
 
 ## The amount of styles per doorframe color.
 const DOORFRAME_STYLES: int = 7
@@ -274,10 +274,10 @@ static func make_base_wall_steps(
 	# span: 3 blocks (Line, T), 1 block and parts (Little C),
 	# or 3 blocks and parts (Big C, E).
 	var result: Array[_Step] = []
-	match Design:
+	match design:
 		Design.LINE_SHAPE, Design.T_SHAPE:
-			for floor_ in range(stories):
-				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+			for floor_ in range(int(stories), -1, -1):
+				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS * BLOCK_SIZE
 				# Step 1: First chunk (+96, +96, 32, 96) -> (0, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (32, y_)
 				# Step 3: Third chunk (+128, +96, 96, 96) -> (128, y_)
@@ -301,7 +301,7 @@ static func make_base_wall_steps(
 					), Vector2i(32 + 2 * BLOCK_SIZE, y_)),
 				])
 		Design.LITTLE_C_SHAPE:
-			for floor_ in range(stories):
+			for floor_ in range(int(stories), -1, -1):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
@@ -321,7 +321,7 @@ static func make_base_wall_steps(
 					), Vector2i(2 * BLOCK_SIZE, y_)),
 				])
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
-			for floor_ in range(stories):
+			for floor_ in range(int(stories), -1, -1):
 				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
@@ -1141,7 +1141,7 @@ static func _make_mansion_floor_steps(
 				steps.append(make_step(
 					"doorframe-%s%d" % [str(doorframe_color), doorframe_index],
 					Rect2i(doorframe.x, doorframe.y, DOORFRAME_SIZE.x, DOORFRAME_SIZE.y),
-					Vector2i(int((BLOCK_SIZE - DOORFRAME_SIZE.x) / 2), 0)
+					block_position(current_target_block) + Vector2i(int((BLOCK_SIZE - DOORFRAME_SIZE.x) / 2), 0)
 				))
 
 	steps.append_array(shadow_steps)
