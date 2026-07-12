@@ -1015,7 +1015,7 @@ static func _make_mansion_floor_steps(
 							Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
 							block_position(current_target_block + Vector2i(1, 0))
 						))
-						for sq_index in (2 + int(depth)):
+						for sq_index in (3 + int(depth)):
 							shadow_steps.append(make_step(
 								"final-%d%d-shadow-%s-%d" % [floor, x_, str(light_mode), sq_index],
 								Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
@@ -1031,11 +1031,27 @@ static func _make_mansion_floor_steps(
 						))
 
 				if x_ < (size.x - 1):
-				# Add the rect / regular shadow.
+					# Add the rect / regular shadow.
 					shadow_steps.append(make_step(
 						"prong-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
 						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, -1))
+					))
+		else:
+			# Just prepare the shadows for if it's the last position.
+			# Do this only for the 1st floor.
+			if x_ == (size.x - 1) and floor == 0:
+				# First, add the triangle shadow. One to the right.
+				shadow_steps.append(make_step(
+					"final-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
+					Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+					block_position(current_target_block + Vector2i(1, 0))
+				))
+				for sq_index in (2 + int(depth)):
+					shadow_steps.append(make_step(
+						"final-%d%d-shadow-%s-%d" % [floor, x_, str(light_mode), sq_index],
+						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(1, -1 - sq_index))
 					))
 
 		# Then, the window must be painted. There are many cases here:
