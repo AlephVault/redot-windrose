@@ -1041,7 +1041,7 @@ static func _make_mansion_floor_steps(
 		else:
 			# Just prepare the shadows for if it's the last position.
 			# Do this only for the 1st floor.
-			if x_ == (size.x - 1) and floor == 0:
+			if x_ == (size.x - 1) and floor == 0 and light_mode == LightMode.DAY:
 				# First, add the triangle shadow. One to the right.
 				shadow_steps.append(make_step(
 					"final-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
@@ -1056,7 +1056,7 @@ static func _make_mansion_floor_steps(
 					))
 
 		# Also, for the 0th floor, add the counterbase shadow and more shadows.
-		if floor == 0:
+		if floor == 0 and light_mode == LightMode.DAY:
 			if x_ == 0:
 				# First, add the triangle shadow. One to the top-left.
 				back_shadow_steps.append(make_step(
@@ -1221,10 +1221,7 @@ static func make_mansion_steps(
 	# 1. Steps to build the walls.
 	steps.append_array(make_base_wall_steps(wall_color, stories, depth, design))
 
-	# 2. Steps to build the roof.
-	steps.append_array(make_roof_steps(roof_color, depth, design))
-
-	# 3. Paint each floor (downward).
+	# 2. Paint each floor (downward).
 	var stories_: Array = range(int(stories), -1, -1)
 	for floor_index in stories_.size():
 		var floor: int = stories_[floor_index]
@@ -1237,5 +1234,8 @@ static func make_mansion_steps(
 			doorsteps_color,
 			floor, floor_index, depth, design
 		))
+
+	# 3. Steps to build the roof.
+	steps.append_array(make_roof_steps(roof_color, depth, design))
 
 	return steps
