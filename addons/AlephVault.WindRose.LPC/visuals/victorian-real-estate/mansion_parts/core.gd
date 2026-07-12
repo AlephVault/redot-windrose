@@ -1000,25 +1000,25 @@ static func _make_mansion_floor_steps(
 				if floor == 0:
 					# First, add the triangle shadow. One to the right.
 					shadow_steps.append(make_step(
-						"prong-%d%d-shadow-base" % [floor, x_],
+						"prong-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
 						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, 0))
 					))
 				# Add the rect / regular shadow.
 				shadow_steps.append(make_step(
-					"prong-%d%d-shadow" % [floor, x_],
+					"prong-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
 					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 					block_position(current_target_block + Vector2i(1, -1))
 				))
 
 		# Then, the window must be painted. There are many cases here:
-		if is_prong and not is_door:
+		if is_prong and not is_door and (floor != 0 or first_floor_prongs != FirstFloorProngs.COLUMNS):
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
 				if prong_window_color == WindowColor.CLASSIC:
 					var classic_box_window: Vector2i = wall_color_pivot + Vector2i(4 + int(light_mode), 0)
 
 					steps.append(make_step(
-						"prong-%d%d-box-window-classic-%s" % [floor, x_, str(wall_color)],
+						"prong-%d%d-box-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
 						Rect2i(classic_box_window.x, classic_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
 						block_position(current_target_block)
 					))
@@ -1029,7 +1029,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-box-window-%s" % [floor, x_, str(prong_window_color)],
+						"prong-%d%d-box-window-%s-%s" % [floor, x_, str(prong_window_color), str(light_mode)],
 						Rect2i(modern_box_window.x, modern_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
 						block_position(current_target_block)
 					))
@@ -1041,7 +1041,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-window-classic-%s" % [floor, x_, str(wall_color)],
+						"prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
 						Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
@@ -1052,7 +1052,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-window-classic-%s" % [floor, x_, str(prong_window_color)],
+						"prong-%d%d-window-classic-%s-%s" % [floor, x_, str(prong_window_color), str(light_mode)],
 						Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
@@ -1064,7 +1064,7 @@ static func _make_mansion_floor_steps(
 				)
 
 				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s" % [floor, x_, str(wall_color)],
+					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
 					Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
@@ -1075,7 +1075,7 @@ static func _make_mansion_floor_steps(
 				)
 
 				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s" % [floor, x_, str(non_prong_window_color)],
+					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(non_prong_window_color), str(light_mode)],
 					Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
