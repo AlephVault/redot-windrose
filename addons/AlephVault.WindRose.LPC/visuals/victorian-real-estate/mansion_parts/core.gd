@@ -1017,10 +1017,9 @@ static func _make_mansion_floor_steps(
 				if prong_window_color == WindowColor.CLASSIC:
 					var classic_box_window: Vector2i = wall_color_pivot + Vector2i(4 + int(light_mode), 0)
 
-					steps.append(make_step(
+					steps.append(make_block_step(
 						"prong-%d%d-box-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
-						Rect2i(classic_box_window.x, classic_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
-						block_position(current_target_block)
+						classic_box_window, current_target_block
 					))
 				else:
 					var modern_box_window: Vector2i = Vector2i(
@@ -1028,10 +1027,9 @@ static func _make_mansion_floor_steps(
 						2 * BLOCK_SIZE * (int(prong_window_color) - 1)
 					)
 
-					steps.append(make_step(
+					steps.append(make_block_step(
 						"prong-%d%d-box-window-%s-%s" % [floor, x_, str(prong_window_color), str(light_mode)],
-						Rect2i(modern_box_window.x, modern_box_window.y, BLOCK_SIZE, BLOCK_SIZE),
-						block_position(current_target_block)
+						modern_box_window, current_target_block
 					))
 			else:
 				if prong_window_color == WindowColor.CLASSIC:
