@@ -279,7 +279,7 @@ static func make_base_wall_steps(
 	match design:
 		Design.LINE_SHAPE, Design.T_SHAPE:
 			for floor_ in range(int(stories), -1, -1):
-				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS * BLOCK_SIZE
+				var y_: int = y + (int(stories) - floor_) * BLOCK_SIZE
 				# Step 1: First chunk (+96, +96, 32, 96) -> (0, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (32, y_)
 				# Step 3: Third chunk (+128, +96, 96, 96) -> (128, y_)
@@ -304,7 +304,7 @@ static func make_base_wall_steps(
 				])
 		Design.LITTLE_C_SHAPE:
 			for floor_ in range(int(stories), -1, -1):
-				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+				var y_: int = y + (int(stories) - floor_) * BLOCK_SIZE
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
 				# Step 3: Third chunk (+224, +96, 64, 96) -> (192, y_)
@@ -324,7 +324,7 @@ static func make_base_wall_steps(
 				])
 		Design.BIG_C_SHAPE, Design.E_SHAPE:
 			for floor_ in range(int(stories), -1, -1):
-				var y_: int = y + floor_ * BASE_OFFSET_IN_BLOCKS
+				var y_: int = y + (int(stories) - floor_) * BLOCK_SIZE
 				# Step 1: First chunk (+96, +96, 32, 96) -> (64, y_)
 				# Step 2: Second chunk (+128, +96, 96, 96) -> (96, y_)
 				# Step 3: Second chunk (+128, +96, 96, 96) -> (192, y_)
@@ -962,7 +962,7 @@ static func _make_mansion_floor_steps(
 
 		# Determining the actual current blockwise Y coordinate.
 		# The X coordinate does not change.
-		var current_y: int = base_y + int(is_prong)
+		var current_y: int = base_y + int(is_prong) + floor_index
 		var current_target_block: Vector2i = Vector2i(x_, current_y)
 
 		# The cases for what prong to pick are now the following ones:
@@ -973,7 +973,7 @@ static func _make_mansion_floor_steps(
 		if is_prong:
 			var wall: Vector2i = wall_color_pivot
 
-			if floor == 0 and first_floor_prongs == FirstFloorProngs.COLUMNS:
+			if floor == 0 and first_floor_prongs == FirstFloorProngs.COLUMNS and not is_door:
 				wall += Vector2i(2, 0)
 			elif use_bricked_prongs:
 				if floor == 0:
@@ -1086,7 +1086,7 @@ static func _make_mansion_floor_steps(
 				)
 
 				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
+					"non-prong-%d%d-window-classic-%s-%s-%d" % [floor, x_, str(wall_color), str(light_mode), non_prong_window_index],
 					Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
@@ -1097,7 +1097,7 @@ static func _make_mansion_floor_steps(
 				)
 
 				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(non_prong_window_color), str(light_mode)],
+					"non-prong-%d%d-window-classic-%s-%s-%d" % [floor, x_, str(non_prong_window_color), str(light_mode), non_prong_window_index],
 					Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 				))
@@ -1128,7 +1128,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
+						"prong-%d%d-window-classic-%s-%s-%d" % [floor, x_, str(wall_color), str(light_mode), prong_window_index],
 						Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
@@ -1139,7 +1139,7 @@ static func _make_mansion_floor_steps(
 					)
 
 					steps.append(make_step(
-						"prong-%d%d-window-classic-%s-%s" % [floor, x_, str(prong_window_color), str(light_mode)],
+						"prong-%d%d-window-%s-%s-%d" % [floor, x_, str(prong_window_color), str(light_mode), prong_window_index],
 						Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
