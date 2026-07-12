@@ -950,6 +950,7 @@ static func _make_mansion_floor_steps(
 	doorsteps_color: DoorstepsColor,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
+	var back_shadow_steps: Array[_Step] = []
 	var steps: Array[_Step] = []
 	var shadow_steps: Array[_Step] = []
 	var size: Vector2i = compute_block_size(design)
@@ -1053,6 +1054,23 @@ static func _make_mansion_floor_steps(
 						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, -1 - sq_index))
 					))
+
+		# Also, for the 0th floor, add the counterbase shadow and more shadows.
+		if floor == 0:
+			if x_ == 0:
+				# First, add the triangle shadow. One to the top-left.
+				back_shadow_steps.append(make_step(
+					"final-%d%d-shadow-counterbase-%s" % [floor, x_, str(light_mode)],
+					Rect2i(SHADOW_COUNTERBASE_X, SHADOW_COUNTERBASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+					block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
+				))
+			else:
+				# then, shadow squares.
+				back_shadow_steps.append(make_step(
+					"final-%d%d-shadow-h-%s" % [floor, x_, str(light_mode)],
+					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+					block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
+				))
 
 		# Then, the window must be painted. There are many cases here:
 		if is_door:
@@ -1185,8 +1203,7 @@ static func _make_mansion_floor_steps(
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
 
-	steps.append_array(shadow_steps)
-	return steps
+	return back_shadow_steps + steps + shadow_steps
 
 ## Given the mansion settings, assembles all the required steps to draw it.
 static func make_mansion_steps(
