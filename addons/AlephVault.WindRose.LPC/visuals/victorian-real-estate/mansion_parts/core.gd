@@ -24,6 +24,12 @@ const SHADOW_X: int = SHADOW_BASE_X
 ## The y position of the non-base part of the shadow.
 const SHADOW_Y: int = SHADOW_BASE_Y - SHADOW_SIZE
 
+## The x position of the opposite base (diagonal) of the shadow.
+const SHADOW_COUNTERBASE_X: int = SHADOW_BASE_X + SHADOW_SIZE
+
+## The y position of the opposite base (diagonal) of the shadow.
+const SHADOW_COUNTERBASE_Y: int = SHADOW_BASE_Y
+
 ## The extra, vertical, size to use for extra assets like door frames or stairs.
 const EXTRA_SIZE: int = 16
 
@@ -1006,12 +1012,24 @@ static func _make_mansion_floor_steps(
 						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, 0))
 					))
+
+					# Paint shadows if x_ == (size.x - 1).
+					# Concretely, 2 + depth.
+					if x_ == (size.x - 1):
+						for sq_index in (2 + int(depth)):
+							shadow_steps.append(make_step(
+								"final-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
+								Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+								block_position(current_target_block + Vector2i(1, -1 - sq_index))
+							))
+
+				if x_ < (size.x - 1):
 				# Add the rect / regular shadow.
-				shadow_steps.append(make_step(
-					"prong-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
-					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
-					block_position(current_target_block + Vector2i(1, -1))
-				))
+					shadow_steps.append(make_step(
+						"prong-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
+						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(1, -1))
+					))
 
 		# Then, the window must be painted. There are many cases here:
 		if is_door:
