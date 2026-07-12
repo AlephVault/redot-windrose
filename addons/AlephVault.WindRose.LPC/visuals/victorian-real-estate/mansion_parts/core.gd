@@ -164,7 +164,9 @@ enum DoorShape {
 	RECTANGULAR,
 	ROUNDED,
 	ROUNDED2,
-	ROUNDED_LARGE
+	ROUNDED_LARGE,
+	ROUNDED2_LARGE,
+	ROUNDED3_LARGE,
 }
 
 # Door style index, Window style index, and Doorframe Index
@@ -1012,7 +1014,94 @@ static func _make_mansion_floor_steps(
 				))
 
 		# Then, the window must be painted. There are many cases here:
-		if is_prong and not is_door and (floor != 0 or first_floor_prongs != FirstFloorProngs.COLUMNS):
+		if is_door:
+			var door_hole: Rect2i
+			match door_shape:
+				DoorShape.RECTANGULAR, DoorShape.ROUNDED, DoorShape.ROUNDED2:
+					door_hole = Rect2i(1760 + DOOR_WIDTH * int(door_shape), 1440, DOOR_WIDTH, DOOR_HEIGHT)
+				DoorShape.ROUNDED_LARGE, DoorShape.ROUNDED2_LARGE, DoorShape.ROUNDED3_LARGE:
+					door_hole = Rect2i(1824 + DOOR_WIDTH * (int(door_shape) - 3), 1760, DOOR_WIDTH, DOOR_HEIGHT)
+			if light_mode == LightMode.NIGHT_ON:
+				door_hole.position.y += DOOR_HEIGHT
+
+			steps.append(make_step(
+				"door-hole-%s" % [str(door_shape)], door_hole,
+				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT - 16)
+			))
+
+			var doorsteps: Rect2i = Rect2i(
+				DOORSTEPS_COLOR_PIVOT.x + DOORSTEPS_WIDTH * (int(doorsteps_color) % DOORSTEPS_COLORS_PER_ROW),
+				DOORSTEPS_COLOR_PIVOT.y + DOORSTEPS_WIDTH * 2 * int(int(doorsteps_color) / DOORSTEPS_COLORS_PER_ROW),
+				DOOR_WIDTH, DOOR_WIDTH
+			)
+
+			steps.append(make_step(
+				"doorsteps-%s" % [str(doorsteps_color)], doorsteps,
+				block_position(current_target_block) + DOORSTEPS_OFFSET
+			))
+
+			if has_doorframe:
+				var doorframe: Vector2i = DOORFRAME_PIVOT
+				match doorframe_color:
+					DoorframeColor.ORANGE_LIGHT:
+						doorframe += Vector2i(0, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.ORANGE_MID:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.ORANGE_DARK:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.BROWN_LIGHT:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.BROWN_MID:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.BROWN_DARK:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(
+							DOORFRAME_SOURCE_SIZE.x * (doorframe_index % 4),
+							DOORFRAME_SOURCE_SIZE.y * int((doorframe_index % DOORFRAME_STYLES) / 4)
+						)
+					DoorframeColor.GRAY_LIGHT:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.GRAY_MID:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+					DoorframeColor.GRAY_DARK:
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, 0)
+						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
+
+				steps.append(make_step(
+					"doorframe-%s%d" % [str(doorframe_color), doorframe_index],
+					Rect2i(doorframe.x, doorframe.y, DOORFRAME_SIZE.x, DOORFRAME_SIZE.y),
+					block_position(current_target_block) + Vector2i(int((BLOCK_SIZE - DOORFRAME_SIZE.x) / 2), 0)
+				))
+		elif not is_prong:
+			if non_prong_window_color == WindowColor.CLASSIC:
+				var classic_window: Vector2i = block_position(Vector2i(7, 0)) + Vector2i(
+					WINDOW_REGULAR_WIDTH * (int(light_mode) * CLASSIC_REGULAR_WINDOWS + non_prong_window_index % CLASSIC_REGULAR_WINDOWS),
+					0
+				)
+
+				steps.append(make_step(
+					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
+					Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+				))
+			else:
+				var modern_window: Vector2i = block_position(Vector2i(7 + CLASSIC_REGULAR_WINDOWS, 0)) + Vector2i(
+					WINDOW_REGULAR_WIDTH * (int(light_mode) * MODERN_REGULAR_WINDOWS_PER_ROW + non_prong_window_index % MODERN_REGULAR_WINDOWS_PER_ROW),
+					2 * BLOCK_SIZE * (int(non_prong_window_color) - 1) + int((non_prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
+				)
+
+				steps.append(make_step(
+					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(non_prong_window_color), str(light_mode)],
+					Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
+					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
+				))
+		elif (floor != 0 or first_floor_prongs != FirstFloorProngs.COLUMNS):
 			if floor == 0 and first_floor_prongs == FirstFloorProngs.BOX_WINDOWS:
 				if prong_window_color == WindowColor.CLASSIC:
 					var classic_box_window: Vector2i = wall_color_pivot + Vector2i(4 + int(light_mode), 0)
@@ -1054,93 +1143,6 @@ static func _make_mansion_floor_steps(
 						Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
 						block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
 					))
-		elif not is_prong:
-			if non_prong_window_color == WindowColor.CLASSIC:
-				var classic_window: Vector2i = block_position(Vector2i(7, 0)) + Vector2i(
-					WINDOW_REGULAR_WIDTH * (int(light_mode) * CLASSIC_REGULAR_WINDOWS + non_prong_window_index % CLASSIC_REGULAR_WINDOWS),
-					0
-				)
-
-				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(wall_color), str(light_mode)],
-					Rect2i(classic_window.x, classic_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
-					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
-				))
-			else:
-				var modern_window: Vector2i = block_position(Vector2i(7 + CLASSIC_REGULAR_WINDOWS, 0)) + Vector2i(
-					WINDOW_REGULAR_WIDTH * (int(light_mode) * MODERN_REGULAR_WINDOWS_PER_ROW + non_prong_window_index % MODERN_REGULAR_WINDOWS_PER_ROW),
-					2 * BLOCK_SIZE * (int(non_prong_window_color) - 1) + int((non_prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
-				)
-
-				steps.append(make_step(
-					"non-prong-%d%d-window-classic-%s-%s" % [floor, x_, str(non_prong_window_color), str(light_mode)],
-					Rect2i(modern_window.x, modern_window.y, WINDOW_REGULAR_WIDTH, WINDOW_REGULAR_HEIGHT),
-					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, 0)
-				))
-		elif is_door:
-			var door_hole: Rect2i
-			match door_shape:
-				DoorShape.RECTANGULAR, DoorShape.ROUNDED, DoorShape.ROUNDED2:
-					door_hole = Rect2i(1760 + DOOR_HEIGHT * int(door_shape), 1440, DOOR_WIDTH, DOOR_HEIGHT)
-				DoorShape.ROUNDED_LARGE:
-					door_hole = Rect2i(1824, 1760, DOOR_WIDTH, DOOR_HEIGHT)
-			if light_mode == LightMode.NIGHT_ON:
-				door_hole.position.y += DOOR_HEIGHT
-
-			steps.append(make_step(
-				"door-hole", door_hole,
-				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT - 16)
-			))
-
-			var doorsteps: Rect2i = Rect2i(
-				DOORSTEPS_COLOR_PIVOT.x + DOORSTEPS_WIDTH * (int(doorsteps_color) % DOORSTEPS_COLORS_PER_ROW),
-				DOORSTEPS_COLOR_PIVOT.y + DOORSTEPS_WIDTH * 2 * int(int(doorsteps_color) / DOORSTEPS_COLORS_PER_ROW),
-				DOOR_WIDTH, DOOR_WIDTH
-			)
-
-			steps.append(make_step(
-				"doorsteps", doorsteps,
-				block_position(current_target_block) + DOORSTEPS_OFFSET
-			))
-
-			if has_doorframe:
-				var doorframe: Vector2i = DOORFRAME_PIVOT
-				match doorframe_color:
-					DoorframeColor.ORANGE_LIGHT:
-						doorframe += Vector2i(0, DOORFRAME_SOURCE_SIZE.y * DOORFRAME_STYLES)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.ORANGE_MID:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.ORANGE_DARK:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, DOORFRAME_SOURCE_SIZE.y)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.BROWN_LIGHT:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, 0)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.BROWN_MID:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 3 * DOORFRAME_STYLES, 1)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.BROWN_DARK:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 4 * DOORFRAME_STYLES, 0)
-						doorframe += Vector2i(
-							DOORFRAME_SOURCE_SIZE.x * (doorframe_index % 4),
-							DOORFRAME_SOURCE_SIZE.y * int((doorframe_index % DOORFRAME_STYLES) / 4)
-						)
-					DoorframeColor.GRAY_LIGHT:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.GRAY_MID:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * DOORFRAME_STYLES, 0)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-					DoorframeColor.GRAY_DARK:
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * 2 * DOORFRAME_STYLES, 0)
-						doorframe += Vector2i(DOORFRAME_SOURCE_SIZE.x * (doorframe_index % DOORFRAME_STYLES), 0)
-
-				steps.append(make_step(
-					"doorframe-%s%d" % [str(doorframe_color), doorframe_index],
-					Rect2i(doorframe.x, doorframe.y, DOORFRAME_SIZE.x, DOORFRAME_SIZE.y),
-					block_position(current_target_block) + Vector2i(int((BLOCK_SIZE - DOORFRAME_SIZE.x) / 2), 0)
-				))
 
 	steps.append_array(shadow_steps)
 	return steps
