@@ -1006,22 +1006,29 @@ static func _make_mansion_floor_steps(
 			# shadow for the other floors. This only applies if it's daylight mode.
 			if light_mode == LightMode.DAY:
 				if floor == 0:
-					# First, add the triangle shadow. One to the right.
-					shadow_steps.append(make_step(
-						"prong-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
-						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
-						block_position(current_target_block + Vector2i(1, 0))
-					))
-
 					# Paint shadows if x_ == (size.x - 1).
 					# Concretely, 2 + depth.
 					if x_ == (size.x - 1):
+						# First, add the triangle shadow. One to the right.
+						shadow_steps.append(make_step(
+							"final-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
+							Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+							block_position(current_target_block + Vector2i(1, 0))
+						))
 						for sq_index in (2 + int(depth)):
 							shadow_steps.append(make_step(
-								"final-%d%d-shadow-%s" % [floor, x_, str(light_mode)],
+								"final-%d%d-shadow-%s-%d" % [floor, x_, str(light_mode), sq_index],
 								Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 								block_position(current_target_block + Vector2i(1, -1 - sq_index))
 							))
+					else:
+						# Only add the triangle shadow. One to the right.
+						# The difference is in the used key.
+						shadow_steps.append(make_step(
+							"prong-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
+							Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+							block_position(current_target_block + Vector2i(1, 0))
+						))
 
 				if x_ < (size.x - 1):
 				# Add the rect / regular shadow.
