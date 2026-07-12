@@ -983,7 +983,7 @@ static func _make_mansion_floor_steps(
 
 			# Then, add the prong step:
 			steps.append(make_block_step(
-				"prong-%d%d-%s" % [floor, x_, str(wall_color)],
+				"prong-%d%d-%s-%s,%s" % [floor, x_, str(wall_color), str(use_bricked_prongs), str(first_floor_prongs)],
 				wall, current_target_block
 			))
 
