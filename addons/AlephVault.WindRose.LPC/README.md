@@ -14,7 +14,7 @@ To use the farm visuals, a matching LPC visual must be added to the entity that 
 
 Wooden furniture visuals are documented separately in `visuals/wooden-furniture/README.md`. A runnable sample scene is available at `samples/wooden-furniture/sample-aleph-vault-windrose-lpc-wooden-furniture-usage.tscn`.
 Victorian street appliances in `visuals/victorian-street-appliances/README.md`. Also, a sample scene is created for this as well.
-Victorian real estate has a mansion sample at `samples/victorian-real-estate/sample-aleph-vault-windrose-lpc-victorian-real-estate-usage.tscn`.
+Victorian real estate currently provides the mansion visual, documented in `visuals/victorian-real-estate/MANSION.md`. A mansion sample is available at `samples/victorian-real-estate/sample-aleph-vault-windrose-lpc-victorian-real-estate-usage.tscn`.
 
 ### Barn
 
