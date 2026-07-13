@@ -10,6 +10,8 @@ const _TEXTURE_SIZE := Vector2i(288, 288)
 const _BLOCK_SIZE := Vector2i(288, 288)
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
 const _DEFAULT_CACHE_NAME := "farm_house"
+const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
+const _TEXTURE_BUILD_STEPS_PER_FRAME := 8
 const _WINDOW_LIGHTS_ON_POSITION := Vector2i(160, 192)
 const _WINDOW_LIGHTS_ON_SIZE := Vector2i(32, 32)
 const _WINDOW_LIGHTS_ON_SOURCE_POSITION := Vector2i(1184, 1088)
@@ -229,6 +231,7 @@ static var _locked_texture_cache_max_disposal_size: int = 0
 
 
 var _texture_context = null
+var _texture_refresh_generation: int = 0
 
 
 func _init() -> void:
@@ -256,7 +259,7 @@ func _resume():
 
 
 func _update(_delta: float):
-	_update_sprite()
+	pass
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -412,12 +415,29 @@ func _build_context():
 
 
 func _release_texture() -> void:
+	_texture_refresh_generation += 1
 	if _texture_context != null and _cache_ensured:
 		_texture_context.dispose_texture(self, _locked_texture_cache_name)
 	_texture_context = null
 
 
 func _update_sprite() -> void:
+	_texture_refresh_generation += 1
+	var generation := _texture_refresh_generation
+	if is_inside_tree():
+		_update_sprite_debounced(generation)
+	else:
+		_update_sprite_now(generation, false)
+
+
+func _update_sprite_debounced(generation: int) -> void:
+	await get_tree().create_timer(_TEXTURE_REFRESH_DEBOUNCE_SECONDS).timeout
+	if generation != _texture_refresh_generation:
+		return
+	await _update_sprite_now(generation, true)
+
+
+func _update_sprite_now(generation: int, chunked: bool) -> void:
 	var cache_name := texture_cache_name.strip_edges()
 	if cache_name == "":
 		return
@@ -426,12 +446,23 @@ func _update_sprite() -> void:
 	var next_context = _build_context()
 	if next_context.invalid:
 		return
+	if generation != _texture_refresh_generation:
+		return
 
-	if _texture_context != null and _texture_context.final_key != next_context.final_key:
-		_texture_context.dispose_texture(self, _locked_texture_cache_name)
-
+	var previous_context = _texture_context
+	var next_texture: Texture2D
+	if chunked:
+		next_texture = await next_context.get_texture_chunked(
+			self, _locked_texture_cache_name, _TEXTURE_BUILD_STEPS_PER_FRAME
+		)
+	else:
+		next_texture = next_context.get_texture(self, _locked_texture_cache_name)
+	if generation != _texture_refresh_generation:
+		return
+	if previous_context != null and previous_context.final_key != next_context.final_key:
+		previous_context.dispose_texture(self, _locked_texture_cache_name)
 	_texture_context = next_context
-	texture = _texture_context.get_texture(self, _locked_texture_cache_name)
+	texture = next_texture
 	hframes = 1
 	vframes = 1
 	frame = 0

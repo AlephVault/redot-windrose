@@ -1172,7 +1172,7 @@ static func _make_mansion_floor_steps(
 				else:
 					var modern_box_window: Vector2i = Vector2i(
 						7 + CLASSIC_REGULAR_WINDOWS + MODERN_REGULAR_WINDOWS_PER_ROW + int(light_mode),
-						2 * BLOCK_SIZE * (int(prong_window_color) - 1)
+						2 * (int(prong_window_color) - 1)
 					)
 
 					steps.append(make_block_step(
@@ -1194,7 +1194,7 @@ static func _make_mansion_floor_steps(
 				else:
 					var modern_window: Vector2i = block_position(Vector2i(7 + CLASSIC_REGULAR_WINDOWS, 0)) + Vector2i(
 						WINDOW_REGULAR_WIDTH * (int(light_mode) * MODERN_REGULAR_WINDOWS_PER_ROW + prong_window_index % MODERN_REGULAR_WINDOWS_PER_ROW),
-						2 * BLOCK_SIZE * (int(prong_window_color) - 1) + int((prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
+						2 * (int(prong_window_color) - 1) + int((prong_window_index % MODERN_REGULAR_WINDOWS) / MODERN_REGULAR_WINDOWS_PER_ROW) * WINDOW_REGULAR_HEIGHT
 					)
 
 					steps.append(make_step(

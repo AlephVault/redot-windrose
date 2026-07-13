@@ -7,6 +7,8 @@ const _FORMAT: Image.Format = Image.FORMAT_RGBA8
 const _Step = preload("./step.gd")
 const _LRURegistry = preload("../lru/registry.gd")
 
+static var _source_image_cache := {}
+
 var _width: int
 var _height: int
 var _steps: Array
@@ -122,9 +124,61 @@ func _build_texture() -> Texture2D:
 
 	var image := Image.create_empty(_width, _height, false, _FORMAT)
 	image.fill(Color(0, 0, 0, 0))
+	var source_images := {}
 	for step in _steps:
-		step.blend_into(image)
+		_blend_step_into(image, step, source_images)
 	return ImageTexture.create_from_image(image)
+
+## Builds the final texture like `_build_texture`, but yields every
+## `steps_per_frame` steps so large compositions do not monopolize a frame.
+func _build_texture_chunked(obj, steps_per_frame: int = 8) -> Texture2D:
+	assert(not invalid, "This context is invalid. It cannot be processed")
+	if invalid:
+		return null
+
+	var image := Image.create_empty(_width, _height, false, _FORMAT)
+	image.fill(Color(0, 0, 0, 0))
+	var source_images := {}
+	var effective_steps_per_frame: int = maxi(1, steps_per_frame)
+	var steps_since_yield: int = 0
+	for step in _steps:
+		_blend_step_into(image, step, source_images)
+		steps_since_yield += 1
+		if steps_since_yield >= effective_steps_per_frame:
+			steps_since_yield = 0
+			if obj is Node and is_instance_valid(obj) and obj.is_inside_tree():
+				await obj.get_tree().process_frame
+	if obj is Node and is_instance_valid(obj) and obj.is_inside_tree():
+		await obj.get_tree().process_frame
+	return ImageTexture.create_from_image(image)
+
+func _blend_step_into(target_image: Image, step: _Step, source_images: Dictionary) -> void:
+	assert(not step.invalid, "This step is invalid. It cannot be processed")
+	assert(target_image != null, "A valid target image is required")
+	if step.invalid or target_image == null:
+		return
+
+	var source_image: Image = _get_step_source_image(step, source_images)
+	assert(source_image != null, "The step texture must expose image data")
+	if source_image == null:
+		return
+	var valid_format: bool = source_image.get_format() == _FORMAT
+	assert(valid_format, "The step texture must use RGBA8 format")
+	if not valid_format:
+		return
+	target_image.blend_rect(source_image, step.source_rect, step.target_position)
+
+func _get_step_source_image(step: _Step, source_images: Dictionary) -> Image:
+	var texture_id: int = step.texture.get_instance_id()
+	if not source_images.has(texture_id):
+		source_images[texture_id] = _get_cached_source_image(step.texture)
+	return source_images[texture_id]
+
+static func _get_cached_source_image(texture: Texture2D) -> Image:
+	var texture_id: int = texture.get_instance_id()
+	if not _source_image_cache.has(texture_id):
+		_source_image_cache[texture_id] = texture.get_image()
+	return _source_image_cache[texture_id]
 
 ## Gets an already cached texture for this context or
 ## builds and stores it in the configured LRU cache.
@@ -144,6 +198,26 @@ func get_texture(obj, cache_key: String) -> Texture2D:
 			return cached_texture
 
 	var built_texture: Texture2D = _build_texture()
+	var set_response = cache.set_value(_final_key, built_texture, null, obj)
+	return set_response.value
+
+## Gets a cached texture or builds it across multiple frames.
+func get_texture_chunked(obj, cache_key: String, steps_per_frame: int = 8) -> Texture2D:
+	assert(not invalid, "This context is invalid. It cannot be processed")
+	if invalid:
+		return null
+
+	var cache = _LRURegistry.fetch(cache_key)
+	if cache == null:
+		return null
+
+	var get_response = cache.get_value(_final_key, obj)
+	if get_response.is_successful():
+		var cached_texture: Texture2D = get_response.value
+		if cached_texture != null:
+			return cached_texture
+
+	var built_texture: Texture2D = await _build_texture_chunked(obj, steps_per_frame)
 	var set_response = cache.set_value(_final_key, built_texture, null, obj)
 	return set_response.value
 

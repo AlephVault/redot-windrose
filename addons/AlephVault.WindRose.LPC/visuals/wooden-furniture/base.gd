@@ -7,6 +7,8 @@ const _Context := AlephVault__WindRose.Utils.Textures.Context
 
 const TEXTURE_CACHE_KEY := "AlephVault.WindRose.LPC:wooden-furniture"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
+const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
+const _TEXTURE_BUILD_STEPS_PER_FRAME := 8
 
 const _DARK_WOOD_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/wooden-furniture/dark-wood.png")
 const _BLONDE_WOOD_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/wooden-furniture/blonde-wood.png")
@@ -50,6 +52,7 @@ static var _locked_texture_cache_max_disposal_size: int = 0
 
 
 var _texture_context = null
+var _texture_refresh_generation: int = 0
 
 
 func _init() -> void:
@@ -193,12 +196,29 @@ func _get_offset() -> Vector2:
 
 
 func _release_texture() -> void:
+	_texture_refresh_generation += 1
 	if _texture_context != null and _cache_ensured:
 		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
 	_texture_context = null
 
 
 func _setup_sprite() -> void:
+	_texture_refresh_generation += 1
+	var generation := _texture_refresh_generation
+	if is_inside_tree():
+		_setup_sprite_debounced(generation)
+	else:
+		_setup_sprite_now(generation, false)
+
+
+func _setup_sprite_debounced(generation: int) -> void:
+	await get_tree().create_timer(_TEXTURE_REFRESH_DEBOUNCE_SECONDS).timeout
+	if generation != _texture_refresh_generation:
+		return
+	await _setup_sprite_now(generation, true)
+
+
+func _setup_sprite_now(generation: int, chunked: bool) -> void:
 	var next_texture := _get_tone_texture()
 	var next_context = _get_texture_context()
 
@@ -206,14 +226,28 @@ func _setup_sprite() -> void:
 		_ensure_cache()
 		if next_context.invalid:
 			return
-		if _texture_context != null and _texture_context.final_key != next_context.final_key:
-			_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
+		if generation != _texture_refresh_generation:
+			return
+		var previous_context = _texture_context
+		if chunked:
+			next_texture = await next_context.get_texture_chunked(
+				self, TEXTURE_CACHE_KEY, _TEXTURE_BUILD_STEPS_PER_FRAME
+			)
+		else:
+			next_texture = next_context.get_texture(self, TEXTURE_CACHE_KEY)
+		if generation != _texture_refresh_generation:
+			return
+		if previous_context != null and previous_context.final_key != next_context.final_key:
+			previous_context.dispose_texture(self, TEXTURE_CACHE_KEY)
 		_texture_context = next_context
-		next_texture = _texture_context.get_texture(self, TEXTURE_CACHE_KEY)
 	elif _texture_context != null:
-		_release_texture()
+		if _cache_ensured:
+			_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
+		_texture_context = null
 
 	if next_texture == null:
+		return
+	if generation != _texture_refresh_generation:
 		return
 
 	texture = next_texture

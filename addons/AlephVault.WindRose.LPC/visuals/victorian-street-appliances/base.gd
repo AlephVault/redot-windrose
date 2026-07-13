@@ -7,6 +7,8 @@ const _Context := AlephVault__WindRose.Utils.Textures.Context
 
 const TEXTURE_CACHE_KEY := "AlephVault.WindRose.LPC:victorian-street-appliances"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 128
+const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
+const _TEXTURE_BUILD_STEPS_PER_FRAME := 8
 
 const _SOURCE_TEXTURE := preload("res://addons/AlephVault.WindRose.LPC/images/victorian-decoration/street-appliances.png")
 
@@ -21,6 +23,7 @@ static var _locked_texture_cache_max_disposal_size: int = 0
 
 var _texture_contexts: Array = []
 var _cached_textures: Array[Texture2D] = []
+var _texture_refresh_generation: int = 0
 
 
 func _init() -> void:
@@ -169,6 +172,7 @@ func _get_offset() -> Vector2:
 
 
 func _release_textures() -> void:
+	_texture_refresh_generation += 1
 	if _cache_ensured:
 		for context in _texture_contexts:
 			if context != null:
@@ -178,7 +182,23 @@ func _release_textures() -> void:
 
 
 func _setup_sprite() -> void:
-	var next_contexts =	 _get_texture_contexts()
+	_texture_refresh_generation += 1
+	var generation := _texture_refresh_generation
+	if is_inside_tree():
+		_setup_sprite_debounced(generation)
+	else:
+		_setup_sprite_now(generation, false)
+
+
+func _setup_sprite_debounced(generation: int) -> void:
+	await get_tree().create_timer(_TEXTURE_REFRESH_DEBOUNCE_SECONDS).timeout
+	if generation != _texture_refresh_generation:
+		return
+	await _setup_sprite_now(generation, true)
+
+
+func _setup_sprite_now(generation: int, chunked: bool) -> void:
+	var next_contexts = _get_texture_contexts()
 	var next_texture: Texture2D = _SOURCE_TEXTURE
 
 	if not next_contexts.is_empty():
@@ -186,17 +206,40 @@ func _setup_sprite() -> void:
 		for context in next_contexts:
 			if context == null or context.invalid:
 				return
-		if _contexts_changed(next_contexts):
-			_release_textures()
+		if generation != _texture_refresh_generation:
+			return
+		var previous_contexts := _texture_contexts
+		var contexts_changed := _contexts_changed(next_contexts)
+		var next_cached_textures: Array[Texture2D] = []
+		for context in next_contexts:
+			var cached_texture: Texture2D
+			if chunked:
+				cached_texture = await context.get_texture_chunked(
+					self, TEXTURE_CACHE_KEY, _TEXTURE_BUILD_STEPS_PER_FRAME
+				)
+			else:
+				cached_texture = context.get_texture(self, TEXTURE_CACHE_KEY)
+			if generation != _texture_refresh_generation:
+				return
+			next_cached_textures.push_back(cached_texture)
+		if contexts_changed and _cache_ensured:
+			for context in previous_contexts:
+				if context != null:
+					context.dispose_texture(self, TEXTURE_CACHE_KEY)
 		_texture_contexts = next_contexts
-		_cached_textures = []
-		for context in _texture_contexts:
-			_cached_textures.push_back(context.get_texture(self, TEXTURE_CACHE_KEY))
+		_cached_textures = next_cached_textures
 		next_texture = _cached_textures[0]
 	elif not _texture_contexts.is_empty():
-		_release_textures()
+		if _cache_ensured:
+			for context in _texture_contexts:
+				if context != null:
+					context.dispose_texture(self, TEXTURE_CACHE_KEY)
+		_texture_contexts = []
+		_cached_textures = []
 
 	if next_texture == null:
+		return
+	if generation != _texture_refresh_generation:
 		return
 
 	texture = next_texture

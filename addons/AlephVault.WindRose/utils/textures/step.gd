@@ -5,6 +5,8 @@ extends RefCounted
 
 const _FORMAT: Image.Format = Image.FORMAT_RGBA8
 
+static var _source_image_cache := {}
+
 var _key: String
 var _texture: Texture2D
 var _source_rect: Rect2i
@@ -111,7 +113,7 @@ func _init(
 		"The source rect must be completely contained in the texture dimensions"
 	)
 
-	var image: Image = step_texture.get_image()
+	var image: Image = _get_cached_source_image(step_texture)
 	var present_image: bool = image != null
 	var valid_format: bool = present_image and image.get_format() == _FORMAT
 	_invalid = _invalid or not valid_format
@@ -124,7 +126,7 @@ func blend_into(target_image: Image):
 	assert(not invalid, "This step is invalid. It cannot be processed")
 	assert(target_image != null, "A valid target image is required")
 	if not invalid and target_image != null:
-		var source_image: Image = _texture.get_image()
+		var source_image: Image = _get_cached_source_image(_texture)
 		assert(source_image != null, "The step texture must expose image data")
 		if source_image == null:
 			return
@@ -133,3 +135,10 @@ func blend_into(target_image: Image):
 		if not valid_format:
 			return
 		target_image.blend_rect(source_image, _source_rect, _target_position)
+
+
+static func _get_cached_source_image(texture: Texture2D) -> Image:
+	var texture_id: int = texture.get_instance_id()
+	if not _source_image_cache.has(texture_id):
+		_source_image_cache[texture_id] = texture.get_image()
+	return _source_image_cache[texture_id]

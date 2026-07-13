@@ -3,12 +3,15 @@ extends AlephVault__WindRose__LPC.Visuals.VictorianRealEstate.Base
 
 
 const _Core := preload("./mansion_parts/core.gd")
+const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
+const _TEXTURE_BUILD_STEPS_PER_FRAME := 1
 
 
 static var _cache_ensured: bool = false
 
 
 var _texture_context = null
+var _texture_refresh_generation: int = 0
 
 
 @export var use_bricked_prongs: bool = false:
@@ -263,23 +266,51 @@ func _build_context():
 
 
 func _release_texture() -> void:
+	_texture_refresh_generation += 1
 	if _texture_context != null and _cache_ensured:
 		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
 	_texture_context = null
 
 
 func _refresh_texture() -> void:
+	_texture_refresh_generation += 1
+	var generation := _texture_refresh_generation
+	if is_inside_tree():
+		_refresh_texture_debounced(generation)
+	else:
+		_refresh_texture_now(generation, false)
+
+
+func _refresh_texture_debounced(generation: int) -> void:
+	await get_tree().create_timer(_TEXTURE_REFRESH_DEBOUNCE_SECONDS).timeout
+	if generation != _texture_refresh_generation:
+		return
+	await _refresh_texture_now(generation, true)
+
+
+func _refresh_texture_now(generation: int, chunked: bool) -> void:
 	_ensure_cache()
 	var next_context = _build_context()
 	if next_context.invalid:
 		return
-
-	if _texture_context != null and _texture_context.final_key != next_context.final_key:
-		_texture_context.dispose_texture(self, TEXTURE_CACHE_KEY)
+	if generation != _texture_refresh_generation:
+		return
 
 	var size: Vector2i = Vector2i(next_context.width, next_context.height)
+	var previous_context = _texture_context
+	var next_texture: Texture2D
+	if chunked:
+		next_texture = await next_context.get_texture_chunked(
+			self, TEXTURE_CACHE_KEY, _TEXTURE_BUILD_STEPS_PER_FRAME
+		)
+	else:
+		next_texture = next_context.get_texture(self, TEXTURE_CACHE_KEY)
+	if generation != _texture_refresh_generation:
+		return
+	if previous_context != null and previous_context.final_key != next_context.final_key:
+		previous_context.dispose_texture(self, TEXTURE_CACHE_KEY)
 	_texture_context = next_context
-	texture = _texture_context.get_texture(self, TEXTURE_CACHE_KEY)
+	texture = next_texture
 	hframes = 1
 	vframes = 1
 	frame = 0

@@ -26,6 +26,8 @@ const _UP_RECT := Rect2i(0, 144, 128, 48)
 const _UP_FRAME_RECT := Rect2i(0, 144, 32, 48)
 const _DEFAULT_CACHE_NAME := "refmap_people"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 256
+const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
+const _TEXTURE_BUILD_STEPS_PER_FRAME := 8
 const _BASE_TRAIT_PROPERTIES: Array[StringName] = [
 	&"sex",
 	&"body",
@@ -270,6 +272,7 @@ var left_hand: Variant:
 
 var _texture_context = null
 var _resolved_layers: Array[ResolvedLayer] = []
+var _texture_refresh_generation: int = 0
 var _traits_entity: AlephVault__WindRose.Maps.MapEntity = null
 
 ## Ensures the composed-texture LRU cache exists and locks the
@@ -443,6 +446,7 @@ func _build_context():
 ## Releases this visual's reference to the currently composed
 ## texture. The LRU cache may keep the texture alive for reuse.
 func _release_texture() -> void:
+	_texture_refresh_generation += 1
 	if _texture_context != null and _cache_ensured:
 		_texture_context.dispose_texture(self, _locked_texture_cache_name)
 	_texture_context = null
@@ -497,14 +501,41 @@ func _make_full_setup() -> FullSetup:
 	)
 
 func _refresh_visual() -> void:
+	_texture_refresh_generation += 1
+	var generation := _texture_refresh_generation
+	if is_inside_tree():
+		_refresh_visual_debounced(generation)
+	else:
+		_refresh_visual_now(generation, false)
+
+
+func _refresh_visual_debounced(generation: int) -> void:
+	await get_tree().create_timer(_TEXTURE_REFRESH_DEBOUNCE_SECONDS).timeout
+	if generation != _texture_refresh_generation:
+		return
+	await _refresh_visual_now(generation, true)
+
+
+func _refresh_visual_now(generation: int, chunked: bool) -> void:
 	_ensure_cache()
 	var next_context = _build_context()
 	if next_context.invalid:
 		return
-	if _texture_context != null and _texture_context.final_key != next_context.final_key:
-		_texture_context.dispose_texture(self, _locked_texture_cache_name)
+	if generation != _texture_refresh_generation:
+		return
+	var previous_context = _texture_context
+	var next_texture: Texture2D
+	if chunked:
+		next_texture = await next_context.get_texture_chunked(
+			self, _locked_texture_cache_name, _TEXTURE_BUILD_STEPS_PER_FRAME
+		)
+	else:
+		next_texture = next_context.get_texture(self, _locked_texture_cache_name)
+	if generation != _texture_refresh_generation:
+		return
+	if previous_context != null and previous_context.final_key != next_context.final_key:
+		previous_context.dispose_texture(self, _locked_texture_cache_name)
 	_texture_context = next_context
-	var next_texture: Texture2D = _texture_context.get_texture(self, _locked_texture_cache_name)
 	texture = next_texture
 	_configure_sprite()
 	if is_instance_valid(full_setup):

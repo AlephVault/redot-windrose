@@ -25,6 +25,8 @@ var _ui_layer: CanvasLayer
 var _help_label: Label
 var _keys_label: Label
 var _status_label: Label
+var _clock_label: Label
+var _update_clock := 0.0
 
 
 func _ready() -> void:
@@ -41,7 +43,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_clock += delta
 	_update_camera(delta)
+	_refresh_clock_label()
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -127,6 +131,10 @@ func _build_ui() -> void:
 	_status_label = Label.new()
 	_status_label.position = Vector2(20, 110)
 	_ui_layer.add_child(_status_label)
+
+	_clock_label = Label.new()
+	_clock_label.position = Vector2(20, 135)
+	_ui_layer.add_child(_clock_label)
 	_update_keys_label()
 
 
@@ -171,6 +179,10 @@ func _update_status() -> void:
 		_property_text(property),
 	]
 	_status_label.text = " | ".join(parts)
+
+
+func _refresh_clock_label() -> void:
+	_clock_label.text = "sample _process clock=%.3f" % _update_clock
 
 
 func _update_keys_label() -> void:
