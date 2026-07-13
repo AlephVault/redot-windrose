@@ -4,8 +4,11 @@ extends RefCounted
 ## be alpha-blended into a final image.
 
 const _FORMAT: Image.Format = Image.FORMAT_RGBA8
+const _LRURegistry = preload("../lru/registry.gd")
+const _SOURCE_IMAGE_CACHE_KEY := "AlephVault.WindRose:source-texture-images"
+const _SOURCE_IMAGE_CACHE_MAX_DISPOSAL_SIZE := 16
 
-static var _source_image_cache := {}
+static var _source_image_cache_ensured: bool = false
 
 var _key: String
 var _texture: Texture2D
@@ -113,32 +116,67 @@ func _init(
 		"The source rect must be completely contained in the texture dimensions"
 	)
 
-	var image: Image = _get_cached_source_image(step_texture)
+	var image: Image = get_cached_source_image(step_texture, self)
 	var present_image: bool = image != null
 	var valid_format: bool = present_image and image.get_format() == _FORMAT
 	_invalid = _invalid or not valid_format
 	assert(present_image, "The step texture must expose image data")
 	assert(valid_format, "The step texture must use RGBA8 format")
+	release_cached_source_image(step_texture, self)
 
 ## Alpha-blends this step source rectangle into the
 ## given target image at the configured target position.
 func blend_into(target_image: Image):
 	assert(not invalid, "This step is invalid. It cannot be processed")
 	assert(target_image != null, "A valid target image is required")
-	if not invalid and target_image != null:
-		var source_image: Image = _get_cached_source_image(_texture)
-		assert(source_image != null, "The step texture must expose image data")
-		if source_image == null:
-			return
-		var valid_format: bool = source_image.get_format() == _FORMAT
-		assert(valid_format, "The step texture must use RGBA8 format")
-		if not valid_format:
-			return
+	if invalid or target_image == null:
+		return
+
+	var source_image: Image = get_cached_source_image(_texture, self)
+	assert(source_image != null, "The step texture must expose image data")
+	if source_image == null:
+		return
+	var valid_format: bool = source_image.get_format() == _FORMAT
+	assert(valid_format, "The step texture must use RGBA8 format")
+	if valid_format:
 		target_image.blend_rect(source_image, _source_rect, _target_position)
+	release_cached_source_image(_texture, self)
 
 
-static func _get_cached_source_image(texture: Texture2D) -> Image:
-	var texture_id: int = texture.get_instance_id()
-	if not _source_image_cache.has(texture_id):
-		_source_image_cache[texture_id] = texture.get_image()
-	return _source_image_cache[texture_id]
+static func get_cached_source_image(texture: Texture2D, owner: Object) -> Image:
+	_ensure_source_image_cache()
+	var cache = _LRURegistry.fetch(_SOURCE_IMAGE_CACHE_KEY)
+	if cache == null:
+		return texture.get_image()
+
+	var entry_key := _source_image_entry_key(texture)
+	var get_response = cache.get_value(entry_key, owner)
+	if get_response.is_successful():
+		var cached_image: Image = get_response.value
+		if cached_image != null:
+			return cached_image
+
+	var image: Image = texture.get_image()
+	if image == null:
+		return null
+	var set_response = cache.set_value(entry_key, image, null, owner)
+	return set_response.value
+
+
+static func release_cached_source_image(texture: Texture2D, owner: Object) -> void:
+	_ensure_source_image_cache()
+	var cache = _LRURegistry.fetch(_SOURCE_IMAGE_CACHE_KEY)
+	if cache != null:
+		cache.delete_value(_source_image_entry_key(texture), owner)
+
+
+static func _ensure_source_image_cache() -> void:
+	if _source_image_cache_ensured:
+		return
+	if not _LRURegistry.has(_SOURCE_IMAGE_CACHE_KEY):
+		_LRURegistry.define(_SOURCE_IMAGE_CACHE_KEY, _SOURCE_IMAGE_CACHE_MAX_DISPOSAL_SIZE)
+	_source_image_cache_ensured = true
+
+
+static func _source_image_entry_key(texture: Texture2D) -> String:
+	return str(texture.get_instance_id())

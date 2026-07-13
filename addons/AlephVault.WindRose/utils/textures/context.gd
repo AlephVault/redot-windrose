@@ -7,8 +7,6 @@ const _FORMAT: Image.Format = Image.FORMAT_RGBA8
 const _Step = preload("./step.gd")
 const _LRURegistry = preload("../lru/registry.gd")
 
-static var _source_image_cache := {}
-
 var _width: int
 var _height: int
 var _steps: Array
@@ -127,7 +125,9 @@ func _build_texture() -> Texture2D:
 	var source_images := {}
 	for step in _steps:
 		_blend_step_into(image, step, source_images)
-	return ImageTexture.create_from_image(image)
+	var texture := ImageTexture.create_from_image(image)
+	_release_step_source_images(source_images)
+	return texture
 
 ## Builds the final texture like `_build_texture`, but yields every
 ## `steps_per_frame` steps so large compositions do not monopolize a frame.
@@ -150,7 +150,9 @@ func _build_texture_chunked(obj, steps_per_frame: int = 8) -> Texture2D:
 				await obj.get_tree().process_frame
 	if obj is Node and is_instance_valid(obj) and obj.is_inside_tree():
 		await obj.get_tree().process_frame
-	return ImageTexture.create_from_image(image)
+	var texture := ImageTexture.create_from_image(image)
+	_release_step_source_images(source_images)
+	return texture
 
 func _blend_step_into(target_image: Image, step: _Step, source_images: Dictionary) -> void:
 	assert(not step.invalid, "This step is invalid. It cannot be processed")
@@ -171,14 +173,17 @@ func _blend_step_into(target_image: Image, step: _Step, source_images: Dictionar
 func _get_step_source_image(step: _Step, source_images: Dictionary) -> Image:
 	var texture_id: int = step.texture.get_instance_id()
 	if not source_images.has(texture_id):
-		source_images[texture_id] = _get_cached_source_image(step.texture)
-	return source_images[texture_id]
+		source_images[texture_id] = {
+			"texture": step.texture,
+			"image": _Step.get_cached_source_image(step.texture, self),
+		}
+	return source_images[texture_id]["image"]
 
-static func _get_cached_source_image(texture: Texture2D) -> Image:
-	var texture_id: int = texture.get_instance_id()
-	if not _source_image_cache.has(texture_id):
-		_source_image_cache[texture_id] = texture.get_image()
-	return _source_image_cache[texture_id]
+
+func _release_step_source_images(source_images: Dictionary) -> void:
+	for texture_id in source_images:
+		var record: Dictionary = source_images[texture_id]
+		_Step.release_cached_source_image(record["texture"], self)
 
 ## Gets an already cached texture for this context or
 ## builds and stores it in the configured LRU cache.
