@@ -83,6 +83,8 @@ func _build_properties() -> void:
 		_enum_property(KEY_I, "I", "wall_color", _Core.WallColor.size(), _Core.WallColor),
 		_enum_property(KEY_O, "O", "light_mode", _Core.LightMode.size(), _Core.LightMode),
 		_enum_property(KEY_P, "P", "door_shape", _Core.DoorShape.size(), _Core.DoorShape),
+		_int_property(KEY_K, "K", "door_index", 40),
+		_bool_property(KEY_L, "L", "is_door_open"),
 		_bool_property(KEY_A, "A", "has_doorframe"),
 		_enum_property(KEY_S, "S", "doorframe_color", _Core.DoorframeColor.size(), _Core.DoorframeColor),
 		_int_property(KEY_D, "D", "doorframe_index", _Core.DOORFRAME_STYLES),
