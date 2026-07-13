@@ -104,6 +104,24 @@ var _texture_refresh_generation: int = 0
 		_log_property_update_finished("door_shape", door_shape)
 
 
+@export var door_index: int = 0:
+	set(value):
+		_log_property_update_started("door_index", door_index, value)
+		_release_texture()
+		door_index = value
+		_refresh_texture()
+		_log_property_update_finished("door_index", door_index)
+
+
+@export var is_door_open: bool = false:
+	set(value):
+		_log_property_update_started("is_door_open", is_door_open, value)
+		_release_texture()
+		is_door_open = value
+		_refresh_texture()
+		_log_property_update_finished("is_door_open", is_door_open)
+
+
 @export var has_doorframe: bool = false:
 	set(value):
 		_log_property_update_started("has_doorframe", has_doorframe, value)
@@ -254,6 +272,8 @@ func _build_context():
 		wall_color,
 		light_mode,
 		door_shape,
+		door_index,
+		is_door_open,
 		has_doorframe,
 		doorframe_color,
 		doorframe_index,

@@ -71,6 +71,13 @@ const DOOR_WIDTH: int = 32
 ## The height of a door.
 const DOOR_HEIGHT: int = 64
 
+const RECTANGULAR_DOOR_PIVOT := Vector2i(1440, 1440)
+const ROUNDED_DOOR_PIVOT := Vector2i(1696, 1440)
+const ROUNDED2_DOOR_PIVOT := Vector2i(1728, 1440)
+const ROUNDED_LARGE_DOOR_PIVOT := Vector2i(1440, 1760)
+const ROUNDED2_LARGE_DOOR_PIVOT := Vector2i(1472, 1760)
+const ROUNDED3_LARGE_DOOR_PIVOT := Vector2i(1504, 1760)
+
 ## The width of a doorstep.
 const DOORSTEPS_WIDTH: int = 32
 
@@ -266,6 +273,44 @@ static func block_rect(pos: Vector2i) -> Rect2i:
 ## Makes a step, configured from the current texture.
 static func make_block_step(part: String, source_position: Vector2i, target_position: Vector2i = Vector2i.ZERO) -> _Step:
 	return make_step(part, block_rect(source_position), block_position(target_position))
+
+
+static func make_door_rect(door_shape: DoorShape, door_index: int) -> Rect2i:
+	var pivot: Vector2i
+	var door_index_: int
+	match door_shape:
+		DoorShape.RECTANGULAR:
+			door_index_ = door_index % 40
+			pivot = RECTANGULAR_DOOR_PIVOT
+			return Rect2i(
+				pivot.x + DOOR_WIDTH * (door_index_ % 8),
+				pivot.y + DOOR_HEIGHT * int(door_index_ / 8),
+				DOOR_WIDTH,
+				DOOR_HEIGHT
+			)
+		DoorShape.ROUNDED:
+			door_index_ = door_index % 5
+			pivot = ROUNDED_DOOR_PIVOT
+		DoorShape.ROUNDED2:
+			door_index_ = door_index % 5
+			pivot = ROUNDED2_DOOR_PIVOT
+		DoorShape.ROUNDED_LARGE:
+			door_index_ = door_index % 7
+			pivot = ROUNDED_LARGE_DOOR_PIVOT
+		DoorShape.ROUNDED2_LARGE:
+			door_index_ = door_index % 7
+			pivot = ROUNDED2_LARGE_DOOR_PIVOT
+		DoorShape.ROUNDED3_LARGE:
+			door_index_ = door_index % 7
+			pivot = ROUNDED3_LARGE_DOOR_PIVOT
+	if door_shape == DoorShape.ROUNDED or door_shape == DoorShape.ROUNDED2:
+		return Rect2i(pivot.x, pivot.y + DOOR_HEIGHT * door_index_, DOOR_WIDTH, DOOR_HEIGHT)
+	return Rect2i(
+		pivot.x + DOOR_WIDTH * (door_index_ % 4),
+		pivot.y + DOOR_HEIGHT * int(door_index_ / 4),
+		DOOR_WIDTH,
+		DOOR_HEIGHT
+	)
 
 ## Creates the steps related to base / background walls.
 static func make_base_wall_steps(
@@ -946,7 +991,8 @@ static func _make_mansion_floor_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
-	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
+	door_shape: DoorShape, door_index: int, is_door_open: bool,
+	has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
 	doorsteps_color: DoorstepsColor,
 	floor: int, floor_index: int, depth: Depth, design: Design
 ) -> Array[_Step]:
@@ -954,7 +1000,7 @@ static func _make_mansion_floor_steps(
 	var steps: Array[_Step] = []
 	var shadow_steps: Array[_Step] = []
 	var size: Vector2i = compute_block_size(design)
-	var door_index: int = (size.x - 1) / 2
+	var door_block_index: int = (size.x - 1) / 2
 	var wall_color_pivot: Vector2i = Vector2i(0, 2 * int(wall_color))
 	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
 	var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
@@ -965,7 +1011,7 @@ static func _make_mansion_floor_steps(
 		# without being a prong (C models), or being a prong and a
 		# door (T and E models). So they are separate concepts.
 		var is_prong: bool = _is_prong(x_, design)
-		var is_door: bool = x_ == door_index and floor == 0
+		var is_door: bool = x_ == door_block_index and floor == 0
 
 		# Determining the actual current blockwise Y coordinate.
 		# The X coordinate does not change.
@@ -1087,6 +1133,13 @@ static func _make_mansion_floor_steps(
 				"door-hole-%s" % [str(door_shape)], door_hole,
 				block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT - 16)
 			))
+
+			if not is_door_open:
+				steps.append(make_step(
+					"door-%s-%d" % [str(door_shape), door_index],
+					make_door_rect(door_shape, door_index),
+					block_position(current_target_block) + Vector2i(WINDOW_REGULAR_WIDTH, BLOCK_SIZE - DOOR_HEIGHT - 16)
+				))
 
 			var doorsteps: Rect2i = Rect2i(
 				DOORSTEPS_COLOR_PIVOT.x + DOORSTEPS_WIDTH * (int(doorsteps_color) % DOORSTEPS_COLORS_PER_ROW),
@@ -1212,7 +1265,8 @@ static func make_mansion_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
-	door_shape: DoorShape, has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
+	door_shape: DoorShape, door_index: int, is_door_open: bool,
+	has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
 	doorsteps_color: DoorstepsColor,
 	stories: Stories, depth: Depth, design: Design
 ) -> Array[_Step]:
@@ -1230,7 +1284,8 @@ static func make_mansion_steps(
 			prong_window_color, prong_window_index,
 			non_prong_window_color, non_prong_window_index,
 			roof_color, wall_color, light_mode,
-			door_shape, has_doorframe, doorframe_color, doorframe_index,
+			door_shape, door_index, is_door_open,
+			has_doorframe, doorframe_color, doorframe_index,
 			doorsteps_color,
 			floor, floor_index, depth, design
 		))
