@@ -92,6 +92,7 @@ func _build_properties() -> void:
 		_enum_property(KEY_G, "G", "stories", _Core.Stories.size(), _Core.Stories),
 		_enum_property(KEY_H, "H", "depth", _Core.Depth.size(), _Core.Depth),
 		_enum_property(KEY_J, "J", "design", _Core.Design.size(), _Core.Design),
+		_enum_property(KEY_B, "B", "shadow_orientation", _Core.ShadowOrientation.size(), _Core.ShadowOrientation),
 	]
 	_key_properties = {}
 	for index in _properties.size():

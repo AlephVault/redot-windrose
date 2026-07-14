@@ -95,6 +95,15 @@ var _texture_refresh_generation: int = 0
 		_log_property_update_finished("light_mode", light_mode)
 
 
+@export var shadow_orientation: _Core.ShadowOrientation = _Core.ShadowOrientation.DIAGONAL:
+	set(value):
+		_log_property_update_started("shadow_orientation", shadow_orientation, value)
+		_release_texture()
+		shadow_orientation = value
+		_refresh_texture()
+		_log_property_update_finished("shadow_orientation", shadow_orientation)
+
+
 @export var door_shape: _Core.DoorShape = _Core.DoorShape.RECTANGULAR:
 	set(value):
 		_log_property_update_started("door_shape", door_shape, value)
@@ -271,6 +280,7 @@ func _build_context():
 		roof_color,
 		wall_color,
 		light_mode,
+		shadow_orientation,
 		door_shape,
 		door_index,
 		is_door_open,

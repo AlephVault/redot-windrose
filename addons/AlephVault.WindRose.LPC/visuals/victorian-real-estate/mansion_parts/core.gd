@@ -143,6 +143,11 @@ enum LightMode {
 	DAY, NIGHT_OFF, NIGHT_ON
 }
 
+## The shadow orientation. This only applies when light mode is DAY.
+enum ShadowOrientation {
+	NO_SHADOW, DIAGONAL, VERTICAL
+}
+
 ## The style/color for windows (classic vs. colored).
 enum WindowColor {
 	CLASSIC, BLACK, WHITE, YELLOW, RED, GREEN, BROWN
@@ -991,6 +996,7 @@ static func _make_mansion_floor_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
+	shadow_orientation: ShadowOrientation,
 	door_shape: DoorShape, door_index: int, is_door_open: bool,
 	has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
 	doorsteps_color: DoorstepsColor,
@@ -1004,6 +1010,12 @@ static func _make_mansion_floor_steps(
 	var wall_color_pivot: Vector2i = Vector2i(0, 2 * int(wall_color))
 	var base_y: int = int(depth) + BASE_OFFSET_IN_BLOCKS
 	var bevel: Vector2i = wall_color_pivot + Vector2i(3, 0)
+	var has_diagonal_shadow: bool = (
+		light_mode == LightMode.DAY and shadow_orientation == ShadowOrientation.DIAGONAL
+	)
+	var has_vertical_shadow: bool = (
+		light_mode == LightMode.DAY and shadow_orientation == ShadowOrientation.VERTICAL
+	)
 
 	for x_ in range(size.x):
 		# First, tell whether the block is prong, door or regular.
@@ -1051,7 +1063,7 @@ static func _make_mansion_floor_steps(
 
 			# Then, cast the shadow. We have a shadow for the first floor, and another
 			# shadow for the other floors. This only applies if it's daylight mode.
-			if light_mode == LightMode.DAY:
+			if has_diagonal_shadow:
 				if floor == 0:
 					# Paint shadows if x_ == (size.x - 1).
 					# Concretely, 2 + depth.
@@ -1084,39 +1096,47 @@ static func _make_mansion_floor_steps(
 						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
 						block_position(current_target_block + Vector2i(1, -1))
 					))
+			elif has_vertical_shadow:
+				pass
 		else:
 			# Just prepare the shadows for if it's the last position.
 			# Do this only for the 1st floor.
-			if x_ == (size.x - 1) and floor == 0 and light_mode == LightMode.DAY:
-				# First, add the triangle shadow. One to the right.
-				shadow_steps.append(make_step(
-					"final-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
-					Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
-					block_position(current_target_block + Vector2i(1, 0))
-				))
-				for sq_index in (2 + int(depth)):
+			if x_ == (size.x - 1) and floor == 0:
+				if has_diagonal_shadow:
+					# First, add the triangle shadow. One to the right.
 					shadow_steps.append(make_step(
-						"final-%d%d-shadow-%s-%d" % [floor, x_, str(light_mode), sq_index],
-						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
-						block_position(current_target_block + Vector2i(1, -1 - sq_index))
+						"final-%d%d-shadow-base-%s" % [floor, x_, str(light_mode)],
+						Rect2i(SHADOW_BASE_X, SHADOW_BASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(1, 0))
 					))
+					for sq_index in (2 + int(depth)):
+						shadow_steps.append(make_step(
+							"final-%d%d-shadow-%s-%d" % [floor, x_, str(light_mode), sq_index],
+							Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+							block_position(current_target_block + Vector2i(1, -1 - sq_index))
+						))
+				elif has_vertical_shadow:
+					pass
 
 		# Also, for the 0th floor, add the counterbase shadow and more shadows.
-		if floor == 0 and light_mode == LightMode.DAY:
-			if x_ == 0:
-				# First, add the triangle shadow. One to the top-left.
-				back_shadow_steps.append(make_step(
-					"final-%d%d-shadow-counterbase-%s" % [floor, x_, str(light_mode)],
-					Rect2i(SHADOW_COUNTERBASE_X, SHADOW_COUNTERBASE_Y, SHADOW_SIZE, SHADOW_SIZE),
-					block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
-				))
-			else:
-				# then, shadow squares.
-				back_shadow_steps.append(make_step(
-					"final-%d%d-shadow-h-%s" % [floor, x_, str(light_mode)],
-					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
-					block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
-				))
+		if floor == 0:
+			if has_diagonal_shadow:
+				if x_ == 0:
+					# First, add the triangle shadow. One to the top-left.
+					back_shadow_steps.append(make_step(
+						"final-%d%d-shadow-counterbase-%s" % [floor, x_, str(light_mode)],
+						Rect2i(SHADOW_COUNTERBASE_X, SHADOW_COUNTERBASE_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
+					))
+				else:
+					# then, shadow squares.
+					back_shadow_steps.append(make_step(
+						"final-%d%d-shadow-h-%s" % [floor, x_, str(light_mode)],
+						Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+						block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
+					))
+			elif has_vertical_shadow:
+				pass
 
 		# Then, the window must be painted. There are many cases here:
 		if is_door:
@@ -1265,6 +1285,7 @@ static func make_mansion_steps(
 	prong_window_color: WindowColor, prong_window_index: int,
 	non_prong_window_color: WindowColor, non_prong_window_index: int,
 	roof_color, wall_color: WallColor, light_mode: LightMode,
+	shadow_orientation: ShadowOrientation,
 	door_shape: DoorShape, door_index: int, is_door_open: bool,
 	has_doorframe: bool, doorframe_color: DoorframeColor, doorframe_index: int,
 	doorsteps_color: DoorstepsColor,
@@ -1283,7 +1304,7 @@ static func make_mansion_steps(
 			use_bricked_prongs, first_floor_prongs,
 			prong_window_color, prong_window_index,
 			non_prong_window_color, non_prong_window_index,
-			roof_color, wall_color, light_mode,
+			roof_color, wall_color, light_mode, shadow_orientation,
 			door_shape, door_index, is_door_open,
 			has_doorframe, doorframe_color, doorframe_index,
 			doorsteps_color,

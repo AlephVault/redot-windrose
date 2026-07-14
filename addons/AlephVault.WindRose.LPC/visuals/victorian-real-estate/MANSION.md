@@ -49,6 +49,9 @@ the same names directly.
   `GREEN`, `GRAYBLUE`, `BLUE`, and `PURPLE`.
 - `light_mode`: Selects window lighting. Available values are `DAY`, `NIGHT_OFF`,
   and `NIGHT_ON`.
+- `shadow_orientation`: Selects the daylight shadow orientation. Available values
+  are `NO_SHADOW`, `DIAGONAL`, and `VERTICAL`. `DIAGONAL` is the default and uses
+  the current shadow rendering; `VERTICAL` is reserved for later logic.
 
 ### Windows and Prongs
 
