@@ -24,6 +24,7 @@ const _RIGHT_FRAME_RECT := Rect2i(0, 96, 32, 48)
 const _LEFT_RIGHT_UP_RECT := Rect2i(0, 48, 128, 144)
 const _UP_RECT := Rect2i(0, 144, 128, 48)
 const _UP_FRAME_RECT := Rect2i(0, 144, 32, 48)
+const _SPRITE_OFFSET := Vector2(0, -_FRAME_SIZE.y + _FRAME_SIZE.x)
 const _DEFAULT_CACHE_NAME := "refmap_people"
 const _DEFAULT_CACHE_MAX_DISPOSAL_SIZE := 256
 const _TEXTURE_REFRESH_DEBOUNCE_SECONDS := 0.05
@@ -481,16 +482,17 @@ func _configure_sprite() -> void:
 	_region_rect_right = Rect2i(0, 96, 128, 48)
 	_region_rect_up = _UP_RECT
 	centered = false
+	offset = _SPRITE_OFFSET
 
 func _make_full_setup() -> FullSetup:
-	var down := FramesetSetup.new(texture, _DOWN_FRAME_RECT, 1, false, centered, offset)
-	var up := FramesetSetup.new(texture, _UP_FRAME_RECT, 1, false, centered, offset)
-	var left := FramesetSetup.new(texture, _LEFT_FRAME_RECT, 1, false, centered, offset)
-	var right := FramesetSetup.new(texture, _RIGHT_FRAME_RECT, 1, false, centered, offset)
-	var moving_down := FramesetSetup.new(texture, _DOWN_RECT, 4, false, centered, offset)
-	var moving_up := FramesetSetup.new(texture, _UP_RECT, 4, false, centered, offset)
-	var moving_left := FramesetSetup.new(texture, Rect2i(0, 48, 128, 48), 4, false, centered, offset)
-	var moving_right := FramesetSetup.new(texture, Rect2i(0, 96, 128, 48), 4, false, centered, offset)
+	var down := FramesetSetup.new(texture, _DOWN_FRAME_RECT, 1, false, false, _SPRITE_OFFSET)
+	var up := FramesetSetup.new(texture, _UP_FRAME_RECT, 1, false, false, _SPRITE_OFFSET)
+	var left := FramesetSetup.new(texture, _LEFT_FRAME_RECT, 1, false, false, _SPRITE_OFFSET)
+	var right := FramesetSetup.new(texture, _RIGHT_FRAME_RECT, 1, false, false, _SPRITE_OFFSET)
+	var moving_down := FramesetSetup.new(texture, _DOWN_RECT, 4, false, false, _SPRITE_OFFSET)
+	var moving_up := FramesetSetup.new(texture, _UP_RECT, 4, false, false, _SPRITE_OFFSET)
+	var moving_left := FramesetSetup.new(texture, Rect2i(0, 48, 128, 48), 4, false, false, _SPRITE_OFFSET)
+	var moving_right := FramesetSetup.new(texture, Rect2i(0, 96, 128, 48), 4, false, false, _SPRITE_OFFSET)
 	return FullSetup.new(
 		StateSetup.new(down, up, left, right),
 		{
@@ -545,4 +547,4 @@ func _refresh_visual_now(generation: int, chunked: bool) -> void:
 			moving_setup.set_image(next_texture)
 		_apply()
 	centered = false
-	offset = Vector2(0, -_FRAME_SIZE.y + _FRAME_SIZE.x)
+	offset = _SPRITE_OFFSET
