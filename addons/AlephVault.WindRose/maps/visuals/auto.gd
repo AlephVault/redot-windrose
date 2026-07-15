@@ -115,7 +115,8 @@ class FramesetSetup:
 		vertically_distributed: bool, centered: bool = true,
 		offset: Vector2 = Vector2.ZERO
 	):
-		if image == null:
+		if image == null and (region.position.x < 0 or region.position.y < 0 or \
+			 region.size.x < 1 or region.size.y < 1):
 			region = Rect2i(0, 0, 0, 0)
 		elif region.position.x < 0 or region.position.y < 0 or \
 			 region.size.x < 1 or region.size.y < 1:
