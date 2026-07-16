@@ -24,6 +24,18 @@ const SHADOW_X: int = SHADOW_BASE_X
 ## The y position of the non-base part of the shadow.
 const SHADOW_Y: int = SHADOW_BASE_Y - SHADOW_SIZE
 
+## The x position of the vertical shadow's start square.
+const SHADOW_VERTICAL_START_X: int = SHADOW_X + SHADOW_SIZE
+
+## The x position of the vertical shadow's end square.
+const SHADOW_VERTICAL_END_X: int = SHADOW_X + 2 * SHADOW_SIZE
+
+## The y position of the vertical shadow's start square.
+const SHADOW_VERTICAL_START_Y: int = SHADOW_Y
+
+## The y position of the vertical shadow's end square.
+const SHADOW_VERTICAL_END_Y: int = SHADOW_Y
+
 ## The x position of the opposite base (diagonal) of the shadow.
 const SHADOW_COUNTERBASE_X: int = SHADOW_BASE_X + SHADOW_SIZE
 
@@ -1132,9 +1144,17 @@ static func _make_mansion_floor_steps(
 						block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
 					))
 			elif has_vertical_shadow:
+				var shadow_source_x: int = SHADOW_X
+				var shadow_source_y: int = SHADOW_Y
+				if x_ == 0:
+					shadow_source_x = SHADOW_VERTICAL_START_X
+					shadow_source_y = SHADOW_VERTICAL_START_Y
+				elif x_ == (size.x - 1):
+					shadow_source_x = SHADOW_VERTICAL_END_X
+					shadow_source_y = SHADOW_VERTICAL_END_Y
 				back_shadow_steps.append(make_step(
 					"final-%d%d-shadow-h-%s-%s" % [floor, x_, str(light_mode), str(shadow_orientation)],
-					Rect2i(SHADOW_X, SHADOW_Y, SHADOW_SIZE, SHADOW_SIZE),
+					Rect2i(shadow_source_x, shadow_source_y, SHADOW_SIZE, SHADOW_SIZE),
 					block_position(current_target_block + Vector2i(0, -2 - int(depth) - int(is_prong)))
 				))
 
