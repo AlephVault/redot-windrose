@@ -30,7 +30,7 @@ String component values require a resolver. Assign one early in your game startu
 
 ```gdscript
 var resolver := AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
-AlephVault__WindRose__REFMAP.Visuals.People.Base.resolver = resolver
+AlephVault__WindRose__REFMAP.Visuals.People.resolver = resolver
 ```
 
 The resolver cache settings are static and must be configured before the first resolve:
@@ -43,8 +43,8 @@ AlephVault__WindRose__REFMAP.Utils.DefaultResolver.texture_cache_max_disposal_si
 The composed people texture cache settings are also static and must be configured before the first people visual refresh:
 
 ```gdscript
-AlephVault__WindRose__REFMAP.Visuals.People.Base.texture_cache_name = "refmap_people"
-AlephVault__WindRose__REFMAP.Visuals.People.Base.texture_cache_max_disposal_size = 256
+AlephVault__WindRose__REFMAP.Visuals.People.texture_cache_name = "refmap_people"
+AlephVault__WindRose__REFMAP.Visuals.People.texture_cache_max_disposal_size = 256
 ```
 
 After either cache is first ensured, changing its static settings is a usage error.
@@ -187,12 +187,12 @@ Then update traits on the entity:
 
 ```gdscript
 traits = {
-	&"sex": AlephVault__WindRose__REFMAP.Visuals.People.Base.Sex.Male,
-	&"body": AlephVault__WindRose__REFMAP.Visuals.People.Base.BodyColor.White,
+	&"sex": AlephVault__WindRose__REFMAP.Visuals.People.Sex.Male,
+	&"body": AlephVault__WindRose__REFMAP.Visuals.People.BodyColor.White,
 	&"hair": "1",
-	&"hair_color": AlephVault__WindRose__REFMAP.Visuals.People.Base.ComponentColor.Black,
+	&"hair_color": AlephVault__WindRose__REFMAP.Visuals.People.ComponentColor.Black,
 	&"shirt": "1",
-	&"shirt_color": AlephVault__WindRose__REFMAP.Visuals.People.Base.ComponentColor.Blue,
+	&"shirt_color": AlephVault__WindRose__REFMAP.Visuals.People.ComponentColor.Blue,
 }
 ```
 
