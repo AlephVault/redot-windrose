@@ -20,7 +20,9 @@ Each row has four 32x48 frames. Rows are, in order: down-facing, left-facing, ri
 ### Public Classes
 
 - `AlephVault__WindRose__REFMAP.Utils.Resolver`: Interface for resolving component keys into textures.
+- `AlephVault__WindRose__REFMAP.Utils.BaseFileSystemResolver`: Shared base class for file path based resolvers.
 - `AlephVault__WindRose__REFMAP.Utils.DefaultResolver`: Bundled LRU-backed resolver for assets under `addons/AlephVault.WindRose.REFMAP/images`.
+- `AlephVault__WindRose__REFMAP.Utils.FileSystemResolver`: LRU-backed resolver for runtime PNG assets under a persistent `user://` directory.
 - `AlephVault__WindRose__REFMAP.Visuals.People`: People visuals. Defines aesthetics of clothes (simple vs. standard/assembled), body, sex, hair and appliances.
 - `AlephVault__WindRose__REFMAP.Traits.People`: `MapEntityTraits` schema for people visuals.
 
@@ -263,6 +265,45 @@ Supported non-body bundled categories are:
 For `hair_tail`, the file key is `{key}_{color}_b`. For the other supported component types, the file key is `{key}_{color}`.
 
 The bundled resolver intentionally returns `null` for `right_hand`, `left_hand`, `cloth`, `necklace`, and `cloak`; provide these through a custom resolver or direct pairs.
+
+### Filesystem Resolver
+
+`FileSystemResolver` loads runtime PNG assets from a `user://` directory:
+
+```gdscript
+var resolver := AlephVault__WindRose__REFMAP.Utils.FileSystemResolver.new(
+	"my-cache", 128, "user://downloaded_7346abc0"
+)
+```
+
+It expects this layout:
+
+```text
+user://downloaded_7346abc0/{Sex}/{Subcategory}/{Key}.png
+```
+
+If the root directory is missing, invalid, or outside `user://`, resolves return `null`. Runtime PNGs are loaded directly from the filesystem, so they do not need Godot import metadata.
+
+Supported non-body filesystem categories are:
+
+- `arms` -> `Arms`
+- `boots` -> `Boots`
+- `chest` -> `Chest`
+- `cloak` -> `Cloak`
+- `cloth` -> `Cloth`
+- `hair` -> `Hair`
+- `hair_tail` -> `Hair`
+- `hat` -> `Hat`
+- `left_hand` -> `LeftHand`
+- `long_shirt` -> `LongShirt`
+- `necklace` -> `Necklace`
+- `pants` -> `Pants`
+- `right_hand` -> `RightHand`
+- `shirt` -> `Shirt`
+- `shoulders` -> `Shoulder`
+- `waist` -> `Waist`
+
+For `hair_tail`, the file key is `{key}_{color}_b`. For the other supported component types, the file key is `{key}_{color}`.
 
 ### Contrib package: Citizens
 
