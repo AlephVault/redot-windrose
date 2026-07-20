@@ -1,4 +1,4 @@
-extends AlephVault__WindRose.Contrib.Simple.MapEntity
+extends AlephVault__WindRose.Contrib.Blocking.MapEntity
 ## Aggregate MapEntity with citizen traits and visual.
 
 const _CitizenTraits = AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Citizen
@@ -24,7 +24,7 @@ func _ensure_citizen_visual() -> void:
 		return
 	_ensure_resolver()
 	if not is_instance_valid(_citizen_visual):
-		_citizen_visual = _SimpleCitizenVisual.new()
+		_citizen_visual = _CitizenVisual.new()
 		_citizen_visual.fps = initial_fps
 	if _citizen_visual.get_parent() == null:
 		add_visual(_citizen_visual)
