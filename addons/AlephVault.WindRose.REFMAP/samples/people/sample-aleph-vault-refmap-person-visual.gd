@@ -46,13 +46,13 @@ func _setup():
 
 func _ensure_resolver() -> void:
 	var people = AlephVault__WindRose__REFMAP.Visuals.People
-	if people.Base.resolver == null or not is_instance_valid(people.Base.resolver):
-		people.Base.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
-	resolver = people.Base.resolver
+	if people.resolver == null or not is_instance_valid(people.resolver):
+		people.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
+	resolver = people.resolver
 
 func _resolver() -> Object:
 	_ensure_resolver()
-	return AlephVault__WindRose__REFMAP.Visuals.People.Base.resolver
+	return AlephVault__WindRose__REFMAP.Visuals.People.resolver
 
 func _define_components() -> void:
 	_components = {

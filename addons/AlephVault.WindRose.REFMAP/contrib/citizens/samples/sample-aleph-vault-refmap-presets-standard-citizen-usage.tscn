@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://du7yw57yadkxp" path="res://addons/AlephVault.WindRose.REFMAP/samples/people-traits/sample-aleph-vault-windrose-refmap-people-traits-usage.tres" id="3_tileset"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/simple/entities_layer.gd" id="4_entities"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/contrib/citizens/samples/sample-aleph-vault-refmap-presets-standard-citizen.gd" id="5_entity"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/contrib/citizens/visuals/standard.gd" id="6_ghi2r"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/contrib/citizens/visuals/citizen.gd" id="6_ghi2r"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/visuals_layer.gd" id="7_visuals"]
 
 [sub_resource type="Image" id="Image_4ms0c"]

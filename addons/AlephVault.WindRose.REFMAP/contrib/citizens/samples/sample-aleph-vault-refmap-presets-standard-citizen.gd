@@ -1,10 +1,10 @@
 extends AlephVault__WindRose.Contrib.Simple.MapEntity
-## Sample entity exposing StandardCitizen traits for the preset visual example.
+## Sample entity exposing Citizen traits for the preset visual example.
 
-const _PeopleVisual = AlephVault__WindRose__REFMAP.Visuals.People.Base
-const _StandardCitizenTraits = AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Standard
+const _PeopleVisual = AlephVault__WindRose__REFMAP.Visuals.People
+const _CitizenTraits = AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Citizen
 
-static var _traits_schema := _StandardCitizenTraits.new()
+static var _traits_schema := _CitizenTraits.new()
 
 func _ready() -> void:
 	_ensure_resolver()
@@ -16,8 +16,8 @@ func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
 
 func _ensure_resolver() -> void:
 	var people = AlephVault__WindRose__REFMAP.Visuals.People
-	if people.Base.resolver == null or not is_instance_valid(people.Base.resolver):
-		people.Base.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
+	if people.resolver == null or not is_instance_valid(people.resolver):
+		people.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
 
 func _apply_initial_traits() -> void:
 	traits = {

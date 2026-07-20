@@ -48,8 +48,8 @@ func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
 
 func _ensure_resolver() -> void:
 	var people = AlephVault__WindRose__REFMAP.Visuals.People
-	if people.Base.resolver == null or not is_instance_valid(people.Base.resolver):
-		people.Base.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
+	if people.resolver == null or not is_instance_valid(people.resolver):
+		people.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
 
 func _define_components() -> void:
 	_components = {
