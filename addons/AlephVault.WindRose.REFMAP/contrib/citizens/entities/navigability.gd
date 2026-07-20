@@ -1,16 +1,16 @@
-extends AlephVault__WindRose.Contrib.Neighbours.MapEntity
-## Neighbours MapEntity with Simple citizen traits and visual.
+extends AlephVault__WindRose.Contrib.Simple.MapEntity
+## Aggregate MapEntity with citizen traits and visual.
 
-const _SimpleCitizenTraits = AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Simple
-const _SimpleCitizenVisual = AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Simple
+const _CitizenTraits = AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Citizen
+const _CitizenVisual = AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Citizen
 
 ## The amount of frames per second to assign to the underlying visual
 ## the next time the visual is created.
 @export var initial_fps: int = 4
 
-static var _traits_schema := _SimpleCitizenTraits.new()
+static var _traits_schema := _CitizenTraits.new()
 
-var _citizen_visual: _SimpleCitizenVisual
+var _citizen_visual: _CitizenVisual
 
 func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
 	return _traits_schema
@@ -31,5 +31,5 @@ func _ensure_citizen_visual() -> void:
 
 func _ensure_resolver() -> void:
 	var people = AlephVault__WindRose__REFMAP.Visuals.People
-	if people.Base.resolver == null or not is_instance_valid(people.Base.resolver):
-		people.Base.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()
+	if people.resolver == null or not is_instance_valid(people.resolver):
+		people.resolver = AlephVault__WindRose__REFMAP.Utils.DefaultResolver.new()

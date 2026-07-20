@@ -1,9 +1,6 @@
-extends AlephVault__WindRose__REFMAP.Traits.People.Simple
+extends AlephVault__WindRose__REFMAP.Traits.People
 ## These traits serve for the purpose of showing labels
 ## on top of a person: name, description and message.
-##
-## This class, in particular, extends the Simple trait
-## for people.
 ##
 ## Each of those elements may be either:
 ## - String: Used to render a string with a default

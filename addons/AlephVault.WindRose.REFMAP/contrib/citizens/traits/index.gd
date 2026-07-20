@@ -1,4 +1,3 @@
 extends Object
 
-const Simple = preload("./simple.gd")
-const Standard = preload("./standard.gd")
+const Citizen = preload("./citizen.gd")
