@@ -284,20 +284,13 @@ It exposes the following namespaces:
 
 ## Public Classes
 
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Simple`: Simple REFMAP people traits plus `name`, `description`, and `message`.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Standard`: Standard REFMAP people traits plus `name`, `description`, and `message`.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Simple`: Simple REFMAP people visual with name, description, and message labels.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Standard`: Standard REFMAP people visual with name, description, and message labels.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.SimpleBlocking`: `AlephVault__WindRose.Contrib.Blocking.MapEntity` with Simple citizen traits and a lazily-created Simple citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.SimpleNavigability`: `AlephVault__WindRose.Contrib.Navigability.MapEntity` with Simple citizen traits and a lazily-created Simple citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.SimpleNeighbours`: `AlephVault__WindRose.Contrib.Neighbours.MapEntity` with Simple citizen traits and a lazily-created Simple citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.SimpleSolidness`: `AlephVault__WindRose.Contrib.Solidness.MapEntity` with Simple citizen traits and a lazily-created Simple citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.SimpleSimple`: `AlephVault__WindRose.Contrib.Simple.MapEntity` with Simple citizen traits and a lazily-created Simple citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.StandardBlocking`: `AlephVault__WindRose.Contrib.Blocking.MapEntity` with Standard citizen traits and a lazily-created Standard citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.StandardNavigability`: `AlephVault__WindRose.Contrib.Navigability.MapEntity` with Standard citizen traits and a lazily-created Standard citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.StandardNeighbours`: `AlephVault__WindRose.Contrib.Neighbours.MapEntity` with Standard citizen traits and a lazily-created Standard citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.StandardSolidness`: `AlephVault__WindRose.Contrib.Solidness.MapEntity` with Standard citizen traits and a lazily-created Standard citizen visual.
-- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.StandardSimple`: `AlephVault__WindRose.Contrib.Simple.MapEntity` with Standard citizen traits and a lazily-created Standard citizen visual.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Traits.Citizen`: REFMAP people traits plus `name`, `description`, and `message`.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Visuals.Citizen`: REFMAP people visual with name, description, and message labels.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.Blocking`: `AlephVault__WindRose.Contrib.Blocking.MapEntity` with citizen traits and a lazily-created citizen visual.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.Navigability`: `AlephVault__WindRose.Contrib.Navigability.MapEntity` with citizen traits and a lazily-created citizen visual.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.Neighbours`: `AlephVault__WindRose.Contrib.Neighbours.MapEntity` with citizen traits and a lazily-created citizen visual.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.Solidness`: `AlephVault__WindRose.Contrib.Solidness.MapEntity` with citizen traits and a lazily-created citizen visual.
+- `AlephVault__WindRose__REFMAP.Contrib.Citizens.Entities.Simple`: `AlephVault__WindRose.Contrib.Simple.MapEntity` with citizen traits and a lazily-created citizen visual.
 
 All citizen entity classes expose `@export var initial_fps: int = 4`. When the entity first needs to create its citizen visual, the visual's `fps` is initialized from that property.
 
