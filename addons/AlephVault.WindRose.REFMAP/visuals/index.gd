@@ -1,3 +1,3 @@
 extends Object
 
-const People = preload("./people/index.gd")
+const People = preload("./people.gd")

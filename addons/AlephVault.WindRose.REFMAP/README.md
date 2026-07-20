@@ -21,12 +21,8 @@ Each row has four 32x48 frames. Rows are, in order: down-facing, left-facing, ri
 
 - `AlephVault__WindRose__REFMAP.Utils.Resolver`: Interface for resolving component keys into textures.
 - `AlephVault__WindRose__REFMAP.Utils.DefaultResolver`: Bundled LRU-backed resolver for assets under `addons/AlephVault.WindRose.REFMAP/images`.
-- `AlephVault__WindRose__REFMAP.Visuals.People.Base`: Shared abstract parent for people visuals. Do not instantiate this directly.
-- `AlephVault__WindRose__REFMAP.Visuals.People.Simple`: People visual using one complete `cloth` layer.
-- `AlephVault__WindRose__REFMAP.Visuals.People.Standard`: People visual using separate outfit layers.
-- `AlephVault__WindRose__REFMAP.Traits.People.Base`: Shared `MapEntityTraits` schema for people visuals.
-- `AlephVault__WindRose__REFMAP.Traits.People.Simple`: Traits schema for simple people visuals.
-- `AlephVault__WindRose__REFMAP.Traits.People.Standard`: Traits schema for standard people visuals.
+- `AlephVault__WindRose__REFMAP.Visuals.People`: People visuals. Defines aesthetics of clothes (simple vs. standard/assembled), body, sex, hair and appliances.
+- `AlephVault__WindRose__REFMAP.Traits.People`: `MapEntityTraits` schema for people visuals.
 
 ### Resolver Setup
 
@@ -97,27 +93,27 @@ Direct pairs do not call the resolver and are not unresolved later. String keys 
 - `Green`
 - `Purple`
 
-### Simple People Visual
+### People Visual
 
-The simple visual is implemented by `AlephVault__WindRose__REFMAP.Visuals.People.Simple`.
+The visual is implemented by `AlephVault__WindRose__REFMAP.Visuals.People`.
 
-Shared properties:
+Common properties:
 
 - `sex`: Selects male or female assets.
 - `body`: `null`, a `BodyColor`, or a direct `[key, Texture2D]` pair.
 - `hair`, `hair_color`: Front hair component and color.
 - `hair_tail`, `hair_tail_color`: Long back/tail hair component and color.
-- `necklace`: Necklace overlay. The bundled default resolver does not provide this asset type.
+- `necklace`: Necklace overlay. The bundled default resolver does not provide this asset type, but other resolvers can.
 - `hat`, `hat_color`: Hat component and color.
-- `right_hand`: Right-hand item. The bundled default resolver does not provide this asset type.
-- `left_hand`: Left-hand item. The bundled default resolver does not provide this asset type.
+- `right_hand`: Right-hand item. The bundled default resolver does not provide this asset type, but other resolvers can.
+- `left_hand`: Left-hand item. The bundled default resolver does not provide this asset type, but other resolvers can.
 - `fps`: Moving animation frames per second, inherited from the WindRose movable visual.
 
 Simple-only property:
 
-- `cloth`: Complete clothing overlay. The bundled default resolver does not provide this asset type.
+- `cloth`: Clothing overlay. The bundled default resolver does not provide this asset type, but other resolvers can.
 
-Composition order:
+Composition order when `cloth` is not `null`:
 
 1. Right hand, up row only.
 2. Left hand, left/right/up rows.
@@ -132,11 +128,8 @@ Composition order:
 11. Left hand, down row only.
 12. Right hand, down row only.
 
-### Standard People Visual
-
-The standard visual is implemented by `AlephVault__WindRose__REFMAP.Visuals.People.Standard`.
-
-It has all shared properties from the simple visual, except `cloth`, and adds:
+However, when the `cloth` property is `null`, other properties are accounted for. These properties allow assembling the
+cloth by parts (and all the parts are optional):
 
 - `boots`, `boots_color`
 - `pants`, `pants_color`
@@ -146,10 +139,10 @@ It has all shared properties from the simple visual, except `cloth`, and adds:
 - `arms`, `arms_color`
 - `long_shirt`, `long_shirt_color`
 - `shoulders`, `shoulders_color`
-- `cloak`: The bundled default resolver does not provide this asset type.
+- `cloak`: The bundled default resolver does not provide this asset type, but other resolvers can.
 - `boots_over_pants`: If `true`, pants are composed before boots. If `false`, boots are composed before pants.
 
-Composition order:
+In this case (again: only account for when `cloth` is `null`) the composition order is:
 
 1. Right hand, up row only.
 2. Left hand, left/right/up rows.
@@ -179,12 +172,12 @@ REFMAP also provides `MapEntityTraits` schemas for people visuals. Use these whe
 `MapEntity` instead of being controlled directly by the visual node.
 
 The trait property names intentionally match the visual property names. REFMAP people visuals listen to their owning
-entity's `traits_updated` signal and copy matching properties into the visual.
+entity's `traits_updated` signal and copy matching properties into the visual. Use the traits like this:
 
 ```gdscript
 extends AlephVault__WindRose.Contrib.Simple.MapEntity
 
-static var _traits_schema := AlephVault__WindRose__REFMAP.Traits.People.Standard.new()
+static var _traits_schema := AlephVault__WindRose__REFMAP.Traits.People.new()
 
 func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
 	return _traits_schema
@@ -210,14 +203,6 @@ The schema instance should be cached, typically as a `static var`, because schem
 only describe the available fields. The schema does not update visuals directly; visual updates happen from
 `traits_updated` listeners.
 
-#### Simple People Traits
-
-Use:
-
-```gdscript
-AlephVault__WindRose__REFMAP.Traits.People.Simple
-```
-
 Available traits:
 
 - `sex`
@@ -228,26 +213,7 @@ Available traits:
 - `hat`, `hat_color`
 - `right_hand`
 - `left_hand`
-- `cloth`
-
-#### Standard People Traits
-
-Use:
-
-```gdscript
-AlephVault__WindRose__REFMAP.Traits.People.Standard
-```
-
-Available traits:
-
-- `sex`
-- `body`
-- `hair`, `hair_color`
-- `hair_tail`, `hair_tail_color`
-- `necklace`
-- `hat`, `hat_color`
-- `right_hand`
-- `left_hand`
+- `cloth` (if not `null`, then the following properties are accounted for - otherwise, they're ignored)
 - `boots`, `boots_color`
 - `pants`, `pants_color`
 - `shirt`, `shirt_color`
