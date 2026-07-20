@@ -6,7 +6,7 @@
 [ext_resource type="TileSet" uid="uid://du7yw57yadkxp" path="res://addons/AlephVault.WindRose.REFMAP/samples/people-traits/sample-aleph-vault-windrose-refmap-people-traits-usage.tres" id="4_q1nlr"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/contrib/simple/entities_layer.gd" id="4_qcclf"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/samples/people-traits/sample-aleph-vault-windrose-refmap-person-traits.gd" id="5_m5h8n"]
-[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/visuals/people/standard.gd" id="6_t6jqf"]
+[ext_resource type="Script" path="res://addons/AlephVault.WindRose.REFMAP/visuals/people.gd" id="6_t6jqf"]
 [ext_resource type="Script" path="res://addons/AlephVault.WindRose/maps/layers/visuals_layer.gd" id="7_cstxo"]
 
 [sub_resource type="Image" id="Image_a64ek"]

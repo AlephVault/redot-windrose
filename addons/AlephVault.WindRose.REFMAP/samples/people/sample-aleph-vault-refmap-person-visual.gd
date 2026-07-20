@@ -1,5 +1,5 @@
 @tool
-extends AlephVault__WindRose__REFMAP.Visuals.People.Standard
+extends AlephVault__WindRose__REFMAP.Visuals.People
 
 const _COMPONENT_COLORS := [
 	ComponentColor.Black,
