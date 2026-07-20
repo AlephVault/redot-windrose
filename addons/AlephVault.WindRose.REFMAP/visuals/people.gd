@@ -726,9 +726,78 @@ func _append_step(steps: Array, layer: ResolvedLayer, source_rect: Rect2i, suffi
 		return
 	steps.append(_Step.new("%s:%s" % [layer.key, suffix], layer.texture, source_rect, source_rect.position))
 
+func _make_simple_composition_steps() -> Array:
+	var steps := []
+	var right_hand_layer := _register_layer(_layer(right_hand, _Resolver.RIGHT_HAND))
+	var left_hand_layer := _register_layer(_layer(left_hand, _Resolver.LEFT_HAND))
+	var hair_tail_layer := _register_layer(_layer(hair_tail, _Resolver.HAIR_TAIL, hair_tail_color))
+	var body_layer := _register_layer(_body_layer())
+	var cloth_layer := _register_layer(_layer(cloth, _Resolver.CLOTH))
+	var necklace_layer := _register_layer(_layer(necklace, _Resolver.NECKLACE))
+	var hair_layer := _register_layer(_layer(hair, _Resolver.HAIR, hair_color))
+	var hat_layer := _register_layer(_layer(hat, _Resolver.HAT, hat_color))
+	_append_step(steps, right_hand_layer, _UP_RECT, "up")
+	_append_step(steps, left_hand_layer, _LEFT_RIGHT_UP_RECT, "left_right_up")
+	_append_step(steps, hair_tail_layer, _DOWN_RECT, "down")
+	_append_step(steps, body_layer, _FULL_RECT, "full")
+	_append_step(steps, cloth_layer, _FULL_RECT, "full")
+	_append_step(steps, necklace_layer, _FULL_RECT, "full")
+	_append_step(steps, hair_layer, _FULL_RECT, "full")
+	_append_step(steps, right_hand_layer, _LEFT_RIGHT_RECT, "left_right")
+	_append_step(steps, hair_tail_layer, _LEFT_RIGHT_UP_RECT, "left_right_up")
+	_append_step(steps, hat_layer, _FULL_RECT, "full")
+	_append_step(steps, left_hand_layer, _DOWN_RECT, "down")
+	_append_step(steps, right_hand_layer, _DOWN_RECT, "down")
+	return steps
+
+func _make_standard_composition_steps() -> Array:
+	var steps := []
+	var right_hand_layer := _register_layer(_layer(right_hand, _Resolver.RIGHT_HAND))
+	var left_hand_layer := _register_layer(_layer(left_hand, _Resolver.LEFT_HAND))
+	var hair_tail_layer := _register_layer(_layer(hair_tail, _Resolver.HAIR_TAIL, hair_tail_color))
+	var cloak_layer := _register_layer(_layer(cloak, _Resolver.CLOAK))
+	var body_layer := _register_layer(_body_layer())
+	var boots_layer := _register_layer(_layer(boots, _Resolver.BOOTS, boots_color))
+	var pants_layer := _register_layer(_layer(pants, _Resolver.PANTS, pants_color))
+	var shirt_layer := _register_layer(_layer(shirt, _Resolver.SHIRT, shirt_color))
+	var chest_layer := _register_layer(_layer(chest, _Resolver.CHEST, chest_color))
+	var long_shirt_layer := _register_layer(_layer(long_shirt, _Resolver.LONG_SHIRT, long_shirt_color))
+	var necklace_layer := _register_layer(_layer(necklace, _Resolver.NECKLACE))
+	var shoulders_layer := _register_layer(_layer(shoulders, _Resolver.SHOULDERS, shoulders_color))
+	var waist_layer := _register_layer(_layer(waist, _Resolver.WAIST, waist_color))
+	var arms_layer := _register_layer(_layer(arms, _Resolver.ARMS, arms_color))
+	var hair_layer := _register_layer(_layer(hair, _Resolver.HAIR, hair_color))
+	var hat_layer := _register_layer(_layer(hat, _Resolver.HAT, hat_color))
+	_append_step(steps, right_hand_layer, _UP_RECT, "up")
+	_append_step(steps, left_hand_layer, _LEFT_RIGHT_UP_RECT, "left_right_up")
+	_append_step(steps, hair_tail_layer, _DOWN_RECT, "down")
+	_append_step(steps, cloak_layer, _DOWN_RECT, "down")
+	_append_step(steps, body_layer, _FULL_RECT, "full")
+	_append_step(steps, pants_layer if boots_over_pants else boots_layer, _FULL_RECT, "full")
+	_append_step(steps, boots_layer if boots_over_pants else pants_layer, _FULL_RECT, "full")
+	_append_step(steps, shirt_layer, _FULL_RECT, "full")
+	_append_step(steps, chest_layer, _FULL_RECT, "full")
+	_append_step(steps, long_shirt_layer, _FULL_RECT, "full")
+	_append_step(steps, necklace_layer, _FULL_RECT, "full")
+	_append_step(steps, shoulders_layer, _FULL_RECT, "full")
+	_append_step(steps, waist_layer, _FULL_RECT, "full")
+	_append_step(steps, arms_layer, _FULL_RECT, "full")
+	_append_step(steps, right_hand_layer, _LEFT_RIGHT_RECT, "left_right")
+	_append_step(steps, cloak_layer, _LEFT_RIGHT_UP_RECT, "left_right_up")
+	_append_step(steps, hair_tail_layer, _LEFT_RIGHT_UP_RECT, "left_right_up")
+	_append_step(steps, hair_layer, _FULL_RECT, "full")
+	_append_step(steps, hat_layer, _FULL_RECT, "full")
+	_append_step(steps, left_hand_layer, _DOWN_RECT, "down")
+	_append_step(steps, right_hand_layer, _DOWN_RECT, "down")
+	return steps
+
 func _make_composition_steps() -> Array:
-	AlephVault__WindRose.Utils.AccessUtils.not_implemented("REFMAPPeopleVisual", "_make_composition_steps")
-	return []
+	_release_resolved_layers()
+	var steps := []
+	if cloth == null:
+		return _make_standard_composition_steps()
+	else:
+		return _make_simple_composition_steps()
 
 func _build_context():
 	var steps := _make_composition_steps()
