@@ -15,6 +15,9 @@ var _citizen_visual: _CitizenVisual
 func get_traits_schema() -> AlephVault__WindRose.Maps.MapEntityTraits:
 	return _traits_schema
 
+func _create_visual() -> _CitizenVisual:
+	return _CitizenVisual.new()
+
 func _on_attached(manager: _EntitiesManager, cell: Vector2i):
 	super._on_attached(manager, cell)
 	_ensure_citizen_visual()
@@ -24,7 +27,7 @@ func _ensure_citizen_visual() -> void:
 		return
 	_ensure_resolver()
 	if not is_instance_valid(_citizen_visual):
-		_citizen_visual = _CitizenVisual.new()
+		_citizen_visual = _create_visual()
 		_citizen_visual.fps = initial_fps
 	if _citizen_visual.get_parent() == null:
 		add_visual(_citizen_visual)
