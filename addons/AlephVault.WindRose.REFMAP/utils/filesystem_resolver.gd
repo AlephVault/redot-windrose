@@ -38,7 +38,7 @@ var base_path: String:
 			"FileSystemResolver", "base_path"
 		)
 
-func _init(cache_name: String, cache_max_disposal_size: int, root_directory: String):
+func _init(root_directory: String, cache_name: String, cache_max_disposal_size: int):
 	_texture_cache_name = cache_name.strip_edges()
 	_texture_cache_max_disposal_size = cache_max_disposal_size
 	_base_path = _normalize_base_path(root_directory)

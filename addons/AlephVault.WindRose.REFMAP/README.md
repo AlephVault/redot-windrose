@@ -272,7 +272,7 @@ The bundled resolver intentionally returns `null` for `right_hand`, `left_hand`,
 
 ```gdscript
 var resolver := AlephVault__WindRose__REFMAP.Utils.FileSystemResolver.new(
-	"my-cache", 128, "user://downloaded_7346abc0"
+	"user://downloaded_7346abc0", "my-cache", 128
 )
 ```
 
