@@ -76,7 +76,7 @@ const COMPONENT_TYPES := [
 
 ## Component keys are non-empty and cannot contain spaces or
 ## colons, because they are used in paths and composition keys.
-func is_valid_key(key: String) -> bool:
+static func is_valid_key(key: String) -> bool:
 	return key != "" and key.find(":") == -1 and key.find(" ") == -1
 
 ## Resolves a non-body component texture. Implementations should

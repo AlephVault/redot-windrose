@@ -134,7 +134,7 @@ func _resolve_path(directory: String, path: String):
 ## Loads component assets from:
 ## {base_path}/{Sex}/{Subcategory}/{Key}.png
 func resolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
-	if not is_valid_key(key):
+	if not AlephVault__WindRose__REFMAP.Utils.Resolver.is_valid_key(key):
 		return null
 	var subcategory := _subcategory(type)
 	if subcategory == "":
@@ -146,7 +146,7 @@ func resolve(sex: Sex, type: String, key: String, color: int = ComponentColor.De
 	)
 
 func unresolve(sex: Sex, type: String, key: String, color: int = ComponentColor.Default):
-	if not is_valid_key(key):
+	if not AlephVault__WindRose__REFMAP.Utils.Resolver.is_valid_key(key):
 		return
 	var subcategory := _subcategory(type)
 	if subcategory == "":

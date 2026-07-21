@@ -672,7 +672,7 @@ func _valid_texture(value) -> bool:
 ## part of the composed texture cache key, so it follows the same
 ## no-space/no-colon rule as resolver keys.
 func _valid_pair(value) -> bool:
-	return value is Array and value.size() == 2 and value[0] is String and _Resolver.new().is_valid_key(value[0]) and _valid_texture(value[1])
+	return value is Array and value.size() == 2 and value[0] is String and _Resolver.is_valid_key(value[0]) and _valid_texture(value[1])
 
 func _resolver() -> Object:
 	return resolver if resolver != null and is_instance_valid(resolver) else null
@@ -703,7 +703,7 @@ func _resolve_component_layer(type: String, value, color: int = ComponentColor.D
 	if not (value is String):
 		return null
 	var key: String = value.strip_edges()
-	if not _Resolver.new().is_valid_key(key):
+	if not _Resolver.is_valid_key(key):
 		return null
 	var resolver_obj := _resolver()
 	if resolver_obj == null:
